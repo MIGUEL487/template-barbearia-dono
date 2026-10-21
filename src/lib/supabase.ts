@@ -1,22 +1,32 @@
-import { createClient } from "@supabase/supabase-js";
-import { Database } from "@/types/database.types";
+import { createBrowserClient } from "@supabase/ssr";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://dummy-project.supabase.co";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "dummy-anon-key";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// Cliente padrão para o navegador / contexto anônimo
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
-
-// Cliente com privilégios de Service Role (EXCLUSIVO para Server Actions e Route Handlers no servidor)
-export function createServerAdminClient() {
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!serviceRoleKey) {
-    throw new Error("SUPABASE_SERVICE_ROLE_KEY não configurada no ambiente do servidor.");
+export function getMissingAdminEnvVars(): string[] {
+  const missing: string[] = [];
+  if (!supabaseUrl || supabaseUrl.trim() === "" || supabaseUrl.includes("dummy")) {
+    missing.push("NEXT_PUBLIC_SUPABASE_URL");
   }
-  return createClient<Database>(supabaseUrl, serviceRoleKey, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    },
-  });
+  if (!supabaseAnonKey || supabaseAnonKey.trim() === "" || supabaseAnonKey.includes("dummy")) {
+    missing.push("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  }
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY.trim() === "") {
+    missing.push("SUPABASE_SERVICE_ROLE_KEY");
+  }
+  return missing;
 }
+
+export function createClient() {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error(
+      "Credenciais do Supabase não configuradas no ambiente. Configure NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY no .env.local."
+    );
+  }
+  return createBrowserClient(supabaseUrl, supabaseAnonKey);
+}
+
+// Instância padrão para o navegador
+export const supabase = supabaseUrl && supabaseAnonKey
+  ? createBrowserClient(supabaseUrl, supabaseAnonKey)
+  : (null as any);

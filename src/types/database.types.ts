@@ -559,6 +559,34 @@ export interface Database {
           about_payment_methods: string | null;
         };
       };
+      public_faq_items: {
+        Row: {
+          id: string;
+          barbershop_id: string;
+          question: string;
+          answer: string;
+          sort_order: number;
+        };
+      };
+      public_gallery_items: {
+        Row: {
+          id: string;
+          barbershop_id: string;
+          image_url: string;
+          title: string | null;
+          sort_order: number;
+        };
+      };
+      public_reviews: {
+        Row: {
+          id: string;
+          barbershop_id: string;
+          customer_name: string;
+          rating: number;
+          comment: string;
+          created_at: string;
+        };
+      };
     };
     Functions: {
       get_availability: {
@@ -577,16 +605,17 @@ export interface Database {
       create_booking_hold: {
         Args: {
           p_barbershop_id: string;
-          p_barber_id: string;
+          p_barber_id: string | null;
           p_starts_at: string;
           p_service_ids: string[];
           p_customer_name: string;
           p_customer_phone: string;
           p_customer_email: string;
-          p_marketing_consent: boolean;
+          p_marketing_consent?: boolean;
         };
         Returns: {
           booking_id: string;
+          barber_id: string;
           hold_expires_at: string;
           total_price: number;
           deposit_amount: number;
@@ -606,6 +635,7 @@ export interface Database {
           customer_name: string;
           services: string[];
           total_price: number;
+          deposit_amount: number;
           can_cancel: boolean;
           can_reschedule: boolean;
         };
@@ -629,6 +659,70 @@ export interface Database {
         Returns: {
           success: boolean;
           message: string;
+          new_starts_at: string;
+          new_ends_at: string;
+        };
+      };
+      admin_create_booking: {
+        Args: {
+          p_barbershop_id: string;
+          p_barber_id: string;
+          p_starts_at: string;
+          p_service_ids: string[];
+          p_customer_name: string;
+          p_customer_phone: string;
+          p_customer_email?: string;
+          p_payment_method?: PaymentMethod;
+          p_notes?: string;
+        };
+        Returns: {
+          success: boolean;
+          booking_id: string;
+          starts_at: string;
+          ends_at: string;
+          total_price: number;
+        };
+      };
+      admin_complete_booking: {
+        Args: {
+          p_barbershop_id: string;
+          p_booking_id: string;
+          p_payment_received?: boolean;
+        };
+        Returns: {
+          success: boolean;
+        };
+      };
+      admin_cancel_booking: {
+        Args: {
+          p_barbershop_id: string;
+          p_booking_id: string;
+          p_reason?: string;
+        };
+        Returns: {
+          success: boolean;
+        };
+      };
+      admin_mark_no_show: {
+        Args: {
+          p_barbershop_id: string;
+          p_booking_id: string;
+        };
+        Returns: {
+          success: boolean;
+        };
+      };
+      admin_block_time: {
+        Args: {
+          p_barbershop_id: string;
+          p_barber_id: string;
+          p_starts_at: string;
+          p_ends_at: string;
+          p_reason?: string;
+        };
+        Returns: {
+          success: boolean;
+          time_off_id: string;
         };
       };
     };

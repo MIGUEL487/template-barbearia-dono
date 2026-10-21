@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:env": "node --env-file=.env.local scripts/check-env.mjs || node scripts/check-env.mjs",
+    "tokens:check": "node scripts/check-tokens.mjs",
+    "types": "npx supabase gen types typescript --local > src/types/database.types.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
