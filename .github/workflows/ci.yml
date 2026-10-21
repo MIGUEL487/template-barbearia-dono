@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate:
+    name: Lint, Typecheck & Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Run unit & integration tests
+        run: npm test --if-present
+
+  security-audit:
+    name: Security Scan & Secret Leak Detection
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for secrets in codebase
+        run: |
+          echo "Scanning for accidental exposed keys..."
+          ! grep -rn "SUPABASE_SERVICE_ROLE_KEY=ey" . --exclude-dir=node_modules || exit 1
+          ! grep -rn "MERCADOPAGO_ACCESS_TOKEN=APP_USR" . --exclude-dir=node_modules || exit 1
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high --omit=dev || true
