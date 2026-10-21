@@ -39,7 +39,6 @@ export default function LoginPage() {
       }
 
       if (data?.user) {
-        // Verificar se usuário possui vínculo em shop_members
         const { data: membership, error: memError } = await supabase
           .from("shop_members")
           .select("barbershop_id, role")
@@ -47,7 +46,7 @@ export default function LoginPage() {
           .single();
 
         if (memError || !membership) {
-          setErrorMessage("Usuário autenticado, mas sem vínculo cadastrado como proprietário ou membro em shop_members.");
+          setErrorMessage("Usuário autenticado, mas sem vínculo cadastrado em shop_members nesta barbearia.");
           setIsLoading(false);
           return;
         }
@@ -62,19 +61,19 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-bg text-text relative">
-      <div className="w-full max-w-md bg-surface border border-border p-8 rounded-lg shadow-premium relative z-10">
-        <div className="flex flex-col items-center text-center mb-6">
-          <div className="w-12 h-12 rounded-sm bg-surface-2 border border-accent/40 flex items-center justify-center text-accent mb-4">
+      <div className="w-full max-w-md bg-surface p-10 rounded-[36px] shadow-soft relative z-10 space-y-6">
+        <div className="flex flex-col items-center text-center">
+          <div className="w-14 h-14 rounded-full bg-accent-soft text-accent flex items-center justify-center mb-4 shadow-sm">
             <Scissors className="w-6 h-6 rotate-45" />
           </div>
-          <h1 className="font-serif text-2xl font-bold text-text">
-            Painel do <span className="italic text-accent">Proprietário</span>
+          <h1 className="font-serif text-3xl font-bold text-text">
+            Painel do <span className="italic text-accent">Dono</span>
           </h1>
-          <p className="text-xs text-text-muted mt-1">Acesso exclusivo do dono da barbearia</p>
+          <p className="text-xs text-text-muted mt-1.5">Acesso administrativo exclusivo</p>
         </div>
 
         {missingVars.length > 0 && (
-          <div className="mb-6 p-4 rounded-sm bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs space-y-1">
+          <div className="p-4 rounded-[20px] bg-amber-500/10 text-amber-300 text-xs space-y-1">
             <strong className="block font-semibold">⚠️ Configuração Necessária:</strong>
             <p>Crie o arquivo <code className="bg-surface px-1 py-0.5 rounded">.env.local</code> preenchendo:</p>
             <ul className="list-disc list-inside mt-1 font-mono text-[11px]">
@@ -86,7 +85,7 @@ export default function LoginPage() {
         )}
 
         {errorMessage && (
-          <div className="mb-4 p-3 rounded-sm bg-danger/10 border border-danger/30 text-danger text-xs flex items-start gap-2">
+          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs flex items-start gap-2.5">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{errorMessage}</span>
           </div>
@@ -94,29 +93,29 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5">
-              E-mail do Dono
+            <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+              E-mail Administrativo
             </label>
             <input
               type="email"
               placeholder="dono@barbearia.com.br"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-surface-2 border border-border focus:border-accent focus:ring-1 focus:ring-accent rounded-sm px-4 py-2.5 text-sm text-text outline-none transition-colors"
+              className="w-full bg-surface-2 rounded-full px-6 py-3.5 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none transition-all"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5">
-              Senha
+            <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+              Senha de Acesso
             </label>
             <input
               type="password"
               placeholder="••••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-surface-2 border border-border focus:border-accent focus:ring-1 focus:ring-accent rounded-sm px-4 py-2.5 text-sm text-text outline-none transition-colors"
+              className="w-full bg-surface-2 rounded-full px-6 py-3.5 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none transition-all"
               required
             />
           </div>
@@ -125,23 +124,23 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast font-bold py-3 px-4 rounded-sm text-sm transition-all shadow-premium disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast font-bold py-4 px-6 rounded-full text-xs shadow-glow transition-all active:scale-95 disabled:opacity-50"
             >
               {isLoading ? (
                 <span className="w-4 h-4 border-2 border-accent-contrast border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
                   <Lock className="w-4 h-4" />
-                  <span>Entrar no Painel</span>
+                  <span>Acessar Painel</span>
                 </>
               )}
             </button>
           </div>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-border flex items-center justify-center text-xs text-text-muted gap-1.5">
+        <div className="pt-6 border-t border-hairline flex items-center justify-center text-xs text-text-muted gap-2">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>Autenticado via Supabase Auth & RLS</span>
+          <span>Sessão segura com criptografia Supabase SSR</span>
         </div>
       </div>
     </main>

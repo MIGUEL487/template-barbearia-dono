@@ -15,9 +15,14 @@ import {
   CheckCircle2,
   AlertCircle,
   Loader2,
+  BarChart3,
+  Users,
+  Settings,
+  LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
 import { formatCurrency } from "@/lib/utils";
+import { logoutAction } from "@/app/actions/admin-actions";
 
 interface PaymentRecord {
   id: string;
@@ -43,10 +48,7 @@ export default function FinanceiroPage() {
 
     try {
       const supabase = createClient();
-      const {
-        data: { user },
-        error: userErr,
-      } = await supabase.auth.getUser();
+      const { data: { user }, error: userErr } = await supabase.auth.getUser();
 
       if (userErr || !user) {
         router.push("/login");
@@ -65,7 +67,7 @@ export default function FinanceiroPage() {
         return;
       }
 
-      const shopId = member.barbershop_id;
+      const shopId = (member as any).barbershop_id;
 
       const { data, error } = await supabase
         .from("payments")
@@ -108,6 +110,11 @@ export default function FinanceiroPage() {
     loadFinancialData();
   }, [loadFinancialData]);
 
+  const handleLogout = async () => {
+    await logoutAction();
+    router.push("/login");
+  };
+
   const filtered = payments.filter((p) => {
     const matchesMethod = methodFilter === "all" || p.payment_method === methodFilter;
     const matchesStatus = statusFilter === "all" || p.status === statusFilter;
@@ -136,85 +143,116 @@ export default function FinanceiroPage() {
     const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.setAttribute(
-      "download",
-      `relatorio-financeiro-${new Date().toISOString().split("T")[0]}.csv`
-    );
+    link.setAttribute("download", `relatorio-financeiro-${new Date().toISOString().split("T")[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
+  const navLinks = [
+    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
+    { href: "/agenda", label: "Agenda", icon: Calendar },
+    { href: "/clientes", label: "Clientes", icon: Users },
+    { href: "/servicos", label: "Serviços", icon: Scissors },
+    { href: "/financeiro", label: "Financeiro", icon: DollarSign, active: true },
+    { href: "/configuracoes", label: "Configurações", icon: Settings },
+  ];
+
   return (
-    <div className="min-h-screen bg-bg text-text flex flex-col font-sans">
-      {/* Header */}
-      <header className="h-16 border-b border-border bg-surface px-6 flex items-center justify-between sticky top-0 z-30">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/dashboard"
-            className="text-text-muted hover:text-text flex items-center gap-1.5 text-xs font-semibold"
-          >
-            <ChevronLeft className="w-4 h-4 text-accent" />
-            <span>Dashboard</span>
-          </Link>
-          <div className="h-4 w-[1px] bg-border" />
-          <h1 className="font-serif text-lg font-bold text-text">Fluxo Financeiro & Recebíveis</h1>
+    <div className="min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
+      <aside className="w-full md:w-64 bg-surface rounded-[32px] p-6 shadow-soft flex flex-col justify-between shrink-0">
+        <div className="space-y-8">
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-10 h-10 rounded-full bg-accent-soft text-accent flex items-center justify-center">
+              <Scissors className="w-4 h-4 rotate-45" />
+            </div>
+            <div>
+              <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">Financeiro</h2>
+              <span className="text-[10px] text-accent uppercase tracking-wider font-bold">Fluxo de Caixa</span>
+            </div>
+          </div>
+
+          <nav className="space-y-1.5">
+            {navLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition-all ${
+                  item.active
+                    ? "bg-accent-soft text-accent shadow-sm"
+                    : "text-text-muted hover:text-text hover:bg-surface-2"
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </nav>
         </div>
 
-        <button
-          onClick={exportCSV}
-          disabled={filtered.length === 0}
-          className="inline-flex items-center gap-1.5 bg-surface-2 hover:bg-surface border border-border px-3 py-1.5 rounded-sm text-xs font-bold transition-all disabled:opacity-40"
-        >
-          <Download className="w-3.5 h-3.5 text-accent" />
-          <span>Exportar Relatório CSV</span>
-        </button>
-      </header>
+        <div className="pt-6 border-t border-hairline px-2">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 text-text-muted hover:text-danger px-3 py-2 rounded-full text-xs font-semibold transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Sair do Painel</span>
+          </button>
+        </div>
+      </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 p-6 max-w-7xl mx-auto w-full space-y-6">
+      <main className="flex-1 space-y-6">
+        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+          <h1 className="font-serif text-lg font-bold text-text">Fluxo Financeiro</h1>
+
+          <button
+            onClick={exportCSV}
+            disabled={filtered.length === 0}
+            className="inline-flex items-center gap-1.5 bg-surface-2 hover:bg-surface-3 text-text px-5 py-2 rounded-full text-xs font-bold transition-all disabled:opacity-40"
+          >
+            <Download className="w-3.5 h-3.5 text-accent" />
+            <span>Exportar CSV</span>
+          </button>
+        </header>
+
         {errorMsg && (
-          <div className="bg-status-danger/10 border border-status-danger/30 rounded-sm p-4 text-xs text-status-danger">
+          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs">
             {errorMsg}
           </div>
         )}
 
-        {/* Resumo Financeiro */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-surface border border-border p-5 rounded-sm">
-            <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">
-              Receita Liquidada (Aprovada)
+        {/* Resumo Financeiro em Superfícies Tonais */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
+            <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider block">
+              Receita Liquidada (Compensada)
             </span>
-            <div className="font-mono text-2xl font-bold text-status-success">
+            <div className="font-serif text-3xl font-bold text-emerald-400">
               {formatCurrency(totalReceived)}
             </div>
-            <p className="text-[11px] text-text-muted mt-2">
-              Total de pagamentos já compensados e confirmados.
-            </p>
+            <p className="text-[11px] text-text-muted">Total de pagamentos já aprovados e recebidos</p>
           </div>
 
-          <div className="bg-surface border border-border p-5 rounded-sm">
-            <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">
-              Aguardando Liquidação (Pendente)
+          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
+            <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider block">
+              Aguardando Liquidação
             </span>
-            <div className="font-mono text-2xl font-bold text-accent">
+            <div className="font-serif text-3xl font-bold text-accent">
               {formatCurrency(totalPending)}
             </div>
-            <p className="text-[11px] text-text-muted mt-2">
-              Sinais Pix abertos ou pagamentos a receber no balcão.
-            </p>
+            <p className="text-[11px] text-text-muted">Sinais Pix abertos ou pagamentos a receber no balcão</p>
           </div>
         </div>
 
-        {/* Filtros */}
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-surface border border-border p-4 rounded-sm">
-          <div className="flex items-center gap-3">
-            <Filter className="w-4 h-4 text-accent" />
-            <span className="text-xs font-bold text-text-muted uppercase">Filtrar Método:</span>
+        {/* Filtros em Pílulas */}
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-surface rounded-full px-6 py-3 shadow-soft text-xs">
+          <div className="flex items-center gap-2">
+            <Filter className="w-3.5 h-3.5 text-accent" />
+            <span className="text-text-muted font-bold uppercase text-[10px]">Método:</span>
             <select
               value={methodFilter}
               onChange={(e) => setMethodFilter(e.target.value)}
-              className="bg-surface-2 border border-border px-3 py-1 text-xs rounded-sm focus:border-accent focus:outline-none"
+              className="bg-surface-2 text-text rounded-full px-4 py-1.5 focus:outline-none focus:ring-1 focus:ring-accent"
             >
               <option value="all">Todos os Métodos</option>
               <option value="pix">Pix</option>
@@ -225,85 +263,74 @@ export default function FinanceiroPage() {
             </select>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-text-muted uppercase">Status:</span>
+          <div className="flex items-center gap-2">
+            <span className="text-text-muted font-bold uppercase text-[10px]">Status:</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-surface-2 border border-border px-3 py-1 text-xs rounded-sm focus:border-accent focus:outline-none"
+              className="bg-surface-2 text-text rounded-full px-4 py-1.5 focus:outline-none focus:ring-1 focus:ring-accent"
             >
               <option value="all">Todos os Status</option>
               <option value="approved">Aprovados</option>
               <option value="pending">Pendentes</option>
               <option value="rejected">Rejeitados</option>
-              <option value="refunded">Estornados</option>
             </select>
           </div>
         </div>
 
-        {/* Tabela de Transações */}
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-24 text-text-muted">
-            <Loader2 className="w-8 h-8 animate-spin text-accent mb-3" />
-            <p className="text-sm">Carregando movimentações financeiras...</p>
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="bg-surface border border-border p-12 text-center rounded-sm">
-            <p className="text-sm text-text-muted mb-2">Nenhuma transação financeira encontrada.</p>
-            <p className="text-xs text-text-muted">
-              Pagamentos de agendamentos e sinais aparecerão aqui em tempo real.
-            </p>
-          </div>
-        ) : (
-          <div className="bg-surface border border-border rounded-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-border bg-surface-2 text-text-muted uppercase text-[10px] font-bold tracking-wider">
-                    <th className="p-4">Data/Hora</th>
-                    <th className="p-4">Cliente</th>
-                    <th className="p-4">Método</th>
-                    <th className="p-4">Status</th>
-                    <th className="p-4 text-right">Valor</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {filtered.map((tx) => (
-                    <tr key={tx.id} className="hover:bg-surface-2/50 transition-colors">
-                      <td className="p-4 font-mono text-text-muted">
-                        {new Date(tx.created_at).toLocaleString("pt-BR")}
-                      </td>
-                      <td className="p-4 font-bold text-text">{tx.customer_name}</td>
-                      <td className="p-4 uppercase text-[11px] font-bold text-text-muted">
-                        {tx.payment_method}
-                      </td>
-                      <td className="p-4">
-                        <span
-                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                            tx.status === "approved"
-                              ? "bg-status-success/15 text-status-success"
-                              : tx.status === "pending"
-                              ? "bg-accent/15 text-accent"
-                              : "bg-status-danger/15 text-status-danger"
-                          }`}
-                        >
-                          {tx.status === "approved"
-                            ? "Aprovado"
-                            : tx.status === "pending"
-                            ? "Pendente"
-                            : tx.status}
-                        </span>
-                      </td>
-                      <td className="p-4 text-right font-mono font-bold text-text text-sm">
-                        {formatCurrency(tx.amount)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        {/* Tabela em Linhas Respiradas */}
+        <div className="bg-surface rounded-[32px] p-8 shadow-soft">
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-24 text-text-muted">
+              <Loader2 className="w-8 h-8 animate-spin text-accent mb-3" />
+              <p className="text-sm">Carregando movimentações...</p>
             </div>
-          </div>
-        )}
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-12 text-xs text-text-muted">
+              Nenhuma movimentação financeira encontrada com estes filtros.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filtered.map((tx) => (
+                <div
+                  key={tx.id}
+                  className="bg-surface-2 hover:bg-surface-3/60 rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-accent font-bold text-xs shrink-0">
+                      <DollarSign className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-serif font-bold text-text text-sm">{tx.customer_name}</h3>
+                      <div className="flex items-center gap-2 text-xs text-text-muted mt-0.5">
+                        <span className="font-mono text-[11px]">{new Date(tx.created_at).toLocaleString("pt-BR")}</span>
+                        <span>· {tx.payment_method.toUpperCase()}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between sm:justify-end gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
+                    <span
+                      className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        tx.status === "approved"
+                          ? "bg-emerald-500/15 text-emerald-400"
+                          : tx.status === "pending"
+                          ? "bg-accent-soft text-accent"
+                          : "bg-danger/15 text-danger"
+                      }`}
+                    >
+                      {tx.status}
+                    </span>
+
+                    <strong className="font-serif font-bold text-base text-text">
+                      {formatCurrency(tx.amount)}
+                    </strong>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );

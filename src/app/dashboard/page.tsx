@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -19,6 +19,8 @@ import {
   LogOut,
   ChevronRight,
   AlertCircle,
+  Layers,
+  Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
 import { formatCurrency } from "@/lib/utils";
@@ -48,21 +50,19 @@ export default function DashboardPage() {
   const [revenuePending, setRevenuePending] = useState<number>(0);
   const [bookingsToday, setBookingsToday] = useState<DashboardBooking[]>([]);
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     setIsLoading(true);
     setErrorMsg(null);
 
     try {
       const supabase = createClient();
 
-      // 1. Obter usuário autenticado
       const { data: { user }, error: userErr } = await supabase.auth.getUser();
       if (userErr || !user) {
         router.push("/login");
         return;
       }
 
-      // 2. Obter vínculo em shop_members
       const { data: member, error: memErr } = await supabase
         .from("shop_members")
         .select("barbershop_id, role, barbershops(name)")
@@ -75,22 +75,20 @@ export default function DashboardPage() {
         return;
       }
 
-      const shopId = member.barbershop_id;
+      const shopId = (member as any).barbershop_id;
       setBarbershopId(shopId);
-      const bShop = member.barbershops as any;
+      const bShop = (member as any).barbershops;
       if (bShop?.name) setShopName(bShop.name);
 
-      // 3. Obter Transações Financeiras Efetivamente Aprovadas (Receita Real)
       const { data: txData } = await supabase
         .from("financial_transactions")
         .select("amount")
         .eq("barbershop_id", shopId)
         .eq("type", "income");
 
-      const totalReceived = (txData || []).reduce((acc, cur) => acc + Number(cur.amount), 0);
+      const totalReceived = (txData || []).reduce((acc: number, cur: any) => acc + Number(cur.amount), 0);
       setRevenueReceived(totalReceived);
 
-      // 4. Obter Agendamentos de Hoje
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
       const todayEnd = new Date();
@@ -99,57 +97,69 @@ export default function DashboardPage() {
       const { data: bData, error: bErr } = await supabase
         .from("bookings")
         .select(`
-          id, starts_at, status, total_price,
+          id,
+          starts_at,
+          status,
+          total_price,
           customers (name, phone),
           barbers (name),
-          payments (status, method)
+          payments (status, payment_method)
         `)
         .eq("barbershop_id", shopId)
         .gte("starts_at", todayStart.toISOString())
         .lte("starts_at", todayEnd.toISOString())
         .order("starts_at", { ascending: true });
 
-      if (bErr) throw bErr;
+      if (bErr) {
+        setErrorMsg(bErr.message);
+      } else if (bData) {
+        const mapped: DashboardBooking[] = bData.map((b: any) => ({
+          id: b.id,
+          starts_at: b.starts_at,
+          status: b.status,
+          total_price: Number(b.total_price),
+          customers: b.customers,
+          barbers: b.barbers,
+          payments: (b.payments || []).map((p: any) => ({
+            status: p.status,
+            method: p.payment_method,
+          })),
+        }));
+        setBookingsToday(mapped);
 
-      const list = (bData as any as DashboardBooking[]) || [];
-      setBookingsToday(list);
-
-      // Calcular pendente apenas para bookings confirmados com pagamento não aprovado
-      const pendingSum = list
-        .filter((b) => b.status === "confirmed" && b.payments?.some((p) => p.status !== "approved"))
-        .reduce((acc, cur) => acc + Number(cur.total_price), 0);
-
-      setRevenuePending(pendingSum);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Erro ao carregar dados do dashboard";
-      setErrorMsg(msg);
+        const pending = mapped
+          .filter((b) => b.status === "confirmed" || b.status === "hold")
+          .reduce((acc, cur) => acc + cur.total_price, 0);
+        setRevenuePending(pending);
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || "Erro ao carregar dados do dashboard.");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [router]);
 
   useEffect(() => {
     loadDashboardData();
-  }, []);
+  }, [loadDashboardData]);
 
-  const handleComplete = async (bookingId: string) => {
+  const handleCompleteBooking = async (bookingId: string) => {
     if (!barbershopId) return;
     const res = await completeBookingAction(barbershopId, bookingId, true);
-    if (!res.success) {
-      alert(res.error || "Erro ao concluir");
-    } else {
+    if (res.success) {
       loadDashboardData();
+    } else {
+      alert(res.error || "Erro ao concluir atendimento");
     }
   };
 
-  const handleCancel = async (bookingId: string) => {
+  const handleCancelBooking = async (bookingId: string) => {
     if (!barbershopId) return;
-    if (!confirm("Deseja cancelar este agendamento?")) return;
-    const res = await cancelBookingAction(barbershopId, bookingId, "Cancelado no painel do dono");
-    if (!res.success) {
-      alert(res.error || "Erro ao cancelar");
-    } else {
+    const res = await cancelBookingAction(barbershopId, bookingId, "Cancelado no dashboard");
+    if (res.success) {
       loadDashboardData();
+    } else {
+      alert(res.error || "Erro ao cancelar agendamento");
     }
   };
 
@@ -160,97 +170,75 @@ export default function DashboardPage() {
 
   if (noAccess) {
     return (
-      <main className="min-h-screen bg-bg text-text flex items-center justify-center p-4">
-        <div className="bg-surface border border-danger/40 p-8 rounded-lg max-w-md text-center space-y-4">
-          <AlertCircle className="w-12 h-12 text-danger mx-auto" />
-          <h2 className="font-serif text-2xl font-bold">Acesso Restrito</h2>
+      <div className="min-h-screen bg-bg text-text flex items-center justify-center p-4">
+        <div className="bg-surface rounded-[32px] p-10 max-w-md w-full text-center shadow-soft space-y-4">
+          <div className="w-16 h-16 rounded-full bg-danger/10 text-danger mx-auto flex items-center justify-center">
+            <XCircle className="w-8 h-8" />
+          </div>
+          <h1 className="font-serif text-2xl font-bold">Acesso Não Autorizado</h1>
           <p className="text-xs text-text-muted">
-            Sua conta está autenticada, mas você não possui autorização em <code>shop_members</code> para gerenciar nenhuma barbearia.
+            Seu usuário autenticado não possui vínculo ativo em <code>shop_members</code> nesta barbearia.
           </p>
           <button
             onClick={handleLogout}
-            className="bg-surface-2 hover:bg-surface border border-border px-4 py-2 rounded-sm text-xs font-semibold"
+            className="bg-accent text-accent-contrast px-6 py-2.5 rounded-full text-xs font-bold shadow-glow"
           >
-            Sair e trocar de conta
+            Fazer Login com Outra Conta
           </button>
         </div>
-      </main>
+      </div>
     );
   }
 
-  const completedCount = bookingsToday.filter((b) => b.status === "completed").length;
-  const cancelledCount = bookingsToday.filter((b) => b.status === "cancelled").length;
+  const navLinks = [
+    { href: "/dashboard", label: "Dashboard", icon: BarChart3, active: true },
+    { href: "/agenda", label: "Agenda", icon: Calendar },
+    { href: "/clientes", label: "Clientes", icon: Users },
+    { href: "/servicos", label: "Serviços", icon: Scissors },
+    { href: "/financeiro", label: "Financeiro", icon: DollarSign },
+    { href: "/configuracoes", label: "Configurações", icon: Settings },
+  ];
 
   return (
-    <div className="min-h-screen bg-bg text-text flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-surface border-r border-border hidden md:flex flex-col justify-between shrink-0">
-        <div>
-          <div className="h-16 border-b border-border flex items-center gap-3 px-6">
-            <div className="w-8 h-8 rounded-sm bg-surface-2 border border-accent/40 flex items-center justify-center text-accent">
+    <div className="min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
+      {/* Menu Lateral Arredondado (Trilho / Dock) */}
+      <aside className="w-full md:w-64 bg-surface rounded-[32px] p-6 shadow-soft flex flex-col justify-between shrink-0">
+        <div className="space-y-8">
+          {/* Marca */}
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-10 h-10 rounded-full bg-accent-soft text-accent flex items-center justify-center">
               <Scissors className="w-4 h-4 rotate-45" />
             </div>
             <div>
-              <span className="font-serif font-bold text-sm text-text block truncate max-w-[140px]">{shopName}</span>
-              <span className="text-[10px] text-text-muted uppercase tracking-wider">Painel do Dono</span>
+              <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">{shopName}</h2>
+              <span className="text-[10px] text-accent uppercase tracking-wider font-bold">Gestão</span>
             </div>
           </div>
 
-          <nav className="p-4 space-y-1">
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-sm bg-accent/15 text-accent font-semibold text-sm border border-accent/30"
-            >
-              <BarChart3 className="w-4 h-4" />
-              <span>Dashboard</span>
-            </Link>
-
-            <Link
-              href="/agenda"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-text-muted hover:text-text hover:bg-surface-2 text-sm font-medium transition-colors"
-            >
-              <Calendar className="w-4 h-4" />
-              <span>Agenda por Barbeiro</span>
-            </Link>
-
-            <Link
-              href="/clientes"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-text-muted hover:text-text hover:bg-surface-2 text-sm font-medium transition-colors"
-            >
-              <Users className="w-4 h-4" />
-              <span>Clientes (CRM)</span>
-            </Link>
-
-            <Link
-              href="/servicos"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-text-muted hover:text-text hover:bg-surface-2 text-sm font-medium transition-colors"
-            >
-              <Scissors className="w-4 h-4" />
-              <span>Serviços & Preços</span>
-            </Link>
-
-            <Link
-              href="/financeiro"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-text-muted hover:text-text hover:bg-surface-2 text-sm font-medium transition-colors"
-            >
-              <DollarSign className="w-4 h-4" />
-              <span>Financeiro</span>
-            </Link>
-
-            <Link
-              href="/configuracoes"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-text-muted hover:text-text hover:bg-surface-2 text-sm font-medium transition-colors"
-            >
-              <Settings className="w-4 h-4" />
-              <span>Configurações do Site</span>
-            </Link>
+          {/* Links do Menu */}
+          <nav className="space-y-1.5">
+            {navLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition-all ${
+                  item.active
+                    ? "bg-accent-soft text-accent shadow-sm"
+                    : "text-text-muted hover:text-text hover:bg-surface-2"
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                <span>{item.label}</span>
+              </Link>
+            ))}
           </nav>
         </div>
 
-        <div className="p-4 border-t border-border">
+        {/* Rodapé do Menu */}
+        <div className="pt-6 border-t border-hairline px-2">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-text-muted hover:text-danger text-sm transition-colors"
+            className="w-full flex items-center gap-2 text-text-muted hover:text-danger px-3 py-2 rounded-full text-xs font-semibold transition-colors"
           >
             <LogOut className="w-4 h-4" />
             <span>Sair do Painel</span>
@@ -259,177 +247,166 @@ export default function DashboardPage() {
       </aside>
 
       {/* Conteúdo Principal */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        <header className="h-16 border-b border-border bg-surface/50 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
-          <h1 className="font-serif text-lg font-bold text-text">Visão Geral do Negócio</h1>
+      <main className="flex-1 space-y-6">
+        {/* Barra Superior */}
+        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+          <div className="flex items-center gap-3">
+            <h1 className="font-serif text-lg font-bold text-text">Visão Geral</h1>
+            <span className="text-xs text-text-muted hidden sm:inline">· Métricas em tempo real</span>
+          </div>
 
           <div className="flex items-center gap-3">
+            {/* Seletor de Período em Pílula */}
+            <div className="bg-surface-2 p-1 rounded-full flex gap-1 text-xs">
+              {(["hoje", "semana", "mes"] as const).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPeriod(p)}
+                  className={`px-4 py-1.5 rounded-full capitalize font-semibold transition-all ${
+                    period === p ? "bg-accent text-accent-contrast shadow-sm" : "text-text-muted hover:text-text"
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+
             <Link
-              href="/agenda?novo=true"
-              className="inline-flex items-center gap-1.5 bg-accent hover:bg-accent-hover text-accent-contrast px-3.5 py-1.5 rounded-sm text-xs font-bold transition-all shadow-premium"
+              href="/agenda"
+              className="inline-flex items-center gap-1.5 bg-accent hover:bg-accent-hover text-accent-contrast px-5 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Agendamento Rápido</span>
+              <span>Novo Agendamento</span>
             </Link>
           </div>
         </header>
 
-        <main className="p-6 space-y-6 max-w-7xl">
-          {errorMsg && (
-            <div className="p-3 bg-danger/10 border border-danger/30 text-danger text-xs rounded-sm">
-              {errorMsg}
-            </div>
-          )}
+        {errorMsg && (
+          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
 
-          {/* Cartões de Métricas Reais */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-surface border border-border p-5 rounded-md shadow-card">
-              <div className="flex justify-between items-start text-xs text-text-muted mb-2">
-                <span>Receita Confirmada</span>
-                <DollarSign className="w-4 h-4 text-emerald-400" />
-              </div>
-              <div className="font-serif text-2xl font-bold text-emerald-400">
-                {formatCurrency(revenueReceived)}
-              </div>
-              <span className="text-[11px] text-text-muted mt-1 block">Receita real lançada no caixa</span>
-            </div>
-
-            <div className="bg-surface border border-border p-5 rounded-md shadow-card">
-              <div className="flex justify-between items-start text-xs text-text-muted mb-2">
-                <span>Pendente no Balcão</span>
-                <Clock className="w-4 h-4 text-amber-400" />
-              </div>
-              <div className="font-serif text-2xl font-bold text-amber-400">
-                {formatCurrency(revenuePending)}
-              </div>
-              <span className="text-[11px] text-text-muted mt-1 block">A receber nos atendimentos de hoje</span>
-            </div>
-
-            <div className="bg-surface border border-border p-5 rounded-md shadow-card">
-              <div className="flex justify-between items-start text-xs text-text-muted mb-2">
-                <span>Agendamentos Hoje</span>
-                <Calendar className="w-4 h-4 text-accent" />
-              </div>
-              <div className="font-serif text-2xl font-bold text-text">
-                {completedCount} / {bookingsToday.length}
-              </div>
-              <span className="text-[11px] text-text-muted mt-1 block">
-                {completedCount} concluídos • {cancelledCount} cancelados
+        {/* Superfícies Tonais de Métricas (Sem bordas de 1px) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Receita Liquidada</span>
+              <span className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                <DollarSign className="w-4 h-4" />
               </span>
             </div>
-
-            <div className="bg-surface border border-border p-5 rounded-md shadow-card">
-              <div className="flex justify-between items-start text-xs text-text-muted mb-2">
-                <span>Faturamento Total Projetado</span>
-                <TrendingUp className="w-4 h-4 text-sky-400" />
-              </div>
-              <div className="font-serif text-2xl font-bold text-text">
-                {formatCurrency(revenueReceived + revenuePending)}
-              </div>
-              <span className="text-[11px] text-text-muted mt-1 block">Recebido + Pendente</span>
+            <div className="font-serif text-3xl font-bold text-emerald-400">
+              {formatCurrency(revenueReceived)}
             </div>
+            <p className="text-[11px] text-text-muted">Total de pagamentos concluídos e compensados</p>
           </div>
 
-          {/* Lista de Agendamentos de Hoje Reais */}
-          <div className="bg-surface border border-border rounded-md shadow-card overflow-hidden">
-            <div className="p-5 border-b border-border flex items-center justify-between">
-              <div>
-                <h3 className="font-serif font-bold text-base text-text">Agendamentos de Hoje</h3>
-                <p className="text-xs text-text-muted mt-0.5">Sincronizado em tempo real com o banco de dados</p>
-              </div>
-
-              <Link
-                href="/agenda"
-                className="text-xs text-accent hover:underline flex items-center gap-1 font-semibold"
-              >
-                <span>Ver Grade Completa</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
+          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Aguardando no Balcão</span>
+              <span className="w-8 h-8 rounded-full bg-accent-soft text-accent flex items-center justify-center">
+                <Clock className="w-4 h-4" />
+              </span>
             </div>
+            <div className="font-serif text-3xl font-bold text-accent">
+              {formatCurrency(revenuePending)}
+            </div>
+            <p className="text-[11px] text-text-muted">Valores a receber de agendamentos de hoje</p>
+          </div>
 
-            {isLoading ? (
-              <div className="p-8 text-center">
-                <span className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin inline-block" />
-              </div>
-            ) : bookingsToday.length === 0 ? (
-              <div className="p-8 text-center text-xs text-text-muted">
-                Nenhum agendamento registrado para hoje até o momento.
-              </div>
-            ) : (
-              <div className="divide-y divide-border overflow-x-auto">
-                {bookingsToday.map((item) => {
-                  const timeStr = new Date(item.starts_at).toLocaleTimeString("pt-BR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  });
-                  const isPaid = item.payments?.some((p) => p.status === "approved");
+          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 sm:col-span-2 lg:col-span-1">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Atendimentos Hoje</span>
+              <span className="w-8 h-8 rounded-full bg-surface-2 text-text flex items-center justify-center">
+                <Calendar className="w-4 h-4" />
+              </span>
+            </div>
+            <div className="font-serif text-3xl font-bold text-text">
+              {bookingsToday.length}
+            </div>
+            <p className="text-[11px] text-text-muted">Clientes agendados na grade do dia</p>
+          </div>
+        </div>
 
-                  return (
-                    <div key={item.id} className="p-4 flex items-center justify-between gap-4 hover:bg-surface-2/40 transition-colors">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 text-center font-mono font-bold text-sm text-accent">
-                          {timeStr}
-                        </div>
+        {/* Linhas Respiradas de Agendamentos de Hoje (Sem caixas de grade) */}
+        <div className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6">
+          <div className="flex items-center justify-between pb-4 border-b border-hairline">
+            <h2 className="font-serif text-xl font-bold text-text">Grade de Atendimentos de Hoje</h2>
+            <Link href="/agenda" className="text-xs text-accent hover:underline font-semibold flex items-center gap-1">
+              <span>Abrir Agenda Completa</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
 
-                        <div>
-                          <h4 className="font-semibold text-sm text-text">{item.customers?.name || "Cliente"}</h4>
-                          <div className="flex items-center gap-2 text-xs text-text-muted mt-0.5">
-                            <span>{item.barbers?.name || "Sem profissional"}</span>
-                            <span>•</span>
-                            <span>{item.customers?.phone}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <span className="text-sm font-bold text-text block">{formatCurrency(item.total_price)}</span>
-                          <span className={`text-[10px] font-semibold ${isPaid ? "text-emerald-400" : "text-amber-400"}`}>
-                            {isPaid ? "Pago Online" : "Pendente no Balcão"}
-                          </span>
-                        </div>
-
-                        <div className="w-28 text-center">
-                          {item.status === "completed" && (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-sm border border-emerald-500/20">
-                              <CheckCircle2 className="w-3 h-3" />
-                              <span>Concluído</span>
-                            </span>
-                          )}
-
-                          {item.status === "confirmed" && (
-                            <div className="flex items-center gap-1">
-                              <button
-                                onClick={() => handleComplete(item.id)}
-                                className="text-[10px] bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 px-2 py-1 rounded-sm font-semibold transition-colors"
-                              >
-                                Concluir
-                              </button>
-                              <button
-                                onClick={() => handleCancel(item.id)}
-                                className="text-[10px] bg-danger/15 hover:bg-danger/25 text-danger border border-danger/30 px-2 py-1 rounded-sm font-semibold transition-colors"
-                              >
-                                Cancelar
-                              </button>
-                            </div>
-                          )}
-
-                          {item.status === "cancelled" && (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-danger bg-danger/10 px-2 py-0.5 rounded-sm border border-danger/20">
-                              <XCircle className="w-3 h-3" />
-                              <span>Cancelado</span>
-                            </span>
-                          )}
-                        </div>
-                      </div>
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <span className="w-7 h-7 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : bookingsToday.length === 0 ? (
+            <div className="text-center py-12 text-xs text-text-muted">
+              Nenhum agendamento agendado para o dia de hoje.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {bookingsToday.map((b) => (
+                <div
+                  key={b.id}
+                  className="bg-surface-2 hover:bg-surface-3/70 rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-surface flex flex-col items-center justify-center font-mono text-xs font-bold text-accent shrink-0">
+                      <span>{new Date(b.starts_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
                     </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </main>
-      </div>
+                    <div>
+                      <h4 className="font-serif font-bold text-text text-sm">{b.customers?.name || "Cliente"}</h4>
+                      <p className="text-xs text-text-muted">
+                        Profissional: {b.barbers?.name || "Barbeiro"} · {b.customers?.phone}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between sm:justify-end gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
+                    <span
+                      className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        b.status === "completed"
+                          ? "bg-emerald-500/15 text-emerald-400"
+                          : b.status === "confirmed"
+                          ? "bg-accent-soft text-accent"
+                          : "bg-danger/15 text-danger"
+                      }`}
+                    >
+                      {b.status}
+                    </span>
+
+                    <span className="font-serif font-bold text-sm text-text">
+                      {formatCurrency(b.total_price)}
+                    </span>
+
+                    {b.status === "confirmed" && (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleCompleteBooking(b.id)}
+                          className="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
+                        >
+                          Concluir
+                        </button>
+                        <button
+                          onClick={() => handleCancelBooking(b.id)}
+                          className="bg-danger/15 hover:bg-danger/25 text-danger px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }

@@ -1,36 +1,60 @@
 :root {
-  /* Cores de Substrato e Cartões */
-  --bg: #0c0d0e;
-  --surface: #141618;
-  --surface-2: #1c1f22;
-  --border: #272b30;
+  /* Fundo e superfícies tonais (Dark Quente) */
+  --bg: #0B0B0C;
+  --surface: #151517;
+  --surface-2: #1C1C1F;
+  --surface-3: #242428;
+  --border: rgba(255, 255, 255, 0.06);
 
-  /* Tipografia & Legibilidade (Contraste testado WCAG AA) */
-  --text: #ededed;
-  --text-muted: #a1a7af;
+  /* Tipografia & Legibilidade (Branco Quente + Muted) */
+  --text: #F4F1EA;
+  --text-muted: #A59F94;
 
-  /* Cores de Destaque / Identidade da Barbearia */
-  --accent: #f59e0b;
-  --accent-hover: #d97706;
-  --accent-contrast: #0c0d0e;
+  /* Identidade Âmbar */
+  --accent: #F5A524;
+  --accent-hover: #E09015;
+  --accent-soft: rgba(245, 165, 36, 0.14);
+  --accent-glow: rgba(245, 165, 36, 0.28);
+  --accent-contrast: #1A1206;
 
   /* Feedback de Sistema */
-  --danger: #ef4444;
-  --success: #10b981;
+  --danger: #FF6B6B;
+  --success: #4ADE80;
 
-  /* Geometria e Raios */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* Geometria e Raios Arredondados e Pílulas */
+  --radius-pill: 9999px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-2xl: 36px;
 
-  /* Tipografia Padrão */
+  /* Sombras Difusas e Brilhos */
+  --shadow-soft: 0 20px 50px -24px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 12px 32px -12px var(--accent-glow);
+  --hairline: rgba(255, 255, 255, 0.06);
+
+  /* Tipografia */
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
 
-  /* Transições e Animações */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+[data-theme="light"] {
+  --bg: #F7F5F0;
+  --surface: #FFFFFF;
+  --surface-2: #EFECE6;
+  --surface-3: #E4E0D7;
+  --border: rgba(0, 0, 0, 0.08);
+  --text: #1C1A17;
+  --text-muted: #757065;
+  --accent: #D98200;
+  --accent-hover: #B86E00;
+  --accent-soft: rgba(217, 130, 0, 0.12);
+  --accent-glow: rgba(217, 130, 0, 0.2);
+  --accent-contrast: #FFFFFF;
+  --danger: #E03131;
+  --success: #2F9E44;
+  --shadow-soft: 0 16px 40px -20px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 8px 24px -8px rgba(217, 130, 0, 0.25);
+  --hairline: rgba(0, 0, 0, 0.08);
 }
 
 /* Respeito a usuários com sensibilidade a movimento */

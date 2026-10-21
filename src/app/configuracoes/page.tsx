@@ -12,9 +12,14 @@ import {
   AlertCircle,
   ShieldCheck,
   Loader2,
+  BarChart3,
+  Calendar,
+  Users,
+  DollarSign,
+  LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
-import { updateSiteSettingsAction } from "@/app/actions/admin-actions";
+import { updateSiteSettingsAction, logoutAction } from "@/app/actions/admin-actions";
 
 export default function ConfiguracoesPage() {
   const router = useRouter();
@@ -23,12 +28,12 @@ export default function ConfiguracoesPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  // Campos de Configuração
+  // Campos
   const [brandName, setBrandName] = useState("");
   const [brandTagline, setBrandTagline] = useState("");
   const [heroTitle, setHeroTitle] = useState("");
   const [heroSubtitle, setHeroSubtitle] = useState("");
-  const [accentColor, setAccentColor] = useState("#F59E0B");
+  const [accentColor, setAccentColor] = useState("#F5A524");
   const [depositPct, setDepositPct] = useState("50");
   const [cancelHours, setCancelHours] = useState("24");
 
@@ -38,10 +43,7 @@ export default function ConfiguracoesPage() {
 
     try {
       const supabase = createClient();
-      const {
-        data: { user },
-        error: userErr,
-      } = await supabase.auth.getUser();
+      const { data: { user }, error: userErr } = await supabase.auth.getUser();
 
       if (userErr || !user) {
         router.push("/login");
@@ -60,7 +62,7 @@ export default function ConfiguracoesPage() {
         return;
       }
 
-      const shopId = member.barbershop_id;
+      const shopId = (member as any).barbershop_id;
       setBarbershopId(shopId);
 
       const { data, error } = await supabase
@@ -76,7 +78,7 @@ export default function ConfiguracoesPage() {
         setBrandTagline(data.brand_tagline || "");
         setHeroTitle(data.hero_title || "");
         setHeroSubtitle(data.hero_subtitle || "");
-        setAccentColor(data.accent_color || "#F59E0B");
+        setAccentColor(data.accent_color || "#F5A524");
         setDepositPct(String(data.deposit_percentage || 50));
         setCancelHours(String(data.cancellation_notice_hours || 24));
       }
@@ -111,63 +113,104 @@ export default function ConfiguracoesPage() {
     setIsSaving(false);
 
     if (res.success) {
-      setMessage({ type: "success", text: "Configurações salvas com sucesso no banco de dados!" });
+      setMessage({ type: "success", text: "Configurações salvas e propagadas para o site do cliente!" });
     } else {
       setMessage({ type: "error", text: res.error || "Erro ao salvar alterações." });
     }
   };
 
-  return (
-    <div className="min-h-screen bg-bg text-text flex flex-col font-sans">
-      <header className="h-16 border-b border-border bg-surface px-6 flex items-center justify-between sticky top-0 z-30">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/dashboard"
-            className="text-text-muted hover:text-text flex items-center gap-1.5 text-xs font-semibold"
-          >
-            <ChevronLeft className="w-4 h-4 text-accent" />
-            <span>Dashboard</span>
-          </Link>
-          <div className="h-4 w-[1px] bg-border" />
-          <h1 className="font-serif text-lg font-bold text-text">Configurações da Barbearia</h1>
-        </div>
-      </header>
+  const handleLogout = async () => {
+    await logoutAction();
+    router.push("/login");
+  };
 
-      <main className="flex-1 p-6 max-w-3xl mx-auto w-full">
+  const navLinks = [
+    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
+    { href: "/agenda", label: "Agenda", icon: Calendar },
+    { href: "/clientes", label: "Clientes", icon: Users },
+    { href: "/servicos", label: "Serviços", icon: Scissors },
+    { href: "/financeiro", label: "Financeiro", icon: DollarSign },
+    { href: "/configuracoes", label: "Configurações", icon: Settings, active: true },
+  ];
+
+  return (
+    <div className="min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
+      <aside className="w-full md:w-64 bg-surface rounded-[32px] p-6 shadow-soft flex flex-col justify-between shrink-0">
+        <div className="space-y-8">
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-10 h-10 rounded-full bg-accent-soft text-accent flex items-center justify-center">
+              <Scissors className="w-4 h-4 rotate-45" />
+            </div>
+            <div>
+              <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">Configurações</h2>
+              <span className="text-[10px] text-accent uppercase tracking-wider font-bold">Personalização</span>
+            </div>
+          </div>
+
+          <nav className="space-y-1.5">
+            {navLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition-all ${
+                  item.active
+                    ? "bg-accent-soft text-accent shadow-sm"
+                    : "text-text-muted hover:text-text hover:bg-surface-2"
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="pt-6 border-t border-hairline px-2">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 text-text-muted hover:text-danger px-3 py-2 rounded-full text-xs font-semibold transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Sair do Painel</span>
+          </button>
+        </div>
+      </aside>
+
+      <main className="flex-1 space-y-6 max-w-4xl">
+        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+          <h1 className="font-serif text-lg font-bold text-text">Parâmetros da Barbearia</h1>
+        </header>
+
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-24 text-text-muted">
             <Loader2 className="w-8 h-8 animate-spin text-accent mb-3" />
-            <p className="text-sm">Carregando parâmetros do estabelecimento...</p>
+            <p className="text-sm">Carregando parâmetros...</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6 bg-surface border border-border p-6 rounded-sm">
+          <form onSubmit={handleSubmit} className="bg-surface rounded-[32px] p-8 shadow-soft space-y-8">
             {message && (
               <div
-                className={`p-4 rounded-sm text-xs flex items-center gap-2 ${
+                className={`p-4 rounded-[20px] text-xs flex items-center gap-2.5 ${
                   message.type === "success"
-                    ? "bg-status-success/15 border border-status-success/30 text-status-success"
-                    : "bg-status-danger/15 border border-status-danger/30 text-status-danger"
+                    ? "bg-emerald-500/10 text-emerald-400"
+                    : "bg-danger/10 text-danger"
                 }`}
               >
-                {message.type === "success" ? (
-                  <Check className="w-4 h-4 shrink-0" />
-                ) : (
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                )}
+                {message.type === "success" ? <Check className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
                 <span>{message.text}</span>
               </div>
             )}
 
-            <div className="border-b border-border pb-4">
-              <h2 className="font-serif text-base font-bold text-text">Identidade da Marca</h2>
-              <p className="text-xs text-text-muted">
-                Esses dados alimentam diretamente a landing page do cliente via views públicas.
+            <div>
+              <h2 className="font-serif text-lg font-bold text-text">Identidade da Marca</h2>
+              <p className="text-xs text-text-muted mt-1">
+                Altera o nome, slogan e cores exibidos na landing page do cliente em tempo real.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-text-muted uppercase mb-1">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Nome da Barbearia
                 </label>
                 <input
@@ -175,26 +218,26 @@ export default function ConfiguracoesPage() {
                   required
                   value={brandName}
                   onChange={(e) => setBrandName(e.target.value)}
-                  className="w-full bg-surface-2 border border-border px-3 py-2 text-xs rounded-sm focus:border-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-text-muted uppercase mb-1">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Slogan / Tagline
                 </label>
                 <input
                   type="text"
                   value={brandTagline}
                   onChange={(e) => setBrandTagline(e.target.value)}
-                  className="w-full bg-surface-2 border border-border px-3 py-2 text-xs rounded-sm focus:border-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-text-muted uppercase mb-1">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Título Principal (Hero)
                 </label>
                 <input
@@ -202,33 +245,33 @@ export default function ConfiguracoesPage() {
                   required
                   value={heroTitle}
                   onChange={(e) => setHeroTitle(e.target.value)}
-                  className="w-full bg-surface-2 border border-border px-3 py-2 text-xs rounded-sm focus:border-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-text-muted uppercase mb-1">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Subtítulo (Hero)
                 </label>
                 <textarea
                   rows={2}
                   value={heroSubtitle}
                   onChange={(e) => setHeroSubtitle(e.target.value)}
-                  className="w-full bg-surface-2 border border-border px-3 py-2 text-xs rounded-sm focus:border-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-2xl px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
             </div>
 
-            <div className="border-b border-border pb-4 pt-2">
-              <h2 className="font-serif text-base font-bold text-text">Regras de Agendamento & Pagamento</h2>
-              <p className="text-xs text-text-muted">
-                Políticas financeiras aplicadas no checkout e cálculo de retenção.
+            <div className="pt-4 border-t border-hairline">
+              <h2 className="font-serif text-lg font-bold text-text">Políticas Financeiras</h2>
+              <p className="text-xs text-text-muted mt-1">
+                Regras aplicadas no checkout de agendamento online.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-text-muted uppercase mb-1">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Sinal Pix Obrigatório (%)
                 </label>
                 <input
@@ -238,12 +281,12 @@ export default function ConfiguracoesPage() {
                   required
                   value={depositPct}
                   onChange={(e) => setDepositPct(e.target.value)}
-                  className="w-full bg-surface-2 border border-border px-3 py-2 text-xs rounded-sm focus:border-accent focus:outline-none font-mono"
+                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-text-muted uppercase mb-1">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Aviso para Cancelar (Horas)
                 </label>
                 <input
@@ -253,12 +296,12 @@ export default function ConfiguracoesPage() {
                   required
                   value={cancelHours}
                   onChange={(e) => setCancelHours(e.target.value)}
-                  className="w-full bg-surface-2 border border-border px-3 py-2 text-xs rounded-sm focus:border-accent focus:outline-none font-mono"
+                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-text-muted uppercase mb-1">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Cor Destaque (Hex)
                 </label>
                 <div className="flex items-center gap-2">
@@ -266,33 +309,33 @@ export default function ConfiguracoesPage() {
                     type="color"
                     value={accentColor}
                     onChange={(e) => setAccentColor(e.target.value)}
-                    className="w-8 h-8 rounded border border-border cursor-pointer bg-transparent"
+                    className="w-10 h-10 rounded-full cursor-pointer bg-transparent border-0"
                   />
                   <input
                     type="text"
                     value={accentColor}
                     onChange={(e) => setAccentColor(e.target.value)}
-                    className="flex-1 bg-surface-2 border border-border px-3 py-2 text-xs rounded-sm focus:border-accent focus:outline-none font-mono"
+                    className="flex-1 bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-end pt-4 border-t border-border">
+            <div className="flex items-center justify-end pt-6 border-t border-hairline">
               <button
                 type="submit"
                 disabled={isSaving}
-                className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 text-xs font-bold rounded-sm shadow-premium flex items-center gap-2 disabled:opacity-50"
+                className="bg-accent hover:bg-accent-hover text-accent-contrast px-8 py-3.5 rounded-full text-xs font-bold shadow-glow flex items-center gap-2 disabled:opacity-50"
               >
                 {isSaving ? (
                   <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                     <span>Salvando...</span>
                   </>
                 ) : (
                   <>
-                    <Save className="w-3.5 h-3.5" />
-                    <span>Salvar Configurações</span>
+                    <Save className="w-4 h-4" />
+                    <span>Salvar Alterações</span>
                   </>
                 )}
               </button>

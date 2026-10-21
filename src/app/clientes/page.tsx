@@ -16,9 +16,13 @@ import {
   UserCheck,
   Loader2,
   FileText,
+  BarChart3,
+  Settings,
+  LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
 import { formatCurrency } from "@/lib/utils";
+import { logoutAction } from "@/app/actions/admin-actions";
 
 interface CustomerRecord {
   id: string;
@@ -45,10 +49,7 @@ export default function ClientesPage() {
 
     try {
       const supabase = createClient();
-      const {
-        data: { user },
-        error: userErr,
-      } = await supabase.auth.getUser();
+      const { data: { user }, error: userErr } = await supabase.auth.getUser();
 
       if (userErr || !user) {
         router.push("/login");
@@ -67,9 +68,8 @@ export default function ClientesPage() {
         return;
       }
 
-      const shopId = member.barbershop_id;
+      const shopId = (member as any).barbershop_id;
 
-      // Buscar clientes e seus bookings
       const { data: custData, error: custErr } = await supabase
         .from("customers")
         .select(`
@@ -93,16 +93,10 @@ export default function ClientesPage() {
         setErrorMsg(custErr.message);
       } else if (custData) {
         const mapped: CustomerRecord[] = custData.map((c: any) => {
-          const completedBookings = (c.bookings || []).filter(
-            (b: any) => b.status === "completed"
-          );
-          const totalSpent = completedBookings.reduce(
-            (acc: number, b: any) => acc + Number(b.total_price || 0),
-            0
-          );
+          const completedBookings = (c.bookings || []).filter((b: any) => b.status === "completed");
+          const totalSpent = completedBookings.reduce((acc: number, b: any) => acc + Number(b.total_price || 0), 0);
           const sortedBookings = [...(c.bookings || [])].sort(
-            (a: any, b: any) =>
-              new Date(b.starts_at).getTime() - new Date(a.starts_at).getTime()
+            (a: any, b: any) => new Date(b.starts_at).getTime() - new Date(a.starts_at).getTime()
           );
           const lastVisit = sortedBookings.length > 0 ? sortedBookings[0].starts_at : null;
 
@@ -121,7 +115,7 @@ export default function ClientesPage() {
         setCustomers(mapped);
       }
     } catch (err: any) {
-      setErrorMsg(err.message || "Erro ao carregar lista de clientes.");
+      setErrorMsg(err.message || "Erro ao carregar clientes.");
     } finally {
       setIsLoading(false);
     }
@@ -131,6 +125,11 @@ export default function ClientesPage() {
     loadCustomers();
   }, [loadCustomers]);
 
+  const handleLogout = async () => {
+    await logoutAction();
+    router.push("/login");
+  };
+
   const filtered = customers.filter(
     (c) =>
       c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -138,131 +137,126 @@ export default function ClientesPage() {
       (c.email && c.email.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
+  const navLinks = [
+    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
+    { href: "/agenda", label: "Agenda", icon: Calendar },
+    { href: "/clientes", label: "Clientes", icon: Users, active: true },
+    { href: "/servicos", label: "Serviços", icon: Scissors },
+    { href: "/financeiro", label: "Financeiro", icon: DollarSign },
+    { href: "/configuracoes", label: "Configurações", icon: Settings },
+  ];
+
   return (
-    <div className="min-h-screen bg-bg text-text flex flex-col font-sans">
-      {/* Header */}
-      <header className="h-16 border-b border-border bg-surface px-6 flex items-center justify-between sticky top-0 z-30">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/dashboard"
-            className="text-text-muted hover:text-text flex items-center gap-1.5 text-xs font-semibold"
-          >
-            <ChevronLeft className="w-4 h-4 text-accent" />
-            <span>Dashboard</span>
-          </Link>
-          <div className="h-4 w-[1px] bg-border" />
-          <h1 className="font-serif text-lg font-bold text-text">Gestão de Clientes & CRM</h1>
+    <div className="min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
+      <aside className="w-full md:w-64 bg-surface rounded-[32px] p-6 shadow-soft flex flex-col justify-between shrink-0">
+        <div className="space-y-8">
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-10 h-10 rounded-full bg-accent-soft text-accent flex items-center justify-center">
+              <Scissors className="w-4 h-4 rotate-45" />
+            </div>
+            <div>
+              <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">Clientes</h2>
+              <span className="text-[10px] text-accent uppercase tracking-wider font-bold">Gestão & CRM</span>
+            </div>
+          </div>
+
+          <nav className="space-y-1.5">
+            {navLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition-all ${
+                  item.active
+                    ? "bg-accent-soft text-accent shadow-sm"
+                    : "text-text-muted hover:text-text hover:bg-surface-2"
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </nav>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="pt-6 border-t border-hairline px-2">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 text-text-muted hover:text-danger px-3 py-2 rounded-full text-xs font-semibold transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Sair do Painel</span>
+          </button>
+        </div>
+      </aside>
+
+      <main className="flex-1 space-y-6">
+        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+          <h1 className="font-serif text-lg font-bold text-text">Carteira de Clientes</h1>
+
           <div className="relative">
-            <Search className="w-4 h-4 text-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-text-muted absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Buscar por nome, telefone..."
+              placeholder="Buscar cliente por nome ou telefone..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-surface-2 border border-border pl-9 pr-4 py-1.5 text-xs rounded-sm focus:border-accent focus:outline-none w-64"
+              className="bg-surface-2 rounded-full pl-10 pr-5 py-2 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none w-64 md:w-80"
             />
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content */}
-      <main className="flex-1 p-6 max-w-7xl mx-auto w-full">
         {errorMsg && (
-          <div className="bg-status-danger/10 border border-status-danger/30 rounded-sm p-4 text-xs text-status-danger mb-6">
+          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs">
             {errorMsg}
           </div>
         )}
 
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-24 text-text-muted">
-            <Loader2 className="w-8 h-8 animate-spin text-accent mb-3" />
-            <p className="text-sm">Carregando carteira de clientes...</p>
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="bg-surface border border-border p-12 text-center rounded-sm">
-            <p className="text-sm text-text-muted mb-2">Nenhum cliente encontrado.</p>
-            <p className="text-xs text-text-muted">
-              Novos clientes aparecem aqui automaticamente a cada agendamento.
-            </p>
-          </div>
-        ) : (
-          <div className="bg-surface border border-border rounded-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-border bg-surface-2 text-text-muted uppercase text-[10px] font-bold tracking-wider">
-                    <th className="p-4">Cliente</th>
-                    <th className="p-4">Contato</th>
-                    <th className="p-4 text-center">Visitas</th>
-                    <th className="p-4 text-right">Total Investido</th>
-                    <th className="p-4">Último Atendimento</th>
-                    <th className="p-4">Observações</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {filtered.map((c) => (
-                    <tr key={c.id} className="hover:bg-surface-2/50 transition-colors">
-                      <td className="p-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center font-bold text-xs shrink-0">
-                            {c.name.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <div className="font-bold text-text text-sm">{c.name}</div>
-                            <div className="text-[11px] text-text-muted">
-                              Cliente desde {new Date(c.created_at).toLocaleDateString("pt-BR")}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="p-4 space-y-1">
-                        <div className="flex items-center gap-1.5 text-text font-mono">
-                          <Phone className="w-3.5 h-3.5 text-accent shrink-0" />
-                          <span>{c.phone}</span>
-                        </div>
-                        {c.email && (
-                          <div className="flex items-center gap-1.5 text-text-muted text-[11px]">
-                            <Mail className="w-3.5 h-3.5 shrink-0" />
-                            <span>{c.email}</span>
-                          </div>
-                        )}
-                      </td>
-
-                      <td className="p-4 text-center">
-                        <span className="inline-block px-2.5 py-1 rounded bg-surface-2 border border-border font-bold text-accent">
-                          {c.visits_count} {c.visits_count === 1 ? "visita" : "visitas"}
-                        </span>
-                      </td>
-
-                      <td className="p-4 text-right font-mono font-bold text-text text-sm">
-                        {formatCurrency(c.total_spent)}
-                      </td>
-
-                      <td className="p-4 text-text-muted">
-                        {c.last_visit ? (
-                          <div className="flex items-center gap-1.5">
-                            <Calendar className="w-3.5 h-3.5 text-accent" />
-                            <span>{new Date(c.last_visit).toLocaleDateString("pt-BR")}</span>
-                          </div>
-                        ) : (
-                          <span className="text-text-muted/60">Sem visitas concluídas</span>
-                        )}
-                      </td>
-
-                      <td className="p-4 text-text-muted max-w-xs truncate">
-                        {c.notes || <span className="text-text-muted/40 italic">Sem notas</span>}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        <div className="bg-surface rounded-[32px] p-8 shadow-soft">
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-24 text-text-muted">
+              <Loader2 className="w-8 h-8 animate-spin text-accent mb-3" />
+              <p className="text-sm">Carregando carteira de clientes...</p>
             </div>
-          </div>
-        )}
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-12 text-xs text-text-muted">
+              Nenhum cliente localizado na pesquisa.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filtered.map((c) => (
+                <div
+                  key={c.id}
+                  className="bg-surface-2 hover:bg-surface-3/60 rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-accent-soft text-accent flex items-center justify-center font-bold font-serif text-sm shrink-0">
+                      {c.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h3 className="font-serif font-bold text-text text-sm">{c.name}</h3>
+                      <div className="flex items-center gap-3 text-xs text-text-muted mt-0.5">
+                        <span className="font-mono">{c.phone}</span>
+                        {c.email && <span>· {c.email}</span>}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between sm:justify-end gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
+                    <span className="px-3.5 py-1.5 rounded-full bg-surface text-accent text-xs font-bold">
+                      {c.visits_count} {c.visits_count === 1 ? "visita" : "visitas"}
+                    </span>
+                    <div className="text-right">
+                      <span className="text-[10px] text-text-muted block">Investido</span>
+                      <strong className="font-serif font-bold text-sm text-text">
+                        {formatCurrency(c.total_spent)}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );
