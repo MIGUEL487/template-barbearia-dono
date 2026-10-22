@@ -103,7 +103,7 @@ export default function DashboardPage() {
           total_price,
           customers (name, phone),
           barbers (name),
-          payments (status, payment_method)
+          payments (status, method)
         `)
         .eq("barbershop_id", shopId)
         .gte("starts_at", todayStart.toISOString())
@@ -122,7 +122,7 @@ export default function DashboardPage() {
           barbers: b.barbers,
           payments: (b.payments || []).map((p: any) => ({
             status: p.status,
-            method: p.payment_method,
+            method: p.method,
           })),
         }));
         setBookingsToday(mapped);
@@ -195,6 +195,7 @@ export default function DashboardPage() {
     { href: "/agenda", label: "Agenda", icon: Calendar },
     { href: "/clientes", label: "Clientes", icon: Users },
     { href: "/servicos", label: "Serviços", icon: Scissors },
+    { href: "/equipe", label: "Equipe & Horários", icon: Clock },
     { href: "/financeiro", label: "Financeiro", icon: DollarSign },
     { href: "/configuracoes", label: "Configurações", icon: Settings },
   ];

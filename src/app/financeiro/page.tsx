@@ -152,6 +152,7 @@ export default function FinanceiroPage() {
   const navLinks = [
     { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
     { href: "/agenda", label: "Agenda", icon: Calendar },
+    { href: "/equipe", label: "Equipe & Horários", icon: Clock },
     { href: "/clientes", label: "Clientes", icon: Users },
     { href: "/servicos", label: "Serviços", icon: Scissors },
     { href: "/financeiro", label: "Financeiro", icon: DollarSign, active: true },

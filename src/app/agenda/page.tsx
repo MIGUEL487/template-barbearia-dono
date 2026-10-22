@@ -149,8 +149,8 @@ export default function AgendaPage() {
           status,
           total_price,
           customers (name, phone),
-          booking_services (
-            services (name)
+          booking_items (
+            service_name
           )
         `)
         .eq("barbershop_id", shopId)
@@ -163,8 +163,8 @@ export default function AgendaPage() {
       } else if (bookData) {
         const mapped: BookingSlot[] = bookData.map((b: any) => {
           const sName =
-            b.booking_services && b.booking_services.length > 0
-              ? b.booking_services.map((bs: any) => bs.services?.name).filter(Boolean).join(", ")
+            b.booking_items && b.booking_items.length > 0
+              ? b.booking_items.map((bs: any) => bs.service_name).filter(Boolean).join(", ")
               : "Serviço";
           return {
             id: b.id,
@@ -261,6 +261,7 @@ export default function AgendaPage() {
   const navLinks = [
     { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
     { href: "/agenda", label: "Agenda", icon: Calendar, active: true },
+    { href: "/equipe", label: "Equipe & Horários", icon: Clock },
     { href: "/clientes", label: "Clientes", icon: Users },
     { href: "/servicos", label: "Serviços", icon: Scissors },
     { href: "/financeiro", label: "Financeiro", icon: DollarSign },

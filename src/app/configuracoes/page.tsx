@@ -14,6 +14,7 @@ import {
   Loader2,
   BarChart3,
   Calendar,
+  Clock,
   Users,
   DollarSign,
   LogOut,
@@ -127,6 +128,7 @@ export default function ConfiguracoesPage() {
   const navLinks = [
     { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
     { href: "/agenda", label: "Agenda", icon: Calendar },
+    { href: "/equipe", label: "Equipe & Horários", icon: Clock },
     { href: "/clientes", label: "Clientes", icon: Users },
     { href: "/servicos", label: "Serviços", icon: Scissors },
     { href: "/financeiro", label: "Financeiro", icon: DollarSign },

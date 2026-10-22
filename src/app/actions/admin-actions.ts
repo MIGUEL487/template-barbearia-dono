@@ -162,3 +162,186 @@ export async function logoutAction() {
   const supabase = createServerActionClient();
   await supabase.auth.signOut();
 }
+
+export async function toggleShopClosedTodayAction(
+  barbershopId: string,
+  shouldClose: boolean,
+  targetDate?: string,
+  reason = "Fechado pelo administrador"
+) {
+  const supabase = createServerActionClient();
+  const dateStr = targetDate || new Date().toISOString().split("T")[0];
+
+  if (shouldClose) {
+    const { error } = await supabase
+      .from("closed_days")
+      .upsert(
+        {
+          barbershop_id: barbershopId,
+          date: dateStr,
+          reason,
+        },
+        { onConflict: "barbershop_id, date" }
+      );
+
+    if (error) return { success: false, error: error.message };
+  } else {
+    const { error } = await supabase
+      .from("closed_days")
+      .delete()
+      .eq("barbershop_id", barbershopId)
+      .eq("date", dateStr);
+
+    if (error) return { success: false, error: error.message };
+  }
+
+  revalidatePath("/equipe");
+  revalidatePath("/dashboard");
+  revalidatePath("/agenda");
+  return { success: true };
+}
+
+export async function createBarberAction(
+  barbershopId: string,
+  barber: { name: string; bio?: string; avatar_url?: string }
+) {
+  const supabase = createServerActionClient();
+
+  const { data: newBarber, error } = await supabase
+    .from("barbers")
+    .insert({
+      barbershop_id: barbershopId,
+      name: barber.name,
+      bio: barber.bio || null,
+      avatar_url: barber.avatar_url || null,
+      is_active: true,
+    })
+    .select()
+    .single();
+
+  if (error || !newBarber) {
+    return { success: false, error: error?.message || "Falha ao criar barbeiro" };
+  }
+
+  // Criar expediente padrão (Segunda a Sábado 09:00 - 19:00, Domingo folga)
+  const defaultHours = [
+    { barber_id: newBarber.id, day_of_week: 0, start_time: "09:00", end_time: "19:00", is_off: true },
+    { barber_id: newBarber.id, day_of_week: 1, start_time: "09:00", end_time: "19:00", is_off: false },
+    { barber_id: newBarber.id, day_of_week: 2, start_time: "09:00", end_time: "19:00", is_off: false },
+    { barber_id: newBarber.id, day_of_week: 3, start_time: "09:00", end_time: "19:00", is_off: false },
+    { barber_id: newBarber.id, day_of_week: 4, start_time: "09:00", end_time: "19:00", is_off: false },
+    { barber_id: newBarber.id, day_of_week: 5, start_time: "09:00", end_time: "19:00", is_off: false },
+    { barber_id: newBarber.id, day_of_week: 6, start_time: "09:00", end_time: "19:00", is_off: false },
+  ];
+
+  await supabase.from("working_hours").insert(defaultHours);
+
+  // Vincular a todos os serviços ativos da barbearia por padrão
+  const { data: allServices } = await supabase
+    .from("services")
+    .select("id")
+    .eq("barbershop_id", barbershopId)
+    .eq("is_active", true);
+
+  if (allServices && allServices.length > 0) {
+    const barberServicesData = allServices.map((s) => ({
+      barber_id: newBarber.id,
+      service_id: s.id,
+    }));
+    await supabase.from("barber_services").insert(barberServicesData);
+  }
+
+  revalidatePath("/equipe");
+  revalidatePath("/agenda");
+  return { success: true, data: newBarber };
+}
+
+export async function toggleBarberActiveAction(
+  barbershopId: string,
+  barberId: string,
+  currentStatus: boolean
+) {
+  const supabase = createServerActionClient();
+
+  const { error } = await supabase
+    .from("barbers")
+    .update({ is_active: !currentStatus, updated_at: new Date().toISOString() })
+    .eq("id", barberId)
+    .eq("barbershop_id", barbershopId);
+
+  if (error) return { success: false, error: error.message };
+
+  revalidatePath("/equipe");
+  revalidatePath("/agenda");
+  return { success: true };
+}
+
+export async function deleteBarberAction(barbershopId: string, barberId: string) {
+  const supabase = createServerActionClient();
+
+  const { error } = await supabase
+    .from("barbers")
+    .delete()
+    .eq("id", barberId)
+    .eq("barbershop_id", barbershopId);
+
+  if (error) return { success: false, error: error.message };
+
+  revalidatePath("/equipe");
+  revalidatePath("/agenda");
+  return { success: true };
+}
+
+export async function saveWorkingHoursAction(
+  barbershopId: string,
+  barberId: string,
+  hours: Array<{ day_of_week: number; start_time: string; end_time: string; is_off: boolean }>
+) {
+  const supabase = createServerActionClient();
+
+  for (const h of hours) {
+    const { error } = await supabase
+      .from("working_hours")
+      .upsert(
+        {
+          barber_id: barberId,
+          day_of_week: h.day_of_week,
+          start_time: h.start_time,
+          end_time: h.end_time,
+          is_off: h.is_off,
+        },
+        { onConflict: "barber_id, day_of_week" }
+      );
+
+    if (error) return { success: false, error: error.message };
+  }
+
+  revalidatePath("/equipe");
+  revalidatePath("/agenda");
+  return { success: true };
+}
+
+export async function saveBarberServicesAction(
+  barbershopId: string,
+  barberId: string,
+  serviceIds: string[]
+) {
+  const supabase = createServerActionClient();
+
+  // Remove vínculos atuais
+  await supabase.from("barber_services").delete().eq("barber_id", barberId);
+
+  // Insere novos vínculos
+  if (serviceIds.length > 0) {
+    const toInsert = serviceIds.map((sid) => ({
+      barber_id: barberId,
+      service_id: sid,
+    }));
+    const { error } = await supabase.from("barber_services").insert(toInsert);
+    if (error) return { success: false, error: error.message };
+  }
+
+  revalidatePath("/equipe");
+  revalidatePath("/agenda");
+  return { success: true };
+}

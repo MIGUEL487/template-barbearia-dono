@@ -9,6 +9,7 @@ import {
   Search,
   ChevronLeft,
   Calendar,
+  Clock,
   DollarSign,
   ShieldCheck,
   Phone,
@@ -140,6 +141,7 @@ export default function ClientesPage() {
   const navLinks = [
     { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
     { href: "/agenda", label: "Agenda", icon: Calendar },
+    { href: "/equipe", label: "Equipe & Horários", icon: Clock },
     { href: "/clientes", label: "Clientes", icon: Users, active: true },
     { href: "/servicos", label: "Serviços", icon: Scissors },
     { href: "/financeiro", label: "Financeiro", icon: DollarSign },
