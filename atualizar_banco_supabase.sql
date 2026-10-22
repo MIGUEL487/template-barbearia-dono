@@ -36,6 +36,7 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
 AS $$
+#variable_conflict use_column
 DECLARE
   v_total_duration INTEGER;
   v_day_of_week INTEGER;
@@ -51,16 +52,16 @@ BEGIN
   -- Limpar holds vencidos na própria consulta
   PERFORM expire_stale_holds();
 
-  SELECT timezone INTO v_tz FROM barbershops WHERE id = p_barbershop_id;
+  SELECT bs.timezone INTO v_tz FROM barbershops bs WHERE bs.id = p_barbershop_id;
   IF v_tz IS NULL THEN
     v_tz := 'America/Sao_Paulo';
   END IF;
 
   -- Calcular duração total dos serviços solicitados
-  SELECT COALESCE(SUM(duration_minutes + buffer_minutes), 30)
+  SELECT COALESCE(SUM(s.duration_minutes + s.buffer_minutes), 30)
   INTO v_total_duration
-  FROM services
-  WHERE id = ANY(p_service_ids) AND barbershop_id = p_barbershop_id;
+  FROM services s
+  WHERE s.id = ANY(p_service_ids) AND s.barbershop_id = p_barbershop_id;
 
   IF v_total_duration IS NULL OR v_total_duration <= 0 THEN
     v_total_duration := 30;
@@ -69,7 +70,7 @@ BEGIN
   v_day_of_week := EXTRACT(DOW FROM p_date);
 
   -- Se a barbearia estiver fechada nesta data, retorna vazio
-  IF EXISTS (SELECT 1 FROM closed_days WHERE barbershop_id = p_barbershop_id AND date = p_date) THEN
+  IF EXISTS (SELECT 1 FROM closed_days cd WHERE cd.barbershop_id = p_barbershop_id AND cd.date = p_date) THEN
     RETURN;
   END IF;
 
@@ -81,9 +82,9 @@ BEGIN
       AND (p_barber_id IS NULL OR b.id = p_barber_id)
   LOOP
     -- Buscar expediente do barbeiro no dia da semana
-    SELECT * INTO v_wh FROM working_hours
-    WHERE barber_id = v_barber.id
-      AND day_of_week = v_day_of_week;
+    SELECT wh.* INTO v_wh FROM working_hours wh
+    WHERE wh.barber_id = v_barber.id
+      AND wh.day_of_week = v_day_of_week;
 
     IF FOUND THEN
       -- Se for dia de folga do barbeiro, pula
@@ -131,18 +132,18 @@ BEGIN
 
         -- Verificar que não colide com folga/férias
         IF NOT EXISTS (
-          SELECT 1 FROM time_off
-          WHERE barber_id = v_barber.id
-            AND starts_at < v_slot_end
-            AND ends_at > v_slot_start
+          SELECT 1 FROM time_off tof
+          WHERE tof.barber_id = v_barber.id
+            AND tof.starts_at < v_slot_end
+            AND tof.ends_at > v_slot_start
         )
         -- Verificar que não colide com agendamentos existentes (hold ou confirmed)
         AND NOT EXISTS (
-          SELECT 1 FROM bookings
-          WHERE barber_id = v_barber.id
-            AND status IN ('hold', 'confirmed')
-            AND starts_at < v_slot_end
-            AND ends_at > v_slot_start
+          SELECT 1 FROM bookings bk
+          WHERE bk.barber_id = v_barber.id
+            AND bk.status IN ('hold', 'confirmed')
+            AND bk.starts_at < v_slot_end
+            AND bk.ends_at > v_slot_start
         ) THEN
           barber_id := v_barber.id;
           start_time := v_slot_start;
