@@ -11,8 +11,12 @@ export function getMissingAdminEnvVars(): string[] {
   if (!supabaseAnonKey || supabaseAnonKey.trim() === "" || supabaseAnonKey.includes("dummy")) {
     missing.push("NEXT_PUBLIC_SUPABASE_ANON_KEY");
   }
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY.trim() === "") {
-    missing.push("SUPABASE_SERVICE_ROLE_KEY");
+  // No navegador (client-side), variáveis sem NEXT_PUBLIC_ não são expostas por segurança.
+  // Somente verificamos a service_role key no lado do servidor.
+  if (typeof window === "undefined") {
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY.trim() === "") {
+      missing.push("SUPABASE_SERVICE_ROLE_KEY");
+    }
   }
   return missing;
 }
