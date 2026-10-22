@@ -23,8 +23,9 @@ import {
   LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
-import { formatCurrency, formatDuration } from "@/lib/utils";
+import { formatCurrency, formatDuration, fixMojibake } from "@/lib/utils";
 import { createServiceAction, toggleServiceActiveAction, logoutAction } from "@/app/actions/admin-actions";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ServiceItem {
   id: string;
@@ -93,12 +94,12 @@ export default function ServicosPage() {
         setServices(
           data.map((s: any) => ({
             id: s.id,
-            name: s.name,
-            description: s.description,
+            name: fixMojibake(s.name),
+            description: s.description ? fixMojibake(s.description) : null,
             duration_minutes: s.duration_minutes,
             price: Number(s.price),
             is_active: s.is_active,
-            category: s.category || "Geral",
+            category: s.category ? fixMojibake(s.category) : "Geral",
           }))
         );
       }
@@ -257,15 +258,19 @@ export default function ServicosPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {services.map((service) => (
-                <div
+              {services.map((service, idx) => (
+                <motion.div
                   key={service.id}
-                  className={`rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.04 }}
+                  whileHover={{ y: -2 }}
+                  className={`rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all border border-hairline/60 ${
                     service.is_active ? "bg-surface-2 hover:bg-surface-3/70" : "bg-surface-2/40 opacity-50"
                   }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-accent shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-accent shrink-0 border border-hairline">
                       <Scissors className="w-4 h-4" />
                     </div>
                     <div>
@@ -291,7 +296,9 @@ export default function ServicosPage() {
                       {formatCurrency(service.price)}
                     </div>
 
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => handleToggleActive(service)}
                       className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
                         service.is_active
@@ -300,130 +307,145 @@ export default function ServicosPage() {
                       }`}
                     >
                       {service.is_active ? "Desativar" : "Ativar"}
-                    </button>
+                    </motion.button>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           )}
         </div>
       </main>
 
-      {/* Modal Novo Serviço com Raio Grande */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-surface rounded-[32px] max-w-md w-full p-8 shadow-soft animate-in zoom-in-95 space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-hairline">
-              <h2 className="font-serif text-xl font-bold text-text">Cadastrar Novo Serviço</h2>
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="w-8 h-8 rounded-full bg-surface-2 text-text-muted hover:text-text flex items-center justify-center"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {modalError && (
-              <div className="bg-danger/10 rounded-[20px] p-3 text-xs text-danger flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 shrink-0" />
-                <span>{modalError}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleCreateService} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
-                  Nome do Serviço
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  placeholder="Ex: Corte Degradê + Barba"
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
-                  Categoria
-                </label>
-                <select
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
-                >
-                  <option value="Cabelo">Cabelo</option>
-                  <option value="Barba">Barba</option>
-                  <option value="Combo">Combo</option>
-                  <option value="Tratamento">Tratamento</option>
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
-                    Preço (R$)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.50"
-                    required
-                    value={newPrice}
-                    onChange={(e) => setNewPrice(e.target.value)}
-                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
-                    Duração (minutos)
-                  </label>
-                  <input
-                    type="number"
-                    step="5"
-                    required
-                    value={newDuration}
-                    onChange={(e) => setNewDuration(e.target.value)}
-                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
-                  Descrição
-                </label>
-                <textarea
-                  rows={2}
-                  value={newDesc}
-                  onChange={(e) => setNewDesc(e.target.value)}
-                  placeholder="Produtos utilizados e detalhes do procedimento..."
-                  className="w-full bg-surface-2 rounded-2xl px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
+      {/* Modal Novo Serviço com Framer Motion */}
+      <AnimatePresence>
+        {showAddModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 15 }}
+              transition={{ duration: 0.25 }}
+              className="bg-surface rounded-[32px] max-w-md w-full p-8 shadow-soft space-y-6 border border-hairline"
+            >
+              <div className="flex items-center justify-between pb-4 border-b border-hairline">
+                <h2 className="font-serif text-xl font-bold text-text">Cadastrar Novo Serviço</h2>
                 <button
-                  type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-5 py-2.5 rounded-full text-xs font-bold text-text-muted hover:text-text"
+                  className="w-8 h-8 rounded-full bg-surface-2 text-text-muted hover:text-text flex items-center justify-center transition-colors"
                 >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
-                >
-                  {isSubmitting ? "Salvando..." : "Salvar Serviço"}
+                  <X className="w-4 h-4" />
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+
+              {modalError && (
+                <div className="bg-danger/10 rounded-[20px] p-3 text-xs text-danger flex items-center gap-2">
+                  <ShieldAlert className="w-4 h-4 shrink-0" />
+                  <span>{modalError}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleCreateService} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                    Nome do Serviço
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    placeholder="Ex: Corte Degradê + Barba"
+                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                    Categoria
+                  </label>
+                  <select
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                  >
+                    <option value="Cabelo">Cabelo</option>
+                    <option value="Barba">Barba</option>
+                    <option value="Combo">Combo</option>
+                    <option value="Tratamento">Tratamento</option>
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                      Preço (R$)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.50"
+                      required
+                      value={newPrice}
+                      onChange={(e) => setNewPrice(e.target.value)}
+                      className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                      Duração (minutos)
+                    </label>
+                    <input
+                      type="number"
+                      step="5"
+                      required
+                      value={newDuration}
+                      onChange={(e) => setNewDuration(e.target.value)}
+                      className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                    Descrição
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={newDesc}
+                    onChange={(e) => setNewDesc(e.target.value)}
+                    placeholder="Produtos utilizados e detalhes do procedimento..."
+                    className="w-full bg-surface-2 rounded-2xl px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddModal(false)}
+                    className="px-5 py-2.5 rounded-full text-xs font-bold text-text-muted hover:text-text"
+                  >
+                    Cancelar
+                  </button>
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Salvando..." : "Salvar Serviço"}
+                  </motion.button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

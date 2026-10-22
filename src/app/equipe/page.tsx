@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Scissors,
   Calendar,
@@ -14,6 +15,7 @@ import {
   LogOut,
   Plus,
   Clock,
+  Coffee,
   ShieldCheck,
   AlertCircle,
   CheckCircle2,
@@ -23,8 +25,10 @@ import {
   UserX,
   Power,
   CalendarOff,
+  Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
+import { fixMojibake } from "@/lib/utils";
 import {
   logoutAction,
   toggleShopClosedTodayAction,
@@ -54,6 +58,8 @@ interface WorkingHour {
   start_time: string;
   end_time: string;
   is_off: boolean;
+  lunch_start?: string;
+  lunch_end?: string;
 }
 
 const DAYS_NAMES = [
@@ -149,9 +155,14 @@ export default function EquipePage() {
         .order("name");
 
       if (barbData) {
-        setBarbers(barbData);
-        if (barbData.length > 0 && !selectedBarberId) {
-          setSelectedBarberId(barbData[0].id);
+        const cleaned = barbData.map((b) => ({
+          ...b,
+          name: fixMojibake(b.name),
+          bio: b.bio ? fixMojibake(b.bio) : null,
+        }));
+        setBarbers(cleaned);
+        if (cleaned.length > 0 && !selectedBarberId) {
+          setSelectedBarberId(cleaned[0].id);
         }
       }
 
@@ -163,7 +174,14 @@ export default function EquipePage() {
         .eq("is_active", true)
         .order("name");
 
-      if (srvData) setAllServices(srvData);
+      if (srvData) {
+        setAllServices(
+          srvData.map((s) => ({
+            ...s,
+            name: fixMojibake(s.name),
+          }))
+        );
+      }
     } catch (err: any) {
       setStatusMsg({ type: "error", text: err.message || "Erro ao carregar dados" });
     } finally {
@@ -183,10 +201,10 @@ export default function EquipePage() {
       try {
         const supabase = createClient();
 
-        // Working hours
+        // Working hours (incluindo horário de almoço)
         const { data: whData } = await supabase
           .from("working_hours")
-          .select("day_of_week, start_time, end_time, is_off")
+          .select("day_of_week, start_time, end_time, is_off, lunch_start, lunch_end")
           .eq("barber_id", selectedBarberId)
           .order("day_of_week");
 
@@ -200,6 +218,8 @@ export default function EquipePage() {
                 start_time: found.start_time.slice(0, 5),
                 end_time: found.end_time.slice(0, 5),
                 is_off: found.is_off,
+                lunch_start: found.lunch_start ? found.lunch_start.slice(0, 5) : "12:00",
+                lunch_end: found.lunch_end ? found.lunch_end.slice(0, 5) : "13:00",
               });
             } else {
               map.push({
@@ -207,6 +227,8 @@ export default function EquipePage() {
                 start_time: "09:00",
                 end_time: "19:00",
                 is_off: i === 0, // Domingo folga
+                lunch_start: "12:00",
+                lunch_end: "13:00",
               });
             }
           }
@@ -218,6 +240,8 @@ export default function EquipePage() {
             start_time: "09:00",
             end_time: "19:00",
             is_off: i === 0,
+            lunch_start: "12:00",
+            lunch_end: "13:00",
           }));
           setWorkingHours(defaultList);
         }
@@ -505,7 +529,12 @@ export default function EquipePage() {
         </section>
 
         {/* 2. SEÇÃO: BARBEIROS (EQUIPE) */}
-        <section className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6">
+        <motion.section
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6"
+        >
           <div className="flex items-center justify-between pb-4 border-b border-hairline">
             <div>
               <span className="text-[10px] uppercase font-bold tracking-wider text-accent block mb-1">Profissionais</span>
@@ -521,9 +550,12 @@ export default function EquipePage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {barbers.map((b) => (
-                <div
+                <motion.div
                   key={b.id}
                   onClick={() => setSelectedBarberId(b.id)}
+                  whileHover={{ y: -3, scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
                   className={`bg-surface-2 p-5 rounded-[24px] cursor-pointer transition-all border ${
                     selectedBarberId === b.id
                       ? "ring-2 ring-accent border-accent/40 bg-surface-2"
@@ -571,49 +603,59 @@ export default function EquipePage() {
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           )}
-        </section>
+        </motion.section>
 
-        {/* 3. SEÇÃO: EXPEDIENTE & HORÁRIOS DO BARBEIRO SELECIONADO */}
+        {/* 3. SEÇÃO: EXPEDIENTE, HORÁRIOS & ALMOÇO DO BARBEIRO SELECIONADO */}
         {selectedBarberId && (
-          <section className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6">
+          <motion.section
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6"
+          >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-accent block mb-1">
-                  Horários de Trabalho
+                  Horários & Intervalo de Almoço
                 </span>
                 <h2 className="font-serif text-xl font-bold text-text">
                   Expediente de {barbers.find((b) => b.id === selectedBarberId)?.name}
                 </h2>
                 <p className="text-xs text-text-muted mt-0.5">
-                  Configure a hora que o profissional entra, sai e quais dias ele folga
+                  Configure o horário de entrada, saída, intervalo de almoço do profissional e dias de folga
                 </p>
               </div>
 
-              <button
+              <motion.button
                 onClick={handleSaveHours}
                 disabled={isSavingHours}
-                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full font-bold text-xs shadow-glow transition-all active:scale-95 disabled:opacity-50"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full font-bold text-xs shadow-glow transition-all disabled:opacity-50"
               >
                 <Clock className="w-3.5 h-3.5" />
                 <span>{isSavingHours ? "Salvando..." : "Salvar Horários"}</span>
-              </button>
+              </motion.button>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {workingHours.map((wh, idx) => (
-                <div
+                <motion.div
                   key={wh.day_of_week}
-                  className="bg-surface-2 px-6 py-3.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.04 }}
+                  className="bg-surface-2 px-6 py-4 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-xs border border-transparent hover:border-hairline transition-all"
                 >
-                  <div className="w-36 font-semibold text-text">
-                    {DAYS_NAMES[wh.day_of_week]}
+                  <div className="w-36 font-semibold text-text flex items-center gap-2">
+                    <span>{DAYS_NAMES[wh.day_of_week]}</span>
                   </div>
 
-                  <div className="flex items-center gap-6">
+                  <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
@@ -631,41 +673,76 @@ export default function EquipePage() {
                     </label>
 
                     {!wh.is_off && (
-                      <div className="flex items-center gap-2">
-                        <span className="text-text-muted text-[11px]">Entrada:</span>
-                        <input
-                          type="time"
-                          value={wh.start_time}
-                          onChange={(e) => {
-                            const updated = [...workingHours];
-                            updated[idx].start_time = e.target.value;
-                            setWorkingHours(updated);
-                          }}
-                          className="bg-surface rounded-full px-3 py-1 text-xs text-text focus:ring-1 focus:ring-accent focus:outline-none"
-                        />
-                        <span className="text-text-muted text-[11px]">Saída:</span>
-                        <input
-                          type="time"
-                          value={wh.end_time}
-                          onChange={(e) => {
-                            const updated = [...workingHours];
-                            updated[idx].end_time = e.target.value;
-                            setWorkingHours(updated);
-                          }}
-                          className="bg-surface rounded-full px-3 py-1 text-xs text-text focus:ring-1 focus:ring-accent focus:outline-none"
-                        />
+                      <div className="flex flex-wrap items-center gap-4">
+                        {/* Entrada e Saída */}
+                        <div className="flex items-center gap-2">
+                          <span className="text-text-muted text-[11px]">Entrada:</span>
+                          <input
+                            type="time"
+                            value={wh.start_time}
+                            onChange={(e) => {
+                              const updated = [...workingHours];
+                              updated[idx].start_time = e.target.value;
+                              setWorkingHours(updated);
+                            }}
+                            className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
+                          />
+                          <span className="text-text-muted text-[11px]">Saída:</span>
+                          <input
+                            type="time"
+                            value={wh.end_time}
+                            onChange={(e) => {
+                              const updated = [...workingHours];
+                              updated[idx].end_time = e.target.value;
+                              setWorkingHours(updated);
+                            }}
+                            className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
+                          />
+                        </div>
+
+                        {/* Intervalo de Almoço */}
+                        <div className="flex items-center gap-2 pl-3 border-l border-hairline">
+                          <Coffee className="w-3.5 h-3.5 text-accent shrink-0" />
+                          <span className="text-text-muted text-[11px]">Almoço:</span>
+                          <input
+                            type="time"
+                            value={wh.lunch_start || "12:00"}
+                            onChange={(e) => {
+                              const updated = [...workingHours];
+                              updated[idx].lunch_start = e.target.value;
+                              setWorkingHours(updated);
+                            }}
+                            className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
+                          />
+                          <span className="text-text-muted text-[11px]">às</span>
+                          <input
+                            type="time"
+                            value={wh.lunch_end || "13:00"}
+                            onChange={(e) => {
+                              const updated = [...workingHours];
+                              updated[idx].lunch_end = e.target.value;
+                              setWorkingHours(updated);
+                            }}
+                            className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
+                          />
+                        </div>
                       </div>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </section>
+          </motion.section>
         )}
 
         {/* 4. SEÇÃO: SERVIÇOS QUE O BARBEIRO FAZ (ESPECIALIDADES) */}
         {selectedBarberId && (
-          <section className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6">
+          <motion.section
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6"
+          >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-accent block mb-1">
@@ -679,14 +756,16 @@ export default function EquipePage() {
                 </p>
               </div>
 
-              <button
+              <motion.button
                 onClick={handleSaveServices}
                 disabled={isSavingServices}
-                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full font-bold text-xs shadow-glow transition-all active:scale-95 disabled:opacity-50"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full font-bold text-xs shadow-glow transition-all disabled:opacity-50"
               >
                 <Scissors className="w-3.5 h-3.5" />
                 <span>{isSavingServices ? "Salvando..." : "Salvar Especialidades"}</span>
-              </button>
+              </motion.button>
             </div>
 
             {allServices.length === 0 ? (
@@ -698,106 +777,129 @@ export default function EquipePage() {
                 {allServices.map((srv) => {
                   const isChecked = barberSelectedServices.includes(srv.id);
                   return (
-                    <div
+                    <motion.div
                       key={srv.id}
                       onClick={() => toggleServiceCheckbox(srv.id)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       className={`p-4 rounded-2xl flex items-center justify-between cursor-pointer transition-all border ${
                         isChecked
-                          ? "bg-accent-soft border-accent/40 text-text"
-                          : "bg-surface-2 border-hairline text-text-muted hover:text-text"
+                          ? "bg-accent-soft border-accent/40 text-text shadow-sm"
+                          : "bg-surface-2 border-hairline text-text-muted hover:text-text hover:bg-surface-3"
                       }`}
                     >
-                      <div className="text-xs font-semibold">{srv.name}</div>
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={() => toggleServiceCheckbox(srv.id)}
-                        className="rounded accent-accent pointer-events-none"
-                      />
-                    </div>
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
+                            isChecked ? "bg-accent border-accent text-accent-contrast" : "border-text-muted/40"
+                          }`}
+                        >
+                          {isChecked && <CheckCircle2 className="w-3 h-3" />}
+                        </div>
+                        <span className="font-semibold text-xs">{srv.name}</span>
+                      </div>
+                      <span className="font-mono text-[11px] opacity-70">
+                        {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(srv.price)}
+                      </span>
+                    </motion.div>
                   );
                 })}
               </div>
             )}
-          </section>
+          </motion.section>
         )}
       </main>
 
       {/* MODAL: ADICIONAR BARBEIRO */}
-      {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-surface rounded-[32px] max-w-md w-full p-8 shadow-soft animate-in zoom-in-95 space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-hairline">
-              <h2 className="font-serif text-xl font-bold text-text">Novo Barbeiro</h2>
-              <button
-                onClick={() => setIsAddModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-surface-2 text-text-muted hover:text-text flex items-center justify-center"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleAddBarber} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
-                  Nome Completo *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={newBarberName}
-                  onChange={(e) => setNewBarberName(e.target.value)}
-                  placeholder="Ex: Carlos Silva"
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
-                  Especialidade / Bio
-                </label>
-                <input
-                  type="text"
-                  value={newBarberBio}
-                  onChange={(e) => setNewBarberBio(e.target.value)}
-                  placeholder="Ex: Mestre em degradê e visagismo"
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
-                  URL da Foto (opcional)
-                </label>
-                <input
-                  type="url"
-                  value={newBarberAvatar}
-                  onChange={(e) => setNewBarberAvatar(e.target.value)}
-                  placeholder="https://exemplo.com/foto.jpg"
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
+      <AnimatePresence>
+        {isAddModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 15 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="bg-surface rounded-[32px] max-w-md w-full p-8 shadow-soft space-y-6 border border-hairline"
+            >
+              <div className="flex items-center justify-between pb-4 border-b border-hairline">
+                <h2 className="font-serif text-xl font-bold text-text">Novo Barbeiro</h2>
                 <button
-                  type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-5 py-2.5 rounded-full text-xs font-bold text-text-muted hover:text-text"
+                  className="w-8 h-8 rounded-full bg-surface-2 text-text-muted hover:text-text flex items-center justify-center transition-colors"
                 >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
-                >
-                  {isSubmitting ? "Salvando..." : "Cadastrar Barbeiro"}
+                  ✕
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+
+              <form onSubmit={handleAddBarber} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                    Nome Completo *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={newBarberName}
+                    onChange={(e) => setNewBarberName(e.target.value)}
+                    placeholder="Ex: Carlos Silva"
+                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                    Especialidade / Bio
+                  </label>
+                  <input
+                    type="text"
+                    value={newBarberBio}
+                    onChange={(e) => setNewBarberBio(e.target.value)}
+                    placeholder="Ex: Mestre em degradê e visagismo"
+                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                    URL da Foto (opcional)
+                  </label>
+                  <input
+                    type="url"
+                    value={newBarberAvatar}
+                    onChange={(e) => setNewBarberAvatar(e.target.value)}
+                    placeholder="https://exemplo.com/foto.jpg"
+                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddModalOpen(false)}
+                    className="px-5 py-2.5 rounded-full text-xs font-bold text-text-muted hover:text-text"
+                  >
+                    Cancelar
+                  </button>
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Salvando..." : "Cadastrar Barbeiro"}
+                  </motion.button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

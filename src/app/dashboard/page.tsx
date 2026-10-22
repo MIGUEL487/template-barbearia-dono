@@ -23,8 +23,9 @@ import {
   Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, fixMojibake } from "@/lib/utils";
 import { completeBookingAction, cancelBookingAction, logoutAction } from "@/app/actions/admin-actions";
+import { motion } from "framer-motion";
 
 interface DashboardBooking {
   id: string;
@@ -289,9 +290,15 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Superfícies Tonais de Métricas (Sem bordas de 1px) */}
+        {/* Superfícies Tonais de Métricas com Motion */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -4, scale: 1.01 }}
+            transition={{ duration: 0.2 }}
+            className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 border border-hairline/60"
+          >
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Receita Liquidada</span>
               <span className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
@@ -302,9 +309,15 @@ export default function DashboardPage() {
               {formatCurrency(revenueReceived)}
             </div>
             <p className="text-[11px] text-text-muted">Total de pagamentos concluídos e compensados</p>
-          </div>
+          </motion.div>
 
-          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -4, scale: 1.01 }}
+            transition={{ duration: 0.2, delay: 0.05 }}
+            className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 border border-hairline/60"
+          >
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Aguardando no Balcão</span>
               <span className="w-8 h-8 rounded-full bg-accent-soft text-accent flex items-center justify-center">
@@ -315,9 +328,15 @@ export default function DashboardPage() {
               {formatCurrency(revenuePending)}
             </div>
             <p className="text-[11px] text-text-muted">Valores a receber de agendamentos de hoje</p>
-          </div>
+          </motion.div>
 
-          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 sm:col-span-2 lg:col-span-1">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -4, scale: 1.01 }}
+            transition={{ duration: 0.2, delay: 0.1 }}
+            className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 sm:col-span-2 lg:col-span-1 border border-hairline/60"
+          >
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Atendimentos Hoje</span>
               <span className="w-8 h-8 rounded-full bg-surface-2 text-text flex items-center justify-center">
@@ -328,10 +347,10 @@ export default function DashboardPage() {
               {bookingsToday.length}
             </div>
             <p className="text-[11px] text-text-muted">Clientes agendados na grade do dia</p>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Linhas Respiradas de Agendamentos de Hoje (Sem caixas de grade) */}
+        {/* Linhas Respiradas de Agendamentos de Hoje */}
         <div className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-hairline">
             <h2 className="font-serif text-xl font-bold text-text">Grade de Atendimentos de Hoje</h2>
@@ -351,19 +370,25 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {bookingsToday.map((b) => (
-                <div
+              {bookingsToday.map((b, idx) => (
+                <motion.div
                   key={b.id}
-                  className="bg-surface-2 hover:bg-surface-3/70 rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors"
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.04 }}
+                  whileHover={{ x: 3 }}
+                  className="bg-surface-2 hover:bg-surface-3/70 rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors border border-transparent hover:border-hairline"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-surface flex flex-col items-center justify-center font-mono text-xs font-bold text-accent shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-surface flex flex-col items-center justify-center font-mono text-xs font-bold text-accent shrink-0 border border-hairline">
                       <span>{new Date(b.starts_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
                     </div>
                     <div>
-                      <h4 className="font-serif font-bold text-text text-sm">{b.customers?.name || "Cliente"}</h4>
+                      <h4 className="font-serif font-bold text-text text-sm">
+                        {fixMojibake(b.customers?.name) || "Cliente"}
+                      </h4>
                       <p className="text-xs text-text-muted">
-                        Profissional: {b.barbers?.name || "Barbeiro"} · {b.customers?.phone}
+                        Profissional: {fixMojibake(b.barbers?.name) || "Barbeiro"} · {b.customers?.phone}
                       </p>
                     </div>
                   </div>
@@ -402,7 +427,7 @@ export default function DashboardPage() {
                       </div>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           )}

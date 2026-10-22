@@ -1,4 +1,4 @@
-﻿-- ============================================================================
+-- ============================================================================
 -- TEMPLATE BARBEARIA PREMIUM â€” MIGRATION INICIAL
 -- Schema multi-tenant com btree_gist, tstzrange anti-duplicidade e RLS estrito
 -- ============================================================================
@@ -88,13 +88,15 @@ CREATE TABLE IF NOT EXISTS barber_services (
   PRIMARY KEY (barber_id, service_id)
 );
 
--- 6. HorÃ¡rio de Funcionamento por Barbeiro (0 = Domingo, 6 = SÃ¡bado)
+-- 6. Horário de Funcionamento por Barbeiro (0 = Domingo, 6 = Sábado)
 CREATE TABLE IF NOT EXISTS working_hours (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   barber_id UUID NOT NULL REFERENCES barbers(id) ON DELETE CASCADE,
   day_of_week INTEGER NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
+  lunch_start TIME DEFAULT '12:00',
+  lunch_end TIME DEFAULT '13:00',
   is_off BOOLEAN NOT NULL DEFAULT false,
   CONSTRAINT chk_working_hours_order CHECK (start_time < end_time),
   CONSTRAINT uq_barber_day UNIQUE (barber_id, day_of_week)
@@ -526,7 +528,7 @@ BEGIN
 END;
 $$;
 
--- RPC: Obter horÃ¡rios disponÃ­veis
+-- RPC: Obter horários disponíveis
 CREATE OR REPLACE FUNCTION get_availability(
   p_barbershop_id UUID,
   p_barber_id UUID,
@@ -549,9 +551,12 @@ DECLARE
   v_wh RECORD;
   v_slot_start TIMESTAMPTZ;
   v_slot_end TIMESTAMPTZ;
+  v_day_end TIMESTAMPTZ;
+  v_lunch_start TIMESTAMPTZ;
+  v_lunch_end TIMESTAMPTZ;
   v_tz TEXT;
 BEGIN
-  -- Limpar holds vencidos na prÃ³pria consulta
+  -- Limpar holds vencidos na própria consulta
   PERFORM expire_stale_holds();
 
   SELECT timezone INTO v_tz FROM barbershops WHERE id = p_barbershop_id;
@@ -559,11 +564,15 @@ BEGIN
     v_tz := 'America/Sao_Paulo';
   END IF;
 
-  -- Calcular duraÃ§Ã£o total dos serviÃ§os solicitados
+  -- Calcular duração total dos serviços solicitados
   SELECT COALESCE(SUM(duration_minutes + buffer_minutes), 30)
   INTO v_total_duration
   FROM services
   WHERE id = ANY(p_service_ids) AND barbershop_id = p_barbershop_id;
+
+  IF v_total_duration IS NULL OR v_total_duration <= 0 THEN
+    v_total_duration := 30;
+  END IF;
 
   v_day_of_week := EXTRACT(DOW FROM p_date);
 
@@ -582,43 +591,77 @@ BEGIN
     -- Buscar expediente do barbeiro no dia
     SELECT * INTO v_wh FROM working_hours
     WHERE barber_id = v_barber.id
-      AND day_of_week = v_day_of_week
-      AND is_off = false;
+      AND day_of_week = v_day_of_week;
 
     IF FOUND THEN
-      -- Gerar slots de 30 em 30 minutos
-      v_slot_start := (p_date || ' ' || v_wh.start_time)::TIMESTAMP AT TIME ZONE v_tz;
+      -- Se for dia de folga do barbeiro, pula
+      IF v_wh.is_off THEN
+        CONTINUE;
+      END IF;
 
-      WHILE (v_slot_start + (v_total_duration || ' minutes')::INTERVAL) <= ((p_date || ' ' || v_wh.end_time)::TIMESTAMP AT TIME ZONE v_tz) LOOP
-        v_slot_end := v_slot_start + (v_total_duration || ' minutes')::INTERVAL;
+      v_slot_start := (p_date + v_wh.start_time) AT TIME ZONE v_tz;
+      v_day_end    := (p_date + v_wh.end_time) AT TIME ZONE v_tz;
 
-        -- Verificar que nÃ£o estÃ¡ no passado
-        IF v_slot_start > now() THEN
-          -- Verificar que nÃ£o colide com folga/fÃ©rias
-          IF NOT EXISTS (
-            SELECT 1 FROM time_off
-            WHERE barber_id = v_barber.id
-              AND starts_at < v_slot_end
-              AND ends_at > v_slot_start
-          )
-          -- Verificar que nÃ£o colide com agendamentos existentes (hold ou confirmed)
-          AND NOT EXISTS (
-            SELECT 1 FROM bookings
-            WHERE barber_id = v_barber.id
-              AND status IN ('hold', 'confirmed')
-              AND starts_at < v_slot_end
-              AND ends_at > v_slot_start
-          ) THEN
-            barber_id := v_barber.id;
-            start_time := v_slot_start;
-            end_time := v_slot_end;
-            RETURN NEXT;
-          END IF;
+      IF v_wh.lunch_start IS NOT NULL AND v_wh.lunch_end IS NOT NULL THEN
+        v_lunch_start := (p_date + v_wh.lunch_start) AT TIME ZONE v_tz;
+        v_lunch_end   := (p_date + v_wh.lunch_end) AT TIME ZONE v_tz;
+      ELSE
+        v_lunch_start := NULL;
+        v_lunch_end   := NULL;
+      END IF;
+
+    ELSE
+      -- Fallback caso o barbeiro ainda não tenha expediente configurado no banco
+      -- Segunda (1) a Sábado (6): 09:00 às 19:00 com almoço das 12:00 às 13:00. Domingo (0) folga
+      IF v_day_of_week = 0 THEN
+        CONTINUE;
+      END IF;
+
+      v_slot_start  := (p_date + TIME '09:00:00') AT TIME ZONE v_tz;
+      v_day_end     := (p_date + TIME '19:00:00') AT TIME ZONE v_tz;
+      v_lunch_start := (p_date + TIME '12:00:00') AT TIME ZONE v_tz;
+      v_lunch_end   := (p_date + TIME '13:00:00') AT TIME ZONE v_tz;
+    END IF;
+
+    -- Gerar slots de 30 em 30 minutos
+    WHILE (v_slot_start + (v_total_duration || ' minutes')::INTERVAL) <= v_day_end LOOP
+      v_slot_end := v_slot_start + (v_total_duration || ' minutes')::INTERVAL;
+
+      -- Verificar que não está no passado
+      IF v_slot_start > now() THEN
+
+        -- Pular horários que colidem com o horário de almoço
+        IF v_lunch_start IS NOT NULL AND v_lunch_end IS NOT NULL 
+           AND (v_slot_start < v_lunch_end AND v_slot_end > v_lunch_start) THEN
+          v_slot_start := v_slot_start + INTERVAL '30 minutes';
+          CONTINUE;
         END IF;
 
-        v_slot_start := v_slot_start + INTERVAL '30 minutes';
-      END LOOP;
-    END IF;
+        -- Verificar que não colide com folga/férias
+        IF NOT EXISTS (
+          SELECT 1 FROM time_off
+          WHERE barber_id = v_barber.id
+            AND starts_at < v_slot_end
+            AND ends_at > v_slot_start
+        )
+        -- Verificar que não colide com agendamentos existentes (hold ou confirmed)
+        AND NOT EXISTS (
+          SELECT 1 FROM bookings
+          WHERE barber_id = v_barber.id
+            AND status IN ('hold', 'confirmed')
+            AND starts_at < v_slot_end
+            AND ends_at > v_slot_start
+        ) THEN
+          barber_id := v_barber.id;
+          start_time := v_slot_start;
+          end_time := v_slot_end;
+          RETURN NEXT;
+        END IF;
+
+      END IF;
+
+      v_slot_start := v_slot_start + INTERVAL '30 minutes';
+    END LOOP;
   END LOOP;
 END;
 $$;
@@ -1318,17 +1361,17 @@ BEGIN
     'America/Sao_Paulo'
   ) ON CONFLICT (id) DO NOTHING;
 
-  -- 2. ConfiguraÃ§Ãµes do Site
+  -- 2. Configurações do Site
   INSERT INTO site_settings (
     barbershop_id, brand_name, brand_tagline, accent_color,
     hero_title, hero_subtitle, deposit_percentage, cancellation_notice_hours
   ) VALUES (
     v_shop_id,
     'Barbearia Modelo Dev',
-    'TradiÃ§Ã£o & Estilo Masculino (Ambiente Dev)',
+    'Tradição & Estilo Masculino (Ambiente Dev)',
     '#F59E0B',
     'Redefinindo o Estilo Masculino',
-    'Cortes clÃ¡ssicos, barba na toalha quente e atendimento com pontualidade.',
+    'Cortes clássicos, barba na toalha quente e atendimento com pontualidade.',
     50.00,
     24
   ) ON CONFLICT (barbershop_id) DO NOTHING;
@@ -1336,19 +1379,19 @@ BEGIN
   -- 3. Barbeiros de Teste
   INSERT INTO barbers (id, barbershop_id, name, bio, is_active)
   VALUES
-    (v_barber_1, v_shop_id, 'Barbeiro Teste Alpha', 'Especialista em cortes clÃ¡ssicos e degradÃª.', true),
+    (v_barber_1, v_shop_id, 'Barbeiro Teste Alpha', 'Especialista em cortes clássicos e degradê.', true),
     (v_barber_2, v_shop_id, 'Barbeiro Teste Beta', 'Mestre em barboterapia e navalha tradicional.', true)
   ON CONFLICT (id) DO NOTHING;
 
-  -- 4. ServiÃ§os de Teste
+  -- 4. Serviços de Teste
   INSERT INTO services (id, barbershop_id, name, description, duration_minutes, buffer_minutes, price, is_active)
   VALUES
-    (v_service_corte, v_shop_id, 'Corte ClÃ¡ssico', 'Lavagem, corte estilizado e acabamento.', 40, 5, 60.00, true),
-    (v_service_barba, v_shop_id, 'Barba Terapia', 'Toalha quente, hidrataÃ§Ã£o e alinhamento.', 35, 5, 50.00, true),
-    (v_service_combo, v_shop_id, 'Combo Corte + Barba', 'ExperiÃªncia completa com desconto especial.', 70, 10, 100.00, true)
+    (v_service_corte, v_shop_id, 'Corte Clássico', 'Lavagem, corte estilizado e acabamento.', 40, 5, 60.00, true),
+    (v_service_barba, v_shop_id, 'Barba Terapia', 'Toalha quente, hidratação e alinhamento.', 35, 5, 50.00, true),
+    (v_service_combo, v_shop_id, 'Combo Corte + Barba', 'Experiência completa com desconto especial.', 70, 10, 100.00, true)
   ON CONFLICT (id) DO NOTHING;
 
-  -- 5. Vincular Barbeiros aos ServiÃ§os
+  -- 5. Vincular Barbeiros aos Serviços
   INSERT INTO barber_services (barber_id, service_id)
   VALUES
     (v_barber_1, v_service_corte),
@@ -1359,29 +1402,29 @@ BEGIN
     (v_barber_2, v_service_combo)
   ON CONFLICT DO NOTHING;
 
-  -- 6. HorÃ¡rio de Funcionamento (Segunda a SÃ¡bado, 09:00 Ã s 19:00)
+  -- 6. Horário de Funcionamento (Segunda a Sábado, 09:00 às 19:00 com almoço das 12:00 às 13:00)
   FOR i IN 1..6 LOOP
-    INSERT INTO working_hours (barber_id, day_of_week, start_time, end_time, is_off)
-    VALUES (v_barber_1, i, '09:00', '19:00', false)
+    INSERT INTO working_hours (barber_id, day_of_week, start_time, end_time, lunch_start, lunch_end, is_off)
+    VALUES (v_barber_1, i, '09:00', '19:00', '12:00', '13:00', false)
     ON CONFLICT (barber_id, day_of_week) DO NOTHING;
 
-    INSERT INTO working_hours (barber_id, day_of_week, start_time, end_time, is_off)
-    VALUES (v_barber_2, i, '09:00', '19:00', false)
+    INSERT INTO working_hours (barber_id, day_of_week, start_time, end_time, lunch_start, lunch_end, is_off)
+    VALUES (v_barber_2, i, '09:00', '19:00', '12:00', '13:00', false)
     ON CONFLICT (barber_id, day_of_week) DO NOTHING;
   END LOOP;
 
   -- Domingo fechado (day_of_week = 0)
-  INSERT INTO working_hours (barber_id, day_of_week, start_time, end_time, is_off)
+  INSERT INTO working_hours (barber_id, day_of_week, start_time, end_time, lunch_start, lunch_end, is_off)
   VALUES
-    (v_barber_1, 0, '09:00', '19:00', true),
-    (v_barber_2, 0, '09:00', '19:00', true)
+    (v_barber_1, 0, '09:00', '19:00', '12:00', '13:00', true),
+    (v_barber_2, 0, '09:00', '19:00', '12:00', '13:00', true)
   ON CONFLICT (barber_id, day_of_week) DO NOTHING;
 
   -- 7. FAQ de Teste
   INSERT INTO faq_items (barbershop_id, question, answer, sort_order)
   VALUES
-    (v_shop_id, 'Como funciona o pagamento do sinal?', 'Para garantir sua vaga sem fila de espera, cobramos um sinal de 50% via Pix ou CartÃ£o de CrÃ©dito. O valor restante Ã© pago no balcÃ£o.', 1),
-    (v_shop_id, 'Qual a polÃ­tica para cancelamentos?', 'VocÃª pode cancelar ou reagendar sem nenhum custo com atÃ© 24 horas de antecedÃªncia atravÃ©s do link recebido na confirmaÃ§Ã£o.', 2),
-    (v_shop_id, 'VocÃªs atendem por ordem de chegada?', 'Trabalhamos com pontualidade britÃ¢nica e agendamento prÃ©vio online para que nenhum cliente perca tempo esperando.', 3)
+    (v_shop_id, 'Como funciona o pagamento do sinal?', 'Para garantir sua vaga sem fila de espera, cobramos um sinal de 50% via Pix ou Cartão de Crédito. O valor restante é pago no balcão.', 1),
+    (v_shop_id, 'Qual a política para cancelamentos?', 'Você pode cancelar ou reagendar sem nenhum custo com até 24 horas de antecedência através do link recebido na confirmação.', 2),
+    (v_shop_id, 'Vocês atendem por ordem de chegada?', 'Trabalhamos com pontualidade britânica e agendamento prévio online para que nenhum cliente perca tempo esperando.', 3)
   ON CONFLICT DO NOTHING;
 END $$;

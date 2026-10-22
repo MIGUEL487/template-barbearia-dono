@@ -223,15 +223,15 @@ export async function createBarberAction(
     return { success: false, error: error?.message || "Falha ao criar barbeiro" };
   }
 
-  // Criar expediente padrão (Segunda a Sábado 09:00 - 19:00, Domingo folga)
+  // Criar expediente padrão (Segunda a Sábado 09:00 - 19:00 com almoço 12:00 - 13:00, Domingo folga)
   const defaultHours = [
-    { barber_id: newBarber.id, day_of_week: 0, start_time: "09:00", end_time: "19:00", is_off: true },
-    { barber_id: newBarber.id, day_of_week: 1, start_time: "09:00", end_time: "19:00", is_off: false },
-    { barber_id: newBarber.id, day_of_week: 2, start_time: "09:00", end_time: "19:00", is_off: false },
-    { barber_id: newBarber.id, day_of_week: 3, start_time: "09:00", end_time: "19:00", is_off: false },
-    { barber_id: newBarber.id, day_of_week: 4, start_time: "09:00", end_time: "19:00", is_off: false },
-    { barber_id: newBarber.id, day_of_week: 5, start_time: "09:00", end_time: "19:00", is_off: false },
-    { barber_id: newBarber.id, day_of_week: 6, start_time: "09:00", end_time: "19:00", is_off: false },
+    { barber_id: newBarber.id, day_of_week: 0, start_time: "09:00", end_time: "19:00", is_off: true, lunch_start: "12:00", lunch_end: "13:00" },
+    { barber_id: newBarber.id, day_of_week: 1, start_time: "09:00", end_time: "19:00", is_off: false, lunch_start: "12:00", lunch_end: "13:00" },
+    { barber_id: newBarber.id, day_of_week: 2, start_time: "09:00", end_time: "19:00", is_off: false, lunch_start: "12:00", lunch_end: "13:00" },
+    { barber_id: newBarber.id, day_of_week: 3, start_time: "09:00", end_time: "19:00", is_off: false, lunch_start: "12:00", lunch_end: "13:00" },
+    { barber_id: newBarber.id, day_of_week: 4, start_time: "09:00", end_time: "19:00", is_off: false, lunch_start: "12:00", lunch_end: "13:00" },
+    { barber_id: newBarber.id, day_of_week: 5, start_time: "09:00", end_time: "19:00", is_off: false, lunch_start: "12:00", lunch_end: "13:00" },
+    { barber_id: newBarber.id, day_of_week: 6, start_time: "09:00", end_time: "19:00", is_off: false, lunch_start: "12:00", lunch_end: "13:00" },
   ];
 
   await supabase.from("working_hours").insert(defaultHours);
@@ -295,7 +295,14 @@ export async function deleteBarberAction(barbershopId: string, barberId: string)
 export async function saveWorkingHoursAction(
   barbershopId: string,
   barberId: string,
-  hours: Array<{ day_of_week: number; start_time: string; end_time: string; is_off: boolean }>
+  hours: Array<{
+    day_of_week: number;
+    start_time: string;
+    end_time: string;
+    is_off: boolean;
+    lunch_start?: string | null;
+    lunch_end?: string | null;
+  }>
 ) {
   const supabase = createServerActionClient();
 
@@ -309,6 +316,8 @@ export async function saveWorkingHoursAction(
           start_time: h.start_time,
           end_time: h.end_time,
           is_off: h.is_off,
+          lunch_start: h.lunch_start || null,
+          lunch_end: h.lunch_end || null,
         },
         { onConflict: "barber_id, day_of_week" }
       );

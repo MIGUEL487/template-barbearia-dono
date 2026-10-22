@@ -22,13 +22,14 @@ import {
   LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, fixMojibake } from "@/lib/utils";
 import {
   createQuickBookingAction,
   completeBookingAction,
   cancelBookingAction,
   logoutAction,
 } from "@/app/actions/admin-actions";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Barber {
   id: string;
@@ -117,9 +118,10 @@ export default function AgendaPage() {
         .order("name");
 
       if (bData) {
-        setBarbers(bData);
-        if (bData.length > 0 && !modalBarberId) {
-          setModalBarberId(bData[0].id);
+        const cleaned = bData.map((b) => ({ ...b, name: fixMojibake(b.name) }));
+        setBarbers(cleaned);
+        if (cleaned.length > 0 && !modalBarberId) {
+          setModalBarberId(cleaned[0].id);
         }
       }
 
@@ -131,9 +133,10 @@ export default function AgendaPage() {
         .order("name");
 
       if (sData) {
-        setServices(sData);
-        if (sData.length > 0 && !modalServiceId) {
-          setModalServiceId(sData[0].id);
+        const cleaned = sData.map((s) => ({ ...s, name: fixMojibake(s.name) }));
+        setServices(cleaned);
+        if (cleaned.length > 0 && !modalServiceId) {
+          setModalServiceId(cleaned[0].id);
         }
       }
 
@@ -164,12 +167,12 @@ export default function AgendaPage() {
         const mapped: BookingSlot[] = bookData.map((b: any) => {
           const sName =
             b.booking_items && b.booking_items.length > 0
-              ? b.booking_items.map((bs: any) => bs.service_name).filter(Boolean).join(", ")
+              ? b.booking_items.map((bs: any) => fixMojibake(bs.service_name)).filter(Boolean).join(", ")
               : "Serviço";
           return {
             id: b.id,
             barber_id: b.barber_id,
-            customer_name: b.customers?.name || "Cliente",
+            customer_name: fixMojibake(b.customers?.name) || "Cliente",
             customer_phone: b.customers?.phone || "",
             service_name: sName,
             starts_at: b.starts_at,

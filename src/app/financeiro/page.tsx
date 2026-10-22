@@ -21,8 +21,9 @@ import {
   LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, fixMojibake } from "@/lib/utils";
 import { logoutAction } from "@/app/actions/admin-actions";
+import { motion } from "framer-motion";
 
 interface PaymentRecord {
   id: string;
@@ -91,7 +92,7 @@ export default function FinanceiroPage() {
         const mapped: PaymentRecord[] = data.map((p: any) => ({
           id: p.id,
           created_at: p.created_at,
-          customer_name: (p.bookings as any)?.customers?.name || "Cliente Balcão",
+          customer_name: fixMojibake((p.bookings as any)?.customers?.name) || "Cliente Balcão",
           amount: Number(p.amount),
           payment_method: p.payment_method,
           status: p.status,

@@ -20,7 +20,9 @@ import {
   LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
+import { fixMojibake } from "@/lib/utils";
 import { updateSiteSettingsAction, logoutAction } from "@/app/actions/admin-actions";
+import { motion } from "framer-motion";
 
 export default function ConfiguracoesPage() {
   const router = useRouter();
@@ -75,10 +77,10 @@ export default function ConfiguracoesPage() {
       if (error) {
         setMessage({ type: "error", text: error.message });
       } else if (data) {
-        setBrandName(data.brand_name || "");
-        setBrandTagline(data.brand_tagline || "");
-        setHeroTitle(data.hero_title || "");
-        setHeroSubtitle(data.hero_subtitle || "");
+        setBrandName(fixMojibake(data.brand_name) || "");
+        setBrandTagline(fixMojibake(data.brand_tagline) || "");
+        setHeroTitle(fixMojibake(data.hero_title) || "");
+        setHeroSubtitle(fixMojibake(data.hero_subtitle) || "");
         setAccentColor(data.accent_color || "#F5A524");
         setDepositPct(String(data.deposit_percentage || 50));
         setCancelHours(String(data.cancellation_notice_hours || 24));

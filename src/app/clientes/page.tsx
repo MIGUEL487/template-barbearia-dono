@@ -22,8 +22,9 @@ import {
   LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, fixMojibake } from "@/lib/utils";
 import { logoutAction } from "@/app/actions/admin-actions";
+import { motion } from "framer-motion";
 
 interface CustomerRecord {
   id: string;
@@ -103,10 +104,10 @@ export default function ClientesPage() {
 
           return {
             id: c.id,
-            name: c.name,
+            name: fixMojibake(c.name),
             phone: c.phone,
             email: c.email,
-            notes: c.notes,
+            notes: c.notes ? fixMojibake(c.notes) : null,
             created_at: c.created_at,
             visits_count: completedBookings.length,
             total_spent: totalSpent,
