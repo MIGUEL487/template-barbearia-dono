@@ -1,21 +1,21 @@
 :root {
   /* Fundo e superfícies tonais (Dark Quente) */
-  --bg: #0B0B0C;
-  --surface: #151517;
-  --surface-2: #1C1C1F;
-  --surface-3: #242428;
+  --bg: #0A0A0B;
+  --surface: #131315;
+  --surface-2: #1A1A1D;
+  --surface-3: #222226;
   --border: rgba(255, 255, 255, 0.06);
 
-  /* Tipografia & Legibilidade (Branco Quente + Muted) */
-  --text: #F4F1EA;
-  --text-muted: #A59F94;
+  /* Tipografia & Legibilidade */
+  --text: #F0EDE6;
+  --text-muted: #8A8580;
 
-  /* Identidade Âmbar */
-  --accent: #F5A524;
-  --accent-hover: #E09015;
-  --accent-soft: rgba(245, 165, 36, 0.14);
-  --accent-glow: rgba(245, 165, 36, 0.28);
-  --accent-contrast: #1A1206;
+  /* Identidade Branco Desbotado / Cinza Claro */
+  --accent: #C8C2B8;
+  --accent-hover: #D8D3CA;
+  --accent-soft: rgba(200, 194, 184, 0.12);
+  --accent-glow: rgba(200, 194, 184, 0.18);
+  --accent-contrast: #0A0A0B;
 
   /* Feedback de Sistema */
   --danger: #FF6B6B;
@@ -29,7 +29,7 @@
 
   /* Sombras Difusas e Brilhos */
   --shadow-soft: 0 20px 50px -24px rgba(0, 0, 0, 0.7);
-  --shadow-glow: 0 12px 32px -12px var(--accent-glow);
+  --shadow-glow: 0 12px 32px -12px rgba(200, 194, 184, 0.12);
   --hairline: rgba(255, 255, 255, 0.06);
 
   /* Tipografia */
@@ -45,15 +45,15 @@
   --border: rgba(0, 0, 0, 0.08);
   --text: #1C1A17;
   --text-muted: #757065;
-  --accent: #D98200;
-  --accent-hover: #B86E00;
-  --accent-soft: rgba(217, 130, 0, 0.12);
-  --accent-glow: rgba(217, 130, 0, 0.2);
+  --accent: #6B6560;
+  --accent-hover: #555050;
+  --accent-soft: rgba(107, 101, 96, 0.10);
+  --accent-glow: rgba(107, 101, 96, 0.15);
   --accent-contrast: #FFFFFF;
   --danger: #E03131;
   --success: #2F9E44;
   --shadow-soft: 0 16px 40px -20px rgba(0, 0, 0, 0.12);
-  --shadow-glow: 0 8px 24px -8px rgba(217, 130, 0, 0.25);
+  --shadow-glow: 0 8px 24px -8px rgba(107, 101, 96, 0.18);
   --hairline: rgba(0, 0, 0, 0.08);
 }
 
