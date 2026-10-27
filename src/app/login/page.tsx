@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Scissors, Lock, AlertCircle, ShieldCheck } from "lucide-react";
+import { Lock, AlertCircle, ShieldCheck } from "lucide-react";
 import { createClient, getMissingAdminEnvVars } from "@/lib/supabase";
 
 export default function LoginPage() {
@@ -64,19 +65,19 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-surface p-10 rounded-[36px] shadow-soft relative z-10 space-y-6">
         <div className="flex flex-col items-center text-center">
           <div className="w-14 h-14 rounded-full bg-accent-soft text-accent flex items-center justify-center mb-4 shadow-sm">
-            <Scissors className="w-6 h-6 rotate-45" />
+            <Image src="/media/auto-stilo/marca-203.webp" width={56} height={56} className="rounded-full" alt="Auto Stilo" />
           </div>
           <h1 className="font-serif text-3xl font-bold text-text">
             Painel do dono
           </h1>
-          <p className="text-xs text-text-muted mt-1.5">Acesso administrativo exclusivo</p>
+          <p className="text-xs text-text-muted mt-2">Acesso administrativo exclusivo</p>
         </div>
 
         {missingVars.length > 0 && (
-          <div className="p-4 rounded-[20px] bg-amber-500/10 text-amber-300 text-xs space-y-1">
+          <div className="p-4 rounded-[20px] bg-amber-500/10 text-amber-300 text-xs space-y-2">
             <strong className="block font-semibold">⚠️ Configuração Necessária:</strong>
-            <p>Crie o arquivo <code className="bg-surface px-1 py-0.5 rounded">.env.local</code> preenchendo:</p>
-            <ul className="list-disc list-inside mt-1 font-mono text-xs">
+            <p>Crie o arquivo <code className="bg-surface px-2 py-2 rounded">.env.local</code> preenchendo:</p>
+            <ul className="list-disc list-inside mt-2 font-mono text-xs">
               {missingVars.map((v) => (
                 <li key={v}>{v}</li>
               ))}
@@ -85,15 +86,15 @@ export default function LoginPage() {
         )}
 
         {errorMessage && (
-          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs flex items-start gap-2.5">
-            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0 mt-2" />
             <span>{errorMessage}</span>
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+            <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
               E-mail Administrativo
             </label>
             <input
@@ -101,13 +102,13 @@ export default function LoginPage() {
               placeholder="dono@barbearia.com.br"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-surface-2 rounded-full px-6 py-3.5 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none transition-all"
+              className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none transition-all"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+            <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
               Senha de Acesso
             </label>
             <input
@@ -115,7 +116,7 @@ export default function LoginPage() {
               placeholder="••••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-surface-2 rounded-full px-6 py-3.5 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none transition-all"
+              className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none transition-all"
               required
             />
           </div>

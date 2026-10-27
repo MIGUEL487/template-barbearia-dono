@@ -1,6 +1,7 @@
 "use client";
 import { DemoBadge } from "@/components/demo-watermark";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
@@ -30,14 +31,15 @@ export function AdminNavigation() {
   return (
     <>
       <div className="admin-mobile-brand">
-        Auto Stilo <DemoBadge />
+        <Image className="brand-logo" src="/media/auto-stilo/marca-203.webp" width={48} height={48} alt="" /> Auto Stilo <DemoBadge />
       </div>
       <aside className="admin-sidebar">
-        <Link className="admin-brand" href="/dashboard">
-          Auto Stilo
+        <Link className="admin-brand brand-with-logo" href="/dashboard">
+          <Image className="brand-logo" src="/media/auto-stilo/marca-203.webp" width={48} height={48} alt="" />
+          <span>Auto Stilo
           <span>
             Gestão da barbearia <DemoBadge />
-          </span>
+          </span></span>
         </Link>
         <nav aria-label="Menu administrativo">
           {links.map(([href, label, Icon]) => (
