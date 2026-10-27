@@ -83,10 +83,12 @@ npm run tokens:check
 
 O hash SHA-256 é comparado com o arquivo de trava `design-tokens.sha256`.
 Hash canônico da release:
-`2ee27ab025deba0b102221a52b156fc7f987b2488bb321a0e8e8163e1d699306`
+`8b5369bd057465b0757cf4d4ed52c1cc4a921e9c08fc5181830ef6f189916176`
 
 Redesign: preto #050507, violeta #A78BFA e botão #7C3AED. Hash deve mudar junto nos dois repos. Não executar migrations/seed sem autorização explícita.
 
 Demo Auto Stilo: dados públicos do briefing; equipe/preços são exemplos. Fallback somente no cliente, sem escrita remota. Seed proposto fica exclusivamente no dono: supabase/seed.auto-stilo.sql; não aplicado.
 
 Painel Black: navegação compartilhada responsiva, sem modo de login demo. Skeletons de rota e números derivados de consultas reais; não há dados fictícios no dashboard. Agenda ganha filtro por profissional e visual compacto móvel. Validação funcional autenticada requer fixtures locais ou ambiente demo autorizado.
+
+Refinamento minimalista: Fraunces 400/500 + Manrope 400, preto neutro/off-white, roxo reservado a ações e foco. Tokens e hash canônicos atualizados em ambos; sem alteração de contratos de dados.

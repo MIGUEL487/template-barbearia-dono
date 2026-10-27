@@ -1,0 +1,82 @@
+[
+  {
+    "route": "login",
+    "width": 390,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/login",
+    "scrollHeight": 1048,
+    "overflow": false
+  },
+  {
+    "route": "dashboard",
+    "width": 390,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/dashboard",
+    "scrollHeight": 1977,
+    "overflow": false
+  },
+  {
+    "route": "agenda",
+    "width": 390,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/agenda",
+    "scrollHeight": 1048,
+    "overflow": false
+  },
+  {
+    "route": "clientes",
+    "width": 390,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/clientes",
+    "scrollHeight": 1048,
+    "overflow": false
+  },
+  {
+    "route": "servicos",
+    "width": 390,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/servicos",
+    "scrollHeight": 1048,
+    "overflow": false
+  },
+  {
+    "route": "login",
+    "width": 1440,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/login",
+    "scrollHeight": 1048,
+    "overflow": false
+  },
+  {
+    "route": "dashboard",
+    "width": 1440,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/dashboard",
+    "scrollHeight": 1142,
+    "overflow": false
+  },
+  {
+    "route": "agenda",
+    "width": 1440,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/agenda",
+    "scrollHeight": 1417,
+    "overflow": false
+  },
+  {
+    "route": "clientes",
+    "width": 1440,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/clientes",
+    "scrollHeight": 1048,
+    "overflow": false
+  },
+  {
+    "route": "servicos",
+    "width": 1440,
+    "status": 200,
+    "url": "http://127.0.0.1:8788/servicos",
+    "scrollHeight": 1048,
+    "overflow": false
+  }
+]

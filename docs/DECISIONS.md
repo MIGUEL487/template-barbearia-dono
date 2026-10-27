@@ -39,3 +39,6 @@ Dark-only: nenhum seletor de tema existente. Display condensado Bebas Neue + cor
 
 ## Versão final e Workers
 Next 15.5.28 + React 19.3.1 + Framer Motion 14.7.0; OpenNext 1.20.13 no painel. Migração autorizada pela continuação do trabalho após identificar os alertas legados. Cookies do servidor são assíncronos. O cliente continua estático e a API de dados mantém views/RPCs. Audit final sem vulnerabilidades conhecidas; isso não substitui testes RLS/pagamento em banco demo autorizado.
+
+## Refinamento editorial
+A direção monumental condensada foi substituída por Fraunces/Manrope. H1 público 42px no móvel e até 68px no desktop; peso 400, cor neutra, line-height 1.15. A paleta e superfícies passam a preto/cinza; foco e ação principal preservam violeta. A tipografia da UI administrativa permanece sans.

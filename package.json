@@ -19,8 +19,6 @@
     "test:authorization": "node tests/authorization-browser.mjs"
   },
   "dependencies": {
-    "@fontsource/bebas-neue": "5.3.0",
-    "@fontsource/manrope": "5.3.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.1",
     "clsx": "^2.1.1",

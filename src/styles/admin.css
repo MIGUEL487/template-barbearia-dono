@@ -411,3 +411,8 @@
     min-width: 0;
   }
 }
+
+/* Títulos de página serif; restante da interface permanece em sans. */
+.admin-content h1{font-family:var(--font-serif),Georgia,serif;font-size:32px;line-height:1.15;font-weight:400;letter-spacing:-.02em}
+.admin-brand,.admin-mobile-brand{font-family:var(--font-serif),Georgia,serif;font-size:24px;line-height:1.2;font-weight:400}
+@media(max-width:767px){.admin-content h1{font-size:28px}.admin-mobile-brand{font-size:23px}}

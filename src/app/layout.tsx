@@ -1,18 +1,10 @@
 import { DemoWatermark, watermarkEnabled } from "@/components/demo-watermark";
 import { MotionPreferences } from "@/components/motion-preferences";
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
-const display = localFont({
-  src: "../../fonts/display.woff2",
-  variable: "--font-serif",
-  display: "swap",
-});
-const manrope = localFont({
-  src: "../../fonts/body.woff2",
-  variable: "--font-sans",
-  display: "swap",
-});
+const display = Fraunces({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-serif", display: "swap" });
+const manrope = Manrope({ subsets: ["latin"], weight: "400", variable: "--font-sans", display: "swap" });
 
 export const metadata: Metadata = {
   robots: watermarkEnabled ? { index: false, follow: false } : undefined,

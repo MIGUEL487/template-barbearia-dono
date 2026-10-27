@@ -29,13 +29,13 @@ const config: Config = {
         none: "0px",
         full: "9999px",
         pill: "9999px",
-        lg: "20px",
-        xl: "28px",
-        "2xl": "36px",
+        lg: "var(--radius-lg)",
+        xl: "var(--radius-xl)",
+        "2xl": "var(--radius-2xl)",
         "3xl": "44px",
       },
       fontFamily: {
-        serif: ["var(--font-serif)", "Playfair Display", "serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
         sans: ["var(--font-sans)", "Manrope", "system-ui", "sans-serif"],
       },
       boxShadow: {
