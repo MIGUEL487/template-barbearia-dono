@@ -213,7 +213,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">{shopName}</h2>
-              <span className="text-[10px] text-accent uppercase tracking-wider font-bold">Gestão</span>
+              <span className="text-xs text-accent uppercase tracking-wider font-bold">Gestão</span>
             </div>
           </div>
 
@@ -300,7 +300,7 @@ export default function DashboardPage() {
             className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 border border-hairline/60"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Receita Liquidada</span>
+              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Receita Liquidada</span>
               <span className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                 <DollarSign className="w-4 h-4" />
               </span>
@@ -308,7 +308,7 @@ export default function DashboardPage() {
             <div className="font-serif text-3xl font-bold text-emerald-400">
               {formatCurrency(revenueReceived)}
             </div>
-            <p className="text-[11px] text-text-muted">Total de pagamentos concluídos e compensados</p>
+            <p className="text-xs text-text-muted">Total de pagamentos concluídos e compensados</p>
           </motion.div>
 
           <motion.div
@@ -319,7 +319,7 @@ export default function DashboardPage() {
             className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 border border-hairline/60"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Aguardando no Balcão</span>
+              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Aguardando no Balcão</span>
               <span className="w-8 h-8 rounded-full bg-accent-soft text-accent flex items-center justify-center">
                 <Clock className="w-4 h-4" />
               </span>
@@ -327,7 +327,7 @@ export default function DashboardPage() {
             <div className="font-serif text-3xl font-bold text-accent">
               {formatCurrency(revenuePending)}
             </div>
-            <p className="text-[11px] text-text-muted">Valores a receber de agendamentos de hoje</p>
+            <p className="text-xs text-text-muted">Valores a receber de agendamentos de hoje</p>
           </motion.div>
 
           <motion.div
@@ -338,7 +338,7 @@ export default function DashboardPage() {
             className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 sm:col-span-2 lg:col-span-1 border border-hairline/60"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Atendimentos Hoje</span>
+              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Atendimentos Hoje</span>
               <span className="w-8 h-8 rounded-full bg-surface-2 text-text flex items-center justify-center">
                 <Calendar className="w-4 h-4" />
               </span>
@@ -346,7 +346,7 @@ export default function DashboardPage() {
             <div className="font-serif text-3xl font-bold text-text">
               {bookingsToday.length}
             </div>
-            <p className="text-[11px] text-text-muted">Clientes agendados na grade do dia</p>
+            <p className="text-xs text-text-muted">Clientes agendados na grade do dia</p>
           </motion.div>
         </div>
 
@@ -395,7 +395,7 @@ export default function DashboardPage() {
 
                   <div className="flex items-center justify-between sm:justify-end gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
                     <span
-                      className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                         b.status === "completed"
                           ? "bg-emerald-500/15 text-emerald-400"
                           : b.status === "confirmed"

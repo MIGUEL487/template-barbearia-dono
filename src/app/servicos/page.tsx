@@ -194,7 +194,7 @@ export default function ServicosPage() {
             </div>
             <div>
               <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">Serviços</h2>
-              <span className="text-[10px] text-accent uppercase tracking-wider font-bold">Catálogo</span>
+              <span className="text-xs text-accent uppercase tracking-wider font-bold">Catálogo</span>
             </div>
           </div>
 
@@ -276,7 +276,7 @@ export default function ServicosPage() {
                     <div>
                       <div className="flex items-center gap-2">
                         <h3 className="font-serif font-bold text-text text-sm">{service.name}</h3>
-                        <span className="text-[10px] text-accent uppercase font-bold tracking-wider">
+                        <span className="text-xs text-accent uppercase font-bold tracking-wider">
                           · {service.category}
                         </span>
                       </div>

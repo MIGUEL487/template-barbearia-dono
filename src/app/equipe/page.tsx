@@ -398,7 +398,7 @@ export default function EquipePage() {
             </div>
             <div>
               <span className="font-serif text-base font-bold text-text block leading-tight">{shopName}</span>
-              <span className="text-[10px] text-accent uppercase tracking-wider font-semibold">Painel Dono</span>
+              <span className="text-xs text-accent uppercase tracking-wider font-semibold">Painel Dono</span>
             </div>
           </div>
 
@@ -473,7 +473,7 @@ export default function EquipePage() {
         <section className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-hairline">
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-accent block mb-1">
+              <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">
                 Controle Rápido
               </span>
               <h2 className="font-serif text-xl font-bold text-text">Status de Abertura da Barbearia</h2>
@@ -512,7 +512,7 @@ export default function EquipePage() {
                 } animate-pulse`}
               />
               <div>
-                <span className="text-text-muted text-[11px] block">Status Atual de Hoje</span>
+                <span className="text-text-muted text-xs block">Status Atual de Hoje</span>
                 <strong className={`font-serif text-sm ${isClosedToday ? "text-danger" : "text-emerald-400"}`}>
                   {isClosedToday ? "Fechada para agendamentos hoje" : "Aberta normalmente hoje"}
                 </strong>
@@ -520,7 +520,7 @@ export default function EquipePage() {
             </div>
 
             <div className="bg-surface-2 rounded-2xl p-4">
-              <span className="text-text-muted text-[11px] block">Data Selecionada</span>
+              <span className="text-text-muted text-xs block">Data Selecionada</span>
               <strong className="text-text font-mono text-sm">
                 {new Date().toLocaleDateString("pt-BR", { dateStyle: "full" })}
               </strong>
@@ -537,7 +537,7 @@ export default function EquipePage() {
         >
           <div className="flex items-center justify-between pb-4 border-b border-hairline">
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-accent block mb-1">Profissionais</span>
+              <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">Profissionais</span>
               <h2 className="font-serif text-xl font-bold text-text">Equipe de Barbeiros</h2>
             </div>
             <span className="text-xs text-text-muted font-mono">{barbers.length} profissionais</span>
@@ -573,7 +573,7 @@ export default function EquipePage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-serif font-bold text-sm text-text truncate">{b.name}</h3>
-                      <p className="text-[11px] text-text-muted truncate">{b.bio || "Especialista em Cortes"}</p>
+                      <p className="text-xs text-text-muted truncate">{b.bio || "Especialista em Cortes"}</p>
                     </div>
                   </div>
 
@@ -583,7 +583,7 @@ export default function EquipePage() {
                         e.stopPropagation();
                         handleToggleBarberActive(b);
                       }}
-                      className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase transition-colors ${
+                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase transition-colors ${
                         b.is_active
                           ? "bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25"
                           : "bg-surface text-text-muted hover:text-text"
@@ -619,7 +619,7 @@ export default function EquipePage() {
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-accent block mb-1">
+                <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">
                   Horários & Intervalo de Almoço
                 </span>
                 <h2 className="font-serif text-xl font-bold text-text">
@@ -676,7 +676,7 @@ export default function EquipePage() {
                       <div className="flex flex-wrap items-center gap-4">
                         {/* Entrada e Saída */}
                         <div className="flex items-center gap-2">
-                          <span className="text-text-muted text-[11px]">Entrada:</span>
+                          <span className="text-text-muted text-xs">Entrada:</span>
                           <input
                             type="time"
                             value={wh.start_time}
@@ -687,7 +687,7 @@ export default function EquipePage() {
                             }}
                             className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
                           />
-                          <span className="text-text-muted text-[11px]">Saída:</span>
+                          <span className="text-text-muted text-xs">Saída:</span>
                           <input
                             type="time"
                             value={wh.end_time}
@@ -703,7 +703,7 @@ export default function EquipePage() {
                         {/* Intervalo de Almoço */}
                         <div className="flex items-center gap-2 pl-3 border-l border-hairline">
                           <Coffee className="w-3.5 h-3.5 text-accent shrink-0" />
-                          <span className="text-text-muted text-[11px]">Almoço:</span>
+                          <span className="text-text-muted text-xs">Almoço:</span>
                           <input
                             type="time"
                             value={wh.lunch_start || "12:00"}
@@ -714,7 +714,7 @@ export default function EquipePage() {
                             }}
                             className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
                           />
-                          <span className="text-text-muted text-[11px]">às</span>
+                          <span className="text-text-muted text-xs">às</span>
                           <input
                             type="time"
                             value={wh.lunch_end || "13:00"}
@@ -745,7 +745,7 @@ export default function EquipePage() {
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-accent block mb-1">
+                <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">
                   Especialidades
                 </span>
                 <h2 className="font-serif text-xl font-bold text-text">
@@ -798,7 +798,7 @@ export default function EquipePage() {
                         </div>
                         <span className="font-semibold text-xs">{srv.name}</span>
                       </div>
-                      <span className="font-mono text-[11px] opacity-70">
+                      <span className="font-mono text-xs opacity-70">
                         {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(srv.price)}
                       </span>
                     </motion.div>

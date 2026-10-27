@@ -31,5 +31,8 @@
 ## Decisões Pendentes / Configuráveis por Instalação
 - `{{NOME}}`: Nome comercial da barbearia.
 - `{{DOMINIO}}`: Domínio principal (`dominio.com` para cliente e `admin.dominio.com` para dono).
-- `{{COR_ACCENT}}`: Padrão inicial âmbar (`#F59E0B`).
+- `{{COR_ACCENT}}`: Padrão inicial violeta (`#A78BFA`), botão forte `#7C3AED`.
 - Credenciais de produção do Mercado Pago e Resend (gerenciadas via `.env.local` / Vercel secrets).
+
+## Redesign Black
+Dark-only: nenhum seletor de tema existente. Display condensado Bebas Neue + corpo Manrope, arquivos locais via next/font/local. Tokens canônicos idênticos nos dois repositórios.

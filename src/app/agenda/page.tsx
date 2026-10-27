@@ -282,7 +282,7 @@ export default function AgendaPage() {
             </div>
             <div>
               <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">Agenda</h2>
-              <span className="text-[10px] text-accent uppercase tracking-wider font-bold">Por Barbeiro</span>
+              <span className="text-xs text-accent uppercase tracking-wider font-bold">Por Barbeiro</span>
             </div>
           </div>
 
@@ -371,7 +371,7 @@ export default function AgendaPage() {
                     </div>
                     <div>
                       <h3 className="font-serif font-bold text-text text-base">{barber.name}</h3>
-                      <span className="text-[11px] text-text-muted">
+                      <span className="text-xs text-text-muted">
                         {barberBookings.length} {barberBookings.length === 1 ? "atendimento" : "atendimentos"} hoje
                       </span>
                     </div>
@@ -394,8 +394,8 @@ export default function AgendaPage() {
                             key={time}
                             className="bg-surface-2/40 hover:bg-surface-2 rounded-full px-4 py-2.5 flex items-center justify-between text-xs transition-colors"
                           >
-                            <span className="font-mono text-text-muted/60 text-[11px]">{time}</span>
-                            <span className="text-[11px] text-text-muted/50">Disponível</span>
+                            <span className="font-mono text-text-muted/60 text-xs">{time}</span>
+                            <span className="text-xs text-text-muted/50">Disponível</span>
                           </div>
                         );
                       }
@@ -429,14 +429,14 @@ export default function AgendaPage() {
                             <div className="flex items-center gap-2 pt-2 border-t border-hairline justify-end">
                               <button
                                 onClick={() => handleComplete(slotBooking.id)}
-                                className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1"
+                                className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1"
                               >
                                 <Check className="w-3 h-3" />
                                 <span>Concluir</span>
                               </button>
                               <button
                                 onClick={() => handleCancel(slotBooking.id)}
-                                className="bg-danger/20 hover:bg-danger/30 text-danger px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1"
+                                className="bg-danger/20 hover:bg-danger/30 text-danger px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1"
                               >
                                 <X className="w-3 h-3" />
                                 <span>Cancelar</span>

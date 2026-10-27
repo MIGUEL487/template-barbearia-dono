@@ -170,7 +170,7 @@ export default function FinanceiroPage() {
             </div>
             <div>
               <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">Financeiro</h2>
-              <span className="text-[10px] text-accent uppercase tracking-wider font-bold">Fluxo de Caixa</span>
+              <span className="text-xs text-accent uppercase tracking-wider font-bold">Fluxo de Caixa</span>
             </div>
           </div>
 
@@ -226,23 +226,23 @@ export default function FinanceiroPage() {
         {/* Resumo Financeiro em Superfícies Tonais */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
-            <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider block">
+            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
               Receita Liquidada (Compensada)
             </span>
             <div className="font-serif text-3xl font-bold text-emerald-400">
               {formatCurrency(totalReceived)}
             </div>
-            <p className="text-[11px] text-text-muted">Total de pagamentos já aprovados e recebidos</p>
+            <p className="text-xs text-text-muted">Total de pagamentos já aprovados e recebidos</p>
           </div>
 
           <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
-            <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider block">
+            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
               Aguardando Liquidação
             </span>
             <div className="font-serif text-3xl font-bold text-accent">
               {formatCurrency(totalPending)}
             </div>
-            <p className="text-[11px] text-text-muted">Sinais Pix abertos ou pagamentos a receber no balcão</p>
+            <p className="text-xs text-text-muted">Sinais Pix abertos ou pagamentos a receber no balcão</p>
           </div>
         </div>
 
@@ -250,7 +250,7 @@ export default function FinanceiroPage() {
         <div className="flex flex-wrap items-center justify-between gap-3 bg-surface rounded-full px-6 py-3 shadow-soft text-xs">
           <div className="flex items-center gap-2">
             <Filter className="w-3.5 h-3.5 text-accent" />
-            <span className="text-text-muted font-bold uppercase text-[10px]">Método:</span>
+            <span className="text-text-muted font-bold uppercase text-xs">Método:</span>
             <select
               value={methodFilter}
               onChange={(e) => setMethodFilter(e.target.value)}
@@ -266,7 +266,7 @@ export default function FinanceiroPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-text-muted font-bold uppercase text-[10px]">Status:</span>
+            <span className="text-text-muted font-bold uppercase text-xs">Status:</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -305,7 +305,7 @@ export default function FinanceiroPage() {
                     <div>
                       <h3 className="font-serif font-bold text-text text-sm">{tx.customer_name}</h3>
                       <div className="flex items-center gap-2 text-xs text-text-muted mt-0.5">
-                        <span className="font-mono text-[11px]">{new Date(tx.created_at).toLocaleString("pt-BR")}</span>
+                        <span className="font-mono text-xs">{new Date(tx.created_at).toLocaleString("pt-BR")}</span>
                         <span>· {tx.payment_method.toUpperCase()}</span>
                       </div>
                     </div>
@@ -313,7 +313,7 @@ export default function FinanceiroPage() {
 
                   <div className="flex items-center justify-between sm:justify-end gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
                     <span
-                      className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                         tx.status === "approved"
                           ? "bg-emerald-500/15 text-emerald-400"
                           : tx.status === "pending"

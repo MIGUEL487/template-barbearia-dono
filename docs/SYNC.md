@@ -73,7 +73,7 @@ O endpoint `POST /api/webhooks/mercadopago` no repositório do dono processa con
 
 ## 4. Sincronização de Design Tokens
 
-Os tokens visuais (cores, tipografia, espaçamentos, raio de borda) residem em `src/styles/tokens.css` de ambos os projetos e devem ser mantidos idênticos.
+Os tokens visuais (cores, tipografia, espaçamentos, raio de borda) residem em `src/styles/design-tokens.css` de ambos os projetos e devem ser mantidos idênticos.
 
 Para verificar a conformidade dos tokens:
 ```bash
@@ -82,4 +82,6 @@ npm run tokens:check
 
 O hash SHA-256 é comparado com o arquivo de trava `design-tokens.sha256`.
 Hash canônico da release:
-`658e3808591220e92cd6bf52f26483aeadad4f6d1ceeb4a6222c691d86be44fb`
+`2ee27ab025deba0b102221a52b156fc7f987b2488bb321a0e8e8163e1d699306`
+
+Redesign: preto #050507, violeta #A78BFA e botão #7C3AED. Hash deve mudar junto nos dois repos. Não executar migrations/seed sem autorização explícita.

@@ -1,8 +1,9 @@
+@import "../styles/design-tokens.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import "../styles/design-tokens.css";
+
 
 body {
   background-color: var(--bg);
@@ -27,3 +28,11 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
 }
+
+html { scroll-padding-top: 6rem; }
+body { font-size: 16px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+button, a, input, select { touch-action: manipulation; }
+button, input, select { min-height: 44px; }
+input, select, textarea { font-size: max(16px, 1em); }
+.font-serif { letter-spacing: .02em; }

@@ -76,7 +76,7 @@ export default function LoginPage() {
           <div className="p-4 rounded-[20px] bg-amber-500/10 text-amber-300 text-xs space-y-1">
             <strong className="block font-semibold">⚠️ Configuração Necessária:</strong>
             <p>Crie o arquivo <code className="bg-surface px-1 py-0.5 rounded">.env.local</code> preenchendo:</p>
-            <ul className="list-disc list-inside mt-1 font-mono text-[11px]">
+            <ul className="list-disc list-inside mt-1 font-mono text-xs">
               {missingVars.map((v) => (
                 <li key={v}>{v}</li>
               ))}

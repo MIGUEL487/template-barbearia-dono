@@ -147,7 +147,7 @@ export default function ConfiguracoesPage() {
             </div>
             <div>
               <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">Configurações</h2>
-              <span className="text-[10px] text-accent uppercase tracking-wider font-bold">Personalização</span>
+              <span className="text-xs text-accent uppercase tracking-wider font-bold">Personalização</span>
             </div>
           </div>
 
