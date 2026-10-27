@@ -85,3 +85,5 @@ Hash canônico da release:
 `2ee27ab025deba0b102221a52b156fc7f987b2488bb321a0e8e8163e1d699306`
 
 Redesign: preto #050507, violeta #A78BFA e botão #7C3AED. Hash deve mudar junto nos dois repos. Não executar migrations/seed sem autorização explícita.
+
+Demo Auto Stilo: dados públicos do briefing; equipe/preços são exemplos. Fallback somente no cliente, sem escrita remota. Seed proposto fica exclusivamente no dono: supabase/seed.auto-stilo.sql; não aplicado.
