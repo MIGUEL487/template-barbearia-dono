@@ -15,3 +15,6 @@ Fontes por next/font/google, subsets latin, display swap, autohospedadas no buil
 4. QA, capturas depois e relatório.
 
 Nenhum push intermediário: publicação Git apenas após validar as quatro etapas. Configuração Cloudflare, rotas, dados/demo/seed, RPCs, hold, segurança, SEO e interruptores da marca d’água preservados.
+
+## Site público
+Hero reduzido a um título, frase, imagem e dois destinos já existentes. Removidos halo que seguia o cursor, recorte inclinado, lettering repetido no rodapé, cardápio com seta redundante e foto duplicada na galeria. Serviços em linhas com duração discreta e preço alinhado à direita; equipe sem caixas decorativas. Galeria passa a grade no desktop e swipe no celular, sem pinning; avaliações mostram uma citação por vez, com avanço manual, sem autoplay. Apenas o hero mantém loop lento, pausado fora da viewport; parallax de 4% e revelação de 12px. Não se alteraram dados nem rotas de agendamento. Marca continua ativa pelo mesmo interruptor, com padrão mais leve e selo neutro.
