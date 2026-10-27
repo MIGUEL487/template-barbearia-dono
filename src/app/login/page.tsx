@@ -60,14 +60,14 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-bg text-text relative">
+    <main className="admin-login min-h-screen flex flex-col items-center justify-center p-4 bg-bg text-text relative">
       <div className="w-full max-w-md bg-surface p-10 rounded-[36px] shadow-soft relative z-10 space-y-6">
         <div className="flex flex-col items-center text-center">
           <div className="w-14 h-14 rounded-full bg-accent-soft text-accent flex items-center justify-center mb-4 shadow-sm">
             <Scissors className="w-6 h-6 rotate-45" />
           </div>
           <h1 className="font-serif text-3xl font-bold text-text">
-            Painel do <span className="italic text-accent">Dono</span>
+            Painel do dono
           </h1>
           <p className="text-xs text-text-muted mt-1.5">Acesso administrativo exclusivo</p>
         </div>

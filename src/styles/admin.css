@@ -1,33 +1,43 @@
-.admin-page {
-  padding-bottom: 110px !important;
+/* Administrative interface — same navigation and interactions, quieter surfaces. */
+body .admin-page {
+  padding: 28px 32px 100px;
+  gap: 40px;
+  max-width: 1600px;
+  margin-inline: auto;
 }
 .admin-content {
   min-width: 0;
+  font-family: var(--font-sans), sans-serif;
 }
 .admin-sidebar {
-  width: 224px;
+  width: 220px;
   flex-shrink: 0;
-  padding: 24px 16px;
+  padding: 20px 20px 24px 0;
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  background: var(--surface);
-  border-radius: 20px;
+  gap: 40px;
+  background: transparent;
+  border-right: 1px solid var(--hairline);
+  border-radius: 0;
   align-self: flex-start;
   position: sticky;
-  top: 24px;
+  top: 28px;
 }
 .admin-brand {
-  font-family: var(--font-serif);
-  font-size: 32px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.2;
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 .admin-brand span {
-  font-family: var(--font-sans);
-  font-size: 13px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
   color: var(--text-muted);
-  margin-top: 8px;
 }
 .admin-sidebar nav {
   display: grid;
@@ -35,97 +45,401 @@
 }
 .admin-sidebar nav a,
 .admin-sidebar > button {
+  font-family: var(--font-sans), sans-serif;
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 48px;
-  padding: 12px 16px;
+  min-height: 46px;
+  padding: 10px 12px;
   font-size: 14px;
-  border-radius: 12px;
+  font-weight: 400;
+  border-radius: 6px;
   color: var(--text-muted);
 }
 .admin-sidebar nav [aria-current] {
-  background: var(--surface-3);
+  background: var(--surface-2);
   color: var(--text);
 }
 .admin-sidebar > button {
-  margin-top: 24px;
+  margin-top: 16px;
+  border-top: 1px solid var(--hairline);
+  border-radius: 0;
+  padding-top: 20px;
+}
+.admin-sidebar svg {
+  stroke-width: 1.5;
 }
 .admin-bottom,
-.admin-more {
+.admin-more,
+.admin-mobile-brand {
   display: none;
 }
 .admin-content h1 {
-  font-family: var(--font-sans);
-  font-size: 24px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+.admin-content h2,
+.admin-content h3,
+.admin-content h4 {
+  font-family: var(--font-sans), sans-serif;
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 400;
 }
 .admin-content h2 {
-  font-family: var(--font-sans);
+  font-size: 19px;
+}
+.admin-content h3,
+.admin-content h4 {
+  font-size: 17px;
+}
+.admin-content .font-serif {
+  font-family: var(--font-sans), sans-serif;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.admin-content .text-3xl,
+.admin-content .text-2xl:has(> span[aria-label]) {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 34px;
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+.admin-content .text-xs {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.admin-content .font-bold,
+.admin-content .font-semibold {
+  font-weight: 400;
+}
+.admin-content .uppercase {
+  font-family: var(--font-sans), sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
 }
 .admin-content .shadow-soft,
-.admin-content .shadow-glow {
+.admin-content .shadow-glow,
+.admin-content .shadow-sm {
   box-shadow: none;
 }
-.admin-content header {
-  border-radius: 16px;
+.admin-content .border {
+  border-color: var(--hairline);
 }
-.admin-content button {
+.admin-content .bg-surface {
+  border-radius: 12px;
+}
+.admin-content .rounded-2xl,
+.admin-content .rounded-3xl,
+.admin-content [class*="rounded-["] {
+  border-radius: 12px;
+}
+.admin-content .bg-accent-soft {
+  background: var(--surface-2);
+}
+.admin-content > header {
+  padding: 22px 0 28px;
+  background: transparent;
+  border-radius: 0;
+  border-bottom: 1px solid var(--hairline);
+  gap: 24px;
+  flex-wrap: wrap;
+  box-shadow: none;
+}
+.admin-content > header > div {
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-content > header p {
+  font-size: 14px;
+  margin-top: 12px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.admin-content button,
+.admin-content input,
+.admin-content select,
+.admin-content textarea {
+  font-family: var(--font-sans), sans-serif;
   min-height: 44px;
+  border-radius: 8px;
+  box-shadow: none;
+  font-weight: 400;
 }
 .admin-content input,
 .admin-content select,
 .admin-content textarea {
   font-size: 16px;
-  min-height: 48px;
+  background: var(--surface-2);
+}
+.admin-content .bg-accent {
+  background: var(--surface-3);
+  color: var(--text);
+}
+.admin-content .hover\:bg-accent-hover:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+.admin-content > header > button.bg-accent,
+.admin-content > header a.bg-accent {
+  background: var(--accent-strong);
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.admin-content .text-text-muted\/50,
+.admin-content .text-text-muted\/60 {
+  color: var(--text-muted);
+}
+.admin-content .rounded-full.bg-accent-soft {
+  background: transparent;
+  color: var(--text-muted);
+}
+.admin-content a {
+  font-weight: 400;
+}
+.admin-content header > div {
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.admin-content header > div > div {
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 .barber-tabs {
   display: flex;
   gap: 12px;
   overflow-x: auto;
   padding-block: 12px;
+  border-bottom: 1px solid var(--hairline);
 }
 .barber-tabs button {
-  padding: 12px 20px;
-  background: var(--surface-2);
-  border-radius: 999px;
+  padding: 10px 16px;
+  min-height: 44px;
+  background: transparent;
+  border-radius: 6px;
   white-space: nowrap;
   font-size: 14px;
+  font-family: var(--font-sans), sans-serif;
+  color: var(--text-muted);
 }
 .barber-tabs [aria-pressed="true"] {
-  background: var(--accent);
-  color: var(--bg);
+  background: var(--surface-2);
+  color: var(--text);
 }
 .admin-skeleton {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  padding: 24px;
+  padding: 24px 0;
   min-height: 230px;
 }
 .admin-skeleton p {
   grid-column: 1/-1;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 14px;
+  color: var(--text-muted);
 }
 .admin-skeleton div {
   height: 120px;
-  background: var(--surface-3);
-  border-radius: 16px;
+  background: var(--surface-2);
+  border-radius: 8px;
 }
-.admin-content .text-xs {
+.row-action {
+  font-family: var(--font-sans), sans-serif;
   font-size: 14px;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-height: 44px;
 }
-.admin-content .font-serif {
-  font-family: var(--font-sans);
+.booking-sheet {
+  font-family: var(--font-sans), sans-serif;
+  background: var(--surface);
+  color: var(--text);
+  max-width: 500px;
+  width: calc(100% - 32px);
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
 }
-.admin-content .text-text-muted\/50,
-.admin-content .text-text-muted\/60 {
+.booking-sheet::backdrop {
+  background: #000b;
+}
+.booking-sheet h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+.booking-sheet p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.booking-sheet button {
+  display: block;
+  width: 100%;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 15px;
+  padding: 14px;
+  border-radius: 8px;
+  margin: 8px 0;
+  background: transparent;
+  border: 1px solid var(--hairline);
+  min-height: 48px;
+}
+.booking-sheet [aria-pressed="true"] {
+  background: var(--surface-3);
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+.booking-sheet label {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0;
+}
+.booking-sheet input {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 16px;
+  background: var(--bg);
+  padding: 14px;
+  border-radius: 8px;
+}
+.booking-sheet button:disabled {
+  opacity: 0.45;
+}
+.revenue-chart {
+  padding: 28px 0;
+  border-radius: 0;
+  background: transparent;
+}
+.revenue-chart h2 {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 19px;
+  margin-bottom: 8px;
+}
+.revenue-chart > p {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 14px;
   color: var(--text-muted);
 }
+.revenue-bars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  margin-top: 28px;
+}
+.revenue-bars > div {
+  min-width: 0;
+  text-align: center;
+}
+.revenue-bars span {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 12px;
+  display: block;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+.revenue-track {
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin: 12px auto;
+  width: 30%;
+  background: var(--surface-2);
+}
+.revenue-bars small {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.admin-login {
+  font-family: var(--font-sans), sans-serif;
+  min-height: 100svh;
+  padding: 48px 24px 100px;
+}
+.admin-login > div {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 24px 0;
+}
+.admin-login > div > div:first-child {
+  align-items: flex-start;
+  text-align: left;
+}
+.admin-login > div > div:first-child > div:first-child {
+  display: none;
+}
+.admin-login h1 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.admin-login p {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.admin-login label {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.admin-login input {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 16px;
+  min-height: 52px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  box-shadow: none;
+  border: 1px solid var(--hairline);
+}
+.admin-login button[type="submit"] {
+  background: var(--accent-strong);
+  color: white;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 400;
+  box-shadow: none;
+  min-height: 50px;
+}
+.admin-login > div > div:last-child {
+  font-size: 12px;
+  justify-content: flex-start;
+}
+.admin-login .rounded-full {
+  box-shadow: none;
+}
 @media (max-width: 1023px) {
+  body .admin-page {
+    display: block;
+    padding: 20px 20px 100px;
+  }
   .admin-sidebar {
     display: none;
   }
-  .admin-page {
-    display: block !important;
+  .admin-mobile-brand {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-family: var(--font-serif), Georgia, serif;
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 1.3;
+    padding: 8px 0 28px;
   }
   .admin-bottom {
     display: flex;
@@ -134,26 +448,41 @@
     left: 0;
     right: 0;
     z-index: 40;
-    background: var(--surface-2);
-    border-top: 1px solid var(--border);
+    background: var(--bg);
+    border-top: 1px solid var(--hairline);
     padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
     justify-content: space-around;
     gap: 4px;
   }
   .admin-bottom a,
   .admin-bottom button {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 6px;
+    font-family: var(--font-sans), sans-serif;
     font-size: 12px;
     min-width: 52px;
     min-height: 48px;
     color: var(--text-muted);
+    font-weight: 400;
   }
   .admin-bottom [aria-current] {
-    color: var(--accent);
+    color: var(--text);
+  }
+  .admin-bottom [aria-current]::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    width: 18px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+  .admin-bottom svg {
+    stroke-width: 1.5;
   }
   .admin-more {
     display: grid;
@@ -164,30 +493,38 @@
     max-width: 500px;
     margin-left: auto;
     z-index: 45;
-    background: var(--surface-3);
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 24px;
+    border-radius: 12px;
     padding: 24px;
     gap: 8px;
-    box-shadow: var(--shadow-soft);
   }
   .admin-more h2 {
-    font-size: 20px;
+    font-family: var(--font-serif), Georgia, serif;
+    font-size: 26px;
+    font-weight: 400;
     margin-bottom: 12px;
   }
   .admin-more a,
   .admin-more button {
+    font-family: var(--font-sans), sans-serif;
     display: flex;
     align-items: center;
     gap: 16px;
     padding: 12px;
     font-size: 16px;
     min-height: 48px;
+    font-weight: 400;
+  }
+  .admin-content {
+    padding-bottom: 40px;
   }
   .admin-content > header {
-    gap: 16px;
-    flex-wrap: wrap;
-    padding: 20px;
+    padding: 16px 0 24px;
+    gap: 20px;
+  }
+  .admin-content > header button {
+    max-width: 100%;
   }
   .admin-skeleton {
     grid-template-columns: 1fr;
@@ -195,10 +532,7 @@
   .admin-skeleton div {
     height: 90px;
   }
-  .admin-content {
-    padding-bottom: 100px;
-  }
-  .agenda-empty-slot {
+  .admin-content .agenda-empty-slot {
     display: none;
   }
   .admin-content .fixed.inset-0 {
@@ -208,7 +542,7 @@
     backdrop-filter: none;
   }
   .admin-content .fixed.inset-0 > div {
-    border-radius: 24px 24px 0 0;
+    border-radius: 12px 12px 0 0;
     max-height: 78svh;
     overflow-y: auto;
     padding-bottom: 32px;
@@ -217,166 +551,13 @@
     min-width: 0;
   }
 }
-.row-action {
-  font-size: 14px;
-  padding: 12px 16px;
-  background: var(--surface-3);
-  border-radius: 12px;
-}
-.booking-sheet {
-  background: var(--surface-2);
-  color: var(--text);
-  max-width: 500px;
-  width: calc(100% - 32px);
-  padding: 28px;
-  border: 1px solid var(--border);
-  border-radius: 24px;
-}
-.booking-sheet::backdrop {
-  background: #000b;
-}
-.booking-sheet h2 {
-  font-size: 24px;
-  margin-bottom: 16px;
-}
-.booking-sheet p {
-  line-height: 1.6;
-  margin-bottom: 16px;
-}
-.booking-sheet button {
-  display: block;
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  margin: 8px 0;
-  background: var(--surface-3);
-  min-height: 48px;
-}
-.booking-sheet [aria-pressed="true"] {
-  background: var(--accent);
-  color: var(--bg);
-}
-.booking-sheet label {
-  display: grid;
-  gap: 12px;
-  margin: 20px 0;
-}
-.booking-sheet input {
-  background: var(--bg);
-  padding: 14px;
-  border-radius: 12px;
-}
-.booking-sheet button:disabled {
-  opacity: 0.4;
-}
 @media (max-width: 767px) {
-  .booking-sheet {
-    margin: auto 0 0;
-    max-width: none;
-    width: 100%;
-    border-radius: 24px 24px 0 0;
-    padding-bottom: calc(32px + env(safe-area-inset-bottom));
-  }
-}
-@media (max-width: 1023px) {
-  .admin-content .agenda-empty-slot {
-    display: none;
-  }
-  .admin-content header > div {
-    flex-wrap: wrap;
-    min-width: 0;
-  }
-  .admin-content > header > div {
-    max-width: 100%;
-  }
-  .admin-content > header button {
-    max-width: 100%;
-  }
-  .admin-content header > div > div {
-    flex-wrap: wrap;
-    max-width: 100%;
+  .admin-content h1 {
+    font-size: 28px;
   }
   .admin-content .text-3xl {
-    font-size: 28px;
+    font-size: 32px;
   }
-}
-
-.admin-content .border {
-  border-color: var(--border);
-}
-
-.revenue-chart {
-  padding: 24px;
-  border-radius: 20px;
-  background: var(--surface);
-}
-.revenue-chart h2 {
-  font-size: 20px;
-  margin-bottom: 8px;
-}
-.revenue-chart > p {
-  font-size: 14px;
-  color: var(--text-muted);
-}
-.revenue-bars {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 12px;
-  margin-top: 24px;
-}
-.revenue-bars > div {
-  min-width: 0;
-  text-align: center;
-}
-.revenue-bars span {
-  font-size: 12px;
-  display: block;
-  white-space: nowrap;
-}
-.revenue-track {
-  height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  margin: 12px auto;
-  width: 36%;
-  background: var(--surface-2);
-}
-.revenue-bars small {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-@media (max-width: 600px) {
-  .revenue-bars {
-    gap: 6px;
-  }
-  .revenue-bars span {
-    font-size: 12px;
-  }
-  .revenue-chart {
-    padding: 20px 12px;
-  }
-  .revenue-track {
-    height: 120px;
-    width: 45%;
-  }
-}
-
-.admin-mobile-brand {
-  display: none;
-}
-@media (max-width: 1023px) {
-  .admin-mobile-brand {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    font-family: var(--font-serif);
-    font-size: 28px;
-    padding: 8px 4px 24px;
-  }
-}
-
-@media (max-width: 767px) {
   .admin-content .booking-row-status {
     flex-wrap: wrap;
     gap: 12px;
@@ -384,11 +565,6 @@
   .admin-content .booking-row-status .row-action {
     width: 100%;
   }
-  .admin-content .revenue-bars {
-    column-gap: 4px;
-  }
-}
-@media (max-width: 767px) {
   .admin-content .flex.items-center {
     flex-wrap: wrap;
     max-width: 100%;
@@ -402,17 +578,37 @@
     min-width: 0;
     max-width: 100%;
   }
-  .admin-content .pl-3.border-l {
-    padding-left: 0;
-    border-left: 0;
-  }
   .admin-content input[type="date"] {
     max-width: 100%;
     min-width: 0;
   }
+  .admin-content .pl-3.border-l {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .booking-sheet {
+    margin: auto 0 0;
+    max-width: none;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    padding-bottom: calc(32px + env(safe-area-inset-bottom));
+  }
+  .revenue-bars {
+    gap: 6px;
+  }
+  .revenue-track {
+    height: 120px;
+    width: 36%;
+  }
+  .revenue-chart {
+    padding: 24px 0;
+  }
+  .admin-login h1 {
+    font-size: 34px;
+  }
+  .admin-login {
+    padding-inline: 24px;
+  }
 }
 
-/* Títulos de página serif; restante da interface permanece em sans. */
-.admin-content h1{font-family:var(--font-serif),Georgia,serif;font-size:32px;line-height:1.15;font-weight:400;letter-spacing:-.02em}
-.admin-brand,.admin-mobile-brand{font-family:var(--font-serif),Georgia,serif;font-size:24px;line-height:1.2;font-weight:400}
-@media(max-width:767px){.admin-content h1{font-size:28px}.admin-mobile-brand{font-size:23px}}
+.admin-content .metric-overview{gap:28px;padding-block:24px;border-bottom:1px solid var(--hairline)}.admin-content .metric-overview>div{background:transparent;border:0;border-radius:0;padding:0;box-shadow:none}.admin-content .metric-overview>div>div:first-child>span:has(>svg){display:none}.admin-content .revenue-bars>div:not(:last-child) .revenue-track>div{background:var(--text-muted)!important}

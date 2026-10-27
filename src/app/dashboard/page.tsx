@@ -294,11 +294,11 @@ export default function DashboardPage() {
         )}
 
         {/* Superfícies Tonais de Métricas com Motion */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="metric-overview grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4, scale: 1.01 }}
+            whileHover={{ y: -1 }}
             transition={{ duration: 0.2 }}
             className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 border border-hairline/60"
           >
@@ -321,7 +321,7 @@ export default function DashboardPage() {
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4, scale: 1.01 }}
+            whileHover={{ y: -1 }}
             transition={{ duration: 0.2, delay: 0.05 }}
             className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 border border-hairline/60"
           >
@@ -344,7 +344,7 @@ export default function DashboardPage() {
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4, scale: 1.01 }}
+            whileHover={{ y: -1 }}
             transition={{ duration: 0.2, delay: 0.1 }}
             className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 sm:col-span-2 lg:col-span-1 border border-hairline/60"
           >
@@ -395,7 +395,7 @@ export default function DashboardPage() {
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.04 }}
-                  whileHover={{ x: 3 }}
+                  whileHover={{ x: 0 }}
                   className="bg-surface-2 hover:bg-surface-3/70 rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors border border-transparent hover:border-hairline"
                 >
                   <div className="flex items-center gap-4">
