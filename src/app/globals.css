@@ -37,3 +37,5 @@ button, a, input, select { touch-action: manipulation; }
 button, input, select { min-height: 44px; }
 input, select, textarea { font-size: max(16px, 1em); }
 .font-serif { letter-spacing: .02em; }
+
+.watermark-pattern{position:fixed;inset:0;pointer-events:none;z-index:20;opacity:.035;background-repeat:repeat}.watermark-badge{position:fixed;right:16px;bottom:100px;z-index:25;pointer-events:none;display:flex;flex-direction:column;gap:4px;background:var(--surface-2);padding:10px 14px;border-radius:12px;font-size:12px;max-width:230px;opacity:.9}.watermark-badge span{font-size:12px;color:var(--text-muted)}.watermark-footer{padding:20px 24px 110px;text-align:center;color:var(--text-muted);font-size:12px}.photo-watermark{position:absolute;bottom:18px;left:18px;right:18px;font-size:12px;color:white;background:#050507aa;padding:10px 14px;pointer-events:none;z-index:3;border-radius:8px}.demo-badge{font-family:var(--font-sans);font-size:12px;padding:5px 8px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:inline-block;line-height:1.2}.gallery-piece .reveal-mask{position:relative}

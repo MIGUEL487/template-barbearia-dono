@@ -1,3 +1,4 @@
+import {DemoWatermark,watermarkEnabled} from "@/components/demo-watermark";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -5,7 +6,8 @@ const display = localFont({ src: "../../fonts/display.woff2", variable: "--font-
 const manrope = localFont({ src: "../../fonts/body.woff2", variable: "--font-sans", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Painel Administrativo — Barbearia Premium",
+  robots: watermarkEnabled?{index:false,follow:false}:undefined,
+  title: "Painel Administrativo — Barbearia Premium"+(watermarkEnabled?" (Demo)":""),
   description: "Gestão completa de agenda, clientes, financeiro e automações.",
 };
 
@@ -18,6 +20,7 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${display.variable} ${manrope.variable}`}>
       <body className="min-h-screen bg-bg text-text antialiased selection:bg-accent selection:text-accent-contrast font-sans">
         {children}
+        <DemoWatermark/>
       </body>
     </html>
   );
