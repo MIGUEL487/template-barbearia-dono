@@ -167,13 +167,13 @@ export default function FinanceiroPage() {
       <AdminNavigation />
 
       <main className="admin-content flex-1 space-y-6">
-        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
           <h1 className="font-serif text-lg font-bold text-text">Fluxo Financeiro</h1>
 
           <button
             onClick={exportCSV}
             disabled={filtered.length === 0}
-            className="inline-flex items-center gap-1.5 bg-surface-2 hover:bg-surface-3 text-text px-5 py-2 rounded-full text-xs font-bold transition-all disabled:opacity-40"
+            className="inline-flex items-center gap-2 bg-surface-2 hover:bg-surface-3 text-text px-6 py-2 rounded-full text-xs font-bold transition-all disabled:opacity-40"
           >
             <Download className="w-3.5 h-3.5 text-accent" />
             <span>Exportar CSV</span>
@@ -210,14 +210,14 @@ export default function FinanceiroPage() {
         </div>
 
         {/* Filtros em Pílulas */}
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-surface rounded-full px-6 py-3 shadow-soft text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-4 bg-surface rounded-full px-6 py-4 shadow-soft text-xs">
           <div className="flex items-center gap-2">
             <Filter className="w-3.5 h-3.5 text-accent" />
             <span className="text-text-muted font-bold uppercase text-xs">Método:</span>
             <select aria-label="Filtrar método de pagamento"
               value={methodFilter}
               onChange={(e) => setMethodFilter(e.target.value)}
-              className="bg-surface-2 text-text rounded-full px-4 py-1.5 focus:outline-none focus:ring-1 focus:ring-accent"
+              className="bg-surface-2 text-text rounded-full px-4 py-2 focus:outline-none focus:ring-1 focus:ring-accent"
             >
               <option value="all">Todos os Métodos</option>
               <option value="pix">Pix</option>
@@ -233,7 +233,7 @@ export default function FinanceiroPage() {
             <select aria-label="Filtrar status de pagamento"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-surface-2 text-text rounded-full px-4 py-1.5 focus:outline-none focus:ring-1 focus:ring-accent"
+              className="bg-surface-2 text-text rounded-full px-4 py-2 focus:outline-none focus:ring-1 focus:ring-accent"
             >
               <option value="all">Todos os Status</option>
               <option value="approved">Aprovados</option>
@@ -251,7 +251,7 @@ export default function FinanceiroPage() {
               Nenhuma movimentação financeira encontrada com estes filtros.
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {filtered.map((tx) => (
                 <div
                   key={tx.id}
@@ -263,7 +263,7 @@ export default function FinanceiroPage() {
                     </div>
                     <div>
                       <h3 className="font-serif font-bold text-text text-sm">{tx.customer_name}</h3>
-                      <div className="flex items-center gap-2 text-xs text-text-muted mt-0.5">
+                      <div className="flex items-center gap-2 text-xs text-text-muted mt-2">
                         <span className="font-mono text-xs">{new Date(tx.created_at).toLocaleString("pt-BR")}</span>
                         <span>· {tx.payment_method.toUpperCase()}</span>
                       </div>
@@ -272,7 +272,7 @@ export default function FinanceiroPage() {
 
                   <div className="flex items-center justify-between sm:justify-end gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                      className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider ${
                         tx.status === "approved"
                           ? "bg-emerald-500/15 text-emerald-400"
                           : tx.status === "pending"

@@ -305,10 +305,10 @@ export default function AgendaPage() {
       {/* Área Principal */}
       <main className="admin-content flex-1 space-y-6">
         {/* Barra Superior em Pílula */}
-        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
           <h1>Agenda</h1>
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-surface-2 px-4 py-1.5 rounded-full text-xs font-semibold">
+            <div className="flex items-center gap-2 bg-surface-2 px-4 py-2 rounded-full text-xs font-semibold">
               <Calendar className="w-3.5 h-3.5 text-accent" />
               <input aria-label="Data da agenda"
                 type="date"
@@ -321,7 +321,7 @@ export default function AgendaPage() {
 
           <button
             onClick={() => setShowQuickModal(true)}
-            className="inline-flex items-center gap-1.5 bg-accent hover:bg-accent-hover text-accent-contrast px-5 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
+            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Agendamento Rápido</span>
@@ -377,7 +377,7 @@ export default function AgendaPage() {
                     className="bg-surface rounded-[32px] p-6 shadow-soft space-y-6"
                   >
                     {/* Cabeçalho do Barbeiro */}
-                    <div className="flex items-center gap-3 pb-4 border-b border-hairline">
+                    <div className="flex items-center gap-4 pb-4 border-b border-hairline">
                       <div className="w-12 h-12 rounded-full bg-accent-soft text-accent flex items-center justify-center font-serif text-lg font-bold">
                         {barber.name.charAt(0)}
                       </div>
@@ -396,7 +396,7 @@ export default function AgendaPage() {
                     </div>
 
                     {/* Lista Respirada de Horários do Barbeiro */}
-                    <div className="space-y-2.5">
+                    <div className="space-y-2">
                       {timeSlots.map((time) => {
                         const slotBooking = barberBookings.find((b) => {
                           const bTime = new Date(
@@ -412,7 +412,7 @@ export default function AgendaPage() {
                           return (
                             <div
                               key={time}
-                              className="agenda-empty-slot bg-surface-2/40 hover:bg-surface-2 rounded-full px-4 py-2.5 flex items-center justify-between text-xs transition-colors"
+                              className="agenda-empty-slot bg-surface-2/40 hover:bg-surface-2 rounded-full px-4 py-2 flex items-center justify-between text-xs transition-colors"
                             >
                               <span className="font-mono text-text-muted/60 text-xs">
                                 {time}
@@ -489,7 +489,7 @@ export default function AgendaPage() {
             </div>
 
             {modalError && (
-              <div className="bg-danger/10 rounded-[20px] p-3 text-xs text-danger flex items-center gap-2">
+              <div className="bg-danger/10 rounded-[20px] p-4 text-xs text-danger flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 shrink-0" />
                 <span>{modalError}</span>
               </div>
@@ -497,7 +497,7 @@ export default function AgendaPage() {
 
             <form onSubmit={handleCreateQuickBooking} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   Nome do Cliente
                 </label>
                 <input aria-label="Nome do cliente"
@@ -506,12 +506,12 @@ export default function AgendaPage() {
                   value={modalCustomer}
                   onChange={(e) => setModalCustomer(e.target.value)}
                   placeholder="Nome do cliente"
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   WhatsApp / Telefone
                 </label>
                 <input aria-label="WhatsApp do cliente"
@@ -520,19 +520,19 @@ export default function AgendaPage() {
                   value={modalPhone}
                   onChange={(e) => setModalPhone(e.target.value)}
                   placeholder="(11) 99999-9999"
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                     Barbeiro
                   </label>
                   <select aria-label="Profissional do agendamento"
                     value={modalBarberId}
                     onChange={(e) => setModalBarberId(e.target.value)}
-                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                   >
                     {barbers.map((b) => (
                       <option key={b.id} value={b.id}>
@@ -543,13 +543,13 @@ export default function AgendaPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                     Horário
                   </label>
                   <select aria-label="Horário do agendamento"
                     value={modalTime}
                     onChange={(e) => setModalTime(e.target.value)}
-                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                   >
                     {timeSlots.map((t) => (
                       <option key={t} value={t}>
@@ -561,13 +561,13 @@ export default function AgendaPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   Serviço
                 </label>
                 <select aria-label="Serviço do agendamento"
                   value={modalServiceId}
                   onChange={(e) => setModalServiceId(e.target.value)}
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 >
                   {services.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -577,18 +577,18 @@ export default function AgendaPage() {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
+              <div className="flex items-center justify-end gap-4 pt-4 border-t border-hairline">
                 <button
                   type="button"
                   onClick={() => setShowQuickModal(false)}
-                  className="px-5 py-2.5 rounded-full text-xs font-bold text-text-muted hover:text-text"
+                  className="px-6 py-2 rounded-full text-xs font-bold text-text-muted hover:text-text"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
+                  className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
                 >
                   {isSubmitting ? "Agendando..." : "Confirmar Agendamento"}
                 </button>

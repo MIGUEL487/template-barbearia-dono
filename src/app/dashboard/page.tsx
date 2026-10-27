@@ -221,7 +221,7 @@ export default function DashboardPage() {
           </p>
           <button
             onClick={handleLogout}
-            className="bg-accent text-accent-contrast px-6 py-2.5 rounded-full text-xs font-bold shadow-glow"
+            className="bg-accent text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow"
           >
             Fazer Login com Outra Conta
           </button>
@@ -248,8 +248,8 @@ export default function DashboardPage() {
       {/* Conteúdo Principal */}
       <main className="admin-content flex-1 space-y-6">
         {/* Barra Superior */}
-        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
-          <div className="flex items-center gap-3">
+        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
+          <div className="flex items-center gap-4">
             <h1 className="font-serif text-lg font-bold text-text">
               Visão Geral
             </h1>
@@ -258,14 +258,14 @@ export default function DashboardPage() {
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {/* Seletor de Período em Pílula */}
-            <div className="bg-surface-2 p-1 rounded-full flex gap-1 text-xs">
+            <div className="bg-surface-2 p-2 rounded-full flex gap-2 text-xs">
               {(["hoje", "semana", "mes"] as const).map((p) => (
                 <button
                   key={p}
                   onClick={() => setPeriod(p)}
-                  className={`px-4 py-1.5 rounded-full capitalize font-semibold transition-all ${
+                  className={`px-4 py-2 rounded-full capitalize font-semibold transition-all ${
                     period === p
                       ? "bg-accent text-accent-contrast shadow-sm"
                       : "text-text-muted hover:text-text"
@@ -278,7 +278,7 @@ export default function DashboardPage() {
 
             <Link
               href="/agenda"
-              className="inline-flex items-center gap-1.5 bg-accent hover:bg-accent-hover text-accent-contrast px-5 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
+              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Novo Agendamento</span>
@@ -373,7 +373,7 @@ export default function DashboardPage() {
             </h2>
             <Link
               href="/agenda"
-              className="text-xs text-accent hover:underline font-semibold flex items-center gap-1"
+              className="text-xs text-accent hover:underline font-semibold flex items-center gap-2"
             >
               <span>Abrir Agenda Completa</span>
               <ChevronRight className="w-4 h-4" />
@@ -388,7 +388,7 @@ export default function DashboardPage() {
               Nenhum agendamento agendado para o dia de hoje.
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {bookingsToday.map((b, idx) => (
                 <motion.div
                   key={b.id}
@@ -421,7 +421,7 @@ export default function DashboardPage() {
 
                   <div className="booking-row-status flex items-center justify-between sm:justify-end gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                      className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider ${
                         b.status === "completed"
                           ? "bg-emerald-500/15 text-emerald-400"
                           : b.status === "confirmed"

@@ -1,0 +1,22 @@
+/* Animate gesture layer. Entrances are owned by interface-motion.tsx. */
+:where(a, button, summary, input, select, textarea, label.choice) {
+  transition: color .2s ease, background-color .2s ease, border-color .2s ease,
+    box-shadow .2s ease, translate .25s var(--motion-ease);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  :where(button, .cta, .choice, .service-row):not(:disabled):hover { translate: 0 -8px; }
+  :where(.gallery-piece, .hero-art) img { transition: transform .8s var(--motion-ease); }
+  :where(.gallery-piece, .hero-art):hover img { transform: scale(1.025); }
+}
+:where(button, .cta):not(:disabled):active { translate: 0 0; }
+:where(input, select, textarea):focus-visible { border-color: var(--accent); }
+:where(.site-nav, .admin-sidebar nav, .admin-bottom) a[aria-current] { color: var(--text); }
+:where(details[open]) > p, .site-nav.is-open { animation: answer-enter .35s var(--motion-ease); }
+@keyframes answer-enter { from { translate: 0 8px; } to { translate: 0 0; } }
+.brand-logo { width:48px; height:48px; object-fit:contain; flex-shrink:0; border-radius:50%; }
+.brand-with-logo { display:flex; align-items:center; gap:16px; }
+.brand-with-logo > span { display:flex; flex-direction:column; }
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  :where(button, a, .choice) { translate:none !important; }
+}

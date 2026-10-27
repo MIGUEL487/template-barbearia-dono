@@ -144,7 +144,7 @@ export default function ConfiguracoesPage() {
       <AdminNavigation />
 
       <main className="admin-content flex-1 space-y-6 max-w-4xl">
-        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
           <h1 className="font-serif text-lg font-bold text-text">Parâmetros da Barbearia</h1>
         </header>
 
@@ -153,7 +153,7 @@ export default function ConfiguracoesPage() {
           <form onSubmit={handleSubmit} className="bg-surface rounded-[32px] p-8 shadow-soft space-y-8">
             {message && (
               <div
-                className={`p-4 rounded-[20px] text-xs flex items-center gap-2.5 ${
+                className={`p-4 rounded-[20px] text-xs flex items-center gap-2 ${
                   message.type === "success"
                     ? "bg-emerald-500/10 text-emerald-400"
                     : "bg-danger/10 text-danger"
@@ -166,14 +166,14 @@ export default function ConfiguracoesPage() {
 
             <div>
               <h2 className="font-serif text-lg font-bold text-text">Identidade da Marca</h2>
-              <p className="text-xs text-text-muted mt-1">
+              <p className="text-xs text-text-muted mt-2">
                 Altera o nome, slogan e cores exibidos na landing page do cliente em tempo real.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   Nome da Barbearia
                 </label>
                 <input aria-label="Nome da barbearia"
@@ -181,26 +181,26 @@ export default function ConfiguracoesPage() {
                   required
                   value={brandName}
                   onChange={(e) => setBrandName(e.target.value)}
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   Slogan / Tagline
                 </label>
                 <input aria-label="Subtítulo da marca"
                   type="text"
                   value={brandTagline}
                   onChange={(e) => setBrandTagline(e.target.value)}
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   Título Principal (Hero)
                 </label>
                 <input aria-label="Título principal do site"
@@ -208,33 +208,33 @@ export default function ConfiguracoesPage() {
                   required
                   value={heroTitle}
                   onChange={(e) => setHeroTitle(e.target.value)}
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   Subtítulo (Hero)
                 </label>
                 <textarea aria-label="Descrição principal do site"
                   rows={2}
                   value={heroSubtitle}
                   onChange={(e) => setHeroSubtitle(e.target.value)}
-                  className="w-full bg-surface-2 rounded-2xl px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-surface-2 rounded-2xl px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
                 />
               </div>
             </div>
 
             <div className="pt-4 border-t border-hairline">
               <h2 className="font-serif text-lg font-bold text-text">Políticas Financeiras</h2>
-              <p className="text-xs text-text-muted mt-1">
+              <p className="text-xs text-text-muted mt-2">
                 Regras aplicadas no checkout de agendamento online.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   Sinal Pix Obrigatório (%)
                 </label>
                 <input aria-label="Percentual do sinal"
@@ -244,12 +244,12 @@ export default function ConfiguracoesPage() {
                   required
                   value={depositPct}
                   onChange={(e) => setDepositPct(e.target.value)}
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none font-mono"
+                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   Aviso para Cancelar (Horas)
                 </label>
                 <input aria-label="Antecedência mínima para cancelamento em horas"
@@ -259,12 +259,12 @@ export default function ConfiguracoesPage() {
                   required
                   value={cancelHours}
                   onChange={(e) => setCancelHours(e.target.value)}
-                  className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none font-mono"
+                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                   Cor Destaque (Hex)
                 </label>
                 <div className="flex items-center gap-2">
@@ -278,7 +278,7 @@ export default function ConfiguracoesPage() {
                     type="text"
                     value={accentColor}
                     onChange={(e) => setAccentColor(e.target.value)}
-                    className="flex-1 bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none font-mono"
+                    className="flex-1 bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
@@ -288,7 +288,7 @@ export default function ConfiguracoesPage() {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="bg-accent hover:bg-accent-hover text-accent-contrast px-8 py-3.5 rounded-full text-xs font-bold shadow-glow flex items-center gap-2 disabled:opacity-50"
+                className="bg-accent hover:bg-accent-hover text-accent-contrast px-8 py-4 rounded-full text-xs font-bold shadow-glow flex items-center gap-2 disabled:opacity-50"
               >
                 {isSaving ? (
                   <>

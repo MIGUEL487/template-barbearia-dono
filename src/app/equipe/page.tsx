@@ -135,12 +135,12 @@ export default function EquipePage() {
       {/* Conteúdo Principal */}
       <main className="admin-content flex-1 space-y-6">
         {/* Header Superior */}
-        <header className="bg-surface rounded-[28px] px-8 py-5 flex items-center justify-between shadow-soft">
+        <header className="bg-surface rounded-[28px] px-8 py-6 flex items-center justify-between shadow-soft">
           <div>
             <h1 className="font-serif text-2xl font-bold text-text">
               Equipe & Expediente
             </h1>
-            <p className="text-xs text-text-muted mt-0.5">
+            <p className="text-xs text-text-muted mt-2">
               Gerencie abertura diária, horários de funcionamento, barbeiros e
               especialidades
             </p>
@@ -148,7 +148,7 @@ export default function EquipePage() {
 
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full font-bold text-xs shadow-glow transition-all active:scale-95"
+            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full font-bold text-xs shadow-glow transition-all active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>Adicionar Barbeiro</span>
@@ -158,7 +158,7 @@ export default function EquipePage() {
         {/* Feedback de Status */}
         {statusMsg && (
           <div
-            className={`p-4 rounded-[20px] text-xs flex items-center gap-2.5 ${
+            className={`p-4 rounded-[20px] text-xs flex items-center gap-2 ${
               statusMsg.type === "success"
                 ? "bg-emerald-500/10 text-emerald-400"
                 : "bg-danger/10 text-danger"
@@ -177,13 +177,13 @@ export default function EquipePage() {
         <section className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-hairline">
             <div>
-              <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">
+              <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-2">
                 Controle Rápido
               </span>
               <h2 className="font-serif text-xl font-bold text-text">
                 Status de Abertura da Barbearia
               </h2>
-              <p className="text-xs text-text-muted mt-1">
+              <p className="text-xs text-text-muted mt-2">
                 Precisa folgar hoje ou fechar por imprevisto? Clique no botão
                 para bloquear agendamentos no site do cliente.
               </p>
@@ -191,7 +191,7 @@ export default function EquipePage() {
 
             <button
               onClick={handleToggleClosedToday}
-              className={`px-6 py-3.5 rounded-full font-bold text-xs transition-all flex items-center gap-2.5 active:scale-95 ${
+              className={`px-6 py-4 rounded-full font-bold text-xs transition-all flex items-center gap-2 active:scale-95 ${
                 isClosedToday
                   ? "bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 ring-1 ring-emerald-500/30"
                   : "bg-danger/15 hover:bg-danger/25 text-danger ring-1 ring-danger/30"
@@ -212,7 +212,7 @@ export default function EquipePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div className="bg-surface-2 rounded-2xl p-4 flex items-center gap-3">
+            <div className="bg-surface-2 rounded-2xl p-4 flex items-center gap-4">
               <div
                 className={`w-3.5 h-3.5 rounded-full ${
                   isClosedToday ? "bg-danger" : "bg-emerald-400"
@@ -252,7 +252,7 @@ export default function EquipePage() {
         >
           <div className="flex items-center justify-between pb-4 border-b border-hairline">
             <div>
-              <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">
+              <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-2">
                 Profissionais
               </span>
               <h2 className="font-serif text-xl font-bold text-text">
@@ -278,13 +278,13 @@ export default function EquipePage() {
                   whileHover={{ y: -3, scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className={`bg-surface-2 p-5 rounded-[24px] cursor-pointer transition-all border ${
+                  className={`bg-surface-2 p-6 rounded-[24px] cursor-pointer transition-all border ${
                     selectedBarberId === b.id
                       ? "ring-2 ring-accent border-accent/40 bg-surface-2"
                       : "border-hairline hover:bg-surface-3"
                   }`}
                 >
-                  <div className="flex items-center gap-3.5 mb-3">
+                  <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center text-accent overflow-hidden font-serif font-bold text-base border border-hairline shrink-0">
                       {b.avatar_url ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
@@ -307,13 +307,13 @@ export default function EquipePage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-hairline text-xs">
+                  <div className="flex items-center justify-between pt-4 border-t border-hairline text-xs">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleToggleBarberActive(b);
                       }}
-                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase transition-colors ${
+                      className={`px-4 py-2 rounded-full text-xs font-bold uppercase transition-colors ${
                         b.is_active
                           ? "bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25"
                           : "bg-surface text-text-muted hover:text-text"
@@ -327,7 +327,7 @@ export default function EquipePage() {
                         e.stopPropagation();
                         handleDeleteBarber(b);
                       }}
-                      className="text-text-muted hover:text-danger p-1 transition-colors"
+                      className="text-text-muted hover:text-danger p-2 transition-colors"
                       title="Excluir Barbeiro"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -349,14 +349,14 @@ export default function EquipePage() {
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
               <div>
-                <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">
+                <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-2">
                   Horários & Intervalo de Almoço
                 </span>
                 <h2 className="font-serif text-xl font-bold text-text">
                   Expediente de{" "}
                   {barbers.find((b) => b.id === selectedBarberId)?.name}
                 </h2>
-                <p className="text-xs text-text-muted mt-0.5">
+                <p className="text-xs text-text-muted mt-2">
                   Configure o horário de entrada, saída, intervalo de almoço do
                   profissional e dias de folga
                 </p>
@@ -367,14 +367,14 @@ export default function EquipePage() {
                 disabled={isSavingHours}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full font-bold text-xs shadow-glow transition-all disabled:opacity-50"
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full font-bold text-xs shadow-glow transition-all disabled:opacity-50"
               >
                 <Clock className="w-3.5 h-3.5" />
                 <span>{isSavingHours ? "Salvando..." : "Salvar Horários"}</span>
               </motion.button>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               {workingHours.map((wh, idx) => (
                 <motion.div
                   key={wh.day_of_week}
@@ -425,7 +425,7 @@ export default function EquipePage() {
                               updated[idx].start_time = e.target.value;
                               setWorkingHours(updated);
                             }}
-                            className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
+                            className="bg-surface rounded-full px-4 py-2 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
                           />
                           <span className="text-text-muted text-xs">
                             Saída:
@@ -438,12 +438,12 @@ export default function EquipePage() {
                               updated[idx].end_time = e.target.value;
                               setWorkingHours(updated);
                             }}
-                            className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
+                            className="bg-surface rounded-full px-4 py-2 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
                           />
                         </div>
 
                         {/* Intervalo de Almoço */}
-                        <div className="flex items-center gap-2 pl-3 border-l border-hairline">
+                        <div className="flex items-center gap-2 pl-4 border-l border-hairline">
                           <Coffee className="w-3.5 h-3.5 text-accent shrink-0" />
                           <span className="text-text-muted text-xs">
                             Almoço:
@@ -456,7 +456,7 @@ export default function EquipePage() {
                               updated[idx].lunch_start = e.target.value;
                               setWorkingHours(updated);
                             }}
-                            className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
+                            className="bg-surface rounded-full px-4 py-2 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
                           />
                           <span className="text-text-muted text-xs">às</span>
                           <input aria-label={`${DAYS_NAMES[wh.day_of_week]} — Fim do almoço`}
@@ -467,7 +467,7 @@ export default function EquipePage() {
                               updated[idx].lunch_end = e.target.value;
                               setWorkingHours(updated);
                             }}
-                            className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
+                            className="bg-surface rounded-full px-4 py-2 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
                           />
                         </div>
                       </div>
@@ -489,14 +489,14 @@ export default function EquipePage() {
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
               <div>
-                <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">
+                <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-2">
                   Especialidades
                 </span>
                 <h2 className="font-serif text-xl font-bold text-text">
                   Serviços Realizados por{" "}
                   {barbers.find((b) => b.id === selectedBarberId)?.name}
                 </h2>
-                <p className="text-xs text-text-muted mt-0.5">
+                <p className="text-xs text-text-muted mt-2">
                   Marque apenas os procedimentos que este barbeiro está apto a
                   realizar
                 </p>
@@ -507,7 +507,7 @@ export default function EquipePage() {
                 disabled={isSavingServices}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full font-bold text-xs shadow-glow transition-all disabled:opacity-50"
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full font-bold text-xs shadow-glow transition-all disabled:opacity-50"
               >
                 <Scissors className="w-3.5 h-3.5" />
                 <span>
@@ -522,7 +522,7 @@ export default function EquipePage() {
                 &quot;Serviços&quot;.
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {allServices.map((srv) => {
                   const isChecked = barberSelectedServices.includes(srv.id);
                   return (
@@ -537,7 +537,7 @@ export default function EquipePage() {
                           : "bg-surface-2 border-hairline text-text-muted hover:text-text hover:bg-surface-3"
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <div
                           className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
                             isChecked
@@ -596,7 +596,7 @@ export default function EquipePage() {
 
               <form onSubmit={handleAddBarber} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                     Nome Completo *
                   </label>
                   <input
@@ -605,12 +605,12 @@ export default function EquipePage() {
                     value={newBarberName}
                     onChange={(e) => setNewBarberName(e.target.value)}
                     placeholder="Ex: Carlos Silva"
-                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                     Especialidade / Bio
                   </label>
                   <input
@@ -618,12 +618,12 @@ export default function EquipePage() {
                     value={newBarberBio}
                     onChange={(e) => setNewBarberBio(e.target.value)}
                     placeholder="Ex: Mestre em degradê e visagismo"
-                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                     URL da Foto (opcional)
                   </label>
                   <input
@@ -631,15 +631,15 @@ export default function EquipePage() {
                     value={newBarberAvatar}
                     onChange={(e) => setNewBarberAvatar(e.target.value)}
                     placeholder="https://exemplo.com/foto.jpg"
-                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
                   />
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
+                <div className="flex items-center justify-end gap-4 pt-4 border-t border-hairline">
                   <button
                     type="button"
                     onClick={() => setIsAddModalOpen(false)}
-                    className="px-5 py-2.5 rounded-full text-xs font-bold text-text-muted hover:text-text"
+                    className="px-6 py-2 rounded-full text-xs font-bold text-text-muted hover:text-text"
                   >
                     Cancelar
                   </button>
@@ -648,7 +648,7 @@ export default function EquipePage() {
                     disabled={isSubmitting}
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
-                    className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
+                    className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
                   >
                     {isSubmitting ? "Salvando..." : "Cadastrar Barbeiro"}
                   </motion.button>

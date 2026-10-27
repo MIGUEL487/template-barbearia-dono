@@ -191,12 +191,12 @@ export default function ServicosPage() {
       <AdminNavigation />
 
       <main className="admin-content flex-1 space-y-6">
-        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
           <h1 className="font-serif text-lg font-bold text-text">Catálogo de Serviços</h1>
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-1.5 bg-accent hover:bg-accent-hover text-accent-contrast px-5 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
+            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Novo Serviço</span>
@@ -216,7 +216,7 @@ export default function ServicosPage() {
               Nenhum serviço cadastrado ainda.
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {services.map((service, idx) => (
                 <motion.div
                   key={service.id}
@@ -239,14 +239,14 @@ export default function ServicosPage() {
                           · {service.category}
                         </span>
                       </div>
-                      <p className="text-xs text-text-muted line-clamp-1 mt-0.5">
+                      <p className="text-xs text-text-muted line-clamp-1 mt-2">
                         {service.description || "Sem descrição informada."}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between sm:justify-end gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
-                    <div className="flex items-center gap-1.5 text-xs text-text-muted">
+                    <div className="flex items-center gap-2 text-xs text-text-muted">
                       <Clock className="w-3.5 h-3.5 text-accent" />
                       <span>{formatDuration(service.duration_minutes)}</span>
                     </div>
@@ -259,7 +259,7 @@ export default function ServicosPage() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => handleToggleActive(service)}
-                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
+                      className={`px-4 py-2 rounded-full text-xs font-bold transition-colors ${
                         service.is_active
                           ? "bg-surface text-text-muted hover:text-danger"
                           : "bg-emerald-500/20 text-emerald-400"
@@ -302,7 +302,7 @@ export default function ServicosPage() {
               </div>
 
               {modalError && (
-                <div className="bg-danger/10 rounded-[20px] p-3 text-xs text-danger flex items-center gap-2">
+                <div className="bg-danger/10 rounded-[20px] p-4 text-xs text-danger flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4 shrink-0" />
                   <span>{modalError}</span>
                 </div>
@@ -310,7 +310,7 @@ export default function ServicosPage() {
 
               <form onSubmit={handleCreateService} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                     Nome do Serviço
                   </label>
                   <input
@@ -319,18 +319,18 @@ export default function ServicosPage() {
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
                     placeholder="Ex: Corte Degradê + Barba"
-                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                     Categoria
                   </label>
                   <select
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value)}
-                    className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
                   >
                     <option value="Cabelo">Cabelo</option>
                     <option value="Barba">Barba</option>
@@ -339,9 +339,9 @@ export default function ServicosPage() {
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                    <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                       Preço (R$)
                     </label>
                     <input
@@ -350,12 +350,12 @@ export default function ServicosPage() {
                       required
                       value={newPrice}
                       onChange={(e) => setNewPrice(e.target.value)}
-                      className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                      className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                    <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                       Duração (minutos)
                     </label>
                     <input
@@ -364,13 +364,13 @@ export default function ServicosPage() {
                       required
                       value={newDuration}
                       onChange={(e) => setNewDuration(e.target.value)}
-                      className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                      className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
                     Descrição
                   </label>
                   <textarea
@@ -378,15 +378,15 @@ export default function ServicosPage() {
                     value={newDesc}
                     onChange={(e) => setNewDesc(e.target.value)}
                     placeholder="Produtos utilizados e detalhes do procedimento..."
-                    className="w-full bg-surface-2 rounded-2xl px-5 py-3 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-surface-2 rounded-2xl px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
                   />
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
+                <div className="flex items-center justify-end gap-4 pt-4 border-t border-hairline">
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-5 py-2.5 rounded-full text-xs font-bold text-text-muted hover:text-text"
+                    className="px-6 py-2 rounded-full text-xs font-bold text-text-muted hover:text-text"
                   >
                     Cancelar
                   </button>
@@ -395,7 +395,7 @@ export default function ServicosPage() {
                     disabled={isSubmitting}
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
-                    className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
+                    className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
                   >
                     {isSubmitting ? "Salvando..." : "Salvar Serviço"}
                   </motion.button>

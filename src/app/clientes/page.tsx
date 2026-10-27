@@ -156,17 +156,17 @@ export default function ClientesPage() {
       <AdminNavigation />
 
       <main className="admin-content flex-1 space-y-6">
-        <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
           <h1 className="font-serif text-lg font-bold text-text">Carteira de Clientes</h1>
 
           <div className="relative">
-            <Search className="w-4 h-4 text-text-muted absolute left-4 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-text-muted absolute left-4 top-2/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Buscar cliente por nome ou telefone..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-surface-2 rounded-full pl-10 pr-5 py-2 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none w-64 md:w-80"
+              className="bg-surface-2 rounded-full pl-10 pr-6 py-2 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none w-64 md:w-80"
             />
           </div>
         </header>
@@ -184,7 +184,7 @@ export default function ClientesPage() {
               Nenhum cliente localizado na pesquisa.
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {filtered.map((c) => (
                 <div
                   key={c.id}
@@ -196,7 +196,7 @@ export default function ClientesPage() {
                     </div>
                     <div>
                       <h3 className="font-serif font-bold text-text text-sm">{c.name}</h3>
-                      <div className="flex items-center gap-3 text-xs text-text-muted mt-0.5">
+                      <div className="flex items-center gap-4 text-xs text-text-muted mt-2">
                         <span className="font-mono">{c.phone}</span>
                         {c.email && <span>· {c.email}</span>}
                       </div>
@@ -204,7 +204,7 @@ export default function ClientesPage() {
                   </div>
 
                   <div className="flex items-center justify-between sm:justify-end gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
-                    <span className="px-3.5 py-1.5 rounded-full bg-surface text-accent text-xs font-bold">
+                    <span className="px-4 py-2 rounded-full bg-surface text-accent text-xs font-bold">
                       {c.visits_count} {c.visits_count === 1 ? "visita" : "visitas"}
                     </span>
                     <div className="text-right">
