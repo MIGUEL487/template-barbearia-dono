@@ -176,7 +176,7 @@ export default function ConfiguracoesPage() {
                 <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Nome da Barbearia
                 </label>
-                <input
+                <input aria-label="Nome da barbearia"
                   type="text"
                   required
                   value={brandName}
@@ -189,7 +189,7 @@ export default function ConfiguracoesPage() {
                 <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Slogan / Tagline
                 </label>
-                <input
+                <input aria-label="Subtítulo da marca"
                   type="text"
                   value={brandTagline}
                   onChange={(e) => setBrandTagline(e.target.value)}
@@ -203,7 +203,7 @@ export default function ConfiguracoesPage() {
                 <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Título Principal (Hero)
                 </label>
-                <input
+                <input aria-label="Título principal do site"
                   type="text"
                   required
                   value={heroTitle}
@@ -216,7 +216,7 @@ export default function ConfiguracoesPage() {
                 <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Subtítulo (Hero)
                 </label>
-                <textarea
+                <textarea aria-label="Descrição principal do site"
                   rows={2}
                   value={heroSubtitle}
                   onChange={(e) => setHeroSubtitle(e.target.value)}
@@ -237,7 +237,7 @@ export default function ConfiguracoesPage() {
                 <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Sinal Pix Obrigatório (%)
                 </label>
-                <input
+                <input aria-label="Percentual do sinal"
                   type="number"
                   min="0"
                   max="100"
@@ -252,7 +252,7 @@ export default function ConfiguracoesPage() {
                 <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Aviso para Cancelar (Horas)
                 </label>
-                <input
+                <input aria-label="Antecedência mínima para cancelamento em horas"
                   type="number"
                   min="1"
                   max="72"
@@ -268,13 +268,13 @@ export default function ConfiguracoesPage() {
                   Cor Destaque (Hex)
                 </label>
                 <div className="flex items-center gap-2">
-                  <input
+                  <input aria-label="Cor de destaque"
                     type="color"
                     value={accentColor}
                     onChange={(e) => setAccentColor(e.target.value)}
                     className="w-10 h-10 rounded-full cursor-pointer bg-transparent border-0"
                   />
-                  <input
+                  <input aria-label="Cor de destaque em hexadecimal"
                     type="text"
                     value={accentColor}
                     onChange={(e) => setAccentColor(e.target.value)}

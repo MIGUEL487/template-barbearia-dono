@@ -1,0 +1,37 @@
+[
+  {
+    "path": "dashboard",
+    "violations": [],
+    "incomplete": 2
+  },
+  {
+    "path": "agenda",
+    "violations": [],
+    "incomplete": 1
+  },
+  {
+    "path": "clientes",
+    "violations": [],
+    "incomplete": 1
+  },
+  {
+    "path": "servicos",
+    "violations": [],
+    "incomplete": 1
+  },
+  {
+    "path": "equipe",
+    "violations": [],
+    "incomplete": 1
+  },
+  {
+    "path": "financeiro",
+    "violations": [],
+    "incomplete": 1
+  },
+  {
+    "path": "configuracoes",
+    "violations": [],
+    "incomplete": 1
+  }
+]

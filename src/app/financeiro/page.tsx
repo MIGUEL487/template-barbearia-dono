@@ -214,7 +214,7 @@ export default function FinanceiroPage() {
           <div className="flex items-center gap-2">
             <Filter className="w-3.5 h-3.5 text-accent" />
             <span className="text-text-muted font-bold uppercase text-xs">Método:</span>
-            <select
+            <select aria-label="Filtrar método de pagamento"
               value={methodFilter}
               onChange={(e) => setMethodFilter(e.target.value)}
               className="bg-surface-2 text-text rounded-full px-4 py-1.5 focus:outline-none focus:ring-1 focus:ring-accent"
@@ -230,7 +230,7 @@ export default function FinanceiroPage() {
 
           <div className="flex items-center gap-2">
             <span className="text-text-muted font-bold uppercase text-xs">Status:</span>
-            <select
+            <select aria-label="Filtrar status de pagamento"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="bg-surface-2 text-text rounded-full px-4 py-1.5 focus:outline-none focus:ring-1 focus:ring-accent"

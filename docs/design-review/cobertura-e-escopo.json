@@ -1,0 +1,32 @@
+{
+  "fontCoverage": [
+    {
+      "font": "Fraunces-400.ttf",
+      "tested": "ãáâéêíóôõúçàR$",
+      "missing": []
+    },
+    {
+      "font": "Fraunces-500.ttf",
+      "tested": "ãáâéêíóôõúçàR$",
+      "missing": []
+    },
+    {
+      "font": "Manrope-400.ttf",
+      "tested": "ãáâéêíóôõúçàR$",
+      "missing": []
+    }
+  ],
+  "protectedPaths": [
+    "wrangler.jsonc",
+    "open-next.config.ts",
+    "next.config.mjs",
+    "scripts",
+    "src/lib",
+    "src/app/actions",
+    "src/app/api",
+    "supabase",
+    "docs/DEPLOY-CLOUDFLARE.md"
+  ],
+  "unchanged": true,
+  "comparedTo": "ef25ec6"
+}

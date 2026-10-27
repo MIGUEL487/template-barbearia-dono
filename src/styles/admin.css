@@ -612,3 +612,5 @@ body .admin-page {
 }
 
 .admin-content .metric-overview{gap:28px;padding-block:24px;border-bottom:1px solid var(--hairline)}.admin-content .metric-overview>div{background:transparent;border:0;border-radius:0;padding:0;box-shadow:none}.admin-content .metric-overview>div>div:first-child>span:has(>svg){display:none}.admin-content .revenue-bars>div:not(:last-child) .revenue-track>div{background:var(--text-muted)!important}
+/* Page titles retain serif even when the legacy utility class is present. */
+.admin-content h1.font-serif{font-family:var(--font-serif),Georgia,serif;font-weight:400;letter-spacing:-.025em}

@@ -310,7 +310,7 @@ export default function AgendaPage() {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-surface-2 px-4 py-1.5 rounded-full text-xs font-semibold">
               <Calendar className="w-3.5 h-3.5 text-accent" />
-              <input
+              <input aria-label="Data da agenda"
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
@@ -500,7 +500,7 @@ export default function AgendaPage() {
                 <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Nome do Cliente
                 </label>
-                <input
+                <input aria-label="Nome do cliente"
                   type="text"
                   required
                   value={modalCustomer}
@@ -514,7 +514,7 @@ export default function AgendaPage() {
                 <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   WhatsApp / Telefone
                 </label>
-                <input
+                <input aria-label="WhatsApp do cliente"
                   type="text"
                   required
                   value={modalPhone}
@@ -529,7 +529,7 @@ export default function AgendaPage() {
                   <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                     Barbeiro
                   </label>
-                  <select
+                  <select aria-label="Profissional do agendamento"
                     value={modalBarberId}
                     onChange={(e) => setModalBarberId(e.target.value)}
                     className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
@@ -546,7 +546,7 @@ export default function AgendaPage() {
                   <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                     Horário
                   </label>
-                  <select
+                  <select aria-label="Horário do agendamento"
                     value={modalTime}
                     onChange={(e) => setModalTime(e.target.value)}
                     className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
@@ -564,7 +564,7 @@ export default function AgendaPage() {
                 <label className="block text-xs font-semibold text-text-muted mb-1.5 ml-2">
                   Serviço
                 </label>
-                <select
+                <select aria-label="Serviço do agendamento"
                   value={modalServiceId}
                   onChange={(e) => setModalServiceId(e.target.value)}
                   className="w-full bg-surface-2 rounded-full px-5 py-3 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"

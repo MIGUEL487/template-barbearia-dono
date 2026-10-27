@@ -417,7 +417,7 @@ export default function EquipePage() {
                           <span className="text-text-muted text-xs">
                             Entrada:
                           </span>
-                          <input
+                          <input aria-label={`${DAYS_NAMES[wh.day_of_week]} — Entrada`}
                             type="time"
                             value={wh.start_time}
                             onChange={(e) => {
@@ -430,7 +430,7 @@ export default function EquipePage() {
                           <span className="text-text-muted text-xs">
                             Saída:
                           </span>
-                          <input
+                          <input aria-label={`${DAYS_NAMES[wh.day_of_week]} — Saída`}
                             type="time"
                             value={wh.end_time}
                             onChange={(e) => {
@@ -448,7 +448,7 @@ export default function EquipePage() {
                           <span className="text-text-muted text-xs">
                             Almoço:
                           </span>
-                          <input
+                          <input aria-label={`${DAYS_NAMES[wh.day_of_week]} — Início do almoço`}
                             type="time"
                             value={wh.lunch_start || "12:00"}
                             onChange={(e) => {
@@ -459,7 +459,7 @@ export default function EquipePage() {
                             className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
                           />
                           <span className="text-text-muted text-xs">às</span>
-                          <input
+                          <input aria-label={`${DAYS_NAMES[wh.day_of_week]} — Fim do almoço`}
                             type="time"
                             value={wh.lunch_end || "13:00"}
                             onChange={(e) => {
