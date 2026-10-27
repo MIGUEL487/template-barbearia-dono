@@ -10,7 +10,10 @@
     "typecheck": "tsc --noEmit",
     "check:env": "node --env-file=.env.local scripts/check-env.mjs || node scripts/check-env.mjs",
     "tokens:check": "node scripts/check-tokens.mjs",
-    "types": "npx supabase gen types typescript --local > src/types/database.types.ts"
+    "types": "npx supabase gen types typescript --local > src/types/database.types.ts",
+    "preview:cf": "wrangler dev --local --port 8788",
+    "deploy:cf": "opennextjs-cloudflare deploy",
+    "build:cf": "npm run build && opennextjs-cloudflare build --skipNextBuild"
   },
   "dependencies": {
     "@fontsource/bebas-neue": "5.3.0",
@@ -29,6 +32,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "1.6.5",
     "@types/node": "^20.17.6",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -37,6 +41,7 @@
     "eslint-config-next": "14.2.35",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "wrangler": "4.153.0"
   }
 }

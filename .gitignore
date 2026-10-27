@@ -36,3 +36,9 @@ next-env.d.ts
 
 # supabase local temp
 .temp
+
+# Cloudflare local build/cache/secrets
+.wrangler/
+.open-next/
+.dev.vars*
+!.dev.vars.example
