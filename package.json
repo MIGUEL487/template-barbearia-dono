@@ -17,7 +17,8 @@
     "test:qa": "node scripts/qa.mjs",
     "test:security": "node --experimental-strip-types --test tests/payment-signature.test.mjs",
     "test:authorization": "node tests/authorization-browser.mjs",
-    "spacing:check": "node scripts/check-spacing.mjs"
+    "spacing:check": "node scripts/check-spacing.mjs",
+    "test:media": "node scripts/qa-media.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

@@ -1,0 +1,22 @@
+[
+  {
+    "path": "http://127.0.0.1:8787/",
+    "violations": [],
+    "incomplete": 3
+  },
+  {
+    "path": "http://127.0.0.1:8787/agendar/",
+    "violations": [],
+    "incomplete": 0
+  },
+  {
+    "path": "http://127.0.0.1:8787/meu-agendamento/",
+    "violations": [],
+    "incomplete": 0
+  },
+  {
+    "path": "http://127.0.0.1:8788/login",
+    "violations": [],
+    "incomplete": 1
+  }
+]

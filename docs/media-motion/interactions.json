@@ -1,0 +1,121 @@
+[
+  {
+    "site": "cliente",
+    "width": 360,
+    "grid": "pass",
+    "media": "pass"
+  },
+  {
+    "site": "cliente",
+    "width": 390,
+    "grid": "pass",
+    "media": "pass"
+  },
+  {
+    "site": "cliente",
+    "width": 768,
+    "grid": "pass",
+    "media": "pass"
+  },
+  {
+    "site": "cliente",
+    "width": 1024,
+    "grid": "pass",
+    "media": "pass"
+  },
+  {
+    "site": "cliente",
+    "width": 1440,
+    "grid": "pass",
+    "media": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "dashboard",
+    "width": 390,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "agenda",
+    "width": 390,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "clientes",
+    "width": 390,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "financeiro",
+    "width": 390,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "servicos",
+    "width": 390,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "equipe",
+    "width": 390,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "configuracoes",
+    "width": 390,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "dashboard",
+    "width": 1440,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "agenda",
+    "width": 1440,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "clientes",
+    "width": 1440,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "financeiro",
+    "width": 1440,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "servicos",
+    "width": 1440,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "equipe",
+    "width": 1440,
+    "grid": "pass"
+  },
+  {
+    "site": "dono",
+    "route": "configuracoes",
+    "width": 1440,
+    "grid": "pass"
+  },
+  {
+    "videoPlayAndOffscreenPause": "pass",
+    "reducedMotion": "pass",
+    "pageErrors": []
+  }
+]
