@@ -1,5 +1,8 @@
 "use client";
 
+import {AdminSkeleton} from "@/components/admin/skeleton";
+import {AdminNavigation} from "@/components/admin/navigation";
+import {BookingActions} from "@/components/admin/booking-actions";
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -64,6 +67,7 @@ export default function AgendaPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Dados do banco
+  const [activeBarber,setActiveBarber]=useState<string>("all");
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [bookings, setBookings] = useState<BookingSlot[]>([]);
@@ -272,51 +276,12 @@ export default function AgendaPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
+    <div className="admin-page min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
       {/* Menu Lateral Arredondado */}
-      <aside className="w-full md:w-64 bg-surface rounded-[32px] p-6 shadow-soft flex flex-col justify-between shrink-0">
-        <div className="space-y-8">
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-10 h-10 rounded-full bg-accent-soft text-accent flex items-center justify-center">
-              <Scissors className="w-4 h-4 rotate-45" />
-            </div>
-            <div>
-              <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">Agenda</h2>
-              <span className="text-xs text-accent uppercase tracking-wider font-bold">Por Barbeiro</span>
-            </div>
-          </div>
-
-          <nav className="space-y-1.5">
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition-all ${
-                  item.active
-                    ? "bg-accent-soft text-accent shadow-sm"
-                    : "text-text-muted hover:text-text hover:bg-surface-2"
-                }`}
-              >
-                <item.icon className="w-4 h-4" />
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        <div className="pt-6 border-t border-hairline px-2">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 text-text-muted hover:text-danger px-3 py-2 rounded-full text-xs font-semibold transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sair do Painel</span>
-          </button>
-        </div>
-      </aside>
+      <AdminNavigation />
 
       {/* Área Principal */}
-      <main className="flex-1 space-y-6">
+      <main className="admin-content flex-1 space-y-6">
         {/* Barra Superior em Pílula */}
         <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
           <div className="flex items-center gap-4">
@@ -347,19 +312,15 @@ export default function AgendaPage() {
           </div>
         )}
 
-        {/* Faixas Arredondadas por Barbeiro (Sem grade dura) */}
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-24 text-text-muted">
-            <Loader2 className="w-8 h-8 animate-spin text-accent mb-3" />
-            <p className="text-sm">Carregando horários em tempo real...</p>
-          </div>
-        ) : barbers.length === 0 ? (
+        <div className="barber-tabs" role="group" aria-label="Filtrar profissional"><button aria-pressed={activeBarber==='all'} onClick={()=>setActiveBarber('all')}>Todos</button>{barbers.map(b=><button key={b.id} aria-pressed={activeBarber===b.id} onClick={()=>setActiveBarber(b.id)}>{b.name}</button>)}</div>
+        {isLoading ? (<AdminSkeleton/>
+) : barbers.length === 0 ? (
           <div className="bg-surface rounded-[32px] p-12 text-center text-text-muted text-xs shadow-soft">
             Nenhum barbeiro ativo cadastrado nesta barbearia.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {barbers.map((barber) => {
+            {barbers.filter(b=>activeBarber==='all'||b.id===activeBarber).map((barber) => {
               const barberBookings = bookings.filter((b) => b.barber_id === barber.id);
 
               return (
@@ -392,7 +353,7 @@ export default function AgendaPage() {
                         return (
                           <div
                             key={time}
-                            className="bg-surface-2/40 hover:bg-surface-2 rounded-full px-4 py-2.5 flex items-center justify-between text-xs transition-colors"
+                            className="agenda-empty-slot bg-surface-2/40 hover:bg-surface-2 rounded-full px-4 py-2.5 flex items-center justify-between text-xs transition-colors"
                           >
                             <span className="font-mono text-text-muted/60 text-xs">{time}</span>
                             <span className="text-xs text-text-muted/50">Disponível</span>
@@ -425,24 +386,7 @@ export default function AgendaPage() {
                             <span className="text-xs text-text-muted">{slotBooking.service_name}</span>
                           </div>
 
-                          {slotBooking.status === "confirmed" && (
-                            <div className="flex items-center gap-2 pt-2 border-t border-hairline justify-end">
-                              <button
-                                onClick={() => handleComplete(slotBooking.id)}
-                                className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1"
-                              >
-                                <Check className="w-3 h-3" />
-                                <span>Concluir</span>
-                              </button>
-                              <button
-                                onClick={() => handleCancel(slotBooking.id)}
-                                className="bg-danger/20 hover:bg-danger/30 text-danger px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1"
-                              >
-                                <X className="w-3 h-3" />
-                                <span>Cancelar</span>
-                              </button>
-                            </div>
-                          )}
+                          {slotBooking.status === "confirmed" && barbershopId && <BookingActions shopId={barbershopId} bookingId={slotBooking.id} onUpdated={loadData}/>}
                         </div>
                       );
                     })}

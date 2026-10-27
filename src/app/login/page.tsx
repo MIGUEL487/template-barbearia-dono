@@ -97,7 +97,7 @@ export default function LoginPage() {
               E-mail Administrativo
             </label>
             <input
-              type="email"
+              type="email" autoComplete="username" inputMode="email"
               placeholder="dono@barbearia.com.br"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -111,7 +111,7 @@ export default function LoginPage() {
               Senha de Acesso
             </label>
             <input
-              type="password"
+              type="password" autoComplete="current-password"
               placeholder="••••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

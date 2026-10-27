@@ -1,0 +1,3 @@
+"use client";
+import {useCallback,useEffect,useRef} from 'react';import {animate,useReducedMotion} from 'framer-motion';
+export function AnimatedNumber({value,currency=false}:{value:number;currency?:boolean}){const ref=useRef<HTMLSpanElement>(null);const reduced=useReducedMotion();const format=useCallback((n:number)=>currency?n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}):Math.round(n).toLocaleString('pt-BR'),[currency]);useEffect(()=>{if(reduced)return;const control=animate(0,value,{duration:.5,onUpdate(n){if(ref.current)ref.current.textContent=format(n)}});return()=>control.stop()},[value,reduced,format]);return <span ref={ref} style={{fontVariantNumeric:'tabular-nums'}} aria-label={format(value)}>{format(value)}</span>}

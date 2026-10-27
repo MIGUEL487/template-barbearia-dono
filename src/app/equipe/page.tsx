@@ -1,5 +1,7 @@
 "use client";
 
+import {AdminSkeleton} from "@/components/admin/skeleton";
+import {AdminNavigation} from "@/components/admin/navigation";
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -388,51 +390,12 @@ export default function EquipePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
+    <div className="admin-page min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
       {/* Menu Lateral Arredondado (Trilho / Dock) */}
-      <aside className="w-full md:w-64 bg-surface rounded-[32px] p-6 flex flex-col justify-between shadow-soft shrink-0">
-        <div className="space-y-8">
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-10 h-10 rounded-full bg-accent-soft text-accent flex items-center justify-center">
-              <Scissors className="w-4 h-4 rotate-45" />
-            </div>
-            <div>
-              <span className="font-serif text-base font-bold text-text block leading-tight">{shopName}</span>
-              <span className="text-xs text-accent uppercase tracking-wider font-semibold">Painel Dono</span>
-            </div>
-          </div>
-
-          <nav className="space-y-1.5">
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition-all ${
-                  item.active
-                    ? "bg-accent-soft text-accent shadow-sm"
-                    : "text-text-muted hover:text-text hover:bg-surface-2"
-                }`}
-              >
-                <item.icon className="w-4 h-4" />
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        <div className="pt-6 border-t border-hairline">
-          <button
-            onClick={() => logoutAction()}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold text-danger hover:bg-danger/10 transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sair do Painel</span>
-          </button>
-        </div>
-      </aside>
+      <AdminNavigation />
 
       {/* Conteúdo Principal */}
-      <main className="flex-1 space-y-6">
+      <main className="admin-content flex-1 space-y-6">
         {/* Header Superior */}
         <header className="bg-surface rounded-[28px] px-8 py-5 flex items-center justify-between shadow-soft">
           <div>

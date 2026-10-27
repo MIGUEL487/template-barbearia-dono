@@ -1,5 +1,8 @@
 "use client";
 
+import {AdminSkeleton} from "@/components/admin/skeleton";
+import {AdminNavigation} from "@/components/admin/navigation";
+import {AnimatedNumber} from "@/components/admin/animated-number";
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -202,54 +205,12 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
+    <div className="admin-page min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
       {/* Menu Lateral Arredondado (Trilho / Dock) */}
-      <aside className="w-full md:w-64 bg-surface rounded-[32px] p-6 shadow-soft flex flex-col justify-between shrink-0">
-        <div className="space-y-8">
-          {/* Marca */}
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-10 h-10 rounded-full bg-accent-soft text-accent flex items-center justify-center">
-              <Scissors className="w-4 h-4 rotate-45" />
-            </div>
-            <div>
-              <h2 className="font-serif text-base font-bold text-text truncate max-w-[140px]">{shopName}</h2>
-              <span className="text-xs text-accent uppercase tracking-wider font-bold">Gestão</span>
-            </div>
-          </div>
-
-          {/* Links do Menu */}
-          <nav className="space-y-1.5">
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition-all ${
-                  item.active
-                    ? "bg-accent-soft text-accent shadow-sm"
-                    : "text-text-muted hover:text-text hover:bg-surface-2"
-                }`}
-              >
-                <item.icon className="w-4 h-4" />
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        {/* Rodapé do Menu */}
-        <div className="pt-6 border-t border-hairline px-2">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 text-text-muted hover:text-danger px-3 py-2 rounded-full text-xs font-semibold transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sair do Painel</span>
-          </button>
-        </div>
-      </aside>
+      <AdminNavigation />
 
       {/* Conteúdo Principal */}
-      <main className="flex-1 space-y-6">
+      <main className="admin-content flex-1 space-y-6">
         {/* Barra Superior */}
         <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
           <div className="flex items-center gap-3">
@@ -306,7 +267,7 @@ export default function DashboardPage() {
               </span>
             </div>
             <div className="font-serif text-3xl font-bold text-emerald-400">
-              {formatCurrency(revenueReceived)}
+              <AnimatedNumber value={revenueReceived} currency/>
             </div>
             <p className="text-xs text-text-muted">Total de pagamentos concluídos e compensados</p>
           </motion.div>
@@ -325,7 +286,7 @@ export default function DashboardPage() {
               </span>
             </div>
             <div className="font-serif text-3xl font-bold text-accent">
-              {formatCurrency(revenuePending)}
+              <AnimatedNumber value={revenuePending} currency/>
             </div>
             <p className="text-xs text-text-muted">Valores a receber de agendamentos de hoje</p>
           </motion.div>
@@ -360,11 +321,8 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          {isLoading ? (
-            <div className="flex justify-center py-12">
-              <span className="w-7 h-7 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-            </div>
-          ) : bookingsToday.length === 0 ? (
+          {isLoading ? (<AdminSkeleton/>
+) : bookingsToday.length === 0 ? (
             <div className="text-center py-12 text-xs text-text-muted">
               Nenhum agendamento agendado para o dia de hoje.
             </div>

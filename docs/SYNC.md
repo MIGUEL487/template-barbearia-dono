@@ -87,3 +87,5 @@ Hash canônico da release:
 Redesign: preto #050507, violeta #A78BFA e botão #7C3AED. Hash deve mudar junto nos dois repos. Não executar migrations/seed sem autorização explícita.
 
 Demo Auto Stilo: dados públicos do briefing; equipe/preços são exemplos. Fallback somente no cliente, sem escrita remota. Seed proposto fica exclusivamente no dono: supabase/seed.auto-stilo.sql; não aplicado.
+
+Painel Black: navegação compartilhada responsiva, sem modo de login demo. Skeletons de rota e números derivados de consultas reais; não há dados fictícios no dashboard. Agenda ganha filtro por profissional e visual compacto móvel. Validação funcional autenticada requer fixtures locais ou ambiente demo autorizado.

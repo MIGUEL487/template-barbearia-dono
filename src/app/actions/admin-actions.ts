@@ -354,3 +354,10 @@ export async function saveBarberServicesAction(
   revalidatePath("/agenda");
   return { success: true };
 }
+
+export async function markNoShowAction(barbershopId:string,bookingId:string){
+ const supabase=createServerActionClient();
+ const {error}=await supabase.rpc('admin_mark_no_show',{p_barbershop_id:barbershopId,p_booking_id:bookingId});
+ if(error)return {success:false,error:error.message};
+ revalidatePath('/agenda');return {success:true};
+}
