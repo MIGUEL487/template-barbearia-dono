@@ -1,6 +1,7 @@
 # Protocolo de Sincronização & Contrato de Arquitetura
 
 Este documento define o contrato de dados, autenticação, RPCs e tokens de design compartilhado entre os dois repositórios do ecossistema:
+
 1. `template-barbearia-cliente` (Interface pública e agendamento)
 2. `template-barbearia-dono` (Painel administrativo, gestão de agenda, financeiro e migrations)
 
@@ -43,6 +44,7 @@ Ambos os projetos conectam-se à **mesma instância do Supabase**.
 Ambos os repositórios contam com o script `npm run check:env` que valida a presença de variáveis obrigatórias em tempo de build/execução.
 
 ### Cliente (`template-barbearia-cliente/.env.local`)
+
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://sua-instancia.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJh...
@@ -51,6 +53,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3002
 ```
 
 ### Dono (`template-barbearia-dono/.env.local`)
+
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://sua-instancia.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJh...
@@ -62,12 +65,9 @@ MERCADOPAGO_WEBHOOK_SECRET=...
 
 ---
 
-## 3. Webhook Mercado Pago & Idempotência
+## 3. Webhook Mercado Pago
 
-O endpoint `POST /api/webhooks/mercadopago` no repositório do dono processa confirmações de pagamento:
-- **Verificação Criptográfica:** Valida o cabeçalho `x-signature` com HMAC-SHA256 (`ts`, `data.id` e `MERCADOPAGO_WEBHOOK_SECRET`) utilizando `crypto.timingSafeEqual` para prevenir ataques de temporização.
-- **Tabela de Idempotência:** Toda notificação recebida é registrada na tabela `payment_events`. Se o evento já tiver sido processado (`processed_at IS NOT NULL`), o endpoint retorna `200 OK` imediatamente sem duplicar liquidações.
-- **Validação de Valor:** O valor recebido na API do Mercado Pago é comparado com o valor registrado no banco de dados (`payments.amount`).
+Handler valida HMAC do manifest oficial (não HMAC do corpo), timestamp, data.id, consulta a API e só liquida aprovado em BRL. Escrita delegada à RPC process_verified_payment, proposta em migration exclusivamente no dono. A RPC compara payments.amount e usa locks/transação para evitar lançamento duplicado. NÃO aplicada nem validada em banco; sem ela o handler retorna 503, sem liquidação parcial. Rejeições, reembolsos e conciliação de hold vencido exigem política adicional antes de produção. Não confundir revisão de fonte com garantia de execução.
 
 ---
 
@@ -76,6 +76,7 @@ O endpoint `POST /api/webhooks/mercadopago` no repositório do dono processa con
 Os tokens visuais (cores, tipografia, espaçamentos, raio de borda) residem em `src/styles/design-tokens.css` de ambos os projetos e devem ser mantidos idênticos.
 
 Para verificar a conformidade dos tokens:
+
 ```bash
 npm run tokens:check
 ```

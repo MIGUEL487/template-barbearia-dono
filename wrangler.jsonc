@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "auto-stilo-dono",
-  "compatibility_date": "2025-08-01",
+  "compatibility_date": "2026-10-27",
   "main": ".open-next/worker.js",
   "compatibility_flags": [
     "nodejs_compat"

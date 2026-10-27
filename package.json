@@ -13,7 +13,10 @@
     "types": "npx supabase gen types typescript --local > src/types/database.types.ts",
     "preview:cf": "wrangler dev --local --port 8788",
     "deploy:cf": "opennextjs-cloudflare deploy",
-    "build:cf": "npm run build && opennextjs-cloudflare build --skipNextBuild"
+    "build:cf": "npm run build && opennextjs-cloudflare build --skipNextBuild",
+    "test:qa": "node scripts/qa.mjs",
+    "test:security": "node --experimental-strip-types --test tests/payment-signature.test.mjs",
+    "test:authorization": "node tests/authorization-browser.mjs"
   },
   "dependencies": {
     "@fontsource/bebas-neue": "5.3.0",
@@ -22,26 +25,42 @@
     "@supabase/supabase-js": "^2.46.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "framer-motion": "^11.11.17",
+    "framer-motion": "14.7.0",
     "lucide-react": "^0.460.0",
-    "next": "14.2.35",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "resend": "^4.0.1",
+    "next": "15.5.28",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "resend": "6.34.1",
     "tailwind-merge": "^2.5.4",
-    "zod": "^3.23.8"
+    "zod": "4.6.7"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "1.6.5",
+    "@opennextjs/cloudflare": "1.20.13",
     "@types/node": "^20.17.6",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.35",
-    "postcss": "^8.4.49",
+    "eslint-config-next": "15.5.28",
+    "playwright": "1.64.1",
+    "postcss": "8.5.32",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",
     "wrangler": "4.153.0"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "8.5.32"
+    },
+    "@next/eslint-plugin-next": {
+      "glob": "10.5.0"
+    },
+    "fast-xml-parser": "5.11.2",
+    "@node-minify/core": {
+      "glob": "10.5.0"
+    }
+  },
+  "engines": {
+    "node": ">=22.6.0"
   }
 }

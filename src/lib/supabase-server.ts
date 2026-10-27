@@ -6,8 +6,8 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 // Cliente de Servidor Autenticado (usa a sessão em cookie do usuário dono logado)
-export function createServerActionClient() {
-  const cookieStore = cookies();
+export async function createServerActionClient() {
+  const cookieStore = await cookies();
 
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error("Variáveis do Supabase ausentes no servidor.");

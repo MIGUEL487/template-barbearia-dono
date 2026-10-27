@@ -1,7 +1,7 @@
 "use client";
 
-import {AdminSkeleton} from "@/components/admin/skeleton";
-import {AdminNavigation} from "@/components/admin/navigation";
+import { AdminSkeleton } from "@/components/admin/skeleton";
+import { AdminNavigation } from "@/components/admin/navigation";
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -74,321 +74,59 @@ const DAYS_NAMES = [
   "Sábado",
 ];
 
+import { useTeamManager } from "./use-team-manager";
+
 export default function EquipePage() {
-  const router = useRouter();
-  const [barbershopId, setBarbershopId] = useState<string | null>(null);
-  const [shopName, setShopName] = useState("Barbearia");
-  const [isLoading, setIsLoading] = useState(true);
-  const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
-
-  // 1. Fechamento de Hoje / Recessos
-  const [isClosedToday, setIsClosedToday] = useState(false);
-  const [closedReason, setClosedReason] = useState("");
-  const [closedDaysList, setClosedDaysList] = useState<Array<{ id: string; date: string; reason: string | null }>>([]);
-
-  // 2. Barbeiros
-  const [barbers, setBarbers] = useState<Barber[]>([]);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [newBarberName, setNewBarberName] = useState("");
-  const [newBarberBio, setNewBarberBio] = useState("");
-  const [newBarberAvatar, setNewBarberAvatar] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // 3. Expediente & Horários
-  const [selectedBarberId, setSelectedBarberId] = useState<string | null>(null);
-  const [workingHours, setWorkingHours] = useState<WorkingHour[]>([]);
-  const [isSavingHours, setIsSavingHours] = useState(false);
-
-  // 4. Serviços por Barbeiro
-  const [allServices, setAllServices] = useState<Service[]>([]);
-  const [barberSelectedServices, setBarberSelectedServices] = useState<string[]>([]);
-  const [isSavingServices, setIsSavingServices] = useState(false);
-
-  const loadData = useCallback(async () => {
-    setIsLoading(true);
-    setStatusMsg(null);
-
-    try {
-      const supabase = createClient();
-      const { data: { user }, error: userErr } = await supabase.auth.getUser();
-
-      if (userErr || !user) {
-        router.push("/login");
-        return;
-      }
-
-      const { data: member, error: memErr } = await supabase
-        .from("shop_members")
-        .select("barbershop_id, barbershops(name)")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (memErr || !member) {
-        router.push("/login");
-        return;
-      }
-
-      const shopId = (member as any).barbershop_id;
-      setBarbershopId(shopId);
-      if ((member as any).barbershops?.name) {
-        setShopName((member as any).barbershops.name);
-      }
-
-      const todayStr = new Date().toISOString().split("T")[0];
-
-      // Buscar closed_days
-      const { data: closedData } = await supabase
-        .from("closed_days")
-        .select("id, date, reason")
-        .eq("barbershop_id", shopId)
-        .order("date", { ascending: true });
-
-      if (closedData) {
-        setClosedDaysList(closedData);
-        const closedNow = closedData.some((cd) => cd.date === todayStr);
-        setIsClosedToday(closedNow);
-      }
-
-      // Buscar barbeiros
-      const { data: barbData } = await supabase
-        .from("barbers")
-        .select("id, name, bio, avatar_url, is_active")
-        .eq("barbershop_id", shopId)
-        .order("name");
-
-      if (barbData) {
-        const cleaned = barbData.map((b) => ({
-          ...b,
-          name: fixMojibake(b.name),
-          bio: b.bio ? fixMojibake(b.bio) : null,
-        }));
-        setBarbers(cleaned);
-        if (cleaned.length > 0 && !selectedBarberId) {
-          setSelectedBarberId(cleaned[0].id);
-        }
-      }
-
-      // Buscar serviços
-      const { data: srvData } = await supabase
-        .from("services")
-        .select("id, name, price")
-        .eq("barbershop_id", shopId)
-        .eq("is_active", true)
-        .order("name");
-
-      if (srvData) {
-        setAllServices(
-          srvData.map((s) => ({
-            ...s,
-            name: fixMojibake(s.name),
-          }))
-        );
-      }
-    } catch (err: any) {
-      setStatusMsg({ type: "error", text: err.message || "Erro ao carregar dados" });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [router, selectedBarberId]);
-
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
-
-  // Carregar working_hours e serviços quando o barbeiro selecionado muda
-  useEffect(() => {
-    if (!selectedBarberId) return;
-
-    async function loadBarberDetails() {
-      try {
-        const supabase = createClient();
-
-        // Working hours (incluindo horário de almoço)
-        const { data: whData } = await supabase
-          .from("working_hours")
-          .select("day_of_week, start_time, end_time, is_off, lunch_start, lunch_end")
-          .eq("barber_id", selectedBarberId)
-          .order("day_of_week");
-
-        if (whData && whData.length > 0) {
-          const map: WorkingHour[] = [];
-          for (let i = 0; i < 7; i++) {
-            const found = whData.find((w) => w.day_of_week === i);
-            if (found) {
-              map.push({
-                day_of_week: i,
-                start_time: found.start_time.slice(0, 5),
-                end_time: found.end_time.slice(0, 5),
-                is_off: found.is_off,
-                lunch_start: found.lunch_start ? found.lunch_start.slice(0, 5) : "12:00",
-                lunch_end: found.lunch_end ? found.lunch_end.slice(0, 5) : "13:00",
-              });
-            } else {
-              map.push({
-                day_of_week: i,
-                start_time: "09:00",
-                end_time: "19:00",
-                is_off: i === 0, // Domingo folga
-                lunch_start: "12:00",
-                lunch_end: "13:00",
-              });
-            }
-          }
-          setWorkingHours(map);
-        } else {
-          // Padrão
-          const defaultList = Array.from({ length: 7 }, (_, i) => ({
-            day_of_week: i,
-            start_time: "09:00",
-            end_time: "19:00",
-            is_off: i === 0,
-            lunch_start: "12:00",
-            lunch_end: "13:00",
-          }));
-          setWorkingHours(defaultList);
-        }
-
-        // Barber services
-        const { data: bsData } = await supabase
-          .from("barber_services")
-          .select("service_id")
-          .eq("barber_id", selectedBarberId);
-
-        if (bsData) {
-          setBarberSelectedServices(bsData.map((bs) => bs.service_id));
-        }
-      } catch (err: any) {
-        console.error(err);
-      }
-    }
-
-    loadBarberDetails();
-  }, [selectedBarberId]);
-
-  // Handlers
-  const handleToggleClosedToday = async () => {
-    if (!barbershopId) return;
-    const nextState = !isClosedToday;
-    setIsLoading(true);
-
-    const res = await toggleShopClosedTodayAction(
-      barbershopId,
-      nextState,
-      new Date().toISOString().split("T")[0],
-      closedReason || (nextState ? "Fechado pelo proprietário" : undefined)
-    );
-
-    if (res.success) {
-      setIsClosedToday(nextState);
-      setStatusMsg({
-        type: "success",
-        text: nextState
-          ? "Barbearia marcada como FECHADA para hoje com sucesso. Nenhum cliente conseguirá agendar para hoje."
-          : "Barbearia REABERTA para hoje com sucesso!",
-      });
-      loadData();
-    } else {
-      setStatusMsg({ type: "error", text: res.error || "Erro ao alterar status de hoje" });
-      setIsLoading(false);
-    }
-  };
-
-  const handleAddBarber = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!barbershopId || !newBarberName.trim()) return;
-
-    setIsSubmitting(true);
-    const res = await createBarberAction(barbershopId, {
-      name: newBarberName.trim(),
-      bio: newBarberBio.trim() || undefined,
-      avatar_url: newBarberAvatar.trim() || undefined,
-    });
-
-    if (res.success) {
-      setStatusMsg({ type: "success", text: `Barbeiro "${newBarberName}" cadastrado com sucesso!` });
-      setNewBarberName("");
-      setNewBarberBio("");
-      setNewBarberAvatar("");
-      setIsAddModalOpen(false);
-      loadData();
-    } else {
-      setStatusMsg({ type: "error", text: res.error || "Erro ao criar barbeiro" });
-    }
-    setIsSubmitting(false);
-  };
-
-  const handleToggleBarberActive = async (barber: Barber) => {
-    if (!barbershopId) return;
-    const res = await toggleBarberActiveAction(barbershopId, barber.id, barber.is_active);
-    if (res.success) {
-      setStatusMsg({
-        type: "success",
-        text: `Barbeiro ${barber.name} ${barber.is_active ? "pausado" : "ativado"} com sucesso.`,
-      });
-      loadData();
-    } else {
-      setStatusMsg({ type: "error", text: res.error || "Erro ao atualizar status" });
-    }
-  };
-
-  const handleDeleteBarber = async (barber: Barber) => {
-    if (!confirm(`Deseja realmente excluir o barbeiro ${barber.name}?`)) return;
-    if (!barbershopId) return;
-
-    const res = await deleteBarberAction(barbershopId, barber.id);
-    if (res.success) {
-      setStatusMsg({ type: "success", text: `Barbeiro ${barber.name} excluído.` });
-      if (selectedBarberId === barber.id) setSelectedBarberId(null);
-      loadData();
-    } else {
-      setStatusMsg({ type: "error", text: res.error || "Erro ao excluir barbeiro" });
-    }
-  };
-
-  const handleSaveHours = async () => {
-    if (!barbershopId || !selectedBarberId) return;
-    setIsSavingHours(true);
-
-    const res = await saveWorkingHoursAction(barbershopId, selectedBarberId, workingHours);
-    if (res.success) {
-      setStatusMsg({ type: "success", text: "Expediente e horários salvos com sucesso!" });
-    } else {
-      setStatusMsg({ type: "error", text: res.error || "Erro ao salvar horários" });
-    }
-    setIsSavingHours(false);
-  };
-
-  const handleSaveServices = async () => {
-    if (!barbershopId || !selectedBarberId) return;
-    setIsSavingServices(true);
-
-    const res = await saveBarberServicesAction(barbershopId, selectedBarberId, barberSelectedServices);
-    if (res.success) {
-      setStatusMsg({ type: "success", text: "Especialidades do profissional atualizadas com sucesso!" });
-    } else {
-      setStatusMsg({ type: "error", text: res.error || "Erro ao salvar especialidades" });
-    }
-    setIsSavingServices(false);
-  };
-
-  const toggleServiceCheckbox = (serviceId: string) => {
-    if (barberSelectedServices.includes(serviceId)) {
-      setBarberSelectedServices(barberSelectedServices.filter((id) => id !== serviceId));
-    } else {
-      setBarberSelectedServices([...barberSelectedServices, serviceId]);
-    }
-  };
-
-  const navLinks = [
-    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-    { href: "/agenda", label: "Agenda", icon: Calendar },
-    { href: "/clientes", label: "Clientes", icon: Users },
-    { href: "/servicos", label: "Serviços", icon: Scissors },
-    { href: "/equipe", label: "Equipe & Horários", icon: Clock, active: true },
-    { href: "/financeiro", label: "Financeiro", icon: DollarSign },
-    { href: "/configuracoes", label: "Configurações", icon: Settings },
-  ];
-
+  const state = useTeamManager();
+  const {
+    router,
+    barbershopId,
+    setBarbershopId,
+    shopName,
+    setShopName,
+    isLoading,
+    setIsLoading,
+    statusMsg,
+    setStatusMsg,
+    isClosedToday,
+    setIsClosedToday,
+    closedReason,
+    setClosedReason,
+    closedDaysList,
+    setClosedDaysList,
+    barbers,
+    setBarbers,
+    isAddModalOpen,
+    setIsAddModalOpen,
+    newBarberName,
+    setNewBarberName,
+    newBarberBio,
+    setNewBarberBio,
+    newBarberAvatar,
+    setNewBarberAvatar,
+    isSubmitting,
+    setIsSubmitting,
+    selectedBarberId,
+    setSelectedBarberId,
+    workingHours,
+    setWorkingHours,
+    isSavingHours,
+    setIsSavingHours,
+    allServices,
+    setAllServices,
+    barberSelectedServices,
+    setBarberSelectedServices,
+    isSavingServices,
+    setIsSavingServices,
+    loadData,
+    handleToggleClosedToday,
+    handleAddBarber,
+    handleToggleBarberActive,
+    handleDeleteBarber,
+    handleSaveHours,
+    handleSaveServices,
+    toggleServiceCheckbox,
+  } = state;
   return (
     <div className="admin-page min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
       {/* Menu Lateral Arredondado (Trilho / Dock) */}
@@ -399,9 +137,12 @@ export default function EquipePage() {
         {/* Header Superior */}
         <header className="bg-surface rounded-[28px] px-8 py-5 flex items-center justify-between shadow-soft">
           <div>
-            <h1 className="font-serif text-2xl font-bold text-text">Equipe & Expediente</h1>
+            <h1 className="font-serif text-2xl font-bold text-text">
+              Equipe & Expediente
+            </h1>
             <p className="text-xs text-text-muted mt-0.5">
-              Gerencie abertura diária, horários de funcionamento, barbeiros e especialidades
+              Gerencie abertura diária, horários de funcionamento, barbeiros e
+              especialidades
             </p>
           </div>
 
@@ -439,9 +180,12 @@ export default function EquipePage() {
               <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">
                 Controle Rápido
               </span>
-              <h2 className="font-serif text-xl font-bold text-text">Status de Abertura da Barbearia</h2>
+              <h2 className="font-serif text-xl font-bold text-text">
+                Status de Abertura da Barbearia
+              </h2>
               <p className="text-xs text-text-muted mt-1">
-                Precisa folgar hoje ou fechar por imprevisto? Clique no botão para bloquear agendamentos no site do cliente.
+                Precisa folgar hoje ou fechar por imprevisto? Clique no botão
+                para bloquear agendamentos no site do cliente.
               </p>
             </div>
 
@@ -475,15 +219,23 @@ export default function EquipePage() {
                 } animate-pulse`}
               />
               <div>
-                <span className="text-text-muted text-xs block">Status Atual de Hoje</span>
-                <strong className={`font-serif text-sm ${isClosedToday ? "text-danger" : "text-emerald-400"}`}>
-                  {isClosedToday ? "Fechada para agendamentos hoje" : "Aberta normalmente hoje"}
+                <span className="text-text-muted text-xs block">
+                  Status Atual de Hoje
+                </span>
+                <strong
+                  className={`font-serif text-sm ${isClosedToday ? "text-danger" : "text-emerald-400"}`}
+                >
+                  {isClosedToday
+                    ? "Fechada para agendamentos hoje"
+                    : "Aberta normalmente hoje"}
                 </strong>
               </div>
             </div>
 
             <div className="bg-surface-2 rounded-2xl p-4">
-              <span className="text-text-muted text-xs block">Data Selecionada</span>
+              <span className="text-text-muted text-xs block">
+                Data Selecionada
+              </span>
               <strong className="text-text font-mono text-sm">
                 {new Date().toLocaleDateString("pt-BR", { dateStyle: "full" })}
               </strong>
@@ -500,15 +252,22 @@ export default function EquipePage() {
         >
           <div className="flex items-center justify-between pb-4 border-b border-hairline">
             <div>
-              <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">Profissionais</span>
-              <h2 className="font-serif text-xl font-bold text-text">Equipe de Barbeiros</h2>
+              <span className="text-xs uppercase font-bold tracking-wider text-accent block mb-1">
+                Profissionais
+              </span>
+              <h2 className="font-serif text-xl font-bold text-text">
+                Equipe de Barbeiros
+              </h2>
             </div>
-            <span className="text-xs text-text-muted font-mono">{barbers.length} profissionais</span>
+            <span className="text-xs text-text-muted font-mono">
+              {barbers.length} profissionais
+            </span>
           </div>
 
           {barbers.length === 0 ? (
             <div className="bg-surface-2 p-8 rounded-2xl text-center text-xs text-text-muted">
-              Nenhum barbeiro cadastrado. Clique no botão &quot;Adicionar Barbeiro&quot; acima para cadastrar seu time.
+              Nenhum barbeiro cadastrado. Clique no botão &quot;Adicionar
+              Barbeiro&quot; acima para cadastrar seu time.
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -529,14 +288,22 @@ export default function EquipePage() {
                     <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center text-accent overflow-hidden font-serif font-bold text-base border border-hairline shrink-0">
                       {b.avatar_url ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={b.avatar_url} alt={b.name} className="w-full h-full object-cover" />
+                        <img
+                          src={b.avatar_url}
+                          alt={b.name}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         <span>{b.name.charAt(0)}</span>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-serif font-bold text-sm text-text truncate">{b.name}</h3>
-                      <p className="text-xs text-text-muted truncate">{b.bio || "Especialista em Cortes"}</p>
+                      <h3 className="font-serif font-bold text-sm text-text truncate">
+                        {b.name}
+                      </h3>
+                      <p className="text-xs text-text-muted truncate">
+                        {b.bio || "Especialista em Cortes"}
+                      </p>
                     </div>
                   </div>
 
@@ -586,10 +353,12 @@ export default function EquipePage() {
                   Horários & Intervalo de Almoço
                 </span>
                 <h2 className="font-serif text-xl font-bold text-text">
-                  Expediente de {barbers.find((b) => b.id === selectedBarberId)?.name}
+                  Expediente de{" "}
+                  {barbers.find((b) => b.id === selectedBarberId)?.name}
                 </h2>
                 <p className="text-xs text-text-muted mt-0.5">
-                  Configure o horário de entrada, saída, intervalo de almoço do profissional e dias de folga
+                  Configure o horário de entrada, saída, intervalo de almoço do
+                  profissional e dias de folga
                 </p>
               </div>
 
@@ -630,7 +399,13 @@ export default function EquipePage() {
                         }}
                         className="rounded accent-accent"
                       />
-                      <span className={wh.is_off ? "text-danger font-semibold" : "text-text-muted"}>
+                      <span
+                        className={
+                          wh.is_off
+                            ? "text-danger font-semibold"
+                            : "text-text-muted"
+                        }
+                      >
                         {wh.is_off ? "Dia de Folga" : "Dia de Trabalho"}
                       </span>
                     </label>
@@ -639,7 +414,9 @@ export default function EquipePage() {
                       <div className="flex flex-wrap items-center gap-4">
                         {/* Entrada e Saída */}
                         <div className="flex items-center gap-2">
-                          <span className="text-text-muted text-xs">Entrada:</span>
+                          <span className="text-text-muted text-xs">
+                            Entrada:
+                          </span>
                           <input
                             type="time"
                             value={wh.start_time}
@@ -650,7 +427,9 @@ export default function EquipePage() {
                             }}
                             className="bg-surface rounded-full px-3 py-1 text-xs text-text border border-hairline focus:ring-1 focus:ring-accent focus:outline-none"
                           />
-                          <span className="text-text-muted text-xs">Saída:</span>
+                          <span className="text-text-muted text-xs">
+                            Saída:
+                          </span>
                           <input
                             type="time"
                             value={wh.end_time}
@@ -666,7 +445,9 @@ export default function EquipePage() {
                         {/* Intervalo de Almoço */}
                         <div className="flex items-center gap-2 pl-3 border-l border-hairline">
                           <Coffee className="w-3.5 h-3.5 text-accent shrink-0" />
-                          <span className="text-text-muted text-xs">Almoço:</span>
+                          <span className="text-text-muted text-xs">
+                            Almoço:
+                          </span>
                           <input
                             type="time"
                             value={wh.lunch_start || "12:00"}
@@ -712,10 +493,12 @@ export default function EquipePage() {
                   Especialidades
                 </span>
                 <h2 className="font-serif text-xl font-bold text-text">
-                  Serviços Realizados por {barbers.find((b) => b.id === selectedBarberId)?.name}
+                  Serviços Realizados por{" "}
+                  {barbers.find((b) => b.id === selectedBarberId)?.name}
                 </h2>
                 <p className="text-xs text-text-muted mt-0.5">
-                  Marque apenas os procedimentos que este barbeiro está apto a realizar
+                  Marque apenas os procedimentos que este barbeiro está apto a
+                  realizar
                 </p>
               </div>
 
@@ -727,13 +510,16 @@ export default function EquipePage() {
                 className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2.5 rounded-full font-bold text-xs shadow-glow transition-all disabled:opacity-50"
               >
                 <Scissors className="w-3.5 h-3.5" />
-                <span>{isSavingServices ? "Salvando..." : "Salvar Especialidades"}</span>
+                <span>
+                  {isSavingServices ? "Salvando..." : "Salvar Especialidades"}
+                </span>
               </motion.button>
             </div>
 
             {allServices.length === 0 ? (
               <div className="bg-surface-2 p-6 rounded-2xl text-xs text-text-muted text-center">
-                Nenhum serviço cadastrado na barbearia. Cadastre serviços na aba &quot;Serviços&quot;.
+                Nenhum serviço cadastrado na barbearia. Cadastre serviços na aba
+                &quot;Serviços&quot;.
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
@@ -754,15 +540,22 @@ export default function EquipePage() {
                       <div className="flex items-center gap-3">
                         <div
                           className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-                            isChecked ? "bg-accent border-accent text-accent-contrast" : "border-text-muted/40"
+                            isChecked
+                              ? "bg-accent border-accent text-accent-contrast"
+                              : "border-text-muted/40"
                           }`}
                         >
                           {isChecked && <CheckCircle2 className="w-3 h-3" />}
                         </div>
-                        <span className="font-semibold text-xs">{srv.name}</span>
+                        <span className="font-semibold text-xs">
+                          {srv.name}
+                        </span>
                       </div>
                       <span className="font-mono text-xs opacity-70">
-                        {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(srv.price)}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(srv.price)}
                       </span>
                     </motion.div>
                   );
@@ -790,7 +583,9 @@ export default function EquipePage() {
               className="bg-surface rounded-[32px] max-w-md w-full p-8 shadow-soft space-y-6 border border-hairline"
             >
               <div className="flex items-center justify-between pb-4 border-b border-hairline">
-                <h2 className="font-serif text-xl font-bold text-text">Novo Barbeiro</h2>
+                <h2 className="font-serif text-xl font-bold text-text">
+                  Novo Barbeiro
+                </h2>
                 <button
                   onClick={() => setIsAddModalOpen(false)}
                   className="w-8 h-8 rounded-full bg-surface-2 text-text-muted hover:text-text flex items-center justify-center transition-colors"

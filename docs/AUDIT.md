@@ -12,3 +12,6 @@ Branches limpas `work` usadas como base; trabalho isolado em `redesign-black`. D
 
 ## Limites e plano
 Nenhum banco será acessado, nenhuma migration aplicada e nenhum deploy executado. Usar placeholders autorais em SVG, demo somente no cliente; nenhum bypass no painel. Ordem: fundação → dados → cliente → dono → marca → Cloudflare → QA. Fotos/logotipo final, horários completos, equipe e preços reais pendentes. Fatos fornecidos no briefing não foram verificados externamente.
+
+## Saída da auditoria
+A fotografia inicial acima descreve o código antes do redesign. A entrega final migrou para Next 15.5.28 / React 19.3.1 e OpenNext 1.20.13, com cookies SSR assíncronos. Dependências e lockfiles revalidados; consulte os relatórios finais, não os números da fase legada.

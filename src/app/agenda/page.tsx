@@ -1,8 +1,8 @@
 "use client";
 
-import {AdminSkeleton} from "@/components/admin/skeleton";
-import {AdminNavigation} from "@/components/admin/navigation";
-import {BookingActions} from "@/components/admin/booking-actions";
+import { AdminSkeleton } from "@/components/admin/skeleton";
+import { AdminNavigation } from "@/components/admin/navigation";
+import { BookingActions } from "@/components/admin/booking-actions";
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -67,7 +67,7 @@ export default function AgendaPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Dados do banco
-  const [activeBarber,setActiveBarber]=useState<string>("all");
+  const [activeBarber, setActiveBarber] = useState<string>("all");
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [bookings, setBookings] = useState<BookingSlot[]>([]);
@@ -149,7 +149,8 @@ export default function AgendaPage() {
 
       const { data: bookData, error: bookErr } = await supabase
         .from("bookings")
-        .select(`
+        .select(
+          `
           id,
           barber_id,
           starts_at,
@@ -159,7 +160,8 @@ export default function AgendaPage() {
           booking_items (
             service_name
           )
-        `)
+        `,
+        )
         .eq("barbershop_id", shopId)
         .gte("starts_at", dayStart)
         .lte("starts_at", dayEnd)
@@ -171,7 +173,10 @@ export default function AgendaPage() {
         const mapped: BookingSlot[] = bookData.map((b: any) => {
           const sName =
             b.booking_items && b.booking_items.length > 0
-              ? b.booking_items.map((bs: any) => fixMojibake(bs.service_name)).filter(Boolean).join(", ")
+              ? b.booking_items
+                  .map((bs: any) => fixMojibake(bs.service_name))
+                  .filter(Boolean)
+                  .join(", ")
               : "Serviço";
           return {
             id: b.id,
@@ -204,7 +209,7 @@ export default function AgendaPage() {
     setIsSubmitting(true);
     setModalError(null);
 
-    const startsAt = `${selectedDate}T${modalTime}:00`;
+    const startsAt = `${selectedDate}T${modalTime}:00-03:00`;
 
     const res = await createQuickBookingAction({
       barbershop_id: barbershopId,
@@ -246,7 +251,11 @@ export default function AgendaPage() {
     if (!barbershopId) return;
     const reason = prompt("Motivo do cancelamento (opcional):");
     if (reason !== null) {
-      const res = await cancelBookingAction(barbershopId, bookingId, reason || undefined);
+      const res = await cancelBookingAction(
+        barbershopId,
+        bookingId,
+        reason || undefined,
+      );
       if (res.success) {
         await loadData();
       } else {
@@ -261,8 +270,21 @@ export default function AgendaPage() {
   };
 
   const timeSlots = [
-    "08:00", "08:45", "09:30", "10:15", "11:00", "11:45",
-    "13:00", "13:45", "14:30", "15:15", "16:00", "16:45", "17:30", "18:15", "19:00",
+    "08:00",
+    "08:45",
+    "09:30",
+    "10:15",
+    "11:00",
+    "11:45",
+    "13:00",
+    "13:45",
+    "14:30",
+    "15:15",
+    "16:00",
+    "16:45",
+    "17:30",
+    "18:15",
+    "19:00",
   ];
 
   const navLinks = [
@@ -284,6 +306,7 @@ export default function AgendaPage() {
       <main className="admin-content flex-1 space-y-6">
         {/* Barra Superior em Pílula */}
         <header className="bg-surface rounded-full px-6 py-3 flex items-center justify-between shadow-soft">
+          <h1>Agenda</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-surface-2 px-4 py-1.5 rounded-full text-xs font-semibold">
               <Calendar className="w-3.5 h-3.5 text-accent" />
@@ -312,88 +335,139 @@ export default function AgendaPage() {
           </div>
         )}
 
-        <div className="barber-tabs" role="group" aria-label="Filtrar profissional"><button aria-pressed={activeBarber==='all'} onClick={()=>setActiveBarber('all')}>Todos</button>{barbers.map(b=><button key={b.id} aria-pressed={activeBarber===b.id} onClick={()=>setActiveBarber(b.id)}>{b.name}</button>)}</div>
-        {isLoading ? (<AdminSkeleton/>
-) : barbers.length === 0 ? (
+        <div
+          className="barber-tabs"
+          role="group"
+          aria-label="Filtrar profissional"
+        >
+          <button
+            aria-pressed={activeBarber === "all"}
+            onClick={() => setActiveBarber("all")}
+          >
+            Todos
+          </button>
+          {barbers.map((b) => (
+            <button
+              key={b.id}
+              aria-pressed={activeBarber === b.id}
+              onClick={() => setActiveBarber(b.id)}
+            >
+              {b.name}
+            </button>
+          ))}
+        </div>
+        {isLoading ? (
+          <AdminSkeleton />
+        ) : barbers.length === 0 ? (
           <div className="bg-surface rounded-[32px] p-12 text-center text-text-muted text-xs shadow-soft">
             Nenhum barbeiro ativo cadastrado nesta barbearia.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {barbers.filter(b=>activeBarber==='all'||b.id===activeBarber).map((barber) => {
-              const barberBookings = bookings.filter((b) => b.barber_id === barber.id);
+            {barbers
+              .filter((b) => activeBarber === "all" || b.id === activeBarber)
+              .map((barber) => {
+                const barberBookings = bookings.filter(
+                  (b) => b.barber_id === barber.id,
+                );
 
-              return (
-                <div key={barber.id} className="bg-surface rounded-[32px] p-6 shadow-soft space-y-6">
-                  {/* Cabeçalho do Barbeiro */}
-                  <div className="flex items-center gap-3 pb-4 border-b border-hairline">
-                    <div className="w-12 h-12 rounded-full bg-accent-soft text-accent flex items-center justify-center font-serif text-lg font-bold">
-                      {barber.name.charAt(0)}
+                return (
+                  <div
+                    key={barber.id}
+                    className="bg-surface rounded-[32px] p-6 shadow-soft space-y-6"
+                  >
+                    {/* Cabeçalho do Barbeiro */}
+                    <div className="flex items-center gap-3 pb-4 border-b border-hairline">
+                      <div className="w-12 h-12 rounded-full bg-accent-soft text-accent flex items-center justify-center font-serif text-lg font-bold">
+                        {barber.name.charAt(0)}
+                      </div>
+                      <div>
+                        <h3 className="font-serif font-bold text-text text-base">
+                          {barber.name}
+                        </h3>
+                        <span className="text-xs text-text-muted">
+                          {barberBookings.length}{" "}
+                          {barberBookings.length === 1
+                            ? "atendimento"
+                            : "atendimentos"}{" "}
+                          hoje
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-serif font-bold text-text text-base">{barber.name}</h3>
-                      <span className="text-xs text-text-muted">
-                        {barberBookings.length} {barberBookings.length === 1 ? "atendimento" : "atendimentos"} hoje
-                      </span>
-                    </div>
-                  </div>
 
-                  {/* Lista Respirada de Horários do Barbeiro */}
-                  <div className="space-y-2.5">
-                    {timeSlots.map((time) => {
-                      const slotBooking = barberBookings.find((b) => {
-                        const bTime = new Date(b.starts_at).toLocaleTimeString("pt-BR", {
-                          hour: "2-digit",
-                          minute: "2-digit",
+                    {/* Lista Respirada de Horários do Barbeiro */}
+                    <div className="space-y-2.5">
+                      {timeSlots.map((time) => {
+                        const slotBooking = barberBookings.find((b) => {
+                          const bTime = new Date(
+                            b.starts_at,
+                          ).toLocaleTimeString("pt-BR", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          });
+                          return bTime === time;
                         });
-                        return bTime === time;
-                      });
 
-                      if (!slotBooking) {
+                        if (!slotBooking) {
+                          return (
+                            <div
+                              key={time}
+                              className="agenda-empty-slot bg-surface-2/40 hover:bg-surface-2 rounded-full px-4 py-2.5 flex items-center justify-between text-xs transition-colors"
+                            >
+                              <span className="font-mono text-text-muted/60 text-xs">
+                                {time}
+                              </span>
+                              <span className="text-xs text-text-muted/50">
+                                Disponível
+                              </span>
+                            </div>
+                          );
+                        }
+
                         return (
                           <div
-                            key={time}
-                            className="agenda-empty-slot bg-surface-2/40 hover:bg-surface-2 rounded-full px-4 py-2.5 flex items-center justify-between text-xs transition-colors"
+                            key={slotBooking.id}
+                            className={`rounded-2xl p-4 flex flex-col gap-2 transition-all shadow-sm ${
+                              slotBooking.status === "completed"
+                                ? "bg-emerald-500/10 text-emerald-400"
+                                : slotBooking.status === "cancelled"
+                                  ? "bg-danger/10 text-danger line-through opacity-60"
+                                  : "bg-accent-soft text-text"
+                            }`}
                           >
-                            <span className="font-mono text-text-muted/60 text-xs">{time}</span>
-                            <span className="text-xs text-text-muted/50">Disponível</span>
+                            <div className="flex items-center justify-between">
+                              <span className="font-mono text-xs font-bold text-accent">
+                                {time}
+                              </span>
+                              <span className="font-serif font-bold text-xs">
+                                {formatCurrency(slotBooking.total_price)}
+                              </span>
+                            </div>
+
+                            <div>
+                              <strong className="text-text block text-sm font-serif">
+                                {slotBooking.customer_name}
+                              </strong>
+                              <span className="text-xs text-text-muted">
+                                {slotBooking.service_name}
+                              </span>
+                            </div>
+
+                            {slotBooking.status === "confirmed" &&
+                              barbershopId && (
+                                <BookingActions
+                                  shopId={barbershopId}
+                                  bookingId={slotBooking.id}
+                                  onUpdated={loadData}
+                                />
+                              )}
                           </div>
                         );
-                      }
-
-                      return (
-                        <div
-                          key={slotBooking.id}
-                          className={`rounded-2xl p-4 flex flex-col gap-2 transition-all shadow-sm ${
-                            slotBooking.status === "completed"
-                              ? "bg-emerald-500/10 text-emerald-400"
-                              : slotBooking.status === "cancelled"
-                              ? "bg-danger/10 text-danger line-through opacity-60"
-                              : "bg-accent-soft text-text"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-mono text-xs font-bold text-accent">{time}</span>
-                            <span className="font-serif font-bold text-xs">
-                              {formatCurrency(slotBooking.total_price)}
-                            </span>
-                          </div>
-
-                          <div>
-                            <strong className="text-text block text-sm font-serif">
-                              {slotBooking.customer_name}
-                            </strong>
-                            <span className="text-xs text-text-muted">{slotBooking.service_name}</span>
-                          </div>
-
-                          {slotBooking.status === "confirmed" && barbershopId && <BookingActions shopId={barbershopId} bookingId={slotBooking.id} onUpdated={loadData}/>}
-                        </div>
-                      );
-                    })}
+                      })}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         )}
       </main>
@@ -403,7 +477,9 @@ export default function AgendaPage() {
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-surface rounded-[32px] max-w-md w-full p-8 shadow-soft animate-in zoom-in-95 space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-hairline">
-              <h2 className="font-serif text-xl font-bold text-text">Novo Agendamento Rápido</h2>
+              <h2 className="font-serif text-xl font-bold text-text">
+                Novo Agendamento Rápido
+              </h2>
               <button
                 onClick={() => setShowQuickModal(false)}
                 className="w-8 h-8 rounded-full bg-surface-2 text-text-muted hover:text-text flex items-center justify-center"

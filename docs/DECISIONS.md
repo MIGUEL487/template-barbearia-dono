@@ -36,3 +36,6 @@
 
 ## Redesign Black
 Dark-only: nenhum seletor de tema existente. Display condensado Bebas Neue + corpo Manrope, arquivos locais via next/font/local. Tokens canônicos idênticos nos dois repositórios.
+
+## Versão final e Workers
+Next 15.5.28 + React 19.3.1 + Framer Motion 14.7.0; OpenNext 1.20.13 no painel. Migração autorizada pela continuação do trabalho após identificar os alertas legados. Cookies do servidor são assíncronos. O cliente continua estático e a API de dados mantém views/RPCs. Audit final sem vulnerabilidades conhecidas; isso não substitui testes RLS/pagamento em banco demo autorizado.

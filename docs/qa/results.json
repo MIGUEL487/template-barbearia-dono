@@ -1,0 +1,251 @@
+{
+  "fixture": true,
+  "intercepted": 170,
+  "results": [
+    {
+      "width": 360,
+      "path": "dashboard",
+      "url": "http://127.0.0.1:8788/dashboard",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "path": "agenda",
+      "url": "http://127.0.0.1:8788/agenda",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "path": "clientes",
+      "url": "http://127.0.0.1:8788/clientes",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "path": "financeiro",
+      "url": "http://127.0.0.1:8788/financeiro",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "path": "servicos",
+      "url": "http://127.0.0.1:8788/servicos",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "path": "equipe",
+      "url": "http://127.0.0.1:8788/equipe",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "path": "configuracoes",
+      "url": "http://127.0.0.1:8788/configuracoes",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "dashboard",
+      "url": "http://127.0.0.1:8788/dashboard",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "agenda",
+      "url": "http://127.0.0.1:8788/agenda",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "clientes",
+      "url": "http://127.0.0.1:8788/clientes",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "financeiro",
+      "url": "http://127.0.0.1:8788/financeiro",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "servicos",
+      "url": "http://127.0.0.1:8788/servicos",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "equipe",
+      "url": "http://127.0.0.1:8788/equipe",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "path": "configuracoes",
+      "url": "http://127.0.0.1:8788/configuracoes",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "path": "dashboard",
+      "url": "http://127.0.0.1:8788/dashboard",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "path": "agenda",
+      "url": "http://127.0.0.1:8788/agenda",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "path": "clientes",
+      "url": "http://127.0.0.1:8788/clientes",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "path": "financeiro",
+      "url": "http://127.0.0.1:8788/financeiro",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "path": "servicos",
+      "url": "http://127.0.0.1:8788/servicos",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "path": "equipe",
+      "url": "http://127.0.0.1:8788/equipe",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "path": "configuracoes",
+      "url": "http://127.0.0.1:8788/configuracoes",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "path": "dashboard",
+      "url": "http://127.0.0.1:8788/dashboard",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "path": "agenda",
+      "url": "http://127.0.0.1:8788/agenda",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "path": "clientes",
+      "url": "http://127.0.0.1:8788/clientes",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "path": "financeiro",
+      "url": "http://127.0.0.1:8788/financeiro",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "path": "servicos",
+      "url": "http://127.0.0.1:8788/servicos",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "path": "equipe",
+      "url": "http://127.0.0.1:8788/equipe",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "path": "configuracoes",
+      "url": "http://127.0.0.1:8788/configuracoes",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "dashboard",
+      "url": "http://127.0.0.1:8788/dashboard",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "agenda",
+      "url": "http://127.0.0.1:8788/agenda",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "clientes",
+      "url": "http://127.0.0.1:8788/clientes",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "financeiro",
+      "url": "http://127.0.0.1:8788/financeiro",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "servicos",
+      "url": "http://127.0.0.1:8788/servicos",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "equipe",
+      "url": "http://127.0.0.1:8788/equipe",
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "path": "configuracoes",
+      "url": "http://127.0.0.1:8788/configuracoes",
+      "errors": [],
+      "overflow": false
+    }
+  ]
+}

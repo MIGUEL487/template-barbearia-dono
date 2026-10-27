@@ -13,13 +13,13 @@ Nenhum deploy ou conta foi criado. Use Workers com Git integrado (Workers Builds
 ## Dono com servidor
 1. Criar/conectar outro Worker ao repo dono. Não rodar conversor automático: já existem `open-next.config.ts` e `wrangler.jsonc`.
 2. Build: `npm run build:cf`; deploy: `npm run deploy:cf`. O primeiro comando faz Next build e adapta com `--skipNextBuild`, evitando build duplicado.
-3. Binding ASSETS para `.open-next/assets`; entrada `.open-next/worker.js`; `nodejs_compat`. Cliente: data 2026-10-26. Dono legado: data 2025-08-01, validada no runtime local. Datas recentes ativam node:process/chdir real e quebram o adaptador legado; não atualizar sem testar.
+3. Binding ASSETS para `.open-next/assets`; entrada `.open-next/worker.js`; `nodejs_compat`. Cliente: data 2026-10-26. Dono: data 2026-10-27, com o adaptador atual.
 4. Build variables públicas: URL/anon do Supabase e opções da marca. Runtime variables: URL/anon, `ADMIN_BASE_URL` com domínio real. `SUPABASE_SERVICE_ROLE_KEY`, `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET`, `RESEND_API_KEY` ficam em **Settings → Variables and Secrets**, como secrets do Worker. Nunca prefixar segredos com NEXT_PUBLIC.
 5. Para preview local, criar `.dev.vars` ignorado a partir de `.dev.vars.example` e preencher com segurança. `npm run preview:cf` usa porta 8788. Não commitar valores, não colocar token do Cloudflare no repositório.
 6. Não basta abrir login: validar cookies SSR, renovação, logout, acesso sem sessão, server actions com papéis distintos, webhook com assinatura e repetição/concorrência em banco demo autorizado. Não aplicar seed/migrations em banco real sem autorização.
 
-## Versões e limites
-Next atualizado para última 14.2.x encontrada (14.2.35). O adaptador atual 1.20.13 exige Next >=15.5.28; este projeto mantém a linha 14 pedida no briefing e fixa OpenNext 1.6.5 para testar o build legado. Isso NÃO significa suporte atual nem ausência de vulnerabilidades. Conferir resultados reais de build/preview e auditoria antes de publicar; migração para linha suportada é necessária para lançamento seguro.
+## Versões e compatibilidade
+Next 15.5.28, React 19.3.1 e OpenNext 1.20.13. O adaptador declara suporte a Next >=15.5.28 <16 (ou >=16.4.1). A combinação legada 14.2/1.6 foi substituída durante o QA de segurança. Cookies SSR usam a API assíncrona do Next 15. Não usar o antigo workaround de data 2025 no Worker atual. `npm audit` final: zero alertas nos dois repositórios, sem --force.
 
 ## Vindo da Vercel
 | Na Vercel | No Cloudflare |
