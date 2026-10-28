@@ -83,7 +83,7 @@ npm run tokens:check
 
 O hash SHA-256 é comparado com o arquivo de trava `design-tokens.sha256`.
 Hash canônico da release:
-`097fcd111ba379d111b248fa106ef48aee9cc3d5524ff0dc48ac349c81a7e977`
+`523d1c51f876f90af57ac21ad58ea129aa132bc0d900e2b68350531eb8dfcd79`
 
 Redesign: preto #050507, violeta #A78BFA e botão #7C3AED. Hash deve mudar junto nos dois repos. Não executar migrations/seed sem autorização explícita.
 
@@ -94,3 +94,5 @@ Painel Black: navegação compartilhada responsiva, sem modo de login demo. Skel
 Refinamento minimalista: Fraunces 400/500 + Manrope 400, preto neutro/off-white, roxo reservado a ações e foco. Tokens e hash canônicos atualizados em ambos; sem alteração de contratos de dados.
 
 Escala de espaçamento: 8 px; tokens `--space-1` a `--space-12`, idênticos nos dois projetos.
+
+Design branco: tokens claros, 8 px; accent contrast branco para ações roxas.

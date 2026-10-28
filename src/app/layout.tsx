@@ -1,10 +1,10 @@
 import { DemoWatermark, watermarkEnabled } from "@/components/demo-watermark";
 import { MotionPreferences } from "@/components/motion-preferences";
 import type { Metadata } from "next";
-import { Fraunces, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
-const display = Fraunces({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-serif", display: "swap" });
-const manrope = Manrope({ subsets: ["latin"], weight: "400", variable: "--font-sans", display: "swap" });
+const display=localFont({src:[{path:"./fonts/fraunces-latin-400-normal.woff2",weight:"400",style:"normal"},{path:"./fonts/fraunces-latin-500-normal.woff2",weight:"500",style:"normal"},{path:"./fonts/fraunces-latin-400-italic.woff2",weight:"400",style:"italic"}],variable:"--font-serif",display:"swap"});
+const manrope=localFont({src:"./fonts/Manrope-400.ttf",weight:"400",variable:"--font-sans",display:"swap"});
 
 export const metadata: Metadata = {
   robots: watermarkEnabled ? { index: false, follow: false } : undefined,
