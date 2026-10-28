@@ -3,7 +3,7 @@
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
 import { BookingActions } from "@/components/admin/booking-actions";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -33,6 +33,7 @@ import {
   logoutAction,
 } from "@/app/actions/admin-actions";
 import { motion, AnimatePresence } from "motion/react";
+import {agendaGrid, blocks, dayBounds, isExpired, saoPauloDate, weekday, type WorkingHours, type TimeOff} from '@/lib/agenda-grid';
 
 interface Barber {
   id: string;
@@ -53,6 +54,8 @@ interface BookingSlot {
   customer_phone: string;
   service_name: string;
   starts_at: string;
+  ends_at: string;
+  hold_expires_at: string | null;
   status: "hold" | "confirmed" | "completed" | "cancelled" | "no_show";
   total_price: number;
 }
@@ -61,7 +64,7 @@ export default function AgendaPage() {
   const router = useRouter();
   const [barbershopId, setBarbershopId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>(() => {
-    return new Date().toISOString().split("T")[0];
+    return saoPauloDate();
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -71,6 +74,12 @@ export default function AgendaPage() {
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [bookings, setBookings] = useState<BookingSlot[]>([]);
+  const [workingHours,setWorkingHours]=useState<WorkingHours[]>([]);
+  const [timeOff,setTimeOff]=useState<TimeOff[]>([]);
+  const [closed,setClosed]=useState(false);
+  const [now,setNow]=useState(Date.now());
+  const loadVersion=useRef(0);
+  useEffect(()=>{const timer=setInterval(()=>setNow(Date.now()),30000);return()=>clearInterval(timer)},[]);
 
   // Modal Agendamento Rápido
   const [showQuickModal, setShowQuickModal] = useState<boolean>(false);
@@ -84,6 +93,7 @@ export default function AgendaPage() {
   const [modalError, setModalError] = useState<string | null>(null);
 
   const loadData = useCallback(async () => {
+    const version=++loadVersion.current;
     setIsLoading(true);
     setErrorMsg(null);
 
@@ -105,6 +115,7 @@ export default function AgendaPage() {
         .eq("user_id", user.id)
         .maybeSingle();
 
+      if(version!==loadVersion.current)return;
       if (memErr || !member) {
         setErrorMsg("Acesso não autorizado para esta barbearia.");
         setIsLoading(false);
@@ -114,12 +125,14 @@ export default function AgendaPage() {
       const shopId = (member as any).barbershop_id;
       setBarbershopId(shopId);
 
-      const { data: bData } = await supabase
+      const { data: bData, error: barberError } = await supabase
         .from("barbers")
         .select("id, name")
         .eq("barbershop_id", shopId)
         .eq("is_active", true)
         .order("name");
+      if(version!==loadVersion.current)return;
+      if(barberError)throw barberError;
 
       if (bData) {
         const cleaned = bData.map((b) => ({ ...b, name: fixMojibake(b.name) }));
@@ -136,6 +149,7 @@ export default function AgendaPage() {
         .eq("is_active", true)
         .order("name");
 
+      if(version!==loadVersion.current)return;
       if (sData) {
         const cleaned = sData.map((s) => ({ ...s, name: fixMojibake(s.name) }));
         setServices(cleaned);
@@ -144,8 +158,16 @@ export default function AgendaPage() {
         }
       }
 
-      const dayStart = `${selectedDate}T00:00:00`;
-      const dayEnd = `${selectedDate}T23:59:59`;
+      const {start:dayStart,end:dayEnd}=dayBounds(selectedDate);
+      const ids=(bData||[]).map(b=>b.id);
+      const [hours,absences,closures]=await Promise.all([
+        ids.length?supabase.from('working_hours').select('barber_id,day_of_week,start_time,end_time,lunch_start,lunch_end,is_off').in('barber_id',ids).eq('day_of_week',weekday(selectedDate)):Promise.resolve({data:[],error:null}),
+        ids.length?supabase.from('time_off').select('barber_id,starts_at,ends_at,reason').in('barber_id',ids).lt('starts_at',dayEnd).gt('ends_at',dayStart):Promise.resolve({data:[],error:null}),
+        supabase.from('closed_days').select('date').eq('barbershop_id',shopId).eq('date',selectedDate)
+      ]);
+      if(version!==loadVersion.current)return;
+      if(hours.error||absences.error||closures.error)throw hours.error||absences.error||closures.error;
+      setWorkingHours(hours.data||[]);setTimeOff(absences.data||[]);setClosed(!!closures.data?.length);setNow(Date.now());
 
       const { data: bookData, error: bookErr } = await supabase
         .from("bookings")
@@ -154,6 +176,8 @@ export default function AgendaPage() {
           id,
           barber_id,
           starts_at,
+          ends_at,
+          hold_expires_at,
           status,
           total_price,
           customers (name, phone),
@@ -163,10 +187,11 @@ export default function AgendaPage() {
         `,
         )
         .eq("barbershop_id", shopId)
-        .gte("starts_at", dayStart)
-        .lte("starts_at", dayEnd)
+        .lt("starts_at", dayEnd)
+        .gt("ends_at", dayStart)
         .order("starts_at");
 
+      if(version!==loadVersion.current)return;
       if (bookErr) {
         setErrorMsg(bookErr.message);
       } else if (bookData) {
@@ -181,10 +206,12 @@ export default function AgendaPage() {
           return {
             id: b.id,
             barber_id: b.barber_id,
-            customer_name: fixMojibake(b.customers?.name) || "Cliente",
+            customer_name: fixMojibake(b.customers?.name) || (b.status==='hold'?'Pré-reserva':'Cliente'),
             customer_phone: b.customers?.phone || "",
             service_name: sName,
             starts_at: b.starts_at,
+            ends_at: b.ends_at,
+            hold_expires_at: b.hold_expires_at,
             status: b.status,
             total_price: Number(b.total_price),
           };
@@ -192,9 +219,9 @@ export default function AgendaPage() {
         setBookings(mapped);
       }
     } catch (err: any) {
-      setErrorMsg(err.message || "Erro ao carregar dados da agenda.");
+      if(version===loadVersion.current)setErrorMsg(err.message || "Erro ao carregar dados da agenda.");
     } finally {
-      setIsLoading(false);
+      if(version===loadVersion.current)setIsLoading(false);
     }
   }, [router, selectedDate, modalBarberId, modalServiceId]);
 
@@ -269,23 +296,7 @@ export default function AgendaPage() {
     router.push("/login");
   };
 
-  const timeSlots = [
-    "08:00",
-    "08:45",
-    "09:30",
-    "10:15",
-    "11:00",
-    "11:45",
-    "13:00",
-    "13:45",
-    "14:30",
-    "15:15",
-    "16:00",
-    "16:45",
-    "17:30",
-    "18:15",
-    "19:00",
-  ];
+  const timeSlots=agendaGrid(selectedDate,modalBarberId,workingHours,bookings,timeOff,closed,now).filter(r=>r.available).map(r=>r.time);
 
   const navLinks = [
     { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
@@ -358,7 +369,7 @@ export default function AgendaPage() {
         </div>
         {isLoading ? (
           <AdminSkeleton />
-        ) : barbers.length === 0 ? (
+        ) : errorMsg ? null : barbers.length === 0 ? (
           <div className="bg-surface rounded-[32px] p-12 text-center text-text-muted text-xs shadow-soft">
             Nenhum barbeiro ativo cadastrado nesta barbearia.
           </div>
@@ -368,8 +379,9 @@ export default function AgendaPage() {
               .filter((b) => activeBarber === "all" || b.id === activeBarber)
               .map((barber) => {
                 const barberBookings = bookings.filter(
-                  (b) => b.barber_id === barber.id,
+                  (b) => b.barber_id === barber.id && !isExpired(b,now),
                 );
+                const rows=agendaGrid(selectedDate,barber.id,workingHours,barberBookings,timeOff,closed,now);
 
                 return (
                   <div
@@ -386,39 +398,31 @@ export default function AgendaPage() {
                           {barber.name}
                         </h3>
                         <span className="text-xs text-text-muted">
-                          {barberBookings.length}{" "}
-                          {barberBookings.length === 1
+                          {barberBookings.filter(b=>blocks(b,now)).length}{" "}
+                          {barberBookings.filter(b=>blocks(b,now)).length === 1
                             ? "atendimento"
                             : "atendimentos"}{" "}
-                          hoje
+                          em {selectedDate.split('-').reverse().join('/')}
                         </span>
                       </div>
                     </div>
 
                     {/* Lista Respirada de Horários do Barbeiro */}
                     <div className="space-y-2">
-                      {timeSlots.map((time) => {
-                        const slotBooking = barberBookings.find((b) => {
-                          const bTime = new Date(
-                            b.starts_at,
-                          ).toLocaleTimeString("pt-BR", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-                          return bTime === time;
-                        });
+                      {rows.flatMap<{time:string;slotBooking:BookingSlot|undefined;state:string}>(row=>row.bookings.length?row.bookings.map(slotBooking=>({time:row.time,slotBooking,state:row.state})): [{time:row.time,slotBooking:undefined,state:row.state}]).map(({time,slotBooking,state}) => {
 
                         if (!slotBooking) {
                           return (
                             <div
                               key={time}
+                              data-agenda-time={time}
                               className="agenda-empty-slot bg-surface-2/40 hover:bg-surface-2 rounded-full px-4 py-2 flex items-center justify-between text-xs transition-colors"
                             >
                               <span className="font-mono text-text-muted/60 text-xs">
                                 {time}
                               </span>
                               <span className="text-xs text-text-muted/50">
-                                Disponível
+                                {state}
                               </span>
                             </div>
                           );
@@ -426,7 +430,9 @@ export default function AgendaPage() {
 
                         return (
                           <div
-                            key={slotBooking.id}
+                            key={`${time}-${slotBooking.id}`}
+                            data-agenda-time={time}
+                            data-booking-id={slotBooking.id}
                             className={`rounded-2xl p-4 flex flex-col gap-2 transition-all shadow-sm ${
                               slotBooking.status === "completed"
                                 ? "bg-emerald-500/10 text-emerald-400"
@@ -446,14 +452,16 @@ export default function AgendaPage() {
 
                             <div>
                               <strong className="text-text block text-sm font-serif">
-                                {slotBooking.customer_name}
+                                {slotBooking.customer_name || (slotBooking.status==='hold'?'Pré-reserva':'Cliente')}
                               </strong>
                               <span className="text-xs text-text-muted">
                                 {slotBooking.service_name}
+                                {' · '}{({hold:'Pré-reserva (hold)',confirmed:'Confirmado',cancelled:'Cancelado · não bloqueia',completed:'Concluído',no_show:'Não compareceu'} as const)[slotBooking.status]}
                               </span>
                             </div>
 
                             {slotBooking.status === "confirmed" &&
+                              rows.find(row=>row.bookings.some(b=>b.id===slotBooking.id))?.time===time &&
                               barbershopId && (
                                 <BookingActions
                                   shopId={barbershopId}
