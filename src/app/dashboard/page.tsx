@@ -34,7 +34,7 @@ import {
   cancelBookingAction,
   logoutAction,
 } from "@/app/actions/admin-actions";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 interface DashboardBooking {
   id: string;

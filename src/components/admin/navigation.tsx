@@ -1,4 +1,5 @@
 "use client";
+import {MotionToggle} from "@/components/motion-preferences";
 import { DemoBadge } from "@/components/demo-watermark";
 import Link from "next/link";
 import Image from "next/image";
@@ -53,6 +54,7 @@ export function AdminNavigation() {
             </Link>
           ))}
         </nav>
+        <MotionToggle/>
         <button onClick={() => logoutAction()}>
           <LogOut size={18} />
           Sair do painel
@@ -93,7 +95,8 @@ export function AdminNavigation() {
               {label}
             </Link>
           ))}
-          <button onClick={() => logoutAction()}>Sair do painel</button>
+          <MotionToggle/>
+        <button onClick={() => logoutAction()}>Sair do painel</button>
           <button onClick={() => setMore(false)}>Fechar</button>
         </div>
       )}

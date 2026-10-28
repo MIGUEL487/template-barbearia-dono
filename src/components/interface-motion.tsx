@@ -26,7 +26,7 @@ export function InterfaceMotion() {
     }, { threshold: .08 });
     const scan = () => {
       document.querySelectorAll<HTMLElement>(selector).forEach(el => {
-        if (seen.has(el)) return;
+        if (seen.has(el) || el.closest(".cinematic, .ritual")) return;
         seen.add(el);
         // Keep fixed overlays and nested surfaces stable; animate their content.
         if (getComputedStyle(el).position === "fixed" || el.parentElement?.closest('[data-motion], .service-row, .team-member, .gallery-piece, .metric-overview > div, .choice, .admin-content form, .admin-content .rounded-xl')) return;

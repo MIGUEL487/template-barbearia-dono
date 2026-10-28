@@ -25,7 +25,7 @@ import {
 import { createClient } from "@/lib/supabase";
 import { formatCurrency, fixMojibake } from "@/lib/utils";
 import { logoutAction } from "@/app/actions/admin-actions";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 interface PaymentRecord {
   id: string;

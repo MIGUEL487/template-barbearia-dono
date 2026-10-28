@@ -20,3 +20,7 @@
   *, *::before, *::after { animation: none !important; transition: none !important; }
   :where(button, a, .choice) { translate:none !important; }
 }
+
+.motion-off *, .motion-off *::before, .motion-off *::after {animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.motion-off :where(button,a,.choice){translate:none!important}
+.page-hidden *{animation-play-state:paused!important}

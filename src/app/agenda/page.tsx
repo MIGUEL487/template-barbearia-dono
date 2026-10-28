@@ -32,7 +32,7 @@ import {
   cancelBookingAction,
   logoutAction,
 } from "@/app/actions/admin-actions";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 interface Barber {
   id: string;

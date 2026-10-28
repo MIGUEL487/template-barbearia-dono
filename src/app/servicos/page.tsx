@@ -27,7 +27,7 @@ import {
 import { createClient } from "@/lib/supabase";
 import { formatCurrency, formatDuration, fixMojibake } from "@/lib/utils";
 import { createServiceAction, toggleServiceActiveAction, logoutAction } from "@/app/actions/admin-actions";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 interface ServiceItem {
   id: string;

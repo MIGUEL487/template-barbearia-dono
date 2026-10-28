@@ -24,7 +24,7 @@ import {
 import { createClient } from "@/lib/supabase";
 import { fixMojibake } from "@/lib/utils";
 import { updateSiteSettingsAction, logoutAction } from "@/app/actions/admin-actions";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export default function ConfiguracoesPage() {
   const router = useRouter();

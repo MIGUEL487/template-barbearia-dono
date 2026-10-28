@@ -614,3 +614,8 @@ body .admin-page {
 .admin-content .metric-overview{gap:32px;padding-block:24px;border-bottom:1px solid var(--hairline)}.admin-content .metric-overview>div{background:transparent;border:0;border-radius:0;padding:0;box-shadow:none}.admin-content .metric-overview>div>div:first-child>span:has(>svg){display:none}.admin-content .revenue-bars>div:not(:last-child) .revenue-track>div{background:var(--text-muted)!important}
 /* Page titles retain serif even when the legacy utility class is present. */
 .admin-content h1.font-serif{font-family:var(--font-serif),Georgia,serif;font-weight:400;letter-spacing:-.025em}
+/* Shared light language, restrained application motion. */
+.admin-content .metric-overview>div{border-radius:24px}.admin-sidebar{background:var(--bg)}.admin-bottom{background:var(--bg)}.admin-more{background:var(--surface)}.admin-login{background:var(--bg-soft)}.admin-login>div{border-radius:32px;background:white}.admin-content :is(input,select,textarea){color:var(--ink);background:var(--surface)}.admin-content button.bg-accent{color:white}.admin-content .revenue-track>div{background:var(--accent)!important}
+/* AA corrections for legacy dark-theme utility combinations on white. */
+.admin-content button.bg-accent,.admin-content button.bg-accent:hover{background:var(--accent);color:white}.admin-content .bg-surface-3.text-white{color:var(--ink)}.admin-content .text-emerald-400,.admin-content .text-green-400{color:#14633d}.admin-content .text-amber-300,.admin-content .text-amber-400,.admin-content .text-yellow-400{color:#805300}.admin-content .text-red-400{color:#b42332}.admin-content .text-blue-400,.admin-content .text-cyan-400{color:#175ca1}
+.admin-content .opacity-70{opacity:1}
