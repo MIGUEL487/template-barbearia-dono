@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { BrandLogo } from "@/components/brand-logo";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Lock, AlertCircle, ShieldCheck } from "lucide-react";
@@ -64,8 +64,8 @@ export default function LoginPage() {
     <main className="admin-login min-h-screen flex flex-col items-center justify-center p-4 bg-bg text-text relative">
       <div className="w-full max-w-md bg-surface p-10 rounded-[36px] shadow-soft relative z-10 space-y-6">
         <div className="flex flex-col items-center text-center">
-          <div className="w-14 h-14 rounded-full bg-accent-soft text-accent flex items-center justify-center mb-4 shadow-sm">
-            <Image src="/media/auto-stilo/marca-203.webp" width={56} height={56} className="rounded-full" alt="Auto Stilo" />
+          <div className="w-14 h-14 flex items-center justify-center mb-4">
+            <BrandLogo className="login-logo" />
           </div>
           <h1 className="font-serif text-3xl font-bold text-text">
             Painel do dono

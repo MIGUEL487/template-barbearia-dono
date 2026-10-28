@@ -378,7 +378,7 @@ body .admin-page {
   text-align: left;
 }
 .admin-login > div > div:first-child > div:first-child {
-  display: none;
+  display: flex;
 }
 .admin-login h1 {
   font-family: var(--font-serif), Georgia, serif;

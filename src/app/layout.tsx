@@ -7,7 +7,15 @@ const display=localFont({src:[{path:"./fonts/fraunces-latin-400-normal.woff2",we
 const manrope=localFont({src:"./fonts/Manrope-400.ttf",weight:"400",variable:"--font-sans",display:"swap"});
 
 export const metadata: Metadata = {
-  icons:{icon:"/media/auto-stilo/marca-203.webp"},
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/brand/auto-stilo/favicon-light-32.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: light)" },
+      { url: "/brand/auto-stilo/favicon-dark-32.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: dark)" },
+      { url: "/favicon-auto-stilo.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   robots: watermarkEnabled ? { index: false, follow: false } : undefined,
   title:
     "Auto Stilo — Painel Administrativo" +

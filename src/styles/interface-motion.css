@@ -13,7 +13,7 @@
 :where(.site-nav, .admin-sidebar nav, .admin-bottom) a[aria-current] { color: var(--text); }
 :where(details[open]) > p, .site-nav.is-open { animation: answer-enter .35s var(--motion-ease); }
 @keyframes answer-enter { from { translate: 0 8px; } to { translate: 0 0; } }
-.brand-logo { width:48px; height:48px; object-fit:contain; flex-shrink:0; border-radius:50%; }
+.brand-logo { width:48px; height:48px; object-fit:contain; flex-shrink:0; border-radius:0; background:transparent; }
 .brand-with-logo { display:flex; align-items:center; gap:16px; }
 .brand-with-logo > span { display:flex; flex-direction:column; }
 @media(prefers-reduced-motion:reduce) {
@@ -24,3 +24,5 @@
 .motion-off *, .motion-off *::before, .motion-off *::after {animation:none!important;transition:none!important;scroll-behavior:auto!important}
 .motion-off :where(button,a,.choice){translate:none!important}
 .page-hidden *{animation-play-state:paused!important}
+
+.admin-login .login-logo { width:56px; height:56px; }

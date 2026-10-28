@@ -1,0 +1,209 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "login": {
+      "src": "/brand/auto-stilo/logo-on-light.png",
+      "width": 56,
+      "height": 56,
+      "radius": "0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "nav": {
+      "src": "/brand/auto-stilo/logo-on-light.png",
+      "width": 48,
+      "height": 48,
+      "radius": "0px",
+      "overflow": 0
+    },
+    "icons": [
+      {
+        "href": "/favicon.ico",
+        "type": "",
+        "media": null
+      },
+      {
+        "href": "/brand/auto-stilo/favicon-light-32.png",
+        "type": "image/png",
+        "media": "(prefers-color-scheme: light)"
+      },
+      {
+        "href": "/brand/auto-stilo/favicon-dark-32.png",
+        "type": "image/png",
+        "media": "(prefers-color-scheme: dark)"
+      },
+      {
+        "href": "/favicon-auto-stilo.svg",
+        "type": "image/svg+xml",
+        "media": null
+      }
+    ],
+    "remote": 0,
+    "errors": []
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "login": {
+      "src": "/brand/auto-stilo/logo-on-light.png",
+      "width": 56,
+      "height": 56,
+      "radius": "0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "nav": {
+      "src": "/brand/auto-stilo/logo-on-light.png",
+      "width": 48,
+      "height": 48,
+      "radius": "0px",
+      "overflow": 0
+    },
+    "icons": [
+      {
+        "href": "/favicon.ico",
+        "type": "",
+        "media": null
+      },
+      {
+        "href": "/brand/auto-stilo/favicon-light-32.png",
+        "type": "image/png",
+        "media": "(prefers-color-scheme: light)"
+      },
+      {
+        "href": "/brand/auto-stilo/favicon-dark-32.png",
+        "type": "image/png",
+        "media": "(prefers-color-scheme: dark)"
+      },
+      {
+        "href": "/favicon-auto-stilo.svg",
+        "type": "image/svg+xml",
+        "media": null
+      }
+    ],
+    "remote": 0,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "login": {
+      "src": "/brand/auto-stilo/logo-on-light.png",
+      "width": 56,
+      "height": 56,
+      "radius": "0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "nav": {
+      "src": "/brand/auto-stilo/logo-on-light.png",
+      "width": 48,
+      "height": 48,
+      "radius": "0px",
+      "overflow": 0
+    },
+    "icons": [
+      {
+        "href": "/favicon.ico",
+        "type": "",
+        "media": null
+      },
+      {
+        "href": "/brand/auto-stilo/favicon-light-32.png",
+        "type": "image/png",
+        "media": "(prefers-color-scheme: light)"
+      },
+      {
+        "href": "/brand/auto-stilo/favicon-dark-32.png",
+        "type": "image/png",
+        "media": "(prefers-color-scheme: dark)"
+      },
+      {
+        "href": "/favicon-auto-stilo.svg",
+        "type": "image/svg+xml",
+        "media": null
+      }
+    ],
+    "remote": 0,
+    "errors": []
+  },
+  {
+    "scheme": "light",
+    "pixels": {
+      "brightness": 0.001889644746787604,
+      "clear": 6444,
+      "purple": 102
+    }
+  },
+  {
+    "scheme": "dark",
+    "pixels": {
+      "brightness": 252.5891344383053,
+      "clear": 6428,
+      "purple": 126
+    }
+  },
+  {
+    "sameAssetsInBothRepositories": true,
+    "hashes": [
+      {
+        "file": "assets/brand/auto-stilo-on-light.png",
+        "sha256": "7c1934b97650f26f8099782972b53d515b8513eba0648b30b5db3a6e5ddf5103"
+      },
+      {
+        "file": "assets/brand/auto-stilo-on-dark.png",
+        "sha256": "37f44b22ff61a803fd289af493331b6742774f48480dba7107db60bb5a97ffde"
+      },
+      {
+        "file": "public/favicon-auto-stilo.svg",
+        "sha256": "767a26d56d96c0fd1146a93206d8067044596807f5c9d12b6267b812c188d2c2"
+      },
+      {
+        "file": "public/favicon.ico",
+        "sha256": "dad99132b3ad4e949112f5f604712fcffc4dcab420737cc13a0c3405f274b464"
+      },
+      {
+        "file": "public/apple-touch-icon.png",
+        "sha256": "bf175e7d7642dc76e59e330d32d9b48cd8fe6fd2dbbd3a8881c679703715588a"
+      },
+      {
+        "file": "public/brand/auto-stilo/favicon-dark-128.png",
+        "sha256": "698350aed465f31e825726ed90dac852685f7c32a548565d686bddc415428921"
+      },
+      {
+        "file": "public/brand/auto-stilo/favicon-dark-16.png",
+        "sha256": "9ca38d0de16633f5a16090baaa9738a2edd72653d6d61b0f4f3177a34ce774a3"
+      },
+      {
+        "file": "public/brand/auto-stilo/favicon-dark-32.png",
+        "sha256": "bf78fb4642c418e238dedecd7f7ca655677f16a78b120b0231e172ab40d7e635"
+      },
+      {
+        "file": "public/brand/auto-stilo/favicon-dark-48.png",
+        "sha256": "33bce0906414ca83655bad517779e958aa8b4a73b1c09acddd65fa0662698b45"
+      },
+      {
+        "file": "public/brand/auto-stilo/favicon-light-128.png",
+        "sha256": "74ac78efd9102bd48cba5b50169986014944e93558e2090df014b874a7bc8ce2"
+      },
+      {
+        "file": "public/brand/auto-stilo/favicon-light-16.png",
+        "sha256": "843cc05e3ba70a5073c94715ae7d16677b470778ac747bcfdad4372983292278"
+      },
+      {
+        "file": "public/brand/auto-stilo/favicon-light-32.png",
+        "sha256": "2f433a8de16e923278535542b2f0f41d340f815136840cc16bf0289e3622b5fb"
+      },
+      {
+        "file": "public/brand/auto-stilo/favicon-light-48.png",
+        "sha256": "76e9ff74be0b58a2f0564c0dbaed0aed6347a315f1860905dda8b95c79067df8"
+      },
+      {
+        "file": "public/brand/auto-stilo/logo-on-dark.png",
+        "sha256": "7129b61ce27ee72f95789a113492ff54aa07c8822623028c83bad77091d9dc18"
+      },
+      {
+        "file": "public/brand/auto-stilo/logo-on-light.png",
+        "sha256": "0b0da44dfc792c10e47f442f54d6e5bec4f0e20e041dd6fc5ea08cd52a2731c1"
+      }
+    ]
+  }
+]

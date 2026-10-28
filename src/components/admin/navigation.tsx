@@ -2,7 +2,7 @@
 import {MotionToggle} from "@/components/motion-preferences";
 import { DemoBadge } from "@/components/demo-watermark";
 import Link from "next/link";
-import Image from "next/image";
+import { BrandLogo } from "@/components/brand-logo";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
@@ -32,11 +32,11 @@ export function AdminNavigation() {
   return (
     <>
       <div className="admin-mobile-brand">
-        <Image className="brand-logo" src="/media/auto-stilo/marca-203.webp" width={48} height={48} alt="" /> Auto Stilo <DemoBadge />
+        <BrandLogo /> Auto Stilo <DemoBadge />
       </div>
       <aside className="admin-sidebar">
         <Link className="admin-brand brand-with-logo" href="/dashboard">
-          <Image className="brand-logo" src="/media/auto-stilo/marca-203.webp" width={48} height={48} alt="" />
+          <BrandLogo />
           <span>Auto Stilo
           <span>
             Gestão da barbearia <DemoBadge />
