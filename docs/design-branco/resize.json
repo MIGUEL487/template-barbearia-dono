@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "height": 600,
+      "width": 390,
+      "px": "600px",
+      "stable": "844px",
+      "canvasIdentity": "kept"
+    },
+    {
+      "height": 844,
+      "width": 390,
+      "px": "844px",
+      "stable": "844px",
+      "canvasIdentity": "kept"
+    },
+    {
+      "height": 390,
+      "width": 844,
+      "px": "390px",
+      "stable": "390px",
+      "canvasIdentity": "kept"
+    },
+    {
+      "height": 844,
+      "width": 390,
+      "px": "844px",
+      "stable": "1827px",
+      "canvasIdentity": "kept"
+    }
+  ],
+  "visibilityEventPauseClass": true,
+  "note": "Resize emulation, not physical toolbar or device."
+}

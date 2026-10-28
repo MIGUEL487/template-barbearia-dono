@@ -1,0 +1,37 @@
+{
+  "runtime": "CDP touch in mobile Chromium emulation, not physical device",
+  "forward": {
+    "scrollY": 385,
+    "stats": {
+      "decoded": 13,
+      "compressed": 183,
+      "target": 17,
+      "drawn": 17,
+      "painted": 18,
+      "backlog": 0,
+      "width": 390,
+      "height": 844,
+      "sourceWidth": 720,
+      "sourceHeight": 1280,
+      "reactScrollUpdates": 0
+    },
+    "mode": "native-sticky"
+  },
+  "reverse": {
+    "scrollY": 0,
+    "stats": {
+      "decoded": 9,
+      "compressed": 183,
+      "target": 0,
+      "drawn": 0,
+      "painted": 35,
+      "backlog": 0,
+      "width": 390,
+      "height": 844,
+      "sourceWidth": 720,
+      "sourceHeight": 1280,
+      "reactScrollUpdates": 0
+    }
+  },
+  "errors": []
+}

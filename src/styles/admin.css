@@ -619,3 +619,5 @@ body .admin-page {
 /* AA corrections for legacy dark-theme utility combinations on white. */
 .admin-content button.bg-accent,.admin-content button.bg-accent:hover{background:var(--accent);color:white}.admin-content .bg-surface-3.text-white{color:var(--ink)}.admin-content .text-emerald-400,.admin-content .text-green-400{color:#14633d}.admin-content .text-amber-300,.admin-content .text-amber-400,.admin-content .text-yellow-400{color:#805300}.admin-content .text-red-400{color:#b42332}.admin-content .text-blue-400,.admin-content .text-cyan-400{color:#175ca1}
 .admin-content .opacity-70{opacity:1}
+
+.admin-login .text-amber-300,.admin-login .text-amber-400{color:#805300}.admin-login .text-red-400{color:#b42332}

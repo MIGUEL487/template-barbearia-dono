@@ -1,0 +1,15 @@
+{
+  "verified": "2026-10-27",
+  "documentation": "https://developers.cloudflare.com/workers/platform/limits/#static-assets",
+  "officialSource": "https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/workers/platform/limits.mdx",
+  "perAssetLimitBytes": 26214400,
+  "fileCount": 441,
+  "largestAsset": "video/pc-gsap-reverse.mp4",
+  "largestBytes": 7572960,
+  "longestHeadersLine": 1976,
+  "headersLineLimit": 2000,
+  "rangeLocalStatus": 200,
+  "rangeLocalResponseBytes": 7538129,
+  "defaultRenderer": "frames",
+  "publishedVerified": false
+}

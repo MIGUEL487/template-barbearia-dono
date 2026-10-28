@@ -19,3 +19,24 @@ Nesta execução: mediana ≤17ms, p95 ≤34ms, nenhum frame >50ms. CLS zero em 
 Cada viewport completou wizard demo e consulta/cancelamento simulado, sem chamada a Supabase. Testes de foco, menu móvel e reduced-motion passaram; nenhuma página apresentou overflow ou erro JS. Detalhes brutos e capturas em docs/qa/results.json e docs/qa/.
 
 Painel: 35 combinações (7 telas × 360/390/768/1024/1440), com HTTP e autenticação sintéticos locais. Sem erro JS ou overflow; isso verifica UI e runtime, não desempenho nem integridade de um banco real. Não foi feita medição de FPS do painel com dados de produção.
+
+
+## Design branco — produção local
+
+Chromium emulado, Workers preview, CPU 4×. Dimensões 360×640, 390×844, 768×1024, 1024×768 e 1440×900. Rolagem por wheel até o rodapé, atravessando a espera do hero e o ritual fixado; não apenas scrollTo final. Transporte padrão de frames preserva os 183 índices em sequência. Resultados em `docs/design-branco/performance.json` no cliente.
+
+Mediana 16,7 ms; p95 até 16,8 ms; o resultado final deve ser lido no JSON, incluindo máximos por largura. Pausa observada de aproximadamente 1 segundo entre a apresentação do último quadro e liberação, incluindo entrada do texto. Os testes não equivalem a aparelho físico, rede móvel real ou produção publicada. MP4 nativo foi verificado à parte com `?renderer=video`: ida/volta, 183 quadros apresentados na ida, um vídeo no PC e nenhum seek/troca involuntária na descida registrado nas estatísticas.
+
+Sem erro de console/hidratação ou overflow nos caminhos normais. As falhas de mídia são deliberadas nos ensaios de fallback. Mapas mantêm espaço reservado e só são carregados por ação.
+
+Correção de método: um ensaio anterior amostrava RAF também durante a captura da imagem inicial e registrou um outlier de 116,7 ms em 1024 px. Esse bruto foi preservado em `performance-with-capture.json` no cliente; não é ocultado nem tratado como aprovação. O ensaio final captura primeiro e só então inicia a amostragem da rolagem, conforme o protocolo original do projeto.
+
+Resultado final, amostragem apenas durante scroll: todas as metas passaram.
+
+|Largura|Mediana|p95|Máximo|Pausa final|
+|---|---|---|---|---|
+|360 px|16.7 ms|16.7 ms|16.8 ms|999.2 ms|
+|390 px|16.7 ms|16.7 ms|16.8 ms|999.0 ms|
+|768 px|16.7 ms|16.7 ms|16.8 ms|1001.7 ms|
+|1024 px|16.7 ms|16.7 ms|16.8 ms|1011.7 ms|
+|1440 px|16.7 ms|16.7 ms|16.8 ms|998.9 ms|

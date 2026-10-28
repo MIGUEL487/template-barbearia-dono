@@ -1,0 +1,79 @@
+[
+  {
+    "width": 360,
+    "booking": true,
+    "cancel": true,
+    "filter": true,
+    "preselect": true,
+    "mapOnDemand": true,
+    "motionToggle": true,
+    "remote": 0
+  },
+  {
+    "width": 1440,
+    "booking": true,
+    "cancel": true,
+    "filter": true,
+    "preselect": true,
+    "mapOnDemand": true,
+    "motionToggle": true,
+    "remote": 0
+  },
+  {
+    "width": 390,
+    "nativeForwardAndReverse": true,
+    "decoders": 2,
+    "stats": {
+      "renderer": "native-video",
+      "target": 182,
+      "drawn": 182,
+      "painted": 183,
+      "backlog": 0,
+      "waiting": 0,
+      "droppedFrames": 0,
+      "totalVideoFrames": 183,
+      "width": 720,
+      "height": 1280,
+      "sourceWidth": 720,
+      "sourceHeight": 1280,
+      "decoded": 0,
+      "compressed": 0,
+      "reactScrollUpdates": 0
+    }
+  },
+  {
+    "width": 1440,
+    "nativeForwardAndReverse": true,
+    "decoders": 1,
+    "stats": {
+      "renderer": "gsap-desktop",
+      "target": 182,
+      "drawn": 182,
+      "painted": 183,
+      "backlog": 0,
+      "waiting": 0,
+      "switches": 0,
+      "playbackRate": 1,
+      "droppedFrames": 0,
+      "totalVideoFrames": 183,
+      "width": 1920,
+      "height": 1080,
+      "sourceWidth": 1920,
+      "sourceHeight": 1080,
+      "decoded": 0,
+      "compressed": 0,
+      "reactScrollUpdates": 0
+    }
+  },
+  {
+    "coldScrollBeforeFirstDecode": true,
+    "delayedFirstFetchMs": 1500
+  },
+  {
+    "forcedVideoErrorFallback": true,
+    "rotationKeepsCanvas": true
+  },
+  {
+    "failedFramesSafetyRelease": true
+  }
+]

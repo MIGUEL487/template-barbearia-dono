@@ -42,3 +42,12 @@ Referências oficiais: https://developers.cloudflare.com/workers/static-assets/h
 
 ## Evidência local da configuração
 Cliente: build estático passou, Workers local serviu 200 e 404 correto, CSP com hashes e noindex verificados; wizard demo concluiu em 390 e 1440 sem chamada remota. Dono: build:cf gerou worker.js; login retornou 200 e dashboard sem sessão redirecionou 307. Login autenticado, ações e webhook de pagamento completo ainda exigem testes específicos (ver relatório final). Nenhum resultado local implica deploy publicado.
+
+
+## Hero branco / transporte de mídia
+
+Os arquivos estão preparados e versionados, sem FFmpeg no build. No preview Workers deste ambiente, `Range: bytes=0-31` em GET retornou 200 e o MP4 inteiro. Portanto o hero usa **frames por padrão**. `?renderer=video` habilita os players nativos para diagnóstico; `?renderer=frames` força o fallback. Não mudar o padrão para vídeo até verificar 206/Content-Range na URL publicada. Não foi feito deploy nem validado domínio de produção.
+
+JPEGs têm hash no nome e cache imutável; manifesto revalida. MP4s sem hash têm cache curto (não imutável). CSP permite media-src self e img-src blob exclusivamente para a alternativa HTMLImageElement do decoder. Sem afrouxar script-src ou acesso ao banco. Vídeo maior preparado: 7.573 MB, abaixo do limite conhecido de 25 MiB por asset; o limite foi confirmado na fonte oficial atual (https://developers.cloudflare.com/workers/platform/limits/#static-assets, fonte cloudflare-docs/production/src/content/docs/workers/platform/limits.mdx consultada em 2026-10-27). Limites adicionais: 20.000 assets no plano Free e 100.000 no Paid; 2.000 caracteres por linha de _headers.
+
+Windows: instalar FFmpeg e ffprobe via `winget install Gyan.FFmpeg`, abrir novo terminal e executar `node scripts/encode-hero-video.mjs` (cliente); `--desktop-gsap` gera GOP 15 e sem B frames. Importadores originais estão em scripts para consulta. Preservar src/config/frames.json idêntico a public/frames/manifest.json após reimportar; o importador original de PC atualiza o manifesto público, então copie para src/config antes de build. Os 183 frames móveis atuais são recorte central dos horizontais; substitua por material próprio para direção móvel específica.

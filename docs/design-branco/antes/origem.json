@@ -1,0 +1,72 @@
+[
+  {
+    "source": "docs/media-motion/qa/dashboard-390.png",
+    "capture": "dashboard-390.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/dashboard-1440.png",
+    "capture": "dashboard-1440.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/agenda-390.png",
+    "capture": "agenda-390.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/agenda-1440.png",
+    "capture": "agenda-1440.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/clientes-390.png",
+    "capture": "clientes-390.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/clientes-1440.png",
+    "capture": "clientes-1440.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/financeiro-390.png",
+    "capture": "financeiro-390.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/financeiro-1440.png",
+    "capture": "financeiro-1440.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/servicos-390.png",
+    "capture": "servicos-390.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/servicos-1440.png",
+    "capture": "servicos-1440.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/equipe-390.png",
+    "capture": "equipe-390.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/equipe-1440.png",
+    "capture": "equipe-1440.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/configuracoes-390.png",
+    "capture": "configuracoes-390.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  },
+  {
+    "source": "docs/media-motion/qa/configuracoes-1440.png",
+    "capture": "configuracoes-1440.png",
+    "note": "Baseline black validada na etapa anterior, reutilizada sem refazer autenticação."
+  }
+]

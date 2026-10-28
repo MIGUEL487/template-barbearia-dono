@@ -85,7 +85,7 @@ O hash SHA-256 é comparado com o arquivo de trava `design-tokens.sha256`.
 Hash canônico da release:
 `523d1c51f876f90af57ac21ad58ea129aa132bc0d900e2b68350531eb8dfcd79`
 
-Redesign: preto #050507, violeta #A78BFA e botão #7C3AED. Hash deve mudar junto nos dois repos. Não executar migrations/seed sem autorização explícita.
+Design atual: branco #FFFFFF, texto #0A0A0C e roxo #7C3AED. Hash deve mudar junto nos dois repos. Não executar migrations/seed sem autorização explícita.
 
 Demo Auto Stilo: dados públicos do briefing; equipe/preços são exemplos. Fallback somente no cliente, sem escrita remota. Seed proposto fica exclusivamente no dono: supabase/seed.auto-stilo.sql; não aplicado.
 

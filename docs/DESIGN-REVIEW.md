@@ -72,3 +72,18 @@ As quatro etapas têm commits locais; nenhum push intermediário foi feito. O en
 A mediana permaneceu em 16,7ms, sem piorar em relação à medição anterior; p95 até 16,8ms e máximo 16,8ms nesta execução. Nenhum frame acima de 50ms e CLS zero nos sete formatos. As fontes e imagens estão no build, servido por Wrangler local; não houve throttling de rede. Resultados desta VM com as ilustrações atuais, não uma garantia de desempenho em qualquer dispositivo/rede. A galeria não é mais pinned e há apenas um loop contínuo visível por tela, no hero, pausado fora da viewport.
 
 `npm audit` não reportou vulnerabilidades conhecidas nesta rodada. O arquivo local de variáveis sintéticas usado nos testes foi removido e o build do painel foi repetido sem a fixture, preservando as configurações reais do projeto.
+
+
+## Design branco — revisão desta entrega
+
+Direção da referência 9e3ee14: abertura fotográfica sem texto, entrada posterior, serif de proporções naturais, branco predominante, arcos, áreas de contraste e roxo pontual. Não aplicado sorteio de direção das skills: o usuário escolheu a referência e a paleta explicitamente.
+
+Comparação em `docs/design-branco/antes/` e `depois/` (cliente) ou `qa/` (painel). Capturas inteiras de cenas fixadas incluem o runway do hero/pin e não representam uma faixa vazia visível durante a navegação; as capturas de viewport e a rolagem real são a evidência visual principal.
+
+Revisão visual: fotos inteiras em janelas com arco, CTA roxo destacado, cardápio com duração e preço à direita, história explicitamente ilustrativa, espaço com traços hexagonais, contraste contido no painel e áreas de toque ≥48 px. Fontes candidatas anteriores Fraunces/Newsreader/DM Serif revistas; mantida Fraunces e acrescentado itálico real, com Manrope na interface. Faces locais e caracteres portugueses constam em `fonts.json` no cliente.
+
+Correções da revisão: contrastes de utilitários herdados no painel (ações, abas e status); indicador do hero com fundo neutro para legibilidade nos frames claros; mapa com altura reservada, carregado somente por ação. Sem mudar contratos do Supabase, RLS ou handlers administrativos.
+
+Limites: não atribuímos nota de júri, prêmio ou certificação. Testes de navegador são emulação Chromium local, não hardware físico ou produção. Falta material independente para mobile, fachada limpa, retratos e identificação de equipe, história confirmada, horários completos, preços e Instagram. Logo e fotos enviados já são utilizados.
+
+Baseline autenticado do painel: reutilizadas as capturas reais da entrega black anterior em docs/media-motion/qa (origem.json registra a correspondência). Não se apresenta redirecionamento para login como screenshot de dashboard.
