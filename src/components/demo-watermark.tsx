@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-export const watermarkEnabled=process.env.NEXT_PUBLIC_DEMO_WATERMARK==='true';
+export const watermarkEnabled=process.env.NEXT_PUBLIC_DEMO_WATERMARK?.trim().toLowerCase() === 'true';
 const text=process.env.NEXT_PUBLIC_WATERMARK_TEXT||'DEMONSTRAÇÃO · SUA MARCA';
 const contact=process.env.NEXT_PUBLIC_WATERMARK_CONTACT;
 const escape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]!));

@@ -46,9 +46,8 @@ ALTER TABLE public.payments
   ADD COLUMN IF NOT EXISTS payment_method public.payment_method
   GENERATED ALWAYS AS (method) STORED;
 
--- is_shop_member era invocada pelas próprias políticas de shop_members sem
--- SECURITY DEFINER, o que impede a primeira consulta do painel por recursão
--- de RLS. A função só devolve a associação do auth.uid() corrente.
+-- Mantém o helper SECURITY DEFINER já presente na migration inicial.
+-- A função só devolve a associação do auth.uid() corrente.
 CREATE OR REPLACE FUNCTION public.is_shop_member(p_shop_id UUID)
 RETURNS BOOLEAN
 LANGUAGE sql
