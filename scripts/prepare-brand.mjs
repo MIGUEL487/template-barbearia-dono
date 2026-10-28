@@ -14,19 +14,20 @@ for (const tone of ['light', 'dark']) {
   }
 }
 const image = tone => `<image class="on-${tone}" width="64" height="64" href="data:image/png;base64,${icons[`${tone}-128`].toString('base64')}"/>`;
-await writeFile('public/favicon-auto-stilo.svg', `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><style>.on-dark{display:none}@media(prefers-color-scheme:dark){.on-light{display:none}.on-dark{display:block}}</style>${image('light')}${image('dark')}</svg>\n`);
+await writeFile('public/favicon-dono-branco.svg', `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">${image('dark')}</svg>\n`);
 // PNG-compressed ICO entries, supported by current browsers and Windows.
 const sizes = [16, 32, 48];
 const header = Buffer.alloc(6 + sizes.length * 16);
 header.writeUInt16LE(1, 2); header.writeUInt16LE(sizes.length, 4);
 let offset = header.length;
 for (const [i, size] of sizes.entries()) {
-  const entry = 6 + i * 16, buffer = icons[`light-${size}`];
+  const entry = 6 + i * 16, buffer = icons[`dark-${size}`];
   header[entry] = size; header[entry + 1] = size;
   header.writeUInt16LE(1, entry + 4); header.writeUInt16LE(32, entry + 6);
   header.writeUInt32LE(buffer.length, entry + 8); header.writeUInt32LE(offset, entry + 12);
   offset += buffer.length;
 }
-await writeFile('public/favicon.ico', Buffer.concat([header, ...sizes.map(s => icons[`light-${s}`])]));
+await writeFile('public/favicon-dono-branco.ico', Buffer.concat([header, ...sizes.map(s => icons[`dark-${s}`])]));
+await writeFile('public/favicon.ico', Buffer.concat([header, ...sizes.map(s => icons[`dark-${s}`])]));
 await sharp('assets/brand/auto-stilo-on-light.png').resize(180, 180, { fit: 'contain', background: '#fff' }).flatten({background:'#fff'}).png().toFile('public/apple-touch-icon.png');
 console.log('Light/dark logos, adaptive favicon, ICO fallbacks and Apple icon exported.');

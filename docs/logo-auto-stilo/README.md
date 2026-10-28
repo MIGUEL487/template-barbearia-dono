@@ -27,3 +27,7 @@ O dashboard foi testado em build OpenNext local com fixture HTTP em `127.0.0.1:5
 `node scripts/prepare-brand.mjs` regenera as exportações a partir das matrizes locais. `scripts/qa-brand.mjs` exige preview local e fixture local para o dashboard; `REFERENCE_REPO` aponta para o checkout do cliente ao comparar os hashes.
 
 As evidências são de Chromium local. A aba real do navegador, Safari/iOS físico e a publicação após o push não foram validados; o teste cobre a renderização do favicon e suas declarações no HTML. Nenhum segredo ou valor de produção foi usado nos testes.
+
+## Correção: favicon do dono sempre branco
+
+O favicon do dono agora usa sempre o desenho branco com coroas roxas, independentemente do tema. SVG, PNG e ICO apontam para essa variante; os novos nomes evitam reutilizar o caminho anterior em cache. O favicon.ico padrão também foi substituído. Playwright confirmou pixels brancos nos temas claro e escuro. As logos sobre superfícies claras do painel continuam pretas.
