@@ -9,6 +9,7 @@ const config = {
   experimental: { cpus: 2 },
   async headers() {
     return [
+      { source: '/booking-push-sw.js', headers: [{key:'Cache-Control',value:'no-store, max-age=0'}, {key:'Service-Worker-Allowed',value:'/'}] },
       {
         source: "/:path*",
         headers: [

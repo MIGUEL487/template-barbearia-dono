@@ -17,6 +17,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { logoutAction } from "@/app/actions/admin-actions";
+import {deactivateDevicePush} from '@/lib/device-push';
 const links = [
   ["/agenda", "Agenda", Calendar],
   ["/dashboard", "Painel", BarChart3],
@@ -27,6 +28,7 @@ const links = [
   ["/configuracoes", "Configurações", Settings],
 ] as const;
 export function AdminNavigation() {
+  const logout=async()=>{try{await deactivateDevicePush();}catch{console.warn('[Notificações] Não foi possível remover completamente o push na saída.');}await logoutAction();};
   const path = usePathname();
   const [more, setMore] = useState(false);
   return (
@@ -55,7 +57,7 @@ export function AdminNavigation() {
           ))}
         </nav>
         <MotionToggle/>
-        <button onClick={() => logoutAction()}>
+        <button onClick={() => void logout()}>
           <LogOut size={18} />
           Sair do painel
         </button>
@@ -96,7 +98,7 @@ export function AdminNavigation() {
             </Link>
           ))}
           <MotionToggle/>
-        <button onClick={() => logoutAction()}>Sair do painel</button>
+        <button onClick={() => void logout()}>Sair do painel</button>
           <button onClick={() => setMore(false)}>Fechar</button>
         </div>
       )}

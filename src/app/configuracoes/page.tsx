@@ -2,6 +2,7 @@
 
 import {AdminSkeleton} from "@/components/admin/skeleton";
 import {AdminNavigation} from "@/components/admin/navigation";
+import {NotificationControls} from '@/components/admin/notification-controls';
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -148,6 +149,7 @@ export default function ConfiguracoesPage() {
           <h1 className="font-serif text-lg font-bold text-text">Parâmetros da Barbearia</h1>
         </header>
 
+        <NotificationControls/>
         {isLoading ? (<AdminSkeleton/>
 ) : (
           <form onSubmit={handleSubmit} className="bg-surface rounded-[32px] p-8 shadow-soft space-y-8">

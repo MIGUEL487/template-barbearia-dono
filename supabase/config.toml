@@ -4,6 +4,10 @@
 # working directory name when running `supabase init`.
 project_id = "template-barbearia-dono"
 
+[functions.send-booking-push]
+# Database Webhook authenticates with its own secret header inside the function.
+verify_jwt = false
+
 [api]
 enabled = true
 # Port to use for the API URL.

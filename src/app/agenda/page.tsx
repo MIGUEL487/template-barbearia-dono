@@ -3,6 +3,7 @@
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
 import { BookingActions } from "@/components/admin/booking-actions";
+import {NotificationControls} from '@/components/admin/notification-controls';
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -92,9 +93,9 @@ export default function AgendaPage() {
   const [modalNotes, setModalNotes] = useState<string>("");
   const [modalError, setModalError] = useState<string | null>(null);
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (silent = false) => {
     const version=++loadVersion.current;
-    setIsLoading(true);
+    if (!silent) setIsLoading(true);
     setErrorMsg(null);
 
     try {
@@ -229,6 +230,16 @@ export default function AgendaPage() {
     loadData();
   }, [loadData]);
 
+  useEffect(() => {
+    let timer:ReturnType<typeof setTimeout>;
+    const refresh=()=>{clearTimeout(timer);timer=setTimeout(()=>void loadData(true),300);};
+    const visible=()=>{if(document.visibilityState==='visible')refresh();};
+    window.addEventListener('auto-stilo:bookings-changed',refresh);
+    window.addEventListener('focus',refresh);
+    document.addEventListener('visibilitychange',visible);
+    return()=>{clearTimeout(timer);window.removeEventListener('auto-stilo:bookings-changed',refresh);window.removeEventListener('focus',refresh);document.removeEventListener('visibilitychange',visible);};
+  },[loadData]);
+
   const handleCreateQuickBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!barbershopId || !modalBarberId || !modalServiceId) return;
@@ -338,6 +349,8 @@ export default function AgendaPage() {
             <span>Agendamento Rápido</span>
           </button>
         </header>
+
+        <NotificationControls compact/>
 
         {errorMsg && (
           <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs flex items-center gap-2">
