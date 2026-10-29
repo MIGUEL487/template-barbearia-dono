@@ -242,6 +242,16 @@ export async function toggleShopClosedTodayAction(
   return { success: true };
 }
 
+export async function updateBarberPhotoAction(barbershopId:string,barberId:string,avatarUrl:string){
+  const parsed=z.string().trim().max(2048).refine(value=>{if(!value)return true;try{const url=new URL(value);return url.protocol==='https:'&&!url.username&&!url.password}catch{return false}}).safeParse(avatarUrl);
+  if(!parsed.success)return {success:false,error:'Informe um link HTTPS válido para uma imagem pública.'};
+  const supabase=await requireShopClient(barbershopId,['owner','admin']);
+  await requireBarberInShop(supabase,barbershopId,barberId);
+  const {data,error}=await supabase.from('barbers').update({avatar_url:parsed.data||null,updated_at:new Date().toISOString()}).eq('id',barberId).eq('barbershop_id',barbershopId).select('id').maybeSingle();
+  if(error||!data)return {success:false,error:'Não foi possível atualizar a foto deste profissional.'};
+  revalidatePath('/equipe');return {success:true};
+}
+
 export async function createBarberAction(
   barbershopId: string,
   barber: { name: string; bio?: string; avatar_url?: string },

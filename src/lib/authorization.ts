@@ -1,11 +1,14 @@
 import "server-only";
 import { z } from "zod";
 import { createServerActionClient } from "./supabase-server";
+// PostgreSQL also accepts the canonical UUIDs used by the existing shop/seed,
+// whose variant bits are not restricted to the RFC variant checked by z.uuid().
+const postgresUuid=z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
 export async function requireShopClient(
   shopId: string,
   roles: readonly string[] = ["owner", "admin", "barber", "receptionist"],
 ) {
-  z.string().uuid().parse(shopId);
+  postgresUuid.parse(shopId);
   const db = await createServerActionClient();
   const {
     data: { user },
@@ -27,7 +30,7 @@ export async function requireBarberInShop(
   shopId: string,
   barberId: string,
 ) {
-  z.string().uuid().parse(barberId);
+  postgresUuid.parse(barberId);
   const { data, error } = await db
     .from("barbers")
     .select("id")

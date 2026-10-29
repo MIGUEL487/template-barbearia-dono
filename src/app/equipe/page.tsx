@@ -2,6 +2,8 @@
 
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
+import {BarberPhotoEditor} from '@/components/admin/barber-photo-editor';
+import {BarberPhoto} from '@/components/barber-photo';
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -285,18 +287,7 @@ export default function EquipePage() {
                   }`}
                 >
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center text-accent overflow-hidden font-serif font-bold text-base border border-hairline shrink-0">
-                      {b.avatar_url ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img
-                          src={b.avatar_url}
-                          alt={b.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span>{b.name.charAt(0)}</span>
-                      )}
-                    </div>
+                    <BarberPhoto url={b.avatar_url} name={b.name} className="barber-photo-compact"/>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-serif font-bold text-sm text-text truncate">
                         {b.name}
@@ -307,6 +298,7 @@ export default function EquipePage() {
                     </div>
                   </div>
 
+                  {barbershopId&&<BarberPhotoEditor shopId={barbershopId} barber={b} onSaved={loadData}/>}
                   <div className="flex items-center justify-between pt-4 border-t border-hairline text-xs">
                     <button
                       onClick={(e) => {
