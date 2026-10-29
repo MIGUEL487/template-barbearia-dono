@@ -38,12 +38,13 @@ try{for(const width of [1440,390]){
  });
  const page=await context.newPage();await page.clock.setFixedTime(new Date('2026-10-29T12:00:00Z'));
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
- let rows=[],saved=null,gridReads=0,wire,topic,joinRef,arrayProtocol=true;
+ let rows=[],saved=null,gridReads=0,wire,topic,joinRef,arrayProtocol=true,releaseBootstrap;
+ const bootstrap=new Promise(resolve=>releaseBootstrap=resolve);
  await page.route('https://*.supabase.co/**',async route=>{
   const req=route.request(),url=new URL(req.url()),table=url.pathname.split('/').pop(),single=(req.headers().accept||'').includes('object');let data=[];
   if(table==='user')data=user;
   if(table==='shop_members')data=single?{barbershop_id:shop,role:'owner'}:[{barbershop_id:shop,user_id:uid,role:'owner'}];
-  if(table==='barbers')data=[{id:barber,name:'Carlos'}];
+  if(table==='barbers'){await bootstrap;data=[{id:barber,name:'Carlos'}];}
   if(table==='services')data=[{id:'33333333-3333-3333-3333-333333333331',name:'Corte',price:60,duration_minutes:30}];
   if(table==='working_hours')data=[{barber_id:barber,day_of_week:4,start_time:'09:00',end_time:'19:00',lunch_start:'12:00',lunch_end:'13:00',is_off:false}];
   if(table==='site_settings')data={brand_name:'Auto Stilo'};
@@ -66,6 +67,11 @@ try{for(const width of [1440,390]){
   });
  });
  await page.goto(base+'/agenda');
+ await page.locator('.admin-skeleton').waitFor();
+ assert.equal((await page.locator('.admin-skeleton').innerText()).trim(),'');
+ assert.deepEqual(await page.locator('.admin-skeleton img').evaluate(el=>({width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height})),{width:96,height:96});
+ await page.locator('.admin-skeleton').screenshot({path:`docs/notifications/loading-logo-${width}.png`});
+ releaseBootstrap();
  await page.getByText('Agenda conectada em tempo real.',{exact:false}).waitFor();
  assert.equal(await page.evaluate(()=>window.__qa.permissionRequests),0);
  await page.getByRole('button',{name:'Ativar notificações',exact:true}).click();

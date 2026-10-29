@@ -17,7 +17,7 @@ export const metadata: Metadata = {
       { url: "/brand/auto-stilo/favicon-dark-32.png", type: "image/png", sizes: "32x32" },
       { url: "/favicon-dono-branco.svg", type: "image/svg+xml" },
     ],
-    apple: [{ url: "/pwa/apple-180.png", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/pwa/apple-180.png?v=2", sizes: "180x180", type: "image/png" }],
   },
   robots: watermarkEnabled ? { index: false, follow: false } : undefined,
   title:

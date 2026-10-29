@@ -235,21 +235,16 @@ body .admin-page {
 }
 .admin-skeleton {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  padding: 24px 0;
-  min-height: 230px;
+  place-items: center;
+  padding: 48px 24px;
+  min-height: 320px;
+  width: 100%;
 }
-.admin-skeleton p {
-  grid-column: 1/-1;
-  font-family: var(--font-sans), sans-serif;
-  font-size: 14px;
-  color: var(--text-muted);
-}
-.admin-skeleton div {
-  height: 120px;
-  background: var(--surface-2);
-  border-radius: 8px;
+.admin-skeleton img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  border-radius: 24px;
 }
 .row-action {
   font-family: var(--font-sans), sans-serif;
@@ -525,12 +520,6 @@ body .admin-page {
   }
   .admin-content > header button {
     max-width: 100%;
-  }
-  .admin-skeleton {
-    grid-template-columns: 1fr;
-  }
-  .admin-skeleton div {
-    height: 90px;
   }
   .admin-content .agenda-empty-slot {
     display: none;
