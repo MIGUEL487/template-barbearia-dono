@@ -10,15 +10,15 @@ export function InterfaceMotion() {
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     const seen = new WeakSet<Element>();
     const active = new Set<Animation>();
-    const selector = '.site-header .brand, .site-header > .cta, .admin-sidebar nav > a, .admin-mobile-brand, .admin-more > *, .admin-login form, .booking-actions > *, .demo-success > *, [data-motion], h1, h2, .service-row, .team-member, .gallery-piece, .proof > *, .how-section li, .admin-content header, .admin-content article, .admin-content tbody tr, .metric-overview > div, .admin-content form, .admin-content .rounded-xl, .booking-shell > form, .choice, .booking-summary, .field-label, [role="dialog"], .admin-more';
+    const selector = '.site-header .brand, .site-header > .cta, .admin-sidebar nav > a, .admin-mobile-brand, .admin-more > *, .admin-login form, .booking-actions > *, .demo-success > *, [data-motion], h1, h2, .service-row, .team-member, .gallery-piece, .proof > *, .how-section li, .admin-content header, .admin-content article, .admin-content tbody tr, .metric-overview > div, .admin-content form, .admin-content .rounded-xl, .admin-content .grid > div, .barber-tabs button, [data-agenda-time], .barber-photo, .booking-shell > form, .choice, .booking-summary, .field-label, [role="dialog"], .admin-more';
     const observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         observer.unobserve(entry.target);
         if (media.matches || document.hidden) continue;
         const animation = entry.target.animate(
-          [{ translate: "0 16px" }, { translate: "0 0" }],
-          { duration: 560, easing: "cubic-bezier(.22,1,.36,1)" },
+          [{ opacity:0, translate: "0 16px" }, { opacity:1, translate: "0 0" }],
+          { duration: 360, delay:Math.min(Array.from(entry.target.parentElement?.children||[]).indexOf(entry.target),7)*24, easing: "cubic-bezier(.22,1,.36,1)" },
         );
         active.add(animation);
         animation.onfinish = animation.oncancel = () => active.delete(animation);

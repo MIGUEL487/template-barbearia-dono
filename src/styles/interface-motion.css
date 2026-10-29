@@ -26,3 +26,9 @@
 .page-hidden *{animation-play-state:paused!important}
 
 .admin-login .login-logo { width:56px; height:56px; }
+.admin-content :is(button,a,summary):focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+@media(prefers-reduced-motion:no-preference){
+ .admin-content button:not(:disabled):active{transform:scale(.98)}
+ .admin-content .barber-photo img{transition:transform .3s var(--motion-ease),opacity .25s ease}
+ .admin-content .barber-photo:hover img{transform:scale(1.04)}
+}

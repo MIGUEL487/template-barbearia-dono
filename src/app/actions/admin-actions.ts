@@ -242,6 +242,25 @@ export async function toggleShopClosedTodayAction(
   return { success: true };
 }
 
+export async function uploadBarberPhotoAction(barbershopId:string,barberId:string,form:FormData){
+  const supabase=await requireShopClient(barbershopId,['owner','admin']);
+  await requireBarberInShop(supabase,barbershopId,barberId);
+  const file=form.get('photo');
+  if(!(file instanceof File)||!file.size||file.size>800*1024)return {success:false,error:'Selecione uma foto válida de até 800 KB após preparação.'};
+  const bytes=Buffer.from(await file.arrayBuffer());
+  const mime=bytes.subarray(0,4).toString()==='RIFF'&&bytes.subarray(8,12).toString()==='WEBP'?'image/webp':bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))?'image/png':bytes[0]===255&&bytes[1]===216&&bytes[2]===255?'image/jpeg':null;
+  if(!mime||file.type!==mime)return {success:false,error:'Use uma foto JPG, PNG ou WebP válida.'};
+  const extension=mime==='image/webp'?'webp':mime==='image/png'?'png':'jpg';
+  const path=barbershopId+'/'+barberId+'/'+crypto.randomUUID()+'.'+extension;
+  const bucket=supabase.storage.from('barber-photos');
+  const {error:uploadError}=await bucket.upload(path,bytes,{contentType:mime,upsert:false});
+  if(uploadError){console.error('[Supabase] Envio da foto:',{message:uploadError.message});return {success:false,error:'Não foi possível enviar a foto. Confira se o bucket barber-photos e suas permissões foram configurados.'}}
+  const {data:publicPhoto}=bucket.getPublicUrl(path);
+  const {data,error}=await supabase.from('barbers').update({avatar_url:publicPhoto.publicUrl,updated_at:new Date().toISOString()}).eq('id',barberId).eq('barbershop_id',barbershopId).select('id').maybeSingle();
+  if(error||!data){await bucket.remove([path]);return {success:false,error:'A foto foi enviada, mas não foi possível vinculá-la ao profissional.'}}
+  revalidatePath('/equipe');return {success:true};
+}
+
 export async function updateBarberPhotoAction(barbershopId:string,barberId:string,avatarUrl:string){
   const parsed=z.string().trim().max(2048).refine(value=>{if(!value)return true;try{const url=new URL(value);return url.protocol==='https:'&&!url.username&&!url.password}catch{return false}}).safeParse(avatarUrl);
   if(!parsed.success)return {success:false,error:'Informe um link HTTPS válido para uma imagem pública.'};

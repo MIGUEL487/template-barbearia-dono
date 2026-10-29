@@ -3,9 +3,14 @@ const http=require('node:http');
 const uid='99999999-9999-4999-8999-999999999999',shop='11111111-1111-1111-1111-111111111111';
 const barbers=[{id:'22222222-2222-2222-2222-222222222221',barbershop_id:shop,name:'Carlos',bio:'Corte e barba',avatar_url:null,is_active:true},{id:'22222222-2222-2222-2222-222222222222',barbershop_id:shop,name:'Jeronimo',bio:'Corte e acabamento',avatar_url:null,is_active:true}];
 const user={id:uid,aud:'authenticated',role:'authenticated',email:'fixture@example.test'};
+const uploads=[];
 http.createServer(async(req,res)=>{
  res.setHeader('access-control-allow-origin','*');res.setHeader('access-control-allow-headers','*');res.setHeader('access-control-allow-methods','GET,POST,PATCH,OPTIONS');res.setHeader('content-type','application/json');
  if(req.method==='OPTIONS'){res.end();return}
+ if(req.url==='/__uploads'){res.end(JSON.stringify(uploads));return}
+ if(req.url.startsWith('/storage/v1/object/barber-photos/')&&req.method==='POST'){
+  let size=0;for await(const part of req)size+=part.length;uploads.push({size,type:req.headers['content-type'],path:req.url});res.end(JSON.stringify({Key:req.url,Id:'fixture-upload'}));return;
+ }
  const url=new URL(req.url,'http://localhost'),table=url.pathname.split('/').pop();let data=[];
  if(table==='user')data=user;
  if(table==='shop_members')data={barbershop_id:shop,role:'owner',barbershops:{name:'Auto Stilo'}};
