@@ -53,7 +53,15 @@ export async function handleRequest(request:Request){
     const result=await db.from('push_subscriptions').delete().eq('id',sub.id);if(result.error)throw result.error;removed++;return;
    }
    const claim=await db.rpc('claim_booking_push_delivery',{p_event_key:eventId,p_subscription_id:sub.id});
-   if(claim.error)throw claim.error;if(!claim.data)return;
+   if(claim.error)throw claim.error;
+   if(!claim.data){
+    const receipt=await db.from('booking_push_deliveries').select('delivered_at').eq('event_key',eventId).eq('subscription_id',sub.id).maybeSingle();
+    if(receipt.error)throw receipt.error;
+    // A concurrent/crashed invocation is not a successful delivery. Preserve a
+    // retryable response while its lease is pending or attempts are exhausted.
+    if(!receipt.data?.delivered_at)failed++;
+    return;
+   }
    try{
     await webpush.sendNotification({endpoint:sub.endpoint,keys:{p256dh:sub.p256dh,auth:sub.auth}},payload,{TTL:row.status==='hold'?Math.min(900,Math.max(1,Math.floor((Date.parse(row.hold_expires_at!)-Date.now())/1000))):900,urgency:'high',timeout:8000});
     const result=await db.from('booking_push_deliveries').update({delivered_at:new Date().toISOString()}).eq('event_key',eventId).eq('subscription_id',sub.id);if(result.error)throw result.error;sent++;

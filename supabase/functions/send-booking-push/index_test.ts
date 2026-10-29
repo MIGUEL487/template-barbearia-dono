@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 // @deno-types="npm:@types/web-push@3.6.4"
 import webpush from 'web-push';
 import {allowedPushEndpoint,handleRequest} from './handler.ts';
-import {bookingNotification} from '../_shared/booking-notification.ts';
+import {bookingNotification,notificationEventId} from '../_shared/booking-notification.ts';
 
 Deno.test('webhook auth, events, privacy, deduplication, retries and stale subscriptions (local only)',async()=>{
  const shop='11111111-1111-1111-1111-111111111111',id='33333333-3333-3333-3333-333333333333';
@@ -25,7 +25,9 @@ Deno.test('webhook auth, events, privacy, deduplication, retries and stale subsc
    deliveries.set(deliveryKey,{delivered_at:null,locked_until:new Date(Date.now()+90000).toISOString()});return reply(true);
   }
   if(table==='booking_push_deliveries'){
-   const key=url.searchParams.get('event_key')!.slice(3)+':'+url.searchParams.get('subscription_id')!.slice(3);deliveries.set(key,{...deliveries.get(key)!,...await req.json()});return new Response(null,{status:204});
+   const key=url.searchParams.get('event_key')!.slice(3)+':'+url.searchParams.get('subscription_id')!.slice(3);
+   if(req.method==='GET')return reply(deliveries.get(key)||null);
+   deliveries.set(key,{...deliveries.get(key)!,...await req.json()});return new Response(null,{status:204});
   }
   return reply([]);
  });
@@ -39,6 +41,9 @@ Deno.test('webhook auth, events, privacy, deduplication, retries and stale subsc
  try{
   assert.equal((await handleRequest(new Request('http://localhost'))).status,405);
   assert.equal((await handleRequest(request('INSERT',{},'wrong'))).status,401);assert.equal(sends,0);
+  const pendingKey=await notificationEventId(bookingNotification('INSERT',base)!.key)+':sub-1';
+  deliveries.set(pendingKey,{delivered_at:null,locked_until:new Date(Date.now()+90000).toISOString()});
+  assert.equal((await handleRequest(request())).status,503,'an in-flight lease is not a delivery receipt');assert.equal(sends,0);deliveries.delete(pendingKey);
   assert.equal((await handleRequest(request())).status,200);assert.equal(sends,1);
   assert.match(lastPayload,/Nova pré-reserva/);assert.match(lastPayload,/09:00/);assert(!/customer|phone|auth|p256dh|endpoint|total_price/.test(lastPayload));
   await handleRequest(request());assert.equal(sends,1,'duplicate webhook must not send twice');

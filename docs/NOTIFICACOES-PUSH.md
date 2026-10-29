@@ -181,7 +181,9 @@ opaco do evento. A função refaz a leitura do booking, ignora evento ultrapassa
 confere membros atuais e aceita endpoints HTTPS de provedores conhecidos. Respostas
 404/410 removem inscrições. Erros temporários retornam 503 e liberam o claim para
 nova tentativa; até cinco tentativas por evento/aparelho. **Não se presume retry
-automático do Database Webhook**: confira histórico/logs, e reenvie o mesmo payload
+automático do Database Webhook**: um claim ainda em andamento também devolve 503;
+se uma execução tiver sido interrompida, espere 90 segundos pelo vencimento do lease
+antes de reenviar. Confira histórico/logs, e reenvie o mesmo payload
 em caso de falha. Há deduplicação por evento/aparelho no banco e por evento no SW.
 Uma falha de rede entre aceitação do provedor e gravação do recibo pode repetir o
 transporte; o SW impede repetir a exibição durante a janela de retenção (48h,
