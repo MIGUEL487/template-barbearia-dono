@@ -1,30 +1,23 @@
 "use client";
 
-import {AdminSkeleton} from "@/components/admin/skeleton";
-import {AdminNavigation} from "@/components/admin/navigation";
+import { AdminSkeleton } from "@/components/admin/skeleton";
+import { AdminNavigation } from "@/components/admin/navigation";
 import React, { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  Scissors,
   DollarSign,
-  Calendar,
   Download,
   Filter,
-  ChevronLeft,
-  ArrowUpRight,
   Clock,
   CheckCircle2,
   AlertCircle,
-  Loader2,
-  BarChart3,
-  Users,
-  Settings,
-  LogOut,
+  TrendingUp,
+  CreditCard,
+  QrCode,
+  Banknote,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
 import { formatCurrency, fixMojibake } from "@/lib/utils";
-import { logoutAction } from "@/app/actions/admin-actions";
 import { motion } from "motion/react";
 
 interface PaymentRecord {
@@ -51,7 +44,10 @@ export default function FinanceiroPage() {
 
     try {
       const supabase = createClient();
-      const { data: { user }, error: userErr } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: userErr,
+      } = await supabase.auth.getUser();
 
       if (userErr || !user) {
         router.push("/login");
@@ -94,7 +90,9 @@ export default function FinanceiroPage() {
         const mapped: PaymentRecord[] = data.map((p: any) => ({
           id: p.id,
           created_at: p.created_at,
-          customer_name: fixMojibake((p.bookings as any)?.customers?.name) || "Cliente Balcão",
+          customer_name:
+            fixMojibake((p.bookings as any)?.customers?.name) ||
+            "Cliente Balcão",
           amount: Number(p.amount),
           payment_method: p.payment_method,
           status: p.status,
@@ -113,13 +111,9 @@ export default function FinanceiroPage() {
     loadFinancialData();
   }, [loadFinancialData]);
 
-  const handleLogout = async () => {
-    await logoutAction();
-    router.push("/login");
-  };
-
   const filtered = payments.filter((p) => {
-    const matchesMethod = methodFilter === "all" || p.payment_method === methodFilter;
+    const matchesMethod =
+      methodFilter === "all" || p.payment_method === methodFilter;
     const matchesStatus = statusFilter === "all" || p.status === statusFilter;
     return matchesMethod && matchesStatus;
   });
@@ -133,161 +127,252 @@ export default function FinanceiroPage() {
     .reduce((sum, p) => sum + p.amount, 0);
 
   const exportCSV = () => {
-    const headers = "ID,Data,Cliente,Valor,Metodo,Status,ReferenciaExterna\n";
+    const headers =
+      "ID,Data,Cliente,Valor,Metodo,Status,ReferenciaExterna\n";
     const rows = filtered
       .map(
         (t) =>
-          `"${t.id}","${new Date(t.created_at).toLocaleString("pt-BR")}","${t.customer_name}",${
-            t.amount
-          },"${t.payment_method}","${t.status}","${t.external_payment_id || ""}"`
+          `"${t.id}","${new Date(t.created_at).toLocaleString("pt-BR")}","${t.customer_name}",${t.amount},"${t.payment_method}","${t.status}","${t.external_payment_id || ""}"`,
       )
       .join("\n");
 
-    const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob([headers + rows], {
+      type: "text/csv;charset=utf-8;",
+    });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.setAttribute("download", `relatorio-financeiro-${new Date().toISOString().split("T")[0]}.csv`);
+    link.href = url;
+    link.setAttribute(
+      "download",
+      `financeiro-autostilo-${new Date().toISOString().slice(0, 10)}.csv`,
+    );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const navLinks = [
-    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-    { href: "/agenda", label: "Agenda", icon: Calendar },
-    { href: "/equipe", label: "Equipe & Horários", icon: Clock },
-    { href: "/clientes", label: "Clientes", icon: Users },
-    { href: "/servicos", label: "Serviços", icon: Scissors },
-    { href: "/financeiro", label: "Financeiro", icon: DollarSign, active: true },
-    { href: "/configuracoes", label: "Configurações", icon: Settings },
-  ];
-
   return (
-    <div className="admin-page min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
+    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
       <AdminNavigation />
 
       <main className="admin-content flex-1 space-y-6">
-        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
-          <h1 className="font-serif text-lg font-bold text-text">Fluxo Financeiro</h1>
+        {/* Header Bar */}
+        <header className="bg-surface border border-border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-soft">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold text-text">
+                Financeiro & Transações
+              </h1>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-2 text-text-muted border border-hairline">
+                {payments.length} transações
+              </span>
+            </div>
+            <p className="text-xs text-text-muted mt-1">
+              Fluxo de caixa, histórico de pagamentos aprovados e pendências de balcão
+            </p>
+          </div>
 
           <button
             onClick={exportCSV}
             disabled={filtered.length === 0}
-            className="inline-flex items-center gap-2 bg-surface-2 hover:bg-surface-3 text-text px-6 py-2 rounded-full text-xs font-bold transition-all disabled:opacity-40"
+            className="inline-flex items-center gap-2 bg-surface-2 hover:bg-surface-3 text-text border border-hairline px-4 py-2 rounded-xl text-xs font-semibold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
           >
-            <Download className="w-3.5 h-3.5 text-accent" />
+            <Download className="w-4 h-4 text-accent-light" />
             <span>Exportar CSV</span>
           </button>
         </header>
 
+        {/* 2 Main KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-surface border border-border hover:border-emerald-500/30 rounded-2xl p-6 shadow-soft space-y-3 transition-colors"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Total Aprovado / Liquidado
+              </span>
+              <span className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+                <DollarSign className="w-4 h-4" />
+              </span>
+            </div>
+            <div className="text-3xl font-bold text-emerald-400">
+              {formatCurrency(totalReceived)}
+            </div>
+            <p className="text-xs text-text-muted pt-1 border-t border-hairline/60">
+              Pagamentos confirmados via Pix, Cartão ou Dinheiro
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="bg-surface border border-border hover:border-amber-500/30 rounded-2xl p-6 shadow-soft space-y-3 transition-colors"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Total Pendente / Em Aberto
+              </span>
+              <span className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center">
+                <Clock className="w-4 h-4" />
+              </span>
+            </div>
+            <div className="text-3xl font-bold text-amber-400">
+              {formatCurrency(totalPending)}
+            </div>
+            <p className="text-xs text-text-muted pt-1 border-t border-hairline/60">
+              Valores aguardando confirmação ou liquidação no balcão
+            </p>
+          </motion.div>
+        </div>
+
         {errorMsg && (
-          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs">
+          <div className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-xs">
             {errorMsg}
           </div>
         )}
 
-        {/* Resumo Financeiro em Superfícies Tonais */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
-            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
-              Receita Liquidada (Compensada)
-            </span>
-            <div className="font-serif text-3xl font-bold text-emerald-400">
-              {formatCurrency(totalReceived)}
+        {/* Transactions Table / List Card */}
+        <div className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-5">
+          {/* Filters Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-hairline">
+            <h2 className="text-base font-bold text-text">Extrato de Pagamentos</h2>
+
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Method filter */}
+              <div className="bg-surface-2 p-1 rounded-xl flex gap-1 border border-hairline text-xs">
+                {(["all", "pix", "credit_card", "money"] as const).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setMethodFilter(m)}
+                    className={`px-3 py-1.5 rounded-lg font-semibold transition-all !min-h-0 ${
+                      methodFilter === m
+                        ? "bg-accent text-white shadow-sm"
+                        : "text-text-muted hover:text-text"
+                    }`}
+                  >
+                    {{
+                      all: "Todos",
+                      pix: "Pix",
+                      credit_card: "Cartão",
+                      money: "Dinheiro",
+                    }[m]}
+                  </button>
+                ))}
+              </div>
+
+              {/* Status filter */}
+              <div className="bg-surface-2 p-1 rounded-xl flex gap-1 border border-hairline text-xs">
+                {(["all", "approved", "pending"] as const).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setStatusFilter(s)}
+                    className={`px-3 py-1.5 rounded-lg font-semibold transition-all !min-h-0 ${
+                      statusFilter === s
+                        ? "bg-accent text-white shadow-sm"
+                        : "text-text-muted hover:text-text"
+                    }`}
+                  >
+                    {{
+                      all: "Status: Todos",
+                      approved: "Aprovados",
+                      pending: "Pendentes",
+                    }[s]}
+                  </button>
+                ))}
+              </div>
             </div>
-            <p className="text-xs text-text-muted">Total de pagamentos já aprovados e recebidos</p>
           </div>
 
-          <div className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2">
-            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
-              Aguardando Liquidação
-            </span>
-            <div className="font-serif text-3xl font-bold text-accent">
-              {formatCurrency(totalPending)}
-            </div>
-            <p className="text-xs text-text-muted">Sinais Pix abertos ou pagamentos a receber no balcão</p>
-          </div>
-        </div>
-
-        {/* Filtros em Pílulas */}
-        <div className="flex flex-wrap items-center justify-between gap-4 bg-surface rounded-full px-6 py-4 shadow-soft text-xs">
-          <div className="flex items-center gap-2">
-            <Filter className="w-3.5 h-3.5 text-accent" />
-            <span className="text-text-muted font-bold uppercase text-xs">Método:</span>
-            <select aria-label="Filtrar método de pagamento"
-              value={methodFilter}
-              onChange={(e) => setMethodFilter(e.target.value)}
-              className="bg-surface-2 text-text rounded-full px-4 py-2 focus:outline-none focus:ring-1 focus:ring-accent"
-            >
-              <option value="all">Todos os Métodos</option>
-              <option value="pix">Pix</option>
-              <option value="credit_card">Cartão de Crédito</option>
-              <option value="debit_card">Cartão de Débito</option>
-              <option value="cash">Dinheiro no Balcão</option>
-              <option value="in_person">Balcão Geral</option>
-            </select>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-text-muted font-bold uppercase text-xs">Status:</span>
-            <select aria-label="Filtrar status de pagamento"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-surface-2 text-text rounded-full px-4 py-2 focus:outline-none focus:ring-1 focus:ring-accent"
-            >
-              <option value="all">Todos os Status</option>
-              <option value="approved">Aprovados</option>
-              <option value="pending">Pendentes</option>
-              <option value="rejected">Rejeitados</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Tabela em Linhas Respiradas */}
-        <div className="bg-surface rounded-[32px] p-8 shadow-soft">
-          {isLoading ? (<AdminSkeleton/>
-) : filtered.length === 0 ? (
-            <div className="text-center py-12 text-xs text-text-muted">
-              Nenhuma movimentação financeira encontrada com estes filtros.
+          {isLoading ? (
+            <AdminSkeleton />
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-12 space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-surface-2 border border-hairline text-text-muted mx-auto flex items-center justify-center">
+                <DollarSign className="w-6 h-6" />
+              </div>
+              <p className="text-xs text-text-muted">
+                Nenhuma transação localizada com os filtros selecionados.
+              </p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {filtered.map((tx) => (
-                <div
-                  key={tx.id}
-                  className="bg-surface-2 hover:bg-surface-3/60 rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors"
+            <div className="space-y-3">
+              {filtered.map((t, idx) => (
+                <motion.div
+                  key={t.id}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.02 }}
+                  className="bg-surface-2 hover:bg-surface-3/70 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all border border-hairline/60 hover:border-hairline"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-accent font-bold text-xs shrink-0">
-                      <DollarSign className="w-4 h-4" />
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-11 h-11 rounded-xl bg-surface border border-hairline flex items-center justify-center text-text-muted shrink-0">
+                      {t.payment_method === "pix" ? (
+                        <QrCode className="w-5 h-5 text-emerald-400" />
+                      ) : t.payment_method === "credit_card" ? (
+                        <CreditCard className="w-5 h-5 text-accent-light" />
+                      ) : (
+                        <Banknote className="w-5 h-5 text-amber-400" />
+                      )}
                     </div>
                     <div>
-                      <h3 className="font-serif font-bold text-text text-sm">{tx.customer_name}</h3>
-                      <div className="flex items-center gap-2 text-xs text-text-muted mt-2">
-                        <span className="font-mono text-xs">{new Date(tx.created_at).toLocaleString("pt-BR")}</span>
-                        <span>· {tx.payment_method.toUpperCase()}</span>
+                      <h4 className="font-semibold text-text text-sm">
+                        {t.customer_name}
+                      </h4>
+                      <div className="flex items-center gap-3 text-xs text-text-muted mt-1 flex-wrap font-mono">
+                        <span>
+                          {new Date(t.created_at).toLocaleString("pt-BR", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                        {t.external_payment_id && (
+                          <span className="text-[11px] text-text-muted/60">
+                            Ref: {t.external_payment_id.slice(0, 14)}…
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between sm:justify-end gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
+                  <div className="flex items-center justify-between sm:justify-end gap-5 pt-3 sm:pt-0 border-t sm:border-t-0 border-hairline/60">
                     <span
-                      className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider ${
-                        tx.status === "approved"
-                          ? "bg-emerald-500/15 text-emerald-400"
-                          : tx.status === "pending"
-                          ? "bg-accent-soft text-accent"
-                          : "bg-danger/15 text-danger"
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        t.status === "approved"
+                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                          : t.status === "pending"
+                            ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                            : "bg-danger/10 text-danger border border-danger/20"
                       }`}
                     >
-                      {tx.status}
+                      {(
+                        {
+                          approved: "Aprovado",
+                          pending: "Pendente",
+                          rejected: "Rejeitado",
+                          refunded: "Estornado",
+                        } as Record<string, string>
+                      )[t.status] || t.status}
                     </span>
 
-                    <strong className="font-serif font-bold text-base text-text">
-                      {formatCurrency(tx.amount)}
-                    </strong>
+                    <span
+                      className={`font-bold text-base min-w-[80px] text-right ${
+                        t.status === "approved"
+                          ? "text-emerald-400"
+                          : t.status === "pending"
+                            ? "text-amber-400"
+                            : "text-danger"
+                      }`}
+                    >
+                      {formatCurrency(t.amount)}
+                    </span>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           )}

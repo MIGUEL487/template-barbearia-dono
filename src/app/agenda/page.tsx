@@ -3,7 +3,7 @@
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
 import { BookingActions } from "@/components/admin/booking-actions";
-import {NotificationControls} from '@/components/admin/notification-controls';
+import { NotificationControls } from "@/components/admin/notification-controls";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -21,9 +21,8 @@ import {
   Loader2,
   Users,
   DollarSign,
-  Settings,
-  BarChart3,
-  LogOut,
+  Coffee,
+  AlertTriangle,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
 import { formatCurrency, fixMojibake } from "@/lib/utils";
@@ -34,7 +33,16 @@ import {
   logoutAction,
 } from "@/app/actions/admin-actions";
 import { motion, AnimatePresence } from "motion/react";
-import {agendaGrid, blocks, dayBounds, isExpired, saoPauloDate, weekday, type WorkingHours, type TimeOff} from '@/lib/agenda-grid';
+import {
+  agendaGrid,
+  blocks,
+  dayBounds,
+  isExpired,
+  saoPauloDate,
+  weekday,
+  type WorkingHours,
+  type TimeOff,
+} from "@/lib/agenda-grid";
 
 interface Barber {
   id: string;
@@ -75,12 +83,16 @@ export default function AgendaPage() {
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [bookings, setBookings] = useState<BookingSlot[]>([]);
-  const [workingHours,setWorkingHours]=useState<WorkingHours[]>([]);
-  const [timeOff,setTimeOff]=useState<TimeOff[]>([]);
-  const [closed,setClosed]=useState(false);
-  const [now,setNow]=useState(Date.now());
-  const loadVersion=useRef(0);
-  useEffect(()=>{const timer=setInterval(()=>setNow(Date.now()),30000);return()=>clearInterval(timer)},[]);
+  const [workingHours, setWorkingHours] = useState<WorkingHours[]>([]);
+  const [timeOff, setTimeOff] = useState<TimeOff[]>([]);
+  const [closed, setClosed] = useState(false);
+  const [now, setNow] = useState(Date.now());
+  const loadVersion = useRef(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 30000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Modal Agendamento Rápido
   const [showQuickModal, setShowQuickModal] = useState<boolean>(false);
@@ -93,152 +105,194 @@ export default function AgendaPage() {
   const [modalNotes, setModalNotes] = useState<string>("");
   const [modalError, setModalError] = useState<string | null>(null);
 
-  const loadData = useCallback(async (silent = false) => {
-    const version=++loadVersion.current;
-    if (!silent) setIsLoading(true);
-    setErrorMsg(null);
+  const loadData = useCallback(
+    async (silent = false) => {
+      const version = ++loadVersion.current;
+      if (!silent) setIsLoading(true);
+      setErrorMsg(null);
 
-    try {
-      const supabase = createClient();
-      const {
-        data: { user },
-        error: userErr,
-      } = await supabase.auth.getUser();
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+          error: userErr,
+        } = await supabase.auth.getUser();
 
-      if (userErr || !user) {
-        router.push("/login");
-        return;
-      }
-
-      const { data: member, error: memErr } = await supabase
-        .from("shop_members")
-        .select("barbershop_id")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if(version!==loadVersion.current)return;
-      if (memErr || !member) {
-        setErrorMsg("Acesso não autorizado para esta barbearia.");
-        setIsLoading(false);
-        return;
-      }
-
-      const shopId = (member as any).barbershop_id;
-      setBarbershopId(shopId);
-
-      const { data: bData, error: barberError } = await supabase
-        .from("barbers")
-        .select("id, name")
-        .eq("barbershop_id", shopId)
-        .eq("is_active", true)
-        .order("name");
-      if(version!==loadVersion.current)return;
-      if(barberError)throw barberError;
-
-      if (bData) {
-        const cleaned = bData.map((b) => ({ ...b, name: fixMojibake(b.name) }));
-        setBarbers(cleaned);
-        if (cleaned.length > 0 && !modalBarberId) {
-          setModalBarberId(cleaned[0].id);
+        if (userErr || !user) {
+          router.push("/login");
+          return;
         }
-      }
 
-      const { data: sData } = await supabase
-        .from("services")
-        .select("id, name, price, duration_minutes")
-        .eq("barbershop_id", shopId)
-        .eq("is_active", true)
-        .order("name");
+        const { data: member, error: memErr } = await supabase
+          .from("shop_members")
+          .select("barbershop_id")
+          .eq("user_id", user.id)
+          .maybeSingle();
 
-      if(version!==loadVersion.current)return;
-      if (sData) {
-        const cleaned = sData.map((s) => ({ ...s, name: fixMojibake(s.name) }));
-        setServices(cleaned);
-        if (cleaned.length > 0 && !modalServiceId) {
-          setModalServiceId(cleaned[0].id);
+        if (version !== loadVersion.current) return;
+        if (memErr || !member) {
+          setErrorMsg("Acesso não autorizado para esta barbearia.");
+          setIsLoading(false);
+          return;
         }
-      }
 
-      const {start:dayStart,end:dayEnd}=dayBounds(selectedDate);
-      const ids=(bData||[]).map(b=>b.id);
-      const [hours,absences,closures]=await Promise.all([
-        ids.length?supabase.from('working_hours').select('barber_id,day_of_week,start_time,end_time,lunch_start,lunch_end,is_off').in('barber_id',ids).eq('day_of_week',weekday(selectedDate)):Promise.resolve({data:[],error:null}),
-        ids.length?supabase.from('time_off').select('barber_id,starts_at,ends_at,reason').in('barber_id',ids).lt('starts_at',dayEnd).gt('ends_at',dayStart):Promise.resolve({data:[],error:null}),
-        supabase.from('closed_days').select('date').eq('barbershop_id',shopId).eq('date',selectedDate)
-      ]);
-      if(version!==loadVersion.current)return;
-      if(hours.error||absences.error||closures.error)throw hours.error||absences.error||closures.error;
-      setWorkingHours(hours.data||[]);setTimeOff(absences.data||[]);setClosed(!!closures.data?.length);setNow(Date.now());
+        const shopId = (member as any).barbershop_id;
+        setBarbershopId(shopId);
 
-      const { data: bookData, error: bookErr } = await supabase
-        .from("bookings")
-        .select(
-          `
-          id,
-          barber_id,
-          starts_at,
-          ends_at,
-          hold_expires_at,
-          status,
-          total_price,
-          customers (name, phone),
-          booking_items (
-            service_name
+        const { data: bData, error: barberError } = await supabase
+          .from("barbers")
+          .select("id, name")
+          .eq("barbershop_id", shopId)
+          .eq("is_active", true)
+          .order("name");
+
+        if (version !== loadVersion.current) return;
+        if (barberError) throw barberError;
+
+        if (bData) {
+          const cleaned = bData.map((b) => ({ ...b, name: fixMojibake(b.name) }));
+          setBarbers(cleaned);
+          if (cleaned.length > 0 && !modalBarberId) {
+            setModalBarberId(cleaned[0].id);
+          }
+        }
+
+        const { data: sData } = await supabase
+          .from("services")
+          .select("id, name, price, duration_minutes")
+          .eq("barbershop_id", shopId)
+          .eq("is_active", true)
+          .order("name");
+
+        if (version !== loadVersion.current) return;
+        if (sData) {
+          const cleaned = sData.map((s) => ({ ...s, name: fixMojibake(s.name) }));
+          setServices(cleaned);
+          if (cleaned.length > 0 && !modalServiceId) {
+            setModalServiceId(cleaned[0].id);
+          }
+        }
+
+        const { start: dayStart, end: dayEnd } = dayBounds(selectedDate);
+        const ids = (bData || []).map((b) => b.id);
+        const [hours, absences, closures] = await Promise.all([
+          ids.length
+            ? supabase
+                .from("working_hours")
+                .select(
+                  "barber_id,day_of_week,start_time,end_time,lunch_start,lunch_end,is_off",
+                )
+                .in("barber_id", ids)
+                .eq("day_of_week", weekday(selectedDate))
+            : Promise.resolve({ data: [], error: null }),
+          ids.length
+            ? supabase
+                .from("time_off")
+                .select("barber_id,starts_at,ends_at,reason")
+                .in("barber_id", ids)
+                .lt("starts_at", dayEnd)
+                .gt("ends_at", dayStart)
+            : Promise.resolve({ data: [], error: null }),
+          supabase
+            .from("closed_days")
+            .select("date")
+            .eq("barbershop_id", shopId)
+            .eq("date", selectedDate),
+        ]);
+
+        if (version !== loadVersion.current) return;
+        if (hours.error || absences.error || closures.error)
+          throw hours.error || absences.error || closures.error;
+
+        setWorkingHours(hours.data || []);
+        setTimeOff(absences.data || []);
+        setClosed(!!closures.data?.length);
+        setNow(Date.now());
+
+        const { data: bookData, error: bookErr } = await supabase
+          .from("bookings")
+          .select(
+            `
+            id,
+            barber_id,
+            starts_at,
+            ends_at,
+            hold_expires_at,
+            status,
+            total_price,
+            customers (name, phone),
+            booking_items (
+              service_name
+            )
+          `,
           )
-        `,
-        )
-        .eq("barbershop_id", shopId)
-        .lt("starts_at", dayEnd)
-        .gt("ends_at", dayStart)
-        .order("starts_at");
+          .eq("barbershop_id", shopId)
+          .lt("starts_at", dayEnd)
+          .gt("ends_at", dayStart)
+          .order("starts_at");
 
-      if(version!==loadVersion.current)return;
-      if (bookErr) {
-        setErrorMsg(bookErr.message);
-      } else if (bookData) {
-        const mapped: BookingSlot[] = bookData.map((b: any) => {
-          const sName =
-            b.booking_items && b.booking_items.length > 0
-              ? b.booking_items
-                  .map((bs: any) => fixMojibake(bs.service_name))
-                  .filter(Boolean)
-                  .join(", ")
-              : "Serviço";
-          return {
-            id: b.id,
-            barber_id: b.barber_id,
-            customer_name: fixMojibake(b.customers?.name) || (b.status==='hold'?'Pré-reserva':'Cliente'),
-            customer_phone: b.customers?.phone || "",
-            service_name: sName,
-            starts_at: b.starts_at,
-            ends_at: b.ends_at,
-            hold_expires_at: b.hold_expires_at,
-            status: b.status,
-            total_price: Number(b.total_price),
-          };
-        });
-        setBookings(mapped);
+        if (version !== loadVersion.current) return;
+        if (bookErr) {
+          setErrorMsg(bookErr.message);
+        } else if (bookData) {
+          const mapped: BookingSlot[] = bookData.map((b: any) => {
+            const sName =
+              b.booking_items && b.booking_items.length > 0
+                ? b.booking_items
+                    .map((bs: any) => fixMojibake(bs.service_name))
+                    .filter(Boolean)
+                    .join(", ")
+                : "Serviço";
+            return {
+              id: b.id,
+              barber_id: b.barber_id,
+              customer_name:
+                fixMojibake(b.customers?.name) ||
+                (b.status === "hold" ? "Pré-reserva" : "Cliente"),
+              customer_phone: b.customers?.phone || "",
+              service_name: sName,
+              starts_at: b.starts_at,
+              ends_at: b.ends_at,
+              hold_expires_at: b.hold_expires_at,
+              status: b.status,
+              total_price: Number(b.total_price),
+            };
+          });
+          setBookings(mapped);
+        }
+      } catch (err: any) {
+        if (version === loadVersion.current)
+          setErrorMsg(err.message || "Erro ao carregar dados da agenda.");
+      } finally {
+        if (version === loadVersion.current) setIsLoading(false);
       }
-    } catch (err: any) {
-      if(version===loadVersion.current)setErrorMsg(err.message || "Erro ao carregar dados da agenda.");
-    } finally {
-      if(version===loadVersion.current)setIsLoading(false);
-    }
-  }, [router, selectedDate, modalBarberId, modalServiceId]);
+    },
+    [router, selectedDate, modalBarberId, modalServiceId],
+  );
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
   useEffect(() => {
-    let timer:ReturnType<typeof setTimeout>;
-    const refresh=()=>{clearTimeout(timer);timer=setTimeout(()=>void loadData(true),300);};
-    const visible=()=>{if(document.visibilityState==='visible')refresh();};
-    window.addEventListener('auto-stilo:bookings-changed',refresh);
-    window.addEventListener('focus',refresh);
-    document.addEventListener('visibilitychange',visible);
-    return()=>{clearTimeout(timer);window.removeEventListener('auto-stilo:bookings-changed',refresh);window.removeEventListener('focus',refresh);document.removeEventListener('visibilitychange',visible);};
-  },[loadData]);
+    let timer: ReturnType<typeof setTimeout>;
+    const refresh = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => void loadData(true), 300);
+    };
+    const visible = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    window.addEventListener("auto-stilo:bookings-changed", refresh);
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", visible);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("auto-stilo:bookings-changed", refresh);
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", visible);
+    };
+  }, [loadData]);
 
   const handleCreateQuickBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -273,117 +327,152 @@ export default function AgendaPage() {
     await loadData();
   };
 
-  const handleComplete = async (bookingId: string) => {
-    if (!barbershopId) return;
-    if (confirm("Marcar este atendimento como Concluído?")) {
-      const res = await completeBookingAction(barbershopId, bookingId);
-      if (res.success) {
-        await loadData();
-      } else {
-        alert(res.error || "Erro ao concluir agendamento");
-      }
-    }
+  const changeDateByDays = (delta: number) => {
+    const d = new Date(selectedDate + "T12:00:00");
+    d.setDate(d.getDate() + delta);
+    setSelectedDate(d.toISOString().split("T")[0]);
   };
 
-  const handleCancel = async (bookingId: string) => {
-    if (!barbershopId) return;
-    const reason = prompt("Motivo do cancelamento (opcional):");
-    if (reason !== null) {
-      const res = await cancelBookingAction(
-        barbershopId,
-        bookingId,
-        reason || undefined,
-      );
-      if (res.success) {
-        await loadData();
-      } else {
-        alert(res.error || "Erro ao cancelar agendamento");
-      }
-    }
-  };
-
-  const handleLogout = async () => {
-    await logoutAction();
-    router.push("/login");
-  };
-
-  const timeSlots=agendaGrid(selectedDate,modalBarberId,workingHours,bookings,timeOff,closed,now).filter(r=>r.available).map(r=>r.time);
-
-  const navLinks = [
-    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-    { href: "/agenda", label: "Agenda", icon: Calendar, active: true },
-    { href: "/equipe", label: "Equipe & Horários", icon: Clock },
-    { href: "/clientes", label: "Clientes", icon: Users },
-    { href: "/servicos", label: "Serviços", icon: Scissors },
-    { href: "/financeiro", label: "Financeiro", icon: DollarSign },
-    { href: "/configuracoes", label: "Configurações", icon: Settings },
-  ];
+  const timeSlots = agendaGrid(
+    selectedDate,
+    modalBarberId,
+    workingHours,
+    bookings,
+    timeOff,
+    closed,
+    now,
+  )
+    .filter((r) => r.available)
+    .map((r) => r.time);
 
   return (
-    <div className="admin-page min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
-      {/* Menu Lateral Arredondado */}
+    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
+      {/* Sidebar Navigation */}
       <AdminNavigation />
 
-      {/* Área Principal */}
+      {/* Main Content Area */}
       <main className="admin-content flex-1 space-y-6">
-        {/* Barra Superior em Pílula */}
-        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
-          <h1>Agenda</h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-surface-2 px-4 py-2 rounded-full text-xs font-semibold">
-              <Calendar className="w-3.5 h-3.5 text-accent" />
-              <input aria-label="Data da agenda"
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent text-text border-none focus:outline-none text-xs cursor-pointer"
-              />
+        {/* Top Header Bar */}
+        <header className="bg-surface border border-border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-soft">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold text-text">
+                Agenda
+              </h1>
+              {closed && (
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-danger/15 text-danger border border-danger/30">
+                  Barbearia Fechada Hoje
+                </span>
+              )}
             </div>
+            <p className="text-xs text-text-muted mt-1">
+              Grade diária de atendimentos, intervalos e disponibilidade em tempo real
+            </p>
           </div>
 
-          <button
-            onClick={() => setShowQuickModal(true)}
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Agendamento Rápido</span>
-          </button>
+          <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+            {/* Date Navigator */}
+            <div className="flex items-center bg-surface-2 rounded-xl border border-hairline p-1">
+              <button
+                onClick={() => changeDateByDays(-1)}
+                className="p-1.5 text-text-muted hover:text-text hover:bg-surface-3 rounded-lg transition-colors !min-h-0 !w-auto"
+                aria-label="Dia anterior"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center gap-2 px-3 py-1">
+                <Calendar className="w-4 h-4 text-accent-light shrink-0" />
+                <input
+                  aria-label="Data da agenda"
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="bg-transparent text-text border-none focus:outline-none text-xs font-semibold cursor-pointer !min-h-0 !p-0"
+                />
+              </div>
+
+              <button
+                onClick={() => changeDateByDays(1)}
+                className="p-1.5 text-text-muted hover:text-text hover:bg-surface-3 rounded-lg transition-colors !min-h-0 !w-auto"
+                aria-label="Próximo dia"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            <button
+              onClick={() => setShowQuickModal(true)}
+              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-glow transition-all active:scale-95 shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Agendamento Rápido</span>
+            </button>
+          </div>
         </header>
 
-        <NotificationControls compact/>
+        <NotificationControls compact />
 
         {errorMsg && (
-          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs flex items-center gap-2">
+          <div className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-xs flex items-center gap-2">
             <ShieldAlert className="w-4 h-4 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
+        {/* Barber Filter Pill Tabs */}
         <div
-          className="barber-tabs"
+          className="barber-tabs flex items-center gap-2 overflow-x-auto pb-1"
           role="group"
           aria-label="Filtrar profissional"
         >
           <button
             aria-pressed={activeBarber === "all"}
             onClick={() => setActiveBarber("all")}
+            className={`px-4 py-2 rounded-full text-xs font-semibold transition-all shrink-0 ${
+              activeBarber === "all"
+                ? "bg-accent text-white shadow-sm"
+                : "bg-surface border border-border text-text-muted hover:text-text hover:bg-surface-2"
+            }`}
           >
-            Todos
+            Todos os Profissionais ({barbers.length})
           </button>
-          {barbers.map((b) => (
-            <button
-              key={b.id}
-              aria-pressed={activeBarber === b.id}
-              onClick={() => setActiveBarber(b.id)}
-            >
-              {b.name}
-            </button>
-          ))}
+
+          {barbers.map((b) => {
+            const count = bookings.filter(
+              (book) => book.barber_id === b.id && !isExpired(book, now) && blocks(book, now),
+            ).length;
+            return (
+              <button
+                key={b.id}
+                aria-pressed={activeBarber === b.id}
+                onClick={() => setActiveBarber(b.id)}
+                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all shrink-0 flex items-center gap-2 ${
+                  activeBarber === b.id
+                    ? "bg-accent text-white shadow-sm"
+                    : "bg-surface border border-border text-text-muted hover:text-text hover:bg-surface-2"
+                }`}
+              >
+                <span>{b.name}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                    activeBarber === b.id
+                      ? "bg-white/20 text-white"
+                      : "bg-surface-2 text-text-muted"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
+
+        {/* Schedule Grid Area */}
         {isLoading ? (
           <AdminSkeleton />
         ) : errorMsg ? null : barbers.length === 0 ? (
-          <div className="bg-surface rounded-[32px] p-12 text-center text-text-muted text-xs shadow-soft">
+          <div className="bg-surface border border-border rounded-2xl p-12 text-center text-text-muted text-xs shadow-soft">
             Nenhum barbeiro ativo cadastrado nesta barbearia.
           </div>
         ) : (
@@ -392,99 +481,173 @@ export default function AgendaPage() {
               .filter((b) => activeBarber === "all" || b.id === activeBarber)
               .map((barber) => {
                 const barberBookings = bookings.filter(
-                  (b) => b.barber_id === barber.id && !isExpired(b,now),
+                  (b) => b.barber_id === barber.id && !isExpired(b, now),
                 );
-                const rows=agendaGrid(selectedDate,barber.id,workingHours,barberBookings,timeOff,closed,now);
+                const rows = agendaGrid(
+                  selectedDate,
+                  barber.id,
+                  workingHours,
+                  barberBookings,
+                  timeOff,
+                  closed,
+                  now,
+                );
+
+                const activeCount = barberBookings.filter((b) => blocks(b, now)).length;
 
                 return (
                   <div
                     key={barber.id}
-                    className="bg-surface rounded-[32px] p-6 shadow-soft space-y-6"
+                    className="bg-surface border border-border rounded-2xl p-5 shadow-soft flex flex-col space-y-4"
                   >
-                    {/* Cabeçalho do Barbeiro */}
-                    <div className="flex items-center gap-4 pb-4 border-b border-hairline">
-                      <div className="w-12 h-12 rounded-full bg-accent-soft text-accent flex items-center justify-center font-serif text-lg font-bold">
-                        {barber.name.charAt(0)}
+                    {/* Barber Card Header */}
+                    <div className="flex items-center justify-between pb-3 border-b border-hairline">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-accent-soft text-accent-light border border-accent/25 flex items-center justify-center font-bold text-sm shrink-0">
+                          {barber.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-text text-sm">
+                            {barber.name}
+                          </h3>
+                          <span className="text-[11px] text-text-muted">
+                            {activeCount} {activeCount === 1 ? "atendimento" : "atendimentos"} marcados
+                          </span>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-serif font-bold text-text text-base">
-                          {barber.name}
-                        </h3>
-                        <span className="text-xs text-text-muted">
-                          {barberBookings.filter(b=>blocks(b,now)).length}{" "}
-                          {barberBookings.filter(b=>blocks(b,now)).length === 1
-                            ? "atendimento"
-                            : "atendimentos"}{" "}
-                          em {selectedDate.split('-').reverse().join('/')}
-                        </span>
-                      </div>
+
+                      <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                        Ativo
+                      </span>
                     </div>
 
-                    {/* Lista Respirada de Horários do Barbeiro */}
-                    <div className="space-y-2">
-                      {rows.flatMap<{time:string;slotBooking:BookingSlot|undefined;state:string}>(row=>row.bookings.length?row.bookings.map(slotBooking=>({time:row.time,slotBooking,state:row.state})): [{time:row.time,slotBooking:undefined,state:row.state}]).map(({time,slotBooking,state}) => {
+                    {/* Barber Schedule Timeline Slots */}
+                    <div className="space-y-2 overflow-y-auto max-h-[70vh] pr-1">
+                      {rows
+                        .flatMap<{
+                          time: string;
+                          slotBooking: BookingSlot | undefined;
+                          state: string;
+                        }>((row) =>
+                          row.bookings.length
+                            ? row.bookings.map((slotBooking) => ({
+                                time: row.time,
+                                slotBooking,
+                                state: row.state,
+                              }))
+                            : [
+                                {
+                                  time: row.time,
+                                  slotBooking: undefined,
+                                  state: row.state,
+                                },
+                              ],
+                        )
+                        .map(({ time, slotBooking, state }) => {
+                          if (!slotBooking) {
+                            const isLunch = state.toLowerCase().includes("almoço");
+                            const isOff = state.toLowerCase().includes("folga") || state.toLowerCase().includes("fechado");
 
-                        if (!slotBooking) {
+                            return (
+                              <div
+                                key={time}
+                                data-agenda-time={time}
+                                className={`rounded-xl px-3.5 py-2.5 flex items-center justify-between text-xs transition-colors border ${
+                                  isLunch
+                                    ? "bg-amber-500/5 border-amber-500/15 text-amber-300/80"
+                                    : isOff
+                                      ? "bg-danger/5 border-danger/15 text-danger/70"
+                                      : "bg-surface-2/40 hover:bg-surface-2 border-hairline/40 text-text-muted hover:text-text"
+                                }`}
+                              >
+                                <span className="font-mono text-xs font-semibold">
+                                  {time}
+                                </span>
+                                <div className="flex items-center gap-1.5 text-[11px]">
+                                  {isLunch && <Coffee className="w-3 h-3 text-amber-400" />}
+                                  <span>{state}</span>
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          const isConfirmed = slotBooking.status === "confirmed";
+                          const isCompleted = slotBooking.status === "completed";
+                          const isHold = slotBooking.status === "hold";
+                          const isCancelled = slotBooking.status === "cancelled";
+
                           return (
-                            <div
-                              key={time}
+                            <motion.div
+                              key={`${time}-${slotBooking.id}`}
                               data-agenda-time={time}
-                              className="agenda-empty-slot bg-surface-2/40 hover:bg-surface-2 rounded-full px-4 py-2 flex items-center justify-between text-xs transition-colors"
+                              data-booking-id={slotBooking.id}
+                              initial={{ opacity: 0, y: 4 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className={`rounded-xl p-3.5 flex flex-col gap-2.5 transition-all border shadow-sm ${
+                                isCompleted
+                                  ? "bg-emerald-500/10 border-emerald-500/25 text-text"
+                                  : isCancelled
+                                    ? "bg-danger/10 border-danger/25 text-danger line-through opacity-60"
+                                    : isHold
+                                      ? "bg-amber-500/10 border-amber-500/25 text-text"
+                                      : "bg-surface-2 hover:bg-surface-3/70 border-accent/30 text-text"
+                              }`}
                             >
-                              <span className="font-mono text-text-muted/60 text-xs">
-                                {time}
-                              </span>
-                              <span className="text-xs text-text-muted/50">
-                                {state}
-                              </span>
-                            </div>
+                              <div className="flex items-center justify-between">
+                                <span className="font-mono text-xs font-bold text-accent-light">
+                                  {time}
+                                </span>
+                                <span className="font-bold text-xs text-text">
+                                  {formatCurrency(slotBooking.total_price)}
+                                </span>
+                              </div>
+
+                              <div>
+                                <strong className="text-text block text-sm font-semibold">
+                                  {slotBooking.customer_name}
+                                </strong>
+                                <div className="flex items-center justify-between text-xs text-text-muted mt-0.5">
+                                  <span>{slotBooking.service_name}</span>
+                                  <span
+                                    className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
+                                      isCompleted
+                                        ? "bg-emerald-500/20 text-emerald-400"
+                                        : isHold
+                                          ? "bg-amber-500/20 text-amber-400"
+                                          : isConfirmed
+                                            ? "bg-accent/20 text-accent-light"
+                                            : "bg-danger/20 text-danger"
+                                    }`}
+                                  >
+                                    {(
+                                      {
+                                        hold: "Pré-reserva",
+                                        confirmed: "Confirmado",
+                                        cancelled: "Cancelado",
+                                        completed: "Concluído",
+                                        no_show: "Faltou",
+                                      } as const
+                                    )[slotBooking.status] || slotBooking.status}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {isConfirmed &&
+                                rows.find((row) =>
+                                  row.bookings.some((b) => b.id === slotBooking.id),
+                                )?.time === time &&
+                                barbershopId && (
+                                  <div className="pt-2 border-t border-hairline/60 flex justify-end">
+                                    <BookingActions
+                                      shopId={barbershopId}
+                                      bookingId={slotBooking.id}
+                                      onUpdated={loadData}
+                                    />
+                                  </div>
+                                )}
+                            </motion.div>
                           );
-                        }
-
-                        return (
-                          <div
-                            key={`${time}-${slotBooking.id}`}
-                            data-agenda-time={time}
-                            data-booking-id={slotBooking.id}
-                            className={`rounded-2xl p-4 flex flex-col gap-2 transition-all shadow-sm ${
-                              slotBooking.status === "completed"
-                                ? "bg-emerald-500/10 text-emerald-400"
-                                : slotBooking.status === "cancelled"
-                                  ? "bg-danger/10 text-danger line-through opacity-60"
-                                  : "bg-accent-soft text-text"
-                            }`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="font-mono text-xs font-bold text-accent">
-                                {time}
-                              </span>
-                              <span className="font-serif font-bold text-xs">
-                                {formatCurrency(slotBooking.total_price)}
-                              </span>
-                            </div>
-
-                            <div>
-                              <strong className="text-text block text-sm font-serif">
-                                {slotBooking.customer_name || (slotBooking.status==='hold'?'Pré-reserva':'Cliente')}
-                              </strong>
-                              <span className="text-xs text-text-muted">
-                                {slotBooking.service_name}
-                                {' · '}{({hold:'Pré-reserva (hold)',confirmed:'Confirmado',cancelled:'Cancelado · não bloqueia',completed:'Concluído',no_show:'Não compareceu'} as const)[slotBooking.status]}
-                              </span>
-                            </div>
-
-                            {slotBooking.status === "confirmed" &&
-                              rows.find(row=>row.bookings.some(b=>b.id===slotBooking.id))?.time===time &&
-                              barbershopId && (
-                                <BookingActions
-                                  shopId={barbershopId}
-                                  bookingId={slotBooking.id}
-                                  onUpdated={loadData}
-                                />
-                              )}
-                          </div>
-                        );
-                      })}
+                        })}
                     </div>
                   </div>
                 );
@@ -493,24 +656,24 @@ export default function AgendaPage() {
         )}
       </main>
 
-      {/* Modal de Agendamento Rápido com Raio Grande e Campos em Pílula */}
+      {/* Quick Booking Modal */}
       {showQuickModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-surface rounded-[32px] max-w-md w-full p-8 shadow-soft animate-in zoom-in-95 space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-hairline">
-              <h2 className="font-serif text-xl font-bold text-text">
+          <div className="bg-surface border border-border rounded-2xl max-w-md w-full p-6 shadow-soft animate-in zoom-in-95 space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-hairline">
+              <h2 className="text-lg font-bold text-text">
                 Novo Agendamento Rápido
               </h2>
               <button
                 onClick={() => setShowQuickModal(false)}
-                className="w-8 h-8 rounded-full bg-surface-2 text-text-muted hover:text-text flex items-center justify-center"
+                className="w-8 h-8 rounded-lg bg-surface-2 text-text-muted hover:text-text flex items-center justify-center transition-colors !min-h-0"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {modalError && (
-              <div className="bg-danger/10 rounded-[20px] p-4 text-xs text-danger flex items-center gap-2">
+              <div className="bg-danger/10 border border-danger/20 rounded-xl p-3 text-xs text-danger flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 shrink-0" />
                 <span>{modalError}</span>
               </div>
@@ -518,42 +681,45 @@ export default function AgendaPage() {
 
             <form onSubmit={handleCreateQuickBooking} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5">
                   Nome do Cliente
                 </label>
-                <input aria-label="Nome do cliente"
+                <input
+                  aria-label="Nome do cliente"
                   type="text"
                   required
                   value={modalCustomer}
                   onChange={(e) => setModalCustomer(e.target.value)}
                   placeholder="Nome do cliente"
-                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5">
                   WhatsApp / Telefone
                 </label>
-                <input aria-label="WhatsApp do cliente"
+                <input
+                  aria-label="WhatsApp do cliente"
                   type="text"
                   required
                   value={modalPhone}
                   onChange={(e) => setModalPhone(e.target.value)}
                   placeholder="(11) 99999-9999"
-                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
                     Barbeiro
                   </label>
-                  <select aria-label="Profissional do agendamento"
+                  <select
+                    aria-label="Profissional do agendamento"
                     value={modalBarberId}
                     onChange={(e) => setModalBarberId(e.target.value)}
-                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-bg border border-border rounded-xl px-3 py-2.5 text-xs text-text focus:border-accent focus:outline-none cursor-pointer"
                   >
                     {barbers.map((b) => (
                       <option key={b.id} value={b.id}>
@@ -564,13 +730,14 @@ export default function AgendaPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
                     Horário
                   </label>
-                  <select aria-label="Horário do agendamento"
+                  <select
+                    aria-label="Horário do agendamento"
                     value={modalTime}
                     onChange={(e) => setModalTime(e.target.value)}
-                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-bg border border-border rounded-xl px-3 py-2.5 text-xs text-text focus:border-accent focus:outline-none cursor-pointer"
                   >
                     {timeSlots.map((t) => (
                       <option key={t} value={t}>
@@ -582,13 +749,14 @@ export default function AgendaPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
+                <label className="block text-xs font-semibold text-text-muted mb-1.5">
                   Serviço
                 </label>
-                <select aria-label="Serviço do agendamento"
+                <select
+                  aria-label="Serviço do agendamento"
                   value={modalServiceId}
                   onChange={(e) => setModalServiceId(e.target.value)}
-                  className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text focus:ring-2 focus:ring-accent focus:outline-none"
+                  className="w-full bg-bg border border-border rounded-xl px-3 py-2.5 text-xs text-text focus:border-accent focus:outline-none cursor-pointer"
                 >
                   {services.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -598,20 +766,21 @@ export default function AgendaPage() {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-4 pt-4 border-t border-hairline">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
                 <button
                   type="button"
                   onClick={() => setShowQuickModal(false)}
-                  className="px-6 py-2 rounded-full text-xs font-bold text-text-muted hover:text-text"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-text-muted hover:text-text bg-surface-2 hover:bg-surface-3 transition-colors !min-h-0"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
+                  className="bg-accent hover:bg-accent-hover text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-glow disabled:opacity-50 transition-all !min-h-0 flex items-center gap-2"
                 >
-                  {isSubmitting ? "Agendando..." : "Confirmar Agendamento"}
+                  {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  <span>{isSubmitting ? "Agendando..." : "Confirmar Agendamento"}</span>
                 </button>
               </div>
             </form>

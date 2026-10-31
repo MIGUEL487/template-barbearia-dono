@@ -1,441 +1,750 @@
-/* Administrative interface — same navigation and interactions, quieter surfaces. */
+/* Auto Stilo — Admin Design System (Figma Dashdark X + Auto Stilo Brand) */
+
+/* Page layout container */
 body .admin-page {
-  padding: 32px 32px 104px;
-  gap: 40px;
+  padding: 24px 32px 96px;
+  gap: 32px;
   max-width: 1600px;
   margin-inline: auto;
+  min-height: 100vh;
+  background-color: var(--bg);
 }
+
 .admin-content {
   min-width: 0;
   font-family: var(--font-sans), sans-serif;
 }
+
+/* ==========================================================================
+   DESKTOP SIDEBAR NAVIGATION (Dashdark X architecture)
+   ========================================================================== */
 .admin-sidebar {
-  width: 220px;
+  width: 240px;
   flex-shrink: 0;
-  padding: 24px 24px 24px 0;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  background: transparent;
-  border-right: 1px solid var(--hairline);
-  border-radius: 0;
+  gap: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
   align-self: flex-start;
   position: sticky;
-  top: 32px;
+  top: 24px;
 }
+
 .admin-brand {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 24px;
-  font-weight: 400;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 18px;
+  font-weight: 700;
   line-height: 1.2;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 8px;
+  color: var(--text);
+  text-decoration: none;
 }
+
 .admin-brand span {
   font-family: var(--font-sans), sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-brand span span {
   font-size: 12px;
   font-weight: 400;
-  letter-spacing: 0;
   color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
+
 .admin-sidebar nav {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
+
 .admin-sidebar nav a,
 .admin-sidebar > button {
   font-family: var(--font-sans), sans-serif;
   display: flex;
   align-items: center;
-  gap: 16px;
-  min-height: 56px;
-  padding: 8px 16px;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 14px;
   font-size: 14px;
-  font-weight: 400;
-  border-radius: 6px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
   color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
 }
-.admin-sidebar nav [aria-current] {
+
+.admin-sidebar nav a:hover,
+.admin-sidebar > button:hover {
   background: var(--surface-2);
   color: var(--text);
+  border-color: rgba(255, 255, 255, 0.05);
 }
+
+.admin-sidebar nav [aria-current] {
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.22) 0%, rgba(124, 58, 237, 0.06) 100%);
+  color: #FFFFFF;
+  border-left: 3px solid var(--accent);
+  border-color: rgba(124, 58, 237, 0.3);
+  font-weight: 600;
+}
+
 .admin-sidebar > button {
-  margin-top: 16px;
+  margin-top: 12px;
   border-top: 1px solid var(--hairline);
-  border-radius: 0;
-  padding-top: 24px;
+  padding-top: 16px;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
 }
+
+.admin-sidebar > button:hover {
+  background: rgba(255, 90, 101, 0.12);
+  color: var(--danger);
+  border-color: rgba(255, 90, 101, 0.2);
+}
+
 .admin-sidebar svg {
-  stroke-width: 1.5;
+  stroke-width: 1.75;
+  flex-shrink: 0;
 }
+
 .admin-bottom,
 .admin-more,
 .admin-mobile-brand {
   display: none;
 }
+
+/* ==========================================================================
+   HEADINGS & TYPOGRAPHY
+   ========================================================================== */
 .admin-content h1 {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 32px;
-  line-height: 1.2;
-  font-weight: 400;
-  letter-spacing: -0.025em;
-}
-.admin-content h2,
-.admin-content h3,
-.admin-content h4 {
   font-family: var(--font-sans), sans-serif;
-  line-height: 1.5;
-  letter-spacing: 0;
-  font-weight: 400;
-}
-.admin-content h2 {
-  font-size: 19px;
-}
-.admin-content h3,
-.admin-content h4 {
-  font-size: 17px;
-}
-.admin-content .font-serif {
-  font-family: var(--font-sans), sans-serif;
-  letter-spacing: 0;
-  font-weight: 400;
-}
-.admin-content .text-3xl,
-.admin-content .text-2xl:has(> span[aria-label]) {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 34px;
-  line-height: 1.2;
-  font-weight: 400;
-  letter-spacing: -0.025em;
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
-.admin-content .text-xs {
-  font-size: 14px;
-  line-height: 1.6;
+
+.admin-content h2 {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
+
+.admin-content h3,
+.admin-content h4 {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.admin-content .font-serif {
+  font-family: var(--font-sans), sans-serif !important;
+}
+
+.admin-content h1.font-serif {
+  font-family: var(--font-sans), sans-serif !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.admin-content .text-3xl,
+.admin-content .text-2xl:has(> span[aria-label]) {
+  font-family: var(--font-sans), sans-serif !important;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.admin-content .text-xs {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .admin-content .font-bold,
 .admin-content .font-semibold {
-  font-weight: 400;
+  font-weight: 600;
 }
-.admin-content .uppercase {
-  font-family: var(--font-sans), sans-serif;
-  text-transform: none;
-  letter-spacing: 0;
-  font-weight: 400;
-}
-.admin-content .shadow-soft,
-.admin-content .shadow-glow,
-.admin-content .shadow-sm {
-  box-shadow: none;
-}
-.admin-content .border {
-  border-color: var(--hairline);
-}
+
+/* ==========================================================================
+   CARDS & SURFACES (Dashdark X standard)
+   ========================================================================== */
 .admin-content .bg-surface {
-  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
 }
+
+.admin-content .bg-surface-2 {
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-content .border {
+  border-color: var(--border);
+}
+
 .admin-content .rounded-2xl,
 .admin-content .rounded-3xl,
 .admin-content [class*="rounded-["] {
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
 }
+
 .admin-content .bg-accent-soft {
-  background: var(--surface-2);
+  background: var(--accent-soft);
+  color: var(--accent-light);
 }
+
+/* Header bar */
 .admin-content > header {
-  padding: 24px 0 32px;
-  background: transparent;
-  border-radius: 0;
-  border-bottom: 1px solid var(--hairline);
-  gap: 24px;
+  padding: 16px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+  gap: 16px;
   flex-wrap: wrap;
-  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
 .admin-content > header > div {
   min-width: 0;
   max-width: 100%;
 }
+
 .admin-content > header p {
-  font-size: 14px;
-  margin-top: 16px;
-  line-height: 1.6;
+  font-size: 13px;
+  margin-top: 4px;
+  line-height: 1.5;
   color: var(--text-muted);
 }
+
+/* Form Controls */
 .admin-content button,
 .admin-content input,
 .admin-content select,
 .admin-content textarea {
   font-family: var(--font-sans), sans-serif;
-  min-height: 48px;
-  border-radius: 8px;
-  box-shadow: none;
-  font-weight: 400;
+  min-height: 44px;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
 }
+
 .admin-content input,
 .admin-content select,
 .admin-content textarea {
-  font-size: 16px;
-  background: var(--surface-2);
+  font-size: 14px;
+  background: #080F25;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
+
+.admin-content input:focus,
+.admin-content select:focus,
+.admin-content textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+}
+
+.admin-content input::placeholder,
+.admin-content textarea::placeholder {
+  color: #637099;
+}
+
+/* Buttons */
 .admin-content .bg-accent {
-  background: var(--surface-3);
-  color: var(--text);
+  background: var(--accent);
+  color: #FFFFFF;
 }
+
 .admin-content .hover\:bg-accent-hover:hover {
-  background: var(--surface-3);
-  color: var(--text);
+  background: var(--accent-hover);
+  color: #FFFFFF;
 }
+
 .admin-content > header > button.bg-accent,
 .admin-content > header a.bg-accent {
-  background: var(--accent-strong);
-  color: white;
-  border-radius: 8px;
-  font-size: 14px;
+  background: var(--accent);
+  color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 18px;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+  transition: all 0.15s ease;
 }
-.admin-content .text-text-muted\/50,
-.admin-content .text-text-muted\/60 {
-  color: var(--text-muted);
+
+.admin-content > header > button.bg-accent:hover,
+.admin-content > header a.bg-accent:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.45);
 }
-.admin-content .rounded-full.bg-accent-soft {
-  background: transparent;
-  color: var(--text-muted);
-}
-.admin-content a {
-  font-weight: 400;
-}
-.admin-content header > div {
-  flex-wrap: wrap;
-  min-width: 0;
-}
-.admin-content header > div > div {
-  flex-wrap: wrap;
-  max-width: 100%;
-}
+
+/* Tab filters */
 .barber-tabs {
   display: flex;
-  gap: 16px;
+  gap: 8px;
   overflow-x: auto;
-  padding-block: 16px;
-  border-bottom: 1px solid var(--hairline);
+  padding-block: 4px;
+  margin-bottom: 20px;
 }
+
 .barber-tabs button {
-  padding: 8px 16px;
-  min-height: 48px;
-  background: transparent;
-  border-radius: 6px;
+  padding: 8px 18px;
+  min-height: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
   white-space: nowrap;
-  font-size: 14px;
-  font-family: var(--font-sans), sans-serif;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
-.barber-tabs [aria-pressed="true"] {
+
+.barber-tabs button:hover {
   background: var(--surface-2);
   color: var(--text);
 }
+
+.barber-tabs [aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #FFFFFF;
+  box-shadow: 0 2px 10px rgba(124, 58, 237, 0.3);
+}
+
+/* Skeleton Loading */
 .admin-skeleton {
   display: grid;
   place-items: center;
   padding: 48px 24px;
-  min-height: 320px;
+  min-height: 280px;
   width: 100%;
 }
+
 .admin-skeleton img {
-  width: 96px;
-  height: 96px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
-  border-radius: 24px;
+  border-radius: 20px;
+  filter: drop-shadow(0 0 16px rgba(124, 58, 237, 0.35));
 }
+
+/* Action button in table/rows */
 .row-action {
   font-family: var(--font-sans), sans-serif;
-  font-size: 14px;
-  padding: 8px 16px;
-  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  min-height: 48px;
+  border-radius: var(--radius-lg);
+  min-height: 40px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
+
+.row-action:hover {
+  background: var(--surface-3);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   MODAL / BOOKING SHEET
+   ========================================================================== */
 .booking-sheet {
   font-family: var(--font-sans), sans-serif;
   background: var(--surface);
   color: var(--text);
-  max-width: 500px;
+  max-width: 520px;
   width: calc(100% - 32px);
-  padding: 32px;
+  padding: 28px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.85);
 }
+
 .booking-sheet::backdrop {
-  background: #000b;
+  background: rgba(4, 8, 20, 0.8);
+  backdrop-filter: blur(8px);
 }
+
 .booking-sheet h2 {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 28px;
-  font-weight: 400;
-  margin-bottom: 24px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text);
 }
+
 .booking-sheet p {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  color: var(--text-muted);
 }
+
 .booking-sheet button {
   display: block;
   width: 100%;
-  font-family: var(--font-sans), sans-serif;
-  font-size: 15px;
-  padding: 16px;
-  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px;
+  border-radius: var(--radius-lg);
   margin: 8px 0;
-  background: transparent;
-  border: 1px solid var(--hairline);
-  min-height: 48px;
-}
-.booking-sheet [aria-pressed="true"] {
-  background: var(--surface-3);
-  border-color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   color: var(--text);
+  min-height: 44px;
+  cursor: pointer;
 }
+
+.booking-sheet [aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #FFFFFF;
+}
+
 .booking-sheet label {
   display: grid;
-  gap: 16px;
-  margin: 24px 0;
+  gap: 8px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: var(--text-muted);
 }
+
 .booking-sheet input {
-  font-family: var(--font-sans), sans-serif;
-  font-size: 16px;
-  background: var(--bg);
-  padding: 16px;
-  border-radius: 8px;
+  font-size: 14px;
+  background: #080F25;
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  color: var(--text);
 }
+
 .booking-sheet button:disabled {
   opacity: 0.45;
+  cursor: not-allowed;
 }
+
+/* ==========================================================================
+   REVENUE CHART (Dashdark X area / bar design)
+   ========================================================================== */
 .revenue-chart {
-  padding: 32px 0;
+  padding: 24px 0 16px;
   border-radius: 0;
   background: transparent;
 }
+
 .revenue-chart h2 {
-  font-family: var(--font-sans), sans-serif;
-  font-size: 19px;
-  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
 }
+
 .revenue-chart > p {
-  font-family: var(--font-sans), sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-muted);
 }
+
 .revenue-bars {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 16px;
-  margin-top: 32px;
+  margin-top: 24px;
 }
+
 .revenue-bars > div {
   min-width: 0;
   text-align: center;
 }
+
 .revenue-bars span {
   font-family: var(--font-sans), sans-serif;
   font-size: 12px;
+  font-weight: 600;
   display: block;
   white-space: nowrap;
-  color: var(--text-muted);
+  color: var(--text);
+  margin-bottom: 6px;
 }
+
 .revenue-track {
-  height: 150px;
+  height: 140px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  margin: 16px auto;
-  width: 30%;
+  margin: 8px auto;
+  width: 40%;
+  max-width: 36px;
   background: var(--surface-2);
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
+
+.revenue-track > div {
+  background: linear-gradient(180deg, #8B5CF6 0%, #7C3AED 100%) !important;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+}
+
 .revenue-bars small {
   font-family: var(--font-sans), sans-serif;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 500;
   color: var(--text-muted);
+  display: block;
+  margin-top: 8px;
 }
+
+/* ==========================================================================
+   LOGIN SCREEN (Dark SaaS Premium)
+   ========================================================================== */
 .admin-login {
   font-family: var(--font-sans), sans-serif;
   min-height: 100svh;
-  padding: 48px 24px 104px;
-}
-.admin-login > div {
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 24px 0;
-}
-.admin-login > div > div:first-child {
-  align-items: flex-start;
-  text-align: left;
-}
-.admin-login > div > div:first-child > div:first-child {
+  padding: 48px 24px;
+  background: var(--bg);
+  background-image: radial-gradient(circle at 50% 20%, rgba(124, 58, 237, 0.12) 0%, transparent 60%);
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.admin-login > div {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7);
+  padding: 40px;
+  max-width: 440px;
+  width: 100%;
+}
+
 .admin-login h1 {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 36px;
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: -0.025em;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
 }
+
 .admin-login p {
-  font-family: var(--font-sans), sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-}
-.admin-login label {
-  font-family: var(--font-sans), sans-serif;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.5;
   color: var(--text-muted);
 }
+
+.admin-login label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
 .admin-login input {
-  font-family: var(--font-sans), sans-serif;
-  font-size: 16px;
-  min-height: 56px;
-  background: var(--surface-2);
-  border-radius: 8px;
-  box-shadow: none;
-  border: 1px solid var(--hairline);
+  font-size: 14px;
+  min-height: 48px;
+  background: #080F25;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px 16px;
 }
+
+.admin-login input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+  outline: none;
+}
+
 .admin-login button[type="submit"] {
-  background: var(--accent-strong);
-  color: white;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 400;
-  box-shadow: none;
-  min-height: 56px;
+  background: var(--accent);
+  color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 48px;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
-.admin-login > div > div:last-child {
-  font-size: 12px;
-  justify-content: flex-start;
+
+.admin-login button[type="submit"]:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
 }
-.admin-login .rounded-full {
-  box-shadow: none;
+
+/* ==========================================================================
+   METRICS & STATUS BADGES (Dashdark X tokens)
+   ========================================================================== */
+.admin-content .metric-overview {
+  gap: 20px;
+  padding-block: 8px;
 }
+
+.admin-content .metric-overview > div {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.admin-content .metric-overview > div:hover {
+  border-color: rgba(124, 58, 237, 0.35);
+}
+
+/* Vibrant Dashdark X Status Colors on Dark */
+.admin-content .text-emerald-400,
+.admin-content .text-green-400 {
+  color: #14CA74 !important;
+}
+
+.admin-content .text-amber-300,
+.admin-content .text-amber-400,
+.admin-content .text-yellow-400 {
+  color: #FDB52A !important;
+}
+
+.admin-content .text-red-400 {
+  color: #FF5A65 !important;
+}
+
+.admin-content .text-blue-400,
+.admin-content .text-cyan-400 {
+  color: #38BDF8 !important;
+}
+
+.admin-login .text-amber-300,
+.admin-login .text-amber-400 {
+  color: #FDB52A !important;
+}
+
+.admin-login .text-red-400 {
+  color: #FF5A65 !important;
+}
+
+/* Barber Photos */
+.barber-photo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.barber-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.barber-photo-compact {
+  width: 44px;
+  height: 44px;
+}
+
+.barber-photo-editor {
+  margin-block: 16px;
+  font-size: 13px;
+}
+
+.barber-photo-editor summary {
+  cursor: pointer;
+  color: var(--accent-light);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.barber-photo-editor form {
+  margin-top: 12px;
+}
+
+.barber-photo-editor .field-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+
+.barber-photo-editor input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: #080F25;
+  color: var(--text);
+}
+
+/* ==========================================================================
+   RESPONSIVE (TABLETS & MOBILE)
+   ========================================================================== */
 @media (max-width: 1023px) {
   body .admin-page {
     display: block;
-    padding: 24px 24px 104px;
+    padding: 16px 16px 104px;
   }
+
   .admin-sidebar {
     display: none;
   }
+
   .admin-mobile-brand {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     align-items: center;
-    font-family: var(--font-serif), Georgia, serif;
-    font-size: 23px;
-    font-weight: 400;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 18px;
+    font-weight: 700;
     line-height: 1.3;
-    padding: 8px 0 32px;
+    padding: 8px 4px 20px;
+    color: var(--text);
   }
+
   .admin-bottom {
     display: flex;
     position: fixed;
@@ -443,12 +752,15 @@ body .admin-page {
     left: 0;
     right: 0;
     z-index: 40;
-    background: var(--bg);
-    border-top: 1px solid var(--hairline);
+    background: rgba(16, 25, 53, 0.94);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
     padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
     justify-content: space-around;
-    gap: 8px;
+    gap: 4px;
   }
+
   .admin-bottom a,
   .admin-bottom button {
     position: relative;
@@ -456,165 +768,175 @@ body .admin-page {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 4px;
     font-family: var(--font-sans), sans-serif;
-    font-size: 12px;
-    min-width: 52px;
+    font-size: 11px;
+    min-width: 48px;
     min-height: 48px;
     color: var(--text-muted);
-    font-weight: 400;
+    font-weight: 500;
+    text-decoration: none;
+    background: transparent;
+    border: none;
   }
+
   .admin-bottom [aria-current] {
-    color: var(--text);
+    color: #FFFFFF;
   }
+
   .admin-bottom [aria-current]::after {
     content: "";
     position: absolute;
-    bottom: 0;
-    height: 2px;
-    width: 18px;
+    bottom: 2px;
+    height: 3px;
+    width: 20px;
     background: var(--accent);
-    border-radius: 1px;
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--accent);
   }
+
   .admin-bottom svg {
-    stroke-width: 1.5;
+    stroke-width: 1.75;
   }
+
   .admin-more {
     display: grid;
     position: fixed;
-    bottom: 88px;
+    bottom: 84px;
     right: 16px;
     left: 16px;
-    max-width: 500px;
+    max-width: 480px;
     margin-left: auto;
     z-index: 45;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
+    border-radius: var(--radius-xl);
+    padding: 20px;
     gap: 8px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
   }
+
   .admin-more h2 {
-    font-family: var(--font-serif), Georgia, serif;
-    font-size: 26px;
-    font-weight: 400;
-    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
   }
+
   .admin-more a,
   .admin-more button {
     font-family: var(--font-sans), sans-serif;
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 16px;
-    font-size: 16px;
-    min-height: 48px;
-    font-weight: 400;
+    gap: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    min-height: 44px;
+    font-weight: 500;
+    color: var(--text);
+    border-radius: var(--radius-lg);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    text-decoration: none;
   }
+
   .admin-content {
     padding-bottom: 40px;
   }
+
   .admin-content > header {
-    padding: 16px 0 24px;
-    gap: 24px;
+    padding: 14px 18px;
+    gap: 16px;
   }
-  .admin-content > header button {
-    max-width: 100%;
-  }
+
   .admin-content .agenda-empty-slot {
     display: none;
   }
+
   .admin-content .fixed.inset-0 {
     align-items: flex-end;
-    padding: 0 0 88px;
-    background: #000b;
-    backdrop-filter: none;
+    padding: 0 0 84px;
+    background: rgba(4, 8, 20, 0.8);
+    backdrop-filter: blur(8px);
   }
+
   .admin-content .fixed.inset-0 > div {
-    border-radius: 12px 12px 0 0;
-    max-height: 78svh;
+    border-radius: 16px 16px 0 0;
+    max-height: 80svh;
     overflow-y: auto;
     padding-bottom: 32px;
   }
+
   .admin-content .grid {
     min-width: 0;
   }
 }
+
 @media (max-width: 767px) {
   .admin-content h1 {
-    font-size: 28px;
+    font-size: 22px;
   }
+
   .admin-content .text-3xl {
-    font-size: 32px;
+    font-size: 26px;
   }
+
   .admin-content .booking-row-status {
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
   }
+
   .admin-content .booking-row-status .row-action {
     width: 100%;
   }
+
   .admin-content .flex.items-center {
     flex-wrap: wrap;
     max-width: 100%;
   }
+
   .admin-content .flex.items-center > div {
     min-width: 0;
     max-width: 100%;
   }
+
   .admin-content input[type="time"] {
     width: 110px;
     min-width: 0;
     max-width: 100%;
   }
+
   .admin-content input[type="date"] {
     max-width: 100%;
     min-width: 0;
   }
-  .admin-content .pl-3.border-l {
-    padding-left: 0;
-    border-left: 0;
-  }
+
   .booking-sheet {
     margin: auto 0 0;
     max-width: none;
     width: 100%;
-    border-radius: 12px 12px 0 0;
+    border-radius: 16px 16px 0 0;
     padding-bottom: calc(32px + env(safe-area-inset-bottom));
   }
+
   .revenue-bars {
     gap: 8px;
   }
+
   .revenue-track {
-    height: 120px;
-    width: 36%;
+    height: 110px;
+    width: 44%;
   }
+
   .revenue-chart {
-    padding: 24px 0;
+    padding: 16px 0;
   }
+
   .admin-login h1 {
-    font-size: 34px;
+    font-size: 24px;
   }
+
   .admin-login {
-    padding-inline: 24px;
+    padding-inline: 16px;
   }
 }
-
-.admin-content .metric-overview{gap:32px;padding-block:24px;border-bottom:1px solid var(--hairline)}.admin-content .metric-overview>div{background:transparent;border:0;border-radius:0;padding:0;box-shadow:none}.admin-content .metric-overview>div>div:first-child>span:has(>svg){display:none}.admin-content .revenue-bars>div:not(:last-child) .revenue-track>div{background:var(--text-muted)!important}
-/* Page titles retain serif even when the legacy utility class is present. */
-.admin-content h1.font-serif{font-family:var(--font-serif),Georgia,serif;font-weight:400;letter-spacing:-.025em}
-/* Shared light language, restrained application motion. */
-.admin-content .metric-overview>div{border-radius:24px}.admin-sidebar{background:var(--bg)}.admin-bottom{background:var(--bg)}.admin-more{background:var(--surface)}.admin-login{background:var(--bg-soft)}.admin-login>div{border-radius:32px;background:white}.admin-content :is(input,select,textarea){color:var(--ink);background:var(--surface)}.admin-content button.bg-accent{color:white}.admin-content .revenue-track>div{background:var(--accent)!important}
-/* AA corrections for legacy dark-theme utility combinations on white. */
-.admin-content button.bg-accent,.admin-content button.bg-accent:hover{background:var(--accent);color:white}.admin-content .bg-surface-3.text-white{color:var(--ink)}.admin-content .text-emerald-400,.admin-content .text-green-400{color:#14633d}.admin-content .text-amber-300,.admin-content .text-amber-400,.admin-content .text-yellow-400{color:#805300}.admin-content .text-red-400{color:#b42332}.admin-content .text-blue-400,.admin-content .text-cyan-400{color:#175ca1}
-.admin-content .opacity-70{opacity:1}
-
-.admin-login .text-amber-300,.admin-login .text-amber-400{color:#805300}.admin-login .text-red-400{color:#b42332}
-.barber-photo{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:64px;height:64px;overflow:hidden;border-radius:50%;background:var(--surface);color:var(--text-muted);border:1px solid var(--hairline)}
-.barber-photo img{width:100%;height:100%;object-fit:cover}
-.barber-photo-compact{width:48px;height:48px}
-.barber-photo-editor{margin-block:16px;font-size:14px}
-.barber-photo-editor summary{cursor:pointer;text-decoration:underline;text-underline-offset:4px}
-.barber-photo-editor form{margin-top:16px}
-.barber-photo-editor .field-label{display:flex;flex-direction:column;gap:8px;overflow-wrap:anywhere}
-.barber-photo-editor input{width:100%;min-width:0;padding:8px 16px;border:1px solid var(--hairline);border-radius:16px}

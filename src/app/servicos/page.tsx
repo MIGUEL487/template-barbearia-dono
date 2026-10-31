@@ -1,32 +1,28 @@
 "use client";
 
-import {AdminSkeleton} from "@/components/admin/skeleton";
-import {AdminNavigation} from "@/components/admin/navigation";
+import { AdminSkeleton } from "@/components/admin/skeleton";
+import { AdminNavigation } from "@/components/admin/navigation";
 import React, { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Scissors,
   Plus,
   Clock,
   DollarSign,
-  ChevronLeft,
   Check,
-  Edit2,
-  Trash2,
-  UserCheck,
   Loader2,
   X,
   ShieldAlert,
-  BarChart3,
-  Calendar,
-  Users,
-  Settings,
-  LogOut,
+  Layers,
+  Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
 import { formatCurrency, formatDuration, fixMojibake } from "@/lib/utils";
-import { createServiceAction, toggleServiceActiveAction, logoutAction } from "@/app/actions/admin-actions";
+import {
+  createServiceAction,
+  toggleServiceActiveAction,
+  logoutAction,
+} from "@/app/actions/admin-actions";
 import { motion, AnimatePresence } from "motion/react";
 
 interface ServiceItem {
@@ -62,7 +58,10 @@ export default function ServicosPage() {
 
     try {
       const supabase = createClient();
-      const { data: { user }, error: userErr } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: userErr,
+      } = await supabase.auth.getUser();
 
       if (userErr || !user) {
         router.push("/login");
@@ -102,7 +101,7 @@ export default function ServicosPage() {
             price: Number(s.price),
             is_active: s.is_active,
             category: s.category ? fixMojibake(s.category) : "Geral",
-          }))
+          })),
         );
       }
     } catch (err: any) {
@@ -118,7 +117,11 @@ export default function ServicosPage() {
 
   const handleToggleActive = async (service: ServiceItem) => {
     if (!barbershopId) return;
-    const res = await toggleServiceActiveAction(barbershopId, service.id, service.is_active);
+    const res = await toggleServiceActiveAction(
+      barbershopId,
+      service.id,
+      service.is_active,
+    );
     if (res.success) {
       await loadServices();
     } else {
@@ -171,102 +174,135 @@ export default function ServicosPage() {
     await loadServices();
   };
 
-  const handleLogout = async () => {
-    await logoutAction();
-    router.push("/login");
-  };
-
-  const navLinks = [
-    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-    { href: "/agenda", label: "Agenda", icon: Calendar },
-    { href: "/equipe", label: "Equipe & Horários", icon: Clock },
-    { href: "/clientes", label: "Clientes", icon: Users },
-    { href: "/servicos", label: "Serviços", icon: Scissors, active: true },
-    { href: "/financeiro", label: "Financeiro", icon: DollarSign },
-    { href: "/configuracoes", label: "Configurações", icon: Settings },
-  ];
+  const activeCount = services.filter((s) => s.is_active).length;
+  const categoriesCount = new Set(services.map((s) => s.category)).size;
 
   return (
-    <div className="admin-page min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
+    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
       <AdminNavigation />
 
       <main className="admin-content flex-1 space-y-6">
-        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
-          <h1 className="font-serif text-lg font-bold text-text">Catálogo de Serviços</h1>
+        {/* Header Bar */}
+        <header className="bg-surface border border-border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-soft">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold text-text">
+                Catálogo de Serviços
+              </h1>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-2 text-text-muted border border-hairline">
+                {services.length} serviços
+              </span>
+            </div>
+            <p className="text-xs text-text-muted mt-1">
+              Cadastre e gerencie os procedimentos, preços e durações oferecidos na barbearia
+            </p>
+          </div>
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
+            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-glow transition-all active:scale-95 shrink-0"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-4 h-4" />
             <span>Novo Serviço</span>
           </button>
         </header>
 
+        {/* Quick KPI stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-surface border border-border rounded-xl p-4 shadow-soft">
+            <span className="text-xs text-text-muted">Total de Procedimentos</span>
+            <div className="text-2xl font-bold text-text mt-1">{services.length}</div>
+          </div>
+          <div className="bg-surface border border-border rounded-xl p-4 shadow-soft">
+            <span className="text-xs text-text-muted">Serviços Ativos no Site</span>
+            <div className="text-2xl font-bold text-emerald-400 mt-1">{activeCount}</div>
+          </div>
+          <div className="bg-surface border border-border rounded-xl p-4 shadow-soft">
+            <span className="text-xs text-text-muted">Categorias Distintas</span>
+            <div className="text-2xl font-bold text-accent-light mt-1">{categoriesCount}</div>
+          </div>
+        </div>
+
         {errorMsg && (
-          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs">
-            {errorMsg}
+          <div className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-xs flex items-center gap-2">
+            <ShieldAlert className="w-4 h-4 shrink-0" />
+            <span>{errorMsg}</span>
           </div>
         )}
 
-        <div className="bg-surface rounded-[32px] p-8 shadow-soft">
-          {isLoading ? (<AdminSkeleton/>
-) : services.length === 0 ? (
-            <div className="text-center py-12 text-xs text-text-muted">
-              Nenhum serviço cadastrado ainda.
+        {/* Services List Card */}
+        <div className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-hairline">
+            <h2 className="text-base font-bold text-text">Todos os Serviços</h2>
+            <span className="text-xs text-text-muted">Clique em Ativar/Desativar para controlar visibilidade</span>
+          </div>
+
+          {isLoading ? (
+            <AdminSkeleton />
+          ) : services.length === 0 ? (
+            <div className="text-center py-12 space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-surface-2 border border-hairline text-text-muted mx-auto flex items-center justify-center">
+                <Scissors className="w-6 h-6" />
+              </div>
+              <p className="text-xs text-text-muted">Nenhum serviço cadastrado ainda.</p>
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="inline-flex items-center gap-1.5 text-xs text-accent-light hover:underline font-medium"
+              >
+                <Plus className="w-3.5 h-3.5" /> Adicionar primeiro serviço
+              </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {services.map((service, idx) => (
                 <motion.div
                   key={service.id}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.04 }}
-                  whileHover={{ y: -2 }}
-                  className={`rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all border border-hairline/60 ${
-                    service.is_active ? "bg-surface-2 hover:bg-surface-3/70" : "bg-surface-2/40 opacity-50"
+                  transition={{ delay: idx * 0.03 }}
+                  className={`rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all border ${
+                    service.is_active
+                      ? "bg-surface-2 hover:bg-surface-3/70 border-hairline/60 hover:border-hairline"
+                      : "bg-surface-2/30 border-hairline/30 opacity-60"
                   }`}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-accent shrink-0 border border-hairline">
-                      <Scissors className="w-4 h-4" />
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-11 h-11 rounded-xl bg-accent-soft text-accent-light border border-accent/20 flex items-center justify-center shrink-0">
+                      <Scissors className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-serif font-bold text-text text-sm">{service.name}</h3>
-                        <span className="text-xs text-accent uppercase font-bold tracking-wider">
-                          · {service.category}
+                        <h3 className="font-bold text-text text-sm">{service.name}</h3>
+                        <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-surface text-accent-light border border-hairline">
+                          {service.category}
                         </span>
                       </div>
-                      <p className="text-xs text-text-muted line-clamp-1 mt-2">
+                      <p className="text-xs text-text-muted line-clamp-1 mt-1">
                         {service.description || "Sem descrição informada."}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between sm:justify-end gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
-                    <div className="flex items-center gap-2 text-xs text-text-muted">
-                      <Clock className="w-3.5 h-3.5 text-accent" />
+                  <div className="flex items-center justify-between sm:justify-end gap-5 pt-3 sm:pt-0 border-t sm:border-t-0 border-hairline/60">
+                    <div className="flex items-center gap-1.5 text-xs text-text-muted font-mono">
+                      <Clock className="w-3.5 h-3.5 text-accent-light" />
                       <span>{formatDuration(service.duration_minutes)}</span>
                     </div>
 
-                    <div className="font-serif font-bold text-base text-accent">
+                    <div className="font-bold text-sm text-text min-w-[70px] text-right">
                       {formatCurrency(service.price)}
                     </div>
 
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                    <button
                       onClick={() => handleToggleActive(service)}
-                      className={`px-4 py-2 rounded-full text-xs font-bold transition-colors ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all !min-h-0 ${
                         service.is_active
-                          ? "bg-surface text-text-muted hover:text-danger"
-                          : "bg-emerald-500/20 text-emerald-400"
+                          ? "bg-emerald-500/10 text-emerald-400 hover:bg-danger/10 hover:text-danger border border-emerald-500/25"
+                          : "bg-surface text-text-muted hover:text-emerald-400 border border-hairline"
                       }`}
                     >
-                      {service.is_active ? "Desativar" : "Ativar"}
-                    </motion.button>
+                      {service.is_active ? "Ativo no Site" : "Inativo"}
+                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -275,34 +311,29 @@ export default function ServicosPage() {
         </div>
       </main>
 
-      {/* Modal Novo Serviço com Framer Motion */}
+      {/* Modal Novo Serviço */}
       <AnimatePresence>
         {showAddModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
-          >
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
             <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 15 }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: 15 }}
-              transition={{ duration: 0.25 }}
-              className="bg-surface rounded-[32px] max-w-md w-full p-8 shadow-soft space-y-6 border border-hairline"
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.2 }}
+              className="bg-surface border border-border rounded-2xl max-w-md w-full p-6 shadow-soft space-y-5"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-hairline">
-                <h2 className="font-serif text-xl font-bold text-text">Cadastrar Novo Serviço</h2>
+              <div className="flex items-center justify-between pb-3 border-b border-hairline">
+                <h2 className="text-lg font-bold text-text">Cadastrar Novo Serviço</h2>
                 <button
                   onClick={() => setShowAddModal(false)}
-                  className="w-8 h-8 rounded-full bg-surface-2 text-text-muted hover:text-text flex items-center justify-center transition-colors"
+                  className="w-8 h-8 rounded-lg bg-surface-2 text-text-muted hover:text-text flex items-center justify-center transition-colors !min-h-0"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {modalError && (
-                <div className="bg-danger/10 rounded-[20px] p-4 text-xs text-danger flex items-center gap-2">
+                <div className="bg-danger/10 border border-danger/20 rounded-xl p-3 text-xs text-danger flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4 shrink-0" />
                   <span>{modalError}</span>
                 </div>
@@ -310,7 +341,7 @@ export default function ServicosPage() {
 
               <form onSubmit={handleCreateService} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
                     Nome do Serviço
                   </label>
                   <input
@@ -318,19 +349,19 @@ export default function ServicosPage() {
                     required
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    placeholder="Ex: Corte Degradê + Barba"
-                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    placeholder="Ex: Corte Degradê + Barboterapia"
+                    className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
                     Categoria
                   </label>
                   <select
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value)}
-                    className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full bg-bg border border-border rounded-xl px-3 py-2.5 text-xs text-text focus:border-accent focus:outline-none cursor-pointer"
                   >
                     <option value="Cabelo">Cabelo</option>
                     <option value="Barba">Barba</option>
@@ -339,9 +370,9 @@ export default function ServicosPage() {
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
+                    <label className="block text-xs font-semibold text-text-muted mb-1.5">
                       Preço (R$)
                     </label>
                     <input
@@ -350,12 +381,12 @@ export default function ServicosPage() {
                       required
                       value={newPrice}
                       onChange={(e) => setNewPrice(e.target.value)}
-                      className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                      className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
+                    <label className="block text-xs font-semibold text-text-muted mb-1.5">
                       Duração (minutos)
                     </label>
                     <input
@@ -364,45 +395,44 @@ export default function ServicosPage() {
                       required
                       value={newDuration}
                       onChange={(e) => setNewDuration(e.target.value)}
-                      className="w-full bg-surface-2 rounded-full px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                      className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-2 ml-2">
-                    Descrição
+                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
+                    Descrição (opcional)
                   </label>
                   <textarea
                     rows={2}
                     value={newDesc}
                     onChange={(e) => setNewDesc(e.target.value)}
-                    placeholder="Produtos utilizados e detalhes do procedimento..."
-                    className="w-full bg-surface-2 rounded-2xl px-6 py-4 text-xs text-text border border-hairline focus:ring-2 focus:ring-accent focus:outline-none"
+                    placeholder="Produtos e detalhes inclusos no atendimento..."
+                    className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none resize-none"
                   />
                 </div>
 
-                <div className="flex items-center justify-end gap-4 pt-4 border-t border-hairline">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-6 py-2 rounded-full text-xs font-bold text-text-muted hover:text-text"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-text-muted hover:text-text bg-surface-2 hover:bg-surface-3 transition-colors !min-h-0"
                   >
                     Cancelar
                   </button>
-                  <motion.button
+                  <button
                     type="submit"
                     disabled={isSubmitting}
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow disabled:opacity-50"
+                    className="bg-accent hover:bg-accent-hover text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-glow disabled:opacity-50 transition-all !min-h-0 flex items-center gap-2"
                   >
-                    {isSubmitting ? "Salvando..." : "Salvar Serviço"}
-                  </motion.button>
+                    {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    <span>{isSubmitting ? "Salvando..." : "Salvar Serviço"}</span>
+                  </button>
                 </div>
               </form>
             </motion.div>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>

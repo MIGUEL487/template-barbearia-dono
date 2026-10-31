@@ -9,7 +9,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  Scissors,
   Calendar,
   Users,
   DollarSign,
@@ -19,13 +18,12 @@ import {
   XCircle,
   Plus,
   BarChart3,
-  Settings,
-  Bell,
-  LogOut,
   ChevronRight,
   AlertCircle,
-  Layers,
+  ArrowUpRight,
   Sparkles,
+  Phone,
+  User,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
 import { formatCurrency, fixMojibake } from "@/lib/utils";
@@ -115,10 +113,17 @@ export default function DashboardPage() {
         0,
       );
       setRevenueReceived(totalReceived);
-      const chartStart = new Date();chartStart.setHours(0,0,0,0);chartStart.setDate(chartStart.getDate()-6);
-      const {data:seriesData,error:seriesError}=await supabase.from("financial_transactions").select("amount,created_at").eq("barbershop_id",shopId).eq("type","income").gte("created_at",chartStart.toISOString());
-      if(seriesError)setErrorMsg("Não foi possível atualizar o gráfico de receita.");
-      setRevenueEntries(seriesData||[]);
+      const chartStart = new Date();
+      chartStart.setHours(0, 0, 0, 0);
+      chartStart.setDate(chartStart.getDate() - 6);
+      const { data: seriesData, error: seriesError } = await supabase
+        .from("financial_transactions")
+        .select("amount,created_at")
+        .eq("barbershop_id", shopId)
+        .eq("type", "income")
+        .gte("created_at", chartStart.toISOString());
+      if (seriesError) setErrorMsg("Não foi possível atualizar o gráfico de receita.");
+      setRevenueEntries(seriesData || []);
 
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
@@ -176,30 +181,6 @@ export default function DashboardPage() {
     loadDashboardData();
   }, [loadDashboardData]);
 
-  const handleCompleteBooking = async (bookingId: string) => {
-    if (!barbershopId) return;
-    const res = await completeBookingAction(barbershopId, bookingId, true);
-    if (res.success) {
-      loadDashboardData();
-    } else {
-      alert(res.error || "Erro ao concluir atendimento");
-    }
-  };
-
-  const handleCancelBooking = async (bookingId: string) => {
-    if (!barbershopId) return;
-    const res = await cancelBookingAction(
-      barbershopId,
-      bookingId,
-      "Cancelado no dashboard",
-    );
-    if (res.success) {
-      loadDashboardData();
-    } else {
-      alert(res.error || "Erro ao cancelar agendamento");
-    }
-  };
-
   const handleLogout = async () => {
     await logoutAction();
     router.push("/login");
@@ -208,20 +189,20 @@ export default function DashboardPage() {
   if (noAccess) {
     return (
       <div className="min-h-screen bg-bg text-text flex items-center justify-center p-4">
-        <div className="bg-surface rounded-[32px] p-10 max-w-md w-full text-center shadow-soft space-y-4">
+        <div className="bg-surface border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-soft space-y-4">
           <div className="w-16 h-16 rounded-full bg-danger/10 text-danger mx-auto flex items-center justify-center">
             <XCircle className="w-8 h-8" />
           </div>
-          <h1 className="font-serif text-2xl font-bold">
+          <h1 className="text-xl font-bold text-text">
             Acesso Não Autorizado
           </h1>
           <p className="text-xs text-text-muted">
             Seu usuário autenticado não possui vínculo ativo em{" "}
-            <code>shop_members</code> nesta barbearia.
+            <code className="text-accent-light">shop_members</code> nesta barbearia.
           </p>
           <button
             onClick={handleLogout}
-            className="bg-accent text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow"
+            className="w-full bg-accent hover:bg-accent-hover text-white py-2.5 rounded-lg text-xs font-semibold shadow-glow transition-colors"
           >
             Fazer Login com Outra Conta
           </button>
@@ -230,44 +211,40 @@ export default function DashboardPage() {
     );
   }
 
-  const navLinks = [
-    { href: "/dashboard", label: "Dashboard", icon: BarChart3, active: true },
-    { href: "/agenda", label: "Agenda", icon: Calendar },
-    { href: "/clientes", label: "Clientes", icon: Users },
-    { href: "/servicos", label: "Serviços", icon: Scissors },
-    { href: "/equipe", label: "Equipe & Horários", icon: Clock },
-    { href: "/financeiro", label: "Financeiro", icon: DollarSign },
-    { href: "/configuracoes", label: "Configurações", icon: Settings },
-  ];
-
   return (
-    <div className="admin-page min-h-screen bg-bg text-text flex flex-col md:flex-row p-4 md:p-6 gap-6">
-      {/* Menu Lateral Arredondado (Trilho / Dock) */}
+    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
+      {/* Sidebar Navigation */}
       <AdminNavigation />
 
-      {/* Conteúdo Principal */}
+      {/* Main Content Area */}
       <main className="admin-content flex-1 space-y-6">
-        {/* Barra Superior */}
-        <header className="bg-surface rounded-full px-6 py-4 flex items-center justify-between shadow-soft">
-          <div className="flex items-center gap-4">
-            <h1 className="font-serif text-lg font-bold text-text">
-              Visão Geral
-            </h1>
-            <span className="text-xs text-text-muted hidden sm:inline">
-              · Métricas em tempo real
-            </span>
+        {/* Top Header Bar (Dashdark X style) */}
+        <header className="bg-surface border border-border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-soft">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold text-text">
+                Visão Geral
+              </h1>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Ao vivo
+              </span>
+            </div>
+            <p className="text-xs text-text-muted mt-1">
+              {shopName} · Gestão operacional e indicadores financeiros
+            </p>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* Seletor de Período em Pílula */}
-            <div className="bg-surface-2 p-2 rounded-full flex gap-2 text-xs">
+          <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+            {/* Period selector pill tabs */}
+            <div className="bg-surface-2 p-1 rounded-xl flex gap-1 border border-hairline">
               {(["hoje", "semana", "mes"] as const).map((p) => (
                 <button
                   key={p}
                   onClick={() => setPeriod(p)}
-                  className={`px-4 py-2 rounded-full capitalize font-semibold transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
                     period === p
-                      ? "bg-accent text-accent-contrast shadow-sm"
+                      ? "bg-accent text-white shadow-sm"
                       : "text-text-muted hover:text-text"
                   }`}
                 >
@@ -278,128 +255,152 @@ export default function DashboardPage() {
 
             <Link
               href="/agenda"
-              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-accent-contrast px-6 py-2 rounded-full text-xs font-bold shadow-glow transition-all active:scale-95"
+              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-glow transition-all active:scale-95 shrink-0"
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Plus className="w-4 h-4" />
               <span>Novo Agendamento</span>
             </Link>
           </div>
         </header>
 
         {errorMsg && (
-          <div className="p-4 rounded-[20px] bg-danger/10 text-danger text-xs flex items-center gap-2">
+          <div className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
-        {/* Superfícies Tonais de Métricas com Motion */}
-        <div className="metric-overview grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* 3 Metric Cards (Dashdark X architecture) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Card 1: Receita Liquidada */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -1 }}
             transition={{ duration: 0.2 }}
-            className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 border border-hairline/60"
+            className="bg-surface border border-border hover:border-emerald-500/30 rounded-2xl p-6 shadow-soft space-y-3 transition-colors"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
+              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
                 Receita Liquidada
               </span>
-              <span className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <span className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
                 <DollarSign className="w-4 h-4" />
               </span>
             </div>
-            <div className="font-serif text-3xl font-bold text-emerald-400">
+            <div className="text-3xl font-bold text-emerald-400">
               <AnimatedNumber value={revenueReceived} currency />
             </div>
-            <p className="text-xs text-text-muted">
-              Total de pagamentos concluídos e compensados
-            </p>
+            <div className="flex items-center justify-between text-xs text-text-muted pt-1 border-t border-hairline/60">
+              <span>Pagamentos confirmados</span>
+              <span className="text-emerald-400 font-medium capitalize">{period}</span>
+            </div>
           </motion.div>
 
+          {/* Card 2: Aguardando no Balcão */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -1 }}
             transition={{ duration: 0.2, delay: 0.05 }}
-            className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 border border-hairline/60"
+            className="bg-surface border border-border hover:border-accent/30 rounded-2xl p-6 shadow-soft space-y-3 transition-colors"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
+              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
                 Aguardando no Balcão
               </span>
-              <span className="w-8 h-8 rounded-full bg-accent-soft text-accent flex items-center justify-center">
+              <span className="w-9 h-9 rounded-xl bg-accent-soft text-accent-light border border-accent/20 flex items-center justify-center">
                 <Clock className="w-4 h-4" />
               </span>
             </div>
-            <div className="font-serif text-3xl font-bold text-accent">
+            <div className="text-3xl font-bold text-accent-light">
               <AnimatedNumber value={revenuePending} currency />
             </div>
-            <p className="text-xs text-text-muted">
-              Valores a receber de agendamentos de hoje
-            </p>
+            <div className="flex items-center justify-between text-xs text-text-muted pt-1 border-t border-hairline/60">
+              <span>Agendamentos confirmados hoje</span>
+              <span className="text-accent-light font-medium">A receber</span>
+            </div>
           </motion.div>
 
+          {/* Card 3: Atendimentos Hoje */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -1 }}
             transition={{ duration: 0.2, delay: 0.1 }}
-            className="bg-surface rounded-[28px] p-6 shadow-soft space-y-2 sm:col-span-2 lg:col-span-1 border border-hairline/60"
+            className="bg-surface border border-border hover:border-white/20 rounded-2xl p-6 shadow-soft space-y-3 sm:col-span-2 lg:col-span-1 transition-colors"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
+              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
                 Atendimentos Hoje
               </span>
-              <span className="w-8 h-8 rounded-full bg-surface-2 text-text flex items-center justify-center">
+              <span className="w-9 h-9 rounded-xl bg-surface-2 text-text border border-hairline flex items-center justify-center">
                 <Calendar className="w-4 h-4" />
               </span>
             </div>
-            <div className="font-serif text-3xl font-bold text-text">
+            <div className="text-3xl font-bold text-text">
               {bookingsToday.length}
             </div>
-            <p className="text-xs text-text-muted">
-              Clientes agendados na grade do dia
-            </p>
+            <div className="flex items-center justify-between text-xs text-text-muted pt-1 border-t border-hairline/60">
+              <span>Clientes na grade do dia</span>
+              <Link href="/agenda" className="text-accent-light hover:underline font-medium flex items-center gap-1">
+                Ver grade <ArrowUpRight className="w-3 h-3" />
+              </Link>
+            </div>
           </motion.div>
         </div>
 
-        {/* Linhas Respiradas de Agendamentos de Hoje */}
-        <div className="bg-surface rounded-[32px] p-8 shadow-soft space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-hairline">
-            <h2 className="font-serif text-xl font-bold text-text">
-              Grade de Atendimentos de Hoje
-            </h2>
+        {/* Revenue Chart Component */}
+        <RevenueChart entries={revenueEntries} />
+
+        {/* Today's Bookings Section */}
+        <section className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-hairline">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-bold text-text">
+                Atendimentos de Hoje
+              </h2>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-2 text-text-muted border border-hairline">
+                {bookingsToday.length} {bookingsToday.length === 1 ? "agendamento" : "agendamentos"}
+              </span>
+            </div>
+
             <Link
               href="/agenda"
-              className="text-xs text-accent hover:underline font-semibold flex items-center gap-2"
+              className="text-xs text-accent-light hover:text-white font-semibold flex items-center gap-1.5 transition-colors self-start sm:self-auto"
             >
               <span>Abrir Agenda Completa</span>
               <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <RevenueChart entries={revenueEntries} />
           {isLoading ? (
             <AdminSkeleton />
           ) : bookingsToday.length === 0 ? (
-            <div className="text-center py-12 text-xs text-text-muted">
-              Nenhum agendamento agendado para o dia de hoje.
+            <div className="text-center py-12 space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-surface-2 border border-hairline text-text-muted mx-auto flex items-center justify-center">
+                <Calendar className="w-6 h-6" />
+              </div>
+              <p className="text-xs text-text-muted">
+                Nenhum agendamento marcado para o dia de hoje.
+              </p>
+              <Link
+                href="/agenda"
+                className="inline-flex items-center gap-1.5 text-xs text-accent-light hover:underline font-medium"
+              >
+                <Plus className="w-3.5 h-3.5" /> Adicionar na agenda
+              </Link>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {bookingsToday.map((b, idx) => (
                 <motion.div
                   key={b.id}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.04 }}
-                  whileHover={{ x: 0 }}
-                  className="bg-surface-2 hover:bg-surface-3/70 rounded-2xl md:rounded-full px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors border border-transparent hover:border-hairline"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.03 }}
+                  className="bg-surface-2 hover:bg-surface-3/60 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all border border-hairline/60 hover:border-hairline"
                 >
+                  {/* Left: Time + Customer Info */}
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-surface flex flex-col items-center justify-center font-mono text-xs font-bold text-accent shrink-0 border border-hairline">
+                    <div className="w-14 h-14 rounded-xl bg-surface flex flex-col items-center justify-center font-mono text-xs font-bold text-accent-light shrink-0 border border-hairline">
                       <span>
                         {new Date(b.starts_at).toLocaleTimeString("pt-BR", {
                           hour: "2-digit",
@@ -407,33 +408,45 @@ export default function DashboardPage() {
                         })}
                       </span>
                     </div>
-                    <div>
-                      <h4 className="font-serif font-bold text-text text-sm">
+
+                    <div className="space-y-1">
+                      <h4 className="font-semibold text-text text-sm">
                         {fixMojibake(b.customers?.name) || "Cliente"}
                       </h4>
-                      <p className="text-xs text-text-muted">
-                        Profissional:{" "}
-                        {fixMojibake(b.barbers?.name) || "Barbeiro"} ·{" "}
-                        {b.customers?.phone}
-                      </p>
+                      <div className="flex items-center gap-3 text-xs text-text-muted flex-wrap">
+                        <span className="flex items-center gap-1">
+                          <User className="w-3.5 h-3.5 text-text-muted/70" />
+                          {fixMojibake(b.barbers?.name) || "Profissional"}
+                        </span>
+                        {b.customers?.phone && (
+                          <span className="flex items-center gap-1">
+                            <Phone className="w-3 h-3 text-text-muted/70" />
+                            {b.customers.phone}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="booking-row-status flex items-center justify-between sm:justify-end gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
+                  {/* Right: Status badge, Price & Actions */}
+                  <div className="booking-row-status flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-hairline/60">
+                    {/* Status Pill Badge */}
                     <span
-                      className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider ${
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
                         b.status === "completed"
-                          ? "bg-emerald-500/15 text-emerald-400"
+                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                           : b.status === "confirmed"
-                            ? "bg-accent-soft text-accent"
-                            : "bg-danger/15 text-danger"
+                            ? "bg-accent/15 text-accent-light border border-accent/25"
+                            : b.status === "hold"
+                              ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                              : "bg-danger/10 text-danger border border-danger/20"
                       }`}
                     >
                       {(
                         {
                           confirmed: "Confirmado",
                           completed: "Concluído",
-                          hold: "Reserva temporária",
+                          hold: "Pré-reserva",
                           cancelled: "Cancelado",
                           no_show: "Faltou",
                           expired: "Expirado",
@@ -441,7 +454,7 @@ export default function DashboardPage() {
                       )[b.status] || b.status}
                     </span>
 
-                    <span className="font-serif font-bold text-sm text-text">
+                    <span className="font-bold text-sm text-text min-w-[70px] text-right">
                       {formatCurrency(b.total_price)}
                     </span>
 
@@ -457,7 +470,7 @@ export default function DashboardPage() {
               ))}
             </div>
           )}
-        </div>
+        </section>
       </main>
     </div>
   );

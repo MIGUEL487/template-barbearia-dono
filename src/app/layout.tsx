@@ -7,7 +7,7 @@ import {NotificationProvider} from '@/components/admin/notification-provider';
 const display=localFont({src:[{path:"./fonts/fraunces-latin-400-normal.woff2",weight:"400",style:"normal"},{path:"./fonts/fraunces-latin-500-normal.woff2",weight:"500",style:"normal"},{path:"./fonts/fraunces-latin-400-italic.woff2",weight:"400",style:"italic"}],variable:"--font-serif",display:"swap"});
 const manrope=localFont({src:"./fonts/Manrope-400.ttf",weight:"400",variable:"--font-sans",display:"swap"});
 
-export const viewport: Viewport = {themeColor:'#ffffff'};
+export const viewport: Viewport = {themeColor:'#080F25', colorScheme:'dark'};
 export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
   appleWebApp: {capable:true,title:'Auto Stilo - Gestão',statusBarStyle:'default'},
