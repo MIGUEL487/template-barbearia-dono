@@ -4,6 +4,8 @@ import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
 import { BookingActions } from "@/components/admin/booking-actions";
 import { NotificationControls } from "@/components/admin/notification-controls";
+import { PremiumDatePicker } from "@/components/admin/premium-date-picker";
+import { CustomSelect } from "@/components/admin/custom-select";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -371,35 +373,7 @@ export default function AgendaPage() {
           </div>
 
           <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
-            {/* Date Navigator */}
-            <div className="flex items-center bg-surface-2 rounded-xl border border-hairline p-1">
-              <button
-                onClick={() => changeDateByDays(-1)}
-                className="p-1.5 text-text-muted hover:text-text hover:bg-surface-3 rounded-lg transition-colors !min-h-0 !w-auto"
-                aria-label="Dia anterior"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-
-              <div className="flex items-center gap-2 px-3 py-1">
-                <Calendar className="w-4 h-4 text-accent-light shrink-0" />
-                <input
-                  aria-label="Data da agenda"
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  className="bg-transparent text-text border-none focus:outline-none text-xs font-semibold cursor-pointer !min-h-0 !p-0"
-                />
-              </div>
-
-              <button
-                onClick={() => changeDateByDays(1)}
-                className="p-1.5 text-text-muted hover:text-text hover:bg-surface-3 rounded-lg transition-colors !min-h-0 !w-auto"
-                aria-label="Próximo dia"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+            <PremiumDatePicker value={selectedDate} onChange={setSelectedDate} />
 
             <button
               onClick={() => setShowQuickModal(true)}
@@ -712,58 +686,38 @@ export default function AgendaPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Barbeiro
-                  </label>
-                  <select
-                    aria-label="Profissional do agendamento"
+                  <CustomSelect
+                    label="Barbeiro"
                     value={modalBarberId}
-                    onChange={(e) => setModalBarberId(e.target.value)}
-                    className="w-full bg-bg border border-border rounded-xl px-3 py-2.5 text-xs text-text focus:border-accent focus:outline-none cursor-pointer"
-                  >
-                    {barbers.map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {b.name}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={setModalBarberId}
+                    options={barbers.map((b) => ({ value: b.id, label: b.name }))}
+                    aria-label="Profissional do agendamento"
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Horário
-                  </label>
-                  <select
-                    aria-label="Horário do agendamento"
+                  <CustomSelect
+                    label="Horário"
                     value={modalTime}
-                    onChange={(e) => setModalTime(e.target.value)}
-                    className="w-full bg-bg border border-border rounded-xl px-3 py-2.5 text-xs text-text focus:border-accent focus:outline-none cursor-pointer"
-                  >
-                    {timeSlots.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={setModalTime}
+                    options={timeSlots.map((t) => ({ value: t, label: t }))}
+                    aria-label="Horário do agendamento"
+                  />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                  Serviço
-                </label>
-                <select
-                  aria-label="Serviço do agendamento"
+                <CustomSelect
+                  label="Serviço"
                   value={modalServiceId}
-                  onChange={(e) => setModalServiceId(e.target.value)}
-                  className="w-full bg-bg border border-border rounded-xl px-3 py-2.5 text-xs text-text focus:border-accent focus:outline-none cursor-pointer"
-                >
-                  {services.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name} - {formatCurrency(s.price)}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setModalServiceId}
+                  options={services.map((s) => ({
+                    value: s.id,
+                    label: s.name,
+                    subtitle: formatCurrency(s.price),
+                  }))}
+                  aria-label="Serviço do agendamento"
+                />
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">

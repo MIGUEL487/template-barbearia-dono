@@ -2,6 +2,7 @@
 
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
+import { CustomSelect } from "@/components/admin/custom-select";
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -355,19 +356,18 @@ export default function ServicosPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Categoria
-                  </label>
-                  <select
+                  <CustomSelect
+                    label="Categoria"
                     value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    className="w-full bg-bg border border-border rounded-xl px-3 py-2.5 text-xs text-text focus:border-accent focus:outline-none cursor-pointer"
-                  >
-                    <option value="Cabelo">Cabelo</option>
-                    <option value="Barba">Barba</option>
-                    <option value="Combo">Combo</option>
-                    <option value="Tratamento">Tratamento</option>
-                  </select>
+                    onChange={setNewCategory}
+                    options={[
+                      { value: "Cabelo", label: "Cabelo" },
+                      { value: "Barba", label: "Barba" },
+                      { value: "Combo", label: "Combo" },
+                      { value: "Tratamento", label: "Tratamento" },
+                    ]}
+                    aria-label="Categoria do serviço"
+                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
