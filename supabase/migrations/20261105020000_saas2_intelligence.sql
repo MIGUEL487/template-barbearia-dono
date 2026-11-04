@@ -1,0 +1,23 @@
+-- Apply manually after review. No jobs, messages, payment mutations or destructive operations.
+BEGIN;
+CREATE OR REPLACE FUNCTION public.saas_can_manage(p_shop uuid) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public AS $$ SELECT EXISTS(SELECT 1 FROM public.shop_members WHERE barbershop_id=p_shop AND user_id=auth.uid() AND role::text IN ('owner','admin')); $$;
+REVOKE ALL ON FUNCTION public.saas_can_manage(uuid) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.saas_can_manage(uuid) TO authenticated;
+CREATE TABLE IF NOT EXISTS public.daily_goals (barbershop_id uuid NOT NULL REFERENCES public.barbershops(id),date date NOT NULL,amount numeric(10,2) NOT NULL CHECK(amount>=0),updated_at timestamptz NOT NULL DEFAULT now(),PRIMARY KEY(barbershop_id,date));
+CREATE TABLE IF NOT EXISTS public.day_closings (barbershop_id uuid NOT NULL REFERENCES public.barbershops(id),date date NOT NULL,report jsonb NOT NULL,generated_at timestamptz NOT NULL DEFAULT now(),generated_by uuid NOT NULL REFERENCES auth.users(id),PRIMARY KEY(barbershop_id,date));
+CREATE TABLE IF NOT EXISTS public.ai_daily_usage (barbershop_id uuid NOT NULL REFERENCES public.barbershops(id),date date NOT NULL,calls integer NOT NULL CHECK(calls BETWEEN 1 AND 5),PRIMARY KEY(barbershop_id,date));
+ALTER TABLE public.daily_goals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.day_closings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ai_daily_usage ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS saas_goals_manager ON public.daily_goals;
+CREATE POLICY saas_goals_manager ON public.daily_goals FOR ALL TO authenticated USING(public.saas_can_manage(barbershop_id)) WITH CHECK(public.saas_can_manage(barbershop_id));
+DROP POLICY IF EXISTS saas_closings_manager ON public.day_closings;
+CREATE POLICY saas_closings_manager ON public.day_closings FOR ALL TO authenticated USING(public.saas_can_manage(barbershop_id)) WITH CHECK(public.saas_can_manage(barbershop_id) AND generated_by=auth.uid());
+REVOKE ALL ON public.daily_goals,public.day_closings,public.ai_daily_usage FROM anon,authenticated;
+GRANT SELECT,INSERT,UPDATE,DELETE ON public.daily_goals TO authenticated;
+GRANT SELECT,INSERT,UPDATE ON public.day_closings TO authenticated;
+CREATE OR REPLACE FUNCTION public.consume_raiox_ai_quota(p_barbershop_id uuid) RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE n integer; BEGIN IF NOT public.saas_can_manage(p_barbershop_id) THEN RAISE EXCEPTION 'Acesso negado' USING ERRCODE='42501'; END IF; INSERT INTO public.ai_daily_usage(barbershop_id,date,calls) VALUES(p_barbershop_id,(now() AT TIME ZONE 'America/Sao_Paulo')::date,1) ON CONFLICT(barbershop_id,date) DO UPDATE SET calls=ai_daily_usage.calls+1 WHERE ai_daily_usage.calls<5 RETURNING calls INTO n; RETURN n IS NOT NULL; END; $$;
+REVOKE ALL ON FUNCTION public.consume_raiox_ai_quota(uuid) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.consume_raiox_ai_quota(uuid) TO authenticated;
+NOTIFY pgrst,'reload schema';
+COMMIT;
