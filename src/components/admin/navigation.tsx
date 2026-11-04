@@ -9,6 +9,9 @@ import { useState } from "react";
 import {
   Calendar,
   BarChart3,
+  ScanLine,
+  Target,
+  ListOrdered,
   Users,
   DollarSign,
   MoreHorizontal,
@@ -28,6 +31,10 @@ const links = [
   ["/financeiro", "Financeiro", DollarSign],
   ["/servicos", "Serviços", Scissors],
   ["/equipe", "Equipe", Clock],
+  ["/analises", "Análises", BarChart3],
+  ["/raio-x", "Raio-X", ScanLine],
+  ["/resgate", "Modo Resgate", Target],
+  ["/fila-de-espera", "Fila de espera", ListOrdered],
   ["/configuracoes", "Configurações", Settings],
 ] as const;
 
