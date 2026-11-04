@@ -1,5 +1,6 @@
 "use client";
 
+import {Support} from "@/components/saas2/support";
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
 import { NotificationControls } from "@/components/admin/notification-controls";
@@ -191,7 +192,7 @@ export default function ConfiguracoesPage() {
                   <input
                     aria-label="Antecedência mínima para cancelamento em horas"
                     type="number"
-                    min="1"
+                    min="0"
                     max="8760"
                     required
                     value={cancelHours}
@@ -226,6 +227,7 @@ export default function ConfiguracoesPage() {
             </div>
           </form>
         )}
+        {!isLoading&&<Support/>}
       </main>
     </div>
   );
