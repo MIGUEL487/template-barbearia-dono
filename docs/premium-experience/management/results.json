@@ -1,0 +1,47 @@
+[
+  {
+    "route": "dashboard",
+    "width": 1440,
+    "noOverflow": true
+  },
+  {
+    "route": "agenda",
+    "width": 1440,
+    "noOverflow": true
+  },
+  {
+    "route": "servicos",
+    "width": 1440,
+    "noOverflow": true
+  },
+  {
+    "route": "clientes",
+    "width": 1440,
+    "noOverflow": true
+  },
+  {
+    "route": "financeiro",
+    "width": 1440,
+    "noOverflow": true
+  },
+  {
+    "route": "equipe",
+    "width": 1440,
+    "noOverflow": true
+  },
+  {
+    "route": "configuracoes",
+    "width": 1440,
+    "noOverflow": true
+  },
+  {
+    "route": "login",
+    "width": 1440,
+    "noOverflow": true
+  },
+  {
+    "route": "dashboard",
+    "width": 390,
+    "noOverflow": true
+  }
+]
