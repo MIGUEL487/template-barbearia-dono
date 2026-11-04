@@ -1,0 +1,3302 @@
+{
+  "results": [
+    {
+      "route": "analises",
+      "width": 1440,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "raio-x",
+      "width": 1440,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "resgate",
+      "width": 1440,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "fila-de-espera",
+      "width": 1440,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "analises",
+      "width": 1024,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "raio-x",
+      "width": 1024,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "resgate",
+      "width": 1024,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "fila-de-espera",
+      "width": 1024,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "analises",
+      "width": 820,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "raio-x",
+      "width": 820,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "resgate",
+      "width": 820,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "fila-de-espera",
+      "width": 820,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "analises",
+      "width": 390,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "raio-x",
+      "width": 390,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "resgate",
+      "width": 390,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "route": "fila-de-espera",
+      "width": 390,
+      "realServerActions": true,
+      "fixtureDatabase": true,
+      "noOverflow": true
+    },
+    {
+      "security": "server action denies nonmember",
+      "passed": true
+    },
+    {
+      "security": "financial analytics denies barber role",
+      "passed": true
+    },
+    {
+      "security": "database error never becomes fake financial totals",
+      "passed": true
+    }
+  ],
+  "calls": [
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "consents",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "get_group_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "consents",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "get_group_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "consents",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "get_group_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "consents",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "get_group_availability",
+      "method": "POST"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "offer_waitlist",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    }
+  ]
+}

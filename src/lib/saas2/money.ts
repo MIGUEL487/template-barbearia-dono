@@ -1,3 +1,19 @@
 /** Decimal money is converted to integer centavos before business calculations. */
-export function toCents(value:number|string){const n=Number(value);if(!Number.isFinite(n)||n<0||n>1e10)throw Error('Valor monetário inválido');return Math.round((n+Number.EPSILON)*100)}
-export function depositBreakdown(total:number,percentage:number){if(!Number.isFinite(percentage)||percentage<0||percentage>100)throw Error('Percentual deve estar entre 0 e 100');const cents=toCents(total),basis=Math.round(percentage*100);const deposit=Math.floor((cents*basis+5000)/10000);return {total:cents/100,deposit:deposit/100,remaining:(cents-deposit)/100}}
+export function toCents(value: number | string) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 0 || n > 99999999.99)
+    throw Error("Valor monetário inválido");
+  return Math.round((n + Number.EPSILON) * 100);
+}
+export function depositBreakdown(total: number, percentage: number) {
+  if (!Number.isFinite(percentage) || percentage < 0 || percentage > 100)
+    throw Error("Percentual deve estar entre 0 e 100");
+  const cents = toCents(total),
+    basis = Math.round(percentage * 100);
+  const deposit = Math.floor((cents * basis + 5000) / 10000);
+  return {
+    total: cents / 100,
+    deposit: deposit / 100,
+    remaining: (cents - deposit) / 100,
+  };
+}

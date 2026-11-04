@@ -1,4 +1,5 @@
 "use client";
+import { waitlistState } from "@/lib/saas2/waitlist";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AdminNavigation } from "@/components/admin/navigation";
@@ -42,9 +43,9 @@ export function WaitlistPage() {
   }, [date]);
   const d = result?.ok ? result : null;
   return (
-    <main className="admin-page">
+    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
       <AdminNavigation />
-      <div className="admin-content">
+      <main className="admin-content flex-1 space-y-6">
         <header>
           <h1>Fila de espera</h1>
           <p>
@@ -78,10 +79,7 @@ export function WaitlistPage() {
           <Card>Nenhuma solicitação para esta data.</Card>
         )}
         {d?.entries.map((e, index) => {
-          const expired =
-            e.status === "offered" &&
-            e.offer_expires_at &&
-            Date.parse(e.offer_expires_at) < Date.now();
+          const state = waitlistState(e);
           return (
             <Card key={e.id}>
               <CardTitle>
@@ -101,13 +99,7 @@ export function WaitlistPage() {
               </p>
               <p>
                 {e.window_start.slice(0, 5)}–{e.window_end.slice(0, 5)} ·{" "}
-                {expired
-                  ? "Oferta vencida; reavaliar disponibilidade"
-                  : e.status === "waiting"
-                    ? "Aguardando"
-                    : e.status === "offered"
-                      ? "Pré-reserva oferecida"
-                      : "Retirado"}
+                {state.label}
               </p>
               <p className="text-text-muted text-sm">
                 Solicitado em{" "}
@@ -117,7 +109,7 @@ export function WaitlistPage() {
                 . Contato manual autorizado:{" "}
                 {e.contact_channel === "email" ? e.email : e.phone}.
               </p>
-              {(e.status === "waiting" || expired) && (
+              {state.canOffer && (
                 <div className="flex flex-wrap gap-4 mt-4">
                   <Button
                     variant="secondary"
@@ -189,7 +181,7 @@ export function WaitlistPage() {
                   >
                     Criar pré-reserva para oferta
                   </Button>
-                  {e.status === "waiting" && (
+                  {state.canRemove && (
                     <Button
                       variant="secondary"
                       disabled={busy}
@@ -229,7 +221,7 @@ export function WaitlistPage() {
             )}
           </Card>
         )}
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

@@ -18,7 +18,8 @@
     "test:security": "node --experimental-strip-types --test tests/payment-signature.test.mjs",
     "test:authorization": "node tests/authorization-browser.mjs",
     "spacing:check": "node scripts/check-spacing.mjs",
-    "test:media": "node scripts/qa-media.mjs"
+    "test:media": "node scripts/qa-media.mjs",
+    "test:saas2": "node --experimental-strip-types --test tests/saas2*.test.mjs && node scripts/build-saas2-sql.mjs --check"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

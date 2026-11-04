@@ -1,11 +1,168 @@
-import {test} from 'node:test';import assert from 'node:assert/strict';import ts from 'typescript';import fs from 'node:fs/promises';import os from 'node:os';import path from 'node:path';import {pathToFileURL} from 'node:url';
-const dir=await fs.mkdtemp(path.join(os.tmpdir(),'saas2-unit-'));for(const name of ['money','analytics']){const source=await fs.readFile(new URL(`../src/lib/saas2/${name}.ts`,import.meta.url),'utf8');await fs.writeFile(path.join(dir,name+'.mjs'),ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText.replace("'./money'","'./money.mjs'"))}const {analyze,capacity,retention,daysIn}=await import(pathToFileURL(path.join(dir,'analytics.mjs')));
-const now=Date.parse('2026-11-04T12:00:00Z'),base={id:'b1',barber_id:'a',customer_id:'c',starts_at:'2026-11-04T12:00Z',ends_at:'2026-11-04T13:00Z',status:'completed',hold_expires_at:null,total_price:'100.00',booking_items:[{service_id:'s',service_name:'Corte',price:'100.00',duration_minutes:60}]};
-const src=()=>({bookings:[base],history:[base],ledger:[{type:'income',amount:'50.00',created_at:'2026-11-04T15:00Z',booking_id:'b1',bookings:{barber_id:'a'}},{type:'refund',amount:'5.00',created_at:'2026-11-04T15:01Z',booking_id:'b1',bookings:{barber_id:'a'}},{type:'expense',amount:'10.00',created_at:'2026-11-04T16:00Z',booking_id:null,bookings:null}],barbers:[{id:'a',name:'Carlos',is_active:true}],services:[],hours:[{barber_id:'a',day_of_week:3,start_time:'09:00',end_time:'19:00',lunch_start:'12:00',lunch_end:'13:00',is_off:false}],off:[{barber_id:'a',starts_at:'2026-11-04T20:00Z',ends_at:'2026-11-04T21:00Z'}],closed:[],consents:[]});
-test('realized ledger differs from forecast; known deductions and cent rounding',()=>{const a=analyze(src(),'2026-11-04','2026-11-04',null,now);assert.equal(a.income,5000);assert.equal(a.expected,10000);assert.equal(a.registeredBalance,3500);assert.equal(a.ticket,10000);assert.equal(a.fresh,1);assert.equal(a.returning,0)});
-test('capacity subtracts lunch and overlapping time off; reservations unioned',()=>{const s=src();s.bookings.push({...base,id:'overlap',starts_at:'2026-11-04T12:30Z',ends_at:'2026-11-04T13:30Z'});const c=capacity('2026-11-04','a',s,now);assert.equal(c.minutes,480);assert.equal(c.occupied,90)});
-test('expired holds, cancellations and no shows do not inflate forecast',()=>{const s=src();s.bookings=[{...base,status:'hold',hold_expires_at:'2026-11-04T11:59Z'},{...base,id:'cancel',status:'cancelled'},{...base,id:'miss',status:'no_show'}];const a=analyze(s,'2026-11-04','2026-11-04',null,now);assert.equal(a.expected,0);assert.equal(a.occupiedMinutes,0);assert.equal(a.cancelled,1);assert.equal(a.noShow,1)});
-test('Sao Paulo midnight and barber attribution',()=>{const s=src();s.bookings=[{...base,starts_at:'2026-11-05T02:30Z',ends_at:'2026-11-05T03:00Z'}];assert.equal(analyze(s,'2026-11-04','2026-11-04','a',now).bookings,1);assert.equal(analyze(s,'2026-11-04','2026-11-04','a',now).registeredBalance,4500);assert.equal(analyze(s,'2026-11-05','2026-11-05',null,now).bookings,0)});
-test('empty data never invents financial values and custom ranges bounded',()=>{const s=src();s.bookings=[];s.history=[];s.ledger=[];s.hours=[];const a=analyze(s,'2026-11-04','2026-11-04',null,now);assert.equal(a.income,0);assert.equal(a.ticket,null);assert.equal(a.occupancy,null);assert.throws(()=>daysIn('2026-01-01','2026-12-31'))});
-test('retention requires 3 distinct service days, detects delayed interval',()=>{assert.equal(retention([base],now)[0].category,'Dados insuficientes');const visits=['2026-08-01','2026-08-11','2026-08-21'].map((d,i)=>({...base,id:String(i),starts_at:d+'T12:00Z'}));const r=retention(visits,now)[0];assert.equal(r.usual,10);assert.equal(r.category,'Retorno atrasado')});
-process.on('exit',()=>{fs.rm(dir,{recursive:true,force:true}).catch(()=>{})});
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import ts from "typescript";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+const dir = await fs.mkdtemp(path.join(os.tmpdir(), "saas2-unit-"));
+for (const name of ["money", "analytics"]) {
+  const source = await fs.readFile(
+    new URL(`../src/lib/saas2/${name}.ts`, import.meta.url),
+    "utf8",
+  );
+  await fs.writeFile(
+    path.join(dir, name + ".mjs"),
+    ts
+      .transpileModule(source, {
+        compilerOptions: {
+          module: ts.ModuleKind.ES2022,
+          target: ts.ScriptTarget.ES2022,
+        },
+      })
+      .outputText.replace(/(['"])\.\/money\1/g, '"./money.mjs"'),
+  );
+}
+const { analyze, capacity, retention, daysIn } = await import(
+  pathToFileURL(path.join(dir, "analytics.mjs"))
+);
+const now = Date.parse("2026-11-04T12:00:00Z"),
+  base = {
+    id: "b1",
+    barber_id: "a",
+    customer_id: "c",
+    starts_at: "2026-11-04T12:00Z",
+    ends_at: "2026-11-04T13:00Z",
+    status: "completed",
+    hold_expires_at: null,
+    total_price: "100.00",
+    booking_items: [
+      {
+        service_id: "s",
+        service_name: "Corte",
+        price: "100.00",
+        duration_minutes: 60,
+      },
+    ],
+  };
+const src = () => ({
+  bookings: [base],
+  history: [base],
+  ledger: [
+    {
+      type: "income",
+      amount: "50.00",
+      created_at: "2026-11-04T15:00Z",
+      booking_id: "b1",
+      bookings: { barber_id: "a" },
+    },
+    {
+      type: "refund",
+      amount: "5.00",
+      created_at: "2026-11-04T15:01Z",
+      booking_id: "b1",
+      bookings: { barber_id: "a" },
+    },
+    {
+      type: "expense",
+      amount: "10.00",
+      created_at: "2026-11-04T16:00Z",
+      booking_id: null,
+      bookings: null,
+    },
+  ],
+  barbers: [{ id: "a", name: "Carlos", is_active: true }],
+  services: [],
+  hours: [
+    {
+      barber_id: "a",
+      day_of_week: 3,
+      start_time: "09:00",
+      end_time: "19:00",
+      lunch_start: "12:00",
+      lunch_end: "13:00",
+      is_off: false,
+    },
+  ],
+  off: [
+    {
+      barber_id: "a",
+      starts_at: "2026-11-04T20:00Z",
+      ends_at: "2026-11-04T21:00Z",
+    },
+  ],
+  closed: [],
+  consents: [],
+});
+test("realized ledger differs from forecast; known deductions and cent rounding", () => {
+  const a = analyze(src(), "2026-11-04", "2026-11-04", null, now);
+  assert.equal(a.income, 5000);
+  assert.equal(a.expected, 10000);
+  assert.equal(a.registeredBalance, 3500);
+  assert.equal(a.ticket, 10000);
+  assert.equal(a.fresh, 1);
+  assert.equal(a.returning, 0);
+});
+test("capacity subtracts lunch and overlapping time off; reservations unioned", () => {
+  const s = src();
+  s.bookings.push({
+    ...base,
+    id: "overlap",
+    starts_at: "2026-11-04T12:30Z",
+    ends_at: "2026-11-04T13:30Z",
+  });
+  const c = capacity("2026-11-04", "a", s, now);
+  assert.equal(c.minutes, 480);
+  assert.equal(c.occupied, 90);
+});
+test("expired holds, cancellations and no shows do not inflate forecast", () => {
+  const s = src();
+  s.bookings = [
+    { ...base, status: "hold", hold_expires_at: "2026-11-04T11:59Z" },
+    { ...base, id: "cancel", status: "cancelled" },
+    { ...base, id: "miss", status: "no_show" },
+  ];
+  const a = analyze(s, "2026-11-04", "2026-11-04", null, now);
+  assert.equal(a.expected, 0);
+  assert.equal(a.occupiedMinutes, 0);
+  assert.equal(a.cancelled, 1);
+  assert.equal(a.noShow, 1);
+});
+test("Sao Paulo midnight and barber attribution", () => {
+  const s = src();
+  s.bookings = [
+    { ...base, starts_at: "2026-11-05T02:30Z", ends_at: "2026-11-05T03:00Z" },
+  ];
+  assert.equal(analyze(s, "2026-11-04", "2026-11-04", "a", now).bookings, 1);
+  assert.equal(
+    analyze(s, "2026-11-04", "2026-11-04", "a", now).registeredBalance,
+    4500,
+  );
+  assert.equal(analyze(s, "2026-11-05", "2026-11-05", null, now).bookings, 0);
+});
+test("empty data never invents financial values and custom ranges bounded", () => {
+  const s = src();
+  s.bookings = [];
+  s.history = [];
+  s.ledger = [];
+  s.hours = [];
+  const a = analyze(s, "2026-11-04", "2026-11-04", null, now);
+  assert.equal(a.income, 0);
+  assert.equal(a.ticket, null);
+  assert.equal(a.occupancy, null);
+  assert.throws(() => daysIn("2026-01-01", "2026-12-31"));
+});
+test("retention requires 3 distinct service days, detects delayed interval", () => {
+  assert.equal(retention([base], now)[0].category, "Dados insuficientes");
+  const visits = ["2026-08-01", "2026-08-11", "2026-08-21"].map((d, i) => ({
+    ...base,
+    id: String(i),
+    starts_at: d + "T12:00Z",
+  }));
+  const r = retention(visits, now)[0];
+  assert.equal(r.usual, 10);
+  assert.equal(r.category, "Retorno atrasado");
+});
+process.on("exit", () => {
+  fs.rm(dir, { recursive: true, force: true }).catch(() => {});
+});

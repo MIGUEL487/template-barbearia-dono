@@ -41,9 +41,9 @@ export function RescuePage() {
   }, [date]);
   const d = result?.ok ? result : null;
   return (
-    <main className="admin-page">
+    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
       <AdminNavigation />
-      <div className="admin-content">
+      <main className="admin-content flex-1 space-y-6">
         <header>
           <h1>Modo Resgate</h1>
           <p>Oportunidades reais; campanhas e conversa em demonstração.</p>
@@ -268,7 +268,7 @@ export function RescuePage() {
             </Card>
           </>
         )}
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

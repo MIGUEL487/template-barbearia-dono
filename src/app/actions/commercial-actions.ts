@@ -22,8 +22,21 @@ export async function rescueAction(date: string) {
         .range(a, b),
     );
     const names = new Map(customers.map((c) => [c.id, c.name]));
+    const consents = await all<{
+      customer_id: string;
+      consent_given: boolean;
+      revoked_at: string | null;
+      given_at: string;
+    }>((a, b) =>
+      db
+        .from("consents")
+        .select("customer_id,consent_given,revoked_at,given_at")
+        .eq("barbershop_id", shop)
+        .order("id")
+        .range(a, b),
+    );
     const latest = new Map<string, boolean>();
-    for (const consent of [...source.consents].sort((a, b) =>
+    for (const consent of [...consents].sort((a, b) =>
       b.given_at.localeCompare(a.given_at),
     ))
       if (!latest.has(consent.customer_id))
@@ -149,13 +162,17 @@ export async function listWaitlistAction(date: string) {
       status: string;
       offer_expires_at: string | null;
       offered_booking_id: string | null;
+      offered_booking: {
+        status: string;
+        hold_expires_at: string | null;
+      } | null;
       created_at: string;
     }>(
       (a, b) =>
         db
           .from("waitlist_entries")
           .select(
-            "id,barber_id,service_ids,customer_name,phone,email,contact_channel,date,window_start,window_end,status,offer_expires_at,offered_booking_id,created_at",
+            "id,barber_id,service_ids,customer_name,phone,email,contact_channel,date,window_start,window_end,status,offer_expires_at,offered_booking_id,created_at,offered_booking:bookings(status,hold_expires_at)",
           )
           .eq("barbershop_id", shop)
           .eq("date", date)

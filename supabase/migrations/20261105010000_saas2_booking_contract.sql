@@ -14,7 +14,7 @@ RETURNS TABLE (
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, extensions
+SET search_path = pg_catalog, public, extensions, pg_temp
 AS $$
 #variable_conflict use_column
 DECLARE
@@ -147,7 +147,7 @@ CREATE OR REPLACE FUNCTION public.create_group_booking_hold(
 RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, extensions
+SET search_path = pg_catalog, public, extensions, pg_temp
 AS $$
 DECLARE
   v_barber_id UUID := p_barber_id;
@@ -166,7 +166,7 @@ DECLARE
 BEGIN
   IF length(trim(p_customer_name)) NOT BETWEEN 2 AND 120 OR p_customer_name IS NULL OR p_customer_phone IS NULL OR length(regexp_replace(p_customer_phone,'[^0-9]','','g')) NOT BETWEEN 8 AND 15 OR length(COALESCE(p_customer_email,''))>254 THEN RAISE EXCEPTION 'Dados de contato inválidos.'; END IF;
   -- 1. Expirar holds vencidos imediatamente antes da tentativa
-  PERFORM expire_stale_holds();
+  UPDATE public.bookings SET status='expired',updated_at=now() WHERE barbershop_id=p_barbershop_id AND status='hold' AND hold_expires_at<=now();
 
   SELECT COALESCE(timezone, 'America/Sao_Paulo') INTO v_tz
   FROM barbershops WHERE id = p_barbershop_id;
@@ -278,9 +278,9 @@ REVOKE ALL ON FUNCTION public.create_group_booking_hold(uuid,uuid,timestamptz,uu
 GRANT EXECUTE ON FUNCTION public.create_group_booking_hold(uuid,uuid,timestamptz,uuid[],text,text,text,boolean) TO anon,authenticated;
 
 CREATE OR REPLACE FUNCTION public.get_availability(p_barbershop_id uuid,p_barber_id uuid,p_date date,p_service_ids uuid[])
-RETURNS TABLE(barber_id uuid,start_time timestamptz,end_time timestamptz) LANGUAGE sql SECURITY DEFINER SET search_path=public,extensions AS $$ SELECT * FROM public.get_group_availability(p_barbershop_id,p_barber_id,p_date,p_service_ids); $$;
+RETURNS TABLE(barber_id uuid,start_time timestamptz,end_time timestamptz) LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,public,extensions,pg_temp AS $$ SELECT * FROM public.get_group_availability(p_barbershop_id,p_barber_id,p_date,p_service_ids); $$;
 CREATE OR REPLACE FUNCTION public.create_booking_hold(p_barbershop_id uuid,p_barber_id uuid,p_starts_at timestamptz,p_service_ids uuid[],p_customer_name text,p_customer_phone text,p_customer_email text,p_marketing_consent boolean DEFAULT false)
-RETURNS jsonb LANGUAGE sql SECURITY DEFINER SET search_path=public,extensions AS $$ SELECT public.create_group_booking_hold(p_barbershop_id,p_barber_id,p_starts_at,p_service_ids,p_customer_name,p_customer_phone,p_customer_email,p_marketing_consent); $$;
+RETURNS jsonb LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,public,extensions,pg_temp AS $$ SELECT public.create_group_booking_hold(p_barbershop_id,p_barber_id,p_starts_at,p_service_ids,p_customer_name,p_customer_phone,p_customer_email,p_marketing_consent); $$;
 REVOKE ALL ON FUNCTION public.get_availability(uuid,uuid,date,uuid[]) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.get_availability(uuid,uuid,date,uuid[]) TO anon,authenticated;
 REVOKE ALL ON FUNCTION public.create_booking_hold(uuid,uuid,timestamptz,uuid[],text,text,text,boolean) FROM PUBLIC;
