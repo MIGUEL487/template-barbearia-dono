@@ -1,5 +1,6 @@
 "use client";
 
+import {UpsellSuggestions} from "@/components/saas2/upsell-suggestions";
 import { useRef, useState } from "react";
 import {
   completeBookingAction,
@@ -128,6 +129,7 @@ export function BookingActions({
           </button>
         </div>
 
+        {action === "Concluir" && <UpsellSuggestions shopId={shopId} bookingId={bookingId}/>}
         {action === "Cancelar" && (
           <label className="block text-xs font-medium text-text-muted mb-4">
             Motivo do cancelamento (opcional)

@@ -19,5 +19,8 @@ GRANT SELECT,INSERT,UPDATE ON public.day_closings TO authenticated;
 CREATE OR REPLACE FUNCTION public.consume_raiox_ai_quota(p_barbershop_id uuid) RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE n integer; BEGIN IF NOT public.saas_can_manage(p_barbershop_id) THEN RAISE EXCEPTION 'Acesso negado' USING ERRCODE='42501'; END IF; INSERT INTO public.ai_daily_usage(barbershop_id,date,calls) VALUES(p_barbershop_id,(now() AT TIME ZONE 'America/Sao_Paulo')::date,1) ON CONFLICT(barbershop_id,date) DO UPDATE SET calls=ai_daily_usage.calls+1 WHERE ai_daily_usage.calls<5 RETURNING calls INTO n; RETURN n IS NOT NULL; END; $$;
 REVOKE ALL ON FUNCTION public.consume_raiox_ai_quota(uuid) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.consume_raiox_ai_quota(uuid) TO authenticated;
+DROP POLICY IF EXISTS saas_consent_manager_read ON public.consents;
+CREATE POLICY saas_consent_manager_read ON public.consents FOR SELECT TO authenticated USING(public.saas_can_manage(barbershop_id));
+GRANT SELECT ON public.consents TO authenticated;
 NOTIFY pgrst,'reload schema';
 COMMIT;
