@@ -263,7 +263,7 @@ export function PremiumDatePicker({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 6 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute top-full mt-2 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 z-50 w-[300px] sm:w-[320px] bg-surface border border-border rounded-2xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.85)]"
+            className="management-date-popover absolute top-full mt-2 right-0 z-50 w-[300px] sm:w-[320px] bg-surface border border-border rounded-2xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.85)]"
           >
             {/* Quick action buttons */}
             <div className="flex items-center justify-between gap-1 pb-3 mb-3 border-b border-hairline text-[11px]">
