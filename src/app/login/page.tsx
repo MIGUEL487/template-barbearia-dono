@@ -1,7 +1,7 @@
 "use client";
 
 import { BrandLogo } from "@/components/brand-logo";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Lock, AlertCircle, ShieldCheck, Loader2 } from "lucide-react";
 import { createClient, getMissingAdminEnvVars } from "@/lib/supabase";
@@ -13,7 +13,8 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const missingVars = getMissingAdminEnvVars();
+  const [missingVars,setMissingVars]=useState<string[]>([]);
+  useEffect(()=>setMissingVars(getMissingAdminEnvVars()),[]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

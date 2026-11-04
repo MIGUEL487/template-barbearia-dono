@@ -40,6 +40,8 @@ export function PremiumDatePicker({
   className = "",
 }: PremiumDatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted,setMounted]=useState(false);
+  useEffect(()=>setMounted(true),[]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Parse current selected date safely without UTC shift
@@ -228,10 +230,10 @@ export function PremiumDatePicker({
 
           <div className="flex flex-col text-left">
             <span className="text-text font-bold text-xs truncate">
-              {trigger.label}
+              {mounted?trigger.label:'Selecionar data'}
             </span>
             <span className="text-[10px] text-text-muted font-normal">
-              {trigger.fullYear}
+              {mounted?trigger.fullYear:'Agenda'}
             </span>
           </div>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import {useEffect,useState} from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { formatCurrency } from "@/lib/utils";
 import { TrendingUp, BarChart2 } from "lucide-react";
@@ -10,6 +11,9 @@ export function RevenueChart({
   entries: { created_at: string; amount: number }[];
 }) {
   const reduced = useReducedMotion();
+  const [mounted,setMounted]=useState(false);
+  useEffect(()=>setMounted(true),[]);
+  if(!mounted)return <section className="revenue-chart bg-surface border border-border rounded-2xl p-6 min-h-[280px]" aria-label="Preparando gráfico de receita" aria-busy="true"><div className="h-32 rounded-xl bg-surface-2"/></section>;
   const days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - 6 + i);
