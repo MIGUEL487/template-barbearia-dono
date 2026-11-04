@@ -8,6 +8,7 @@ Usar checkout limpo. Neste ambiente usar /workspace/template-barbearia-dono-visu
 git fetch origin
 git switch master
 git merge --ff-only origin/master
+git revert 276bb90
 git revert 7c7f45c
 git revert 50f81be
 git push origin master

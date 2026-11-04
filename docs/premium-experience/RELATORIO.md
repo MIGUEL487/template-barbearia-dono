@@ -1,6 +1,6 @@
 # Auto Stilo — painel refinado
 
-Base remota: c158a6eed9e5d4be358df1f1916207c30571f754. Branch feat/premium-experience. Backup remoto: backup/pre-premium-experience-20261104. Commits de código: 50f81be + 7c7f45c. Destino master; main preservada.
+Base remota: c158a6eed9e5d4be358df1f1916207c30571f754. Branch feat/premium-experience. Backup remoto: backup/pre-premium-experience-20261104. Commits de código: 50f81be + 7c7f45c + 276bb90. Destino master; main preservada.
 
 ## Escopo visual
 
@@ -30,10 +30,14 @@ qa-premium-management: dashboard, agenda, serviços, clientes, financeiro, equip
 
 qa-premium-notifications: permissão somente por clique, salvar/remover inscrição, som, preferência persistida, Realtime atualizando agenda, deduplicação, evento push no service worker real via CDP, permissão negada e instrução de instalação no iPhone. Desktop/mobile passaram. Tudo com HTTP/WebSocket/PushManager interceptados e fixtures; não houve inscrição ou envio reais. Capturas em notifications/.
 
-Testes HMAC existentes: três passaram. Não houve alterações em rotas/actions, lib, Edge Function, RPCs, migrations, RLS, subscription/provider de notificações ou service worker. A bateria não equivale a login/reserva real ou entrega push em telefone físico; isso depende da configuração e homologação do ambiente publicado.
+Testes HMAC existentes: três passaram. Não houve alterações em Server Actions, lib, Edge Function, RPCs, migrations, RLS, subscription/provider de notificações ou service worker. A bateria não equivale a login/reserva real ou entrega push em telefone físico; isso depende da configuração e homologação do ambiente publicado.
 
 ## Skills e publicação
 
 high-end-visual-design, ui-animations, motion-design, web-animation-design e webapp-testing foram reutilizadas a partir das instruções já lidas nesta conversa. Nenhum scanner ou script desconhecido foi executado. Bibliotecas já existentes não foram tratadas como skills.
 
 Push em master usa o fluxo Cloudflare existente, sem deploy manual em paralelo. O ambiente não permite consultar API GitHub/Cloudflare nem abrir workers.dev; hash remoto será conferido, mas deployment e URL de produção permanecem sem confirmação. Não alterei contas, secrets ou configuração Cloudflare.
+
+## Revisão final de calendário móvel
+
+O teste adicional com o calendário aberto encontrou overflow no popover: a centralização via translateX concorria com o transform da animação Motion. O commit 276bb90 ancora pela direita, sem transformação para centralizar, e limita a largura ao viewport. Também remove espaço superior desnecessário no header móvel em fluxo normal. A bateria completa foi repetida após esse ajuste, incluindo os oito destinos e notificações.
