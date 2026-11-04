@@ -11,13 +11,10 @@ import {
   Check,
   AlertCircle,
   Loader2,
-  Sparkles,
-  Palette,
   CreditCard,
   ShieldCheck,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
-import { fixMojibake } from "@/lib/utils";
 import {
   updateSiteSettingsAction,
   logoutAction,
@@ -34,11 +31,6 @@ export default function ConfiguracoesPage() {
   } | null>(null);
 
   // Campos
-  const [brandName, setBrandName] = useState("");
-  const [brandTagline, setBrandTagline] = useState("");
-  const [heroTitle, setHeroTitle] = useState("");
-  const [heroSubtitle, setHeroSubtitle] = useState("");
-  const [accentColor, setAccentColor] = useState("#7C3AED");
   const [depositPct, setDepositPct] = useState("50");
   const [cancelHours, setCancelHours] = useState("24");
 
@@ -82,13 +74,8 @@ export default function ConfiguracoesPage() {
       if (error) {
         setMessage({ type: "error", text: error.message });
       } else if (data) {
-        setBrandName(fixMojibake(data.brand_name) || "");
-        setBrandTagline(fixMojibake(data.brand_tagline) || "");
-        setHeroTitle(fixMojibake(data.hero_title) || "");
-        setHeroSubtitle(fixMojibake(data.hero_subtitle) || "");
-        setAccentColor(data.accent_color || "#7C3AED");
-        setDepositPct(String(data.deposit_percentage || 50));
-        setCancelHours(String(data.cancellation_notice_hours || 24));
+        setDepositPct(String(data.deposit_percentage ?? 50));
+        setCancelHours(String(data.cancellation_notice_hours ?? 24));
       }
     } catch (err: any) {
       setMessage({
@@ -112,13 +99,8 @@ export default function ConfiguracoesPage() {
     setMessage(null);
 
     const res = await updateSiteSettingsAction(barbershopId, {
-      brand_name: brandName,
-      brand_tagline: brandTagline,
-      hero_title: heroTitle,
-      hero_subtitle: heroSubtitle,
-      accent_color: accentColor,
-      deposit_percentage: parseFloat(depositPct) || 50,
-      cancellation_notice_hours: parseInt(cancelHours, 10) || 24,
+      deposit_percentage: depositPct.trim()===''?NaN:Number(depositPct),
+      cancellation_notice_hours: cancelHours.trim()===''?NaN:Number(cancelHours),
     });
 
     setIsSaving(false);
@@ -148,7 +130,7 @@ export default function ConfiguracoesPage() {
               Configurações do Sistema
             </h1>
             <p className="text-xs text-text-muted mt-1">
-              Personalização da marca, avisos do site, regras de cancelamento e notificações push
+              Sinal, cancelamento, notificações e ajuda para operar sua barbearia.
             </p>
           </div>
         </header>
@@ -176,74 +158,6 @@ export default function ConfiguracoesPage() {
               </div>
             )}
 
-            {/* Section 1: Identidade da Marca */}
-            <div className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-5">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-hairline">
-                <Sparkles className="w-4 h-4 text-accent-light" />
-                <h2 className="text-base font-bold text-text">
-                  Identidade da Marca & Textos do Site
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Nome da Barbearia
-                  </label>
-                  <input
-                    aria-label="Nome da barbearia"
-                    type="text"
-                    required
-                    value={brandName}
-                    onChange={(e) => setBrandName(e.target.value)}
-                    className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Slogan / Tagline
-                  </label>
-                  <input
-                    aria-label="Subtítulo da marca"
-                    type="text"
-                    value={brandTagline}
-                    onChange={(e) => setBrandTagline(e.target.value)}
-                    className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Título Principal do Site (Hero)
-                  </label>
-                  <input
-                    aria-label="Título principal do site"
-                    type="text"
-                    required
-                    value={heroTitle}
-                    onChange={(e) => setHeroTitle(e.target.value)}
-                    className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Subtítulo / Descrição da Landing Page
-                  </label>
-                  <textarea
-                    aria-label="Descrição principal do site"
-                    rows={2}
-                    value={heroSubtitle}
-                    onChange={(e) => setHeroSubtitle(e.target.value)}
-                    className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none resize-none"
-                  />
-                </div>
-              </div>
-            </div>
-
             {/* Section 2: Políticas Financeiras & Agendamento */}
             <div className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-5">
               <div className="flex items-center gap-2.5 pb-3 border-b border-hairline">
@@ -259,7 +173,7 @@ export default function ConfiguracoesPage() {
                     Sinal Pix Obrigatório (%)
                   </label>
                   <input
-                    aria-label="Percentual do sinal"
+                    aria-label="Percentual do sinal" step="0.01"
                     type="number"
                     min="0"
                     max="100"
@@ -278,7 +192,7 @@ export default function ConfiguracoesPage() {
                     aria-label="Antecedência mínima para cancelamento em horas"
                     type="number"
                     min="1"
-                    max="72"
+                    max="8760"
                     required
                     value={cancelHours}
                     onChange={(e) => setCancelHours(e.target.value)}
@@ -286,27 +200,7 @@ export default function ConfiguracoesPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Cor de Destaque da Marca
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      aria-label="Cor de destaque"
-                      type="color"
-                      value={accentColor}
-                      onChange={(e) => setAccentColor(e.target.value)}
-                      className="w-9 h-9 rounded-xl cursor-pointer bg-transparent border-0 p-0"
-                    />
-                    <input
-                      aria-label="Cor de destaque em hexadecimal"
-                      type="text"
-                      value={accentColor}
-                      onChange={(e) => setAccentColor(e.target.value)}
-                      className="flex-1 bg-bg border border-border rounded-xl px-3 py-2 text-xs text-text focus:border-accent focus:outline-none font-mono"
-                    />
-                  </div>
-                </div>
+
               </div>
             </div>
 

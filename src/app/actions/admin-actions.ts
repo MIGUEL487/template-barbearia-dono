@@ -169,36 +169,15 @@ export async function toggleServiceActiveAction(
   return { success: true };
 }
 
-export async function updateSiteSettingsAction(
-  barbershopId: string,
-  settings: {
-    brand_name?: string;
-    brand_tagline?: string;
-    accent_color?: string;
-    hero_title?: string;
-    hero_subtitle?: string;
-    deposit_percentage?: number;
-    cancellation_notice_hours?: number;
-    about_history?: string;
-    about_location?: string;
-  },
-) {
-  const supabase = await requireShopClient(barbershopId, ["owner", "admin"]);
-
-  const { error } = await supabase
-    .from("site_settings")
-    .update({
-      ...settings,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("barbershop_id", barbershopId);
-
-  if (error) {
-    return { success: false, error: error.message };
-  }
-
-  revalidatePath("/configuracoes");
-  return { success: true };
+export async function updateSiteSettingsAction(barbershopId:string,settings:{deposit_percentage?:number;cancellation_notice_hours?:number}){
+  try{
+    const parsed=z.object({deposit_percentage:z.number().finite().min(0).max(100).multipleOf(0.01),cancellation_notice_hours:z.number().int().min(0).max(8760)}).strict().safeParse(settings);
+    if(!parsed.success)return {success:false,error:'Informe um sinal entre 0 e 100% e antecedência válida (0 a 8760 horas).'};
+    const db=await requireShopClient(barbershopId,['owner','admin']);
+    const {data,error}=await db.from('site_settings').update({...parsed.data,updated_at:new Date().toISOString()}).eq('barbershop_id',barbershopId).select('barbershop_id').maybeSingle();
+    if(error||!data)return {success:false,error:'Não foi possível salvar as políticas. Verifique sua permissão e tente novamente.'};
+    revalidatePath('/configuracoes');return {success:true};
+  }catch{return {success:false,error:'Sessão inválida ou sem permissão para alterar configurações.'}}
 }
 
 export async function logoutAction() {
