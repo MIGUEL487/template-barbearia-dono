@@ -1,5 +1,6 @@
 "use client";
 
+import {ManagementDate} from "@/components/admin/management-date";
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
 import { BarberPhotoEditor } from "@/components/admin/barber-photo-editor";
@@ -179,7 +180,7 @@ export default function EquipePage() {
               <div>
                 <span className="text-text-muted text-[11px] block">Data Atual</span>
                 <strong className="text-text font-mono text-xs">
-                  {new Date().toLocaleDateString("pt-BR", { dateStyle: "full" })}
+                  <ManagementDate/>
                 </strong>
               </div>
             </div>
