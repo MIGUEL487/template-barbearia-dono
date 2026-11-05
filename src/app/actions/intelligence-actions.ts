@@ -1,7 +1,7 @@
 "use server";
 import { resolveCurrentShop } from "@/lib/current-shop";
 import { localDate, validBooking } from "@/lib/saas2/analytics";
-import { geminiKey } from "@/lib/runtime-secret";
+import { geminiKey, geminiRuntime } from "@/lib/runtime-secret";
 import { cachedInterpretation } from "@/lib/saas2/gemini";
 import { Filter, loadIntelligence } from "@/lib/saas2/source";
 export async function analyticsAction(filter: unknown) {
@@ -207,12 +207,12 @@ export async function generateAiAction(date: string) {
       end: date,
       barber: null,
     });
-    const key = geminiKey();
+    const { key, model } = geminiRuntime();
     if (!key)
       return {
         ok: false as const,
         error:
-          "Gemini não configurado. O diagnóstico determinístico continua disponível.",
+          "O secret Gemini não está disponível nesta execução. Confira Conexão Gemini no Raio-X. O diagnóstico determinístico continua disponível.",
       };
     const aggregate = {
       date,
@@ -242,6 +242,7 @@ export async function generateAiAction(date: string) {
             "Limite de cinco análises generativas por loja/dia atingido.",
           );
       },
+      model,
     );
     return { ok: true as const, output };
   } catch (error) {

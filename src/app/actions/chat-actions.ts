@@ -8,8 +8,9 @@ import {
   analyze,
   dayStart,
 } from "@/lib/saas2/analytics";
+import { GeminiFailure, safeGeminiDiagnostic } from "@/lib/saas2/gemini-errors";
 import { diagnose } from "@/lib/saas2/diagnosis";
-import { geminiKey } from "@/lib/runtime-secret";
+import { geminiRuntime } from "@/lib/runtime-secret";
 import { cachedInterpretation } from "@/lib/saas2/gemini";
 import { pendingSchema } from "@/lib/saas3/ledger";
 import { cleanQuestion, questionRange } from "@/lib/saas3/questions";
@@ -36,6 +37,7 @@ export interface ChatPayload {
   daily: { date: string; income: number; forecast: number; bookings: number }[];
   retention: { label: string; count: number }[];
   notice?: string;
+  diagnostic?: string;
 }
 export async function chatStateAction(conversation?: string) {
   try {
@@ -372,7 +374,7 @@ export async function askRaioXAction(raw: {
         "\n" +
         payload.retention.map((r) => `${r.label}: ${r.count}.`).join(" ") +
         " Classificações históricas, sem expor nomes/contatos nem presumir intenção.";
-    const key = geminiKey();
+    const { key, model } = geminiRuntime();
     if (key && conversation) {
       try {
         const interpreted = await cachedInterpretation(
@@ -409,20 +411,31 @@ export async function askRaioXAction(raw: {
             const { data, error } = await db.rpc("consume_raiox_ai_quota", {
               p_barbershop_id: shop,
             });
-            if (error || !data)
-              throw Error("Cota generativa indisponível ou esgotada.");
+            if (error) throw new GeminiFailure("quota_check", null, error.code);
+            if (!data) throw new GeminiFailure("app_quota");
           },
+          model,
         );
         text +=
           "\n\n" + interpreted.summary + "\n" + interpreted.actions.join("\n");
         payload.mode = "gemini";
-      } catch {
+      } catch (error) {
+        const diagnostic = safeGeminiDiagnostic(error);
+        console.warn(
+          "[Raio-X]",
+          JSON.stringify({
+            category: diagnostic.category,
+            status: diagnostic.status,
+            model,
+          }),
+        );
         payload.notice =
-          "Gemini indisponível ou cota esgotada. Resposta calculada pelo sistema.";
+          diagnostic.message + " Resposta calculada pelo sistema.";
+        payload.diagnostic = diagnostic.category;
       }
     } else
       payload.notice = conversation
-        ? "Gemini não configurado. Resposta calculada pelo sistema."
+        ? "O secret Gemini não está acessível neste runtime. Abra Conexão Gemini para conferir a origem. Resposta calculada pelo sistema."
         : "Prévia calculada sem histórico: aplique a migration SaaS 3.0 para salvar e habilitar Gemini.";
     if (conversation) {
       const { error } = await db.from("raiox_messages").insert({

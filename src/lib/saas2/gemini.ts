@@ -1,5 +1,10 @@
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
+import {
+  GeminiFailure,
+  classifyGeminiError,
+  safeGeminiDiagnostic,
+} from "./gemini-errors";
 export const geminiModel = "gemini-flash-latest";
 const schema = z
   .object({
@@ -13,6 +18,7 @@ const schema = z
 export async function interpretWithGemini(
   key: string,
   aggregate: Record<string, number | string | null>,
+  model = geminiModel,
 ) {
   const ai = new GoogleGenAI({
     apiKey: key,
@@ -21,7 +27,7 @@ export async function interpretWithGemini(
   });
   try {
     const response = await ai.models.generateContent({
-      model: geminiModel,
+      model,
       contents: JSON.stringify(aggregate),
       config: {
         systemInstruction:
@@ -51,7 +57,12 @@ export async function interpretWithGemini(
         },
       },
     });
-    const result = schema.parse(JSON.parse(response.text || "{}"));
+    let result: z.infer<typeof schema>;
+    try {
+      result = schema.parse(JSON.parse(response.text || "{}"));
+    } catch {
+      throw new GeminiFailure("structured_response");
+    }
     return {
       summary: result.resumo,
       actions: [
@@ -61,10 +72,13 @@ export async function interpretWithGemini(
       ],
       priority: result.prioridade,
     };
-  } catch {
-    throw Error(
-      "Gemini indisponível ou resposta inválida. Os indicadores e o diagnóstico determinístico continuam disponíveis.",
+  } catch (error) {
+    const failure = classifyGeminiError(error);
+    console.warn(
+      "[Gemini]",
+      JSON.stringify({ ...safeGeminiDiagnostic(failure), model }),
     );
+    throw failure;
   }
 }
 const pending = new Map<
@@ -79,10 +93,11 @@ export async function cachedInterpretation(
   key: string,
   aggregate: Record<string, number | string | null>,
   consume: () => Promise<void>,
+  model = geminiModel,
 ) {
   const digest = await crypto.subtle.digest(
     "SHA-256",
-    new TextEncoder().encode(JSON.stringify(aggregate)),
+    new TextEncoder().encode(JSON.stringify({ model, aggregate })),
   );
   const id =
     shop +
@@ -95,7 +110,7 @@ export async function cachedInterpretation(
   if (existing) return existing.value;
   const value = (async () => {
     await consume();
-    return interpretWithGemini(key, aggregate);
+    return interpretWithGemini(key, aggregate, model);
   })();
   if (pending.size >= 100) pending.delete(pending.keys().next().value!);
   pending.set(id, { expires: Date.now() + 300000, value });

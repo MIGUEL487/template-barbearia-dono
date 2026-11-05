@@ -8,6 +8,7 @@ const dir = await fs.mkdtemp(path.resolve(".qa-gemini-"));
 for (const [name, src] of [
   ["selection", "shop-selection"],
   ["gemini", "saas2/gemini"],
+  ["gemini-errors", "saas2/gemini-errors"],
 ]) {
   await fs.writeFile(
     path.join(dir, name + ".mjs"),
@@ -16,7 +17,7 @@ for (const [name, src] of [
         target: ts.ScriptTarget.ES2022,
         module: ts.ModuleKind.ES2022,
       },
-    }).outputText,
+    }).outputText.replace(/(["'])\.\/gemini-errors\1/g,'"./gemini-errors.mjs"'),
   );
 }
 const { selectMembership } = await import(
