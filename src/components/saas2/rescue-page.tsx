@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { AdminNavigation } from "@/components/admin/navigation";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -62,48 +63,104 @@ export function RescuePage() {
         {result && !result.ok && <Card role="alert">{result.error}</Card>}
         {d && (
           <>
-            <Card>
-              <CardTitle>Oportunidades de agenda</CardTitle>
-              <p className="mt-4">
-                {Math.round(d.current.freeMinutes)} minutos livres ·{" "}
-                {d.current.cancelled} cancelamento(s) ·{" "}
-                {d.current.occupancy === null
-                  ? "Sem expediente"
-                  : (d.current.occupancy * 100).toFixed(1) + "% de ocupação"}
-                .
-              </p>
-              <p className="text-text-muted mt-4">
-                Capacidade livre não equivale a serviços que cabem. Confirme os
-                inícios disponíveis no Raio-X ou na fila de espera.
-                Cancelamentos são agrupados pela data do atendimento; não há
-                histórico de quando ocorreram.
-              </p>
-            </Card>
-            <Card>
-              <CardTitle>
-                Campanha de retorno · Demonstração — integração futura
-              </CardTitle>
-              <p className="mt-4">
-                Público sugerido: clientes além do intervalo habitual com
-                consentimento de WhatsApp vigente. {d.eligible} cliente(s)
-                elegível(is) no histórico analisado.
-              </p>
-              <label className="block mt-4">
-                Prévia da mensagem
-                <textarea
-                  className="w-full mt-2"
-                  rows={4}
-                  value={message}
-                  maxLength={1000}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-              </label>
-              <p className="text-text-muted mt-4">
-                {d.warning} Não há disparo, fila ativa ou desconto aplicado.
-                Revise preferências e consentimentos antes de qualquer contato
-                manual.
-              </p>
-            </Card>
+            <section className="s3-action-list">
+              <article className="s3-opportunity">
+                <div>
+                  <h2>Preencher a agenda</h2>
+                  <p>
+                    {Math.round(d.current.freeMinutes)} minutos livres na
+                    capacidade cadastrada. Verifique os serviços que cabem.
+                  </p>
+                </div>
+                <Link className="text-accent-light" href="/raio-x">
+                  Consultar horários →
+                </Link>
+              </article>
+              <article className="s3-opportunity">
+                <div>
+                  <h2>Reavaliar cancelamentos</h2>
+                  <p>
+                    {d.current.cancelled} cancelamento(s) na data. A fila mantém
+                    prioridade e regras de encaixe.
+                  </p>
+                </div>
+                <Link className="text-accent-light" href="/fila-de-espera">
+                  Abrir fila →
+                </Link>
+              </article>
+              <article className="s3-opportunity">
+                <div>
+                  <h2>Preparar um retorno</h2>
+                  <p>
+                    {d.eligible} cliente(s) com sinal de atraso e consentimento
+                    vigente. Envio em demonstração.
+                  </p>
+                </div>
+                <a
+                  className="text-accent-light"
+                  href="#rescue-campaign"
+                  onClick={() => {
+                    const el = document.getElementById(
+                      "rescue-campaign",
+                    ) as HTMLDetailsElement | null;
+                    if (el) el.open = true;
+                  }}
+                >
+                  Ver prévia →
+                </a>
+              </article>
+            </section>
+            <details className="bg-surface border border-border rounded-2xl p-6">
+              <summary>Entender as oportunidades</summary>
+              <Card>
+                <CardTitle>Oportunidades de agenda</CardTitle>
+                <p className="mt-4">
+                  {Math.round(d.current.freeMinutes)} minutos livres ·{" "}
+                  {d.current.cancelled} cancelamento(s) ·{" "}
+                  {d.current.occupancy === null
+                    ? "Sem expediente"
+                    : (d.current.occupancy * 100).toFixed(1) + "% de ocupação"}
+                  .
+                </p>
+                <p className="text-text-muted mt-4">
+                  Capacidade livre não equivale a serviços que cabem. Confirme
+                  os inícios disponíveis no Raio-X ou na fila de espera.
+                  Cancelamentos são agrupados pela data do atendimento; não há
+                  histórico de quando ocorreram.
+                </p>
+              </Card>
+            </details>
+            <details
+              id="rescue-campaign"
+              className="bg-surface border border-border rounded-2xl p-6"
+            >
+              <summary>Preparar campanha · somente demonstração</summary>
+              <Card>
+                <CardTitle>
+                  Campanha de retorno · Demonstração — integração futura
+                </CardTitle>
+                <p className="mt-4">
+                  Público sugerido: clientes além do intervalo habitual com
+                  consentimento de WhatsApp vigente. {d.eligible} cliente(s)
+                  elegível(is) no histórico analisado.
+                </p>
+                <label className="block mt-4">
+                  Prévia da mensagem
+                  <textarea
+                    className="w-full mt-2"
+                    rows={4}
+                    value={message}
+                    maxLength={1000}
+                    onChange={(e) => setMessage(e.target.value)}
+                  />
+                </label>
+                <p className="text-text-muted mt-4">
+                  {d.warning} Não há disparo, fila ativa ou desconto aplicado.
+                  Revise preferências e consentimentos antes de qualquer contato
+                  manual.
+                </p>
+              </Card>
+            </details>
             <Card>
               <CardTitle>Retenção de clientes</CardTitle>
               <p className="text-text-muted mt-4">

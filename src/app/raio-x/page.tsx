@@ -1,4 +1,1 @@
-import { RaioXPage } from "@/components/saas2/raiox-page";
-export default function Page() {
-  return <RaioXPage />;
-}
+import {Chat3} from '@/components/saas3/chat';export default function Page(){return <Chat3/>}

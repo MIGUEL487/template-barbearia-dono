@@ -1,4 +1,1 @@
-import { AnalyticsPage } from "@/components/saas2/analytics-page";
-export default function Page() {
-  return <AnalyticsPage />;
-}
+import {Analytics3} from '@/components/saas3/analytics';export default function Page(){return <Analytics3/>}

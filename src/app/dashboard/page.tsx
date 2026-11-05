@@ -1,4 +1,5 @@
 "use client";
+import {readLedger,settled} from "@/lib/saas3/ledger";
 import {currentMembership} from "@/lib/browser-shop";
 
 import { AdminSkeleton } from "@/components/admin/skeleton";
@@ -97,14 +98,8 @@ export default function DashboardPage() {
       if (period === "mes") periodStart.setDate(1);
       const periodEnd = new Date();
       periodEnd.setHours(23, 59, 59, 999);
-      const { data: txData } = await supabase
-        .from("financial_transactions")
-        .select("amount,created_at")
-        .eq("barbershop_id", shopId)
-        .eq("type", "income")
-        .gte("created_at", periodStart.toISOString())
-        .lte("created_at", periodEnd.toISOString());
-
+      const {entries:periodLedger}=await readLedger(supabase,shopId,periodStart.toISOString(),new Date(periodEnd.getTime()+1).toISOString());
+      const txData=periodLedger.filter(e=>e.type==='income'&&settled(e));
       const totalReceived = (txData || []).reduce(
         (acc: number, cur: any) => acc + Number(cur.amount),
         0,
@@ -113,14 +108,8 @@ export default function DashboardPage() {
       const chartStart = new Date();
       chartStart.setHours(0, 0, 0, 0);
       chartStart.setDate(chartStart.getDate() - 6);
-      const { data: seriesData, error: seriesError } = await supabase
-        .from("financial_transactions")
-        .select("amount,created_at")
-        .eq("barbershop_id", shopId)
-        .eq("type", "income")
-        .gte("created_at", chartStart.toISOString());
-      if (seriesError) setErrorMsg("Não foi possível atualizar o gráfico de receita.");
-      setRevenueEntries(seriesData || []);
+      const {entries:seriesLedger}=await readLedger(supabase,shopId,chartStart.toISOString(),new Date(Date.now()+86400000).toISOString());
+      setRevenueEntries(seriesLedger.filter(e=>e.type==='income'&&settled(e)).map(e=>({created_at:e.created_at,amount:Number(e.amount)})));
 
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);

@@ -1,7 +1,18 @@
 import Link from "next/link";
 import { Card, CardTitle } from "@/components/ui/card";
-import { version } from "../../../package.json";
+import packageInfo from "../../../package.json";
+const { version } = packageInfo;
 const answers = [
+  [
+    "Como registro compras, vendas e despesas?",
+    "No Financeiro, use Nova movimentação ou os atalhos de compra/venda. Pendências não são recebimentos. Lançamentos manuais podem ser editados ou anulados com histórico; pagamentos conciliados usam o fluxo original. Vincular um agendamento reutiliza a receita existente, sem duplicar.",
+    "/financeiro",
+  ],
+  [
+    "Como converso com o Raio-X?",
+    "Faça perguntas sobre números e períodos. O servidor consulta dados autorizados; Gemini interpreta quando disponível. Sem provedor, a resposta é calculada e identificada. Não informe contatos pessoais. Conversas são privadas por usuário e loja.",
+    "/raio-x",
+  ],
   [
     "Como configuro o expediente?",
     "Abra Equipe, escolha o profissional e ajuste expediente, almoço e folgas. Bloqueios e dias fechados também afetam a disponibilidade pública.",
@@ -24,7 +35,7 @@ const answers = [
   ],
   [
     "O encerramento é automático?",
-    "Nesta versão, gere manualmente no Raio-X. Um único relatório é mantido por loja e dia. Regerar atualiza o relatório; não altera reservas ou pagamentos.",
+    "Briefing e fechamento são gerados uma vez por data na primeira abertura após os horários cadastrados. Não há job em segundo plano. Sem acesso, a próxima abertura pode gerar o fechamento do último dia de expediente. Relatórios não lançam recebimentos.",
     "/raio-x",
   ],
   [
@@ -48,7 +59,7 @@ export function Support() {
     <Card>
       <CardTitle>Suporte e ajuda interna</CardTitle>
       <p className="text-text-muted mt-4">
-        Auto Stilo Gestão · versão {version} · funcionalidades SaaS 2.0. Nenhum
+        Auto Stilo Gestão · versão {version} · experiência SaaS 3.0. Nenhum
         canal externo de suporte foi cadastrado.
       </p>
       <div className="space-y-4 mt-4">

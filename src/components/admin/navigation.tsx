@@ -1,6 +1,7 @@
 "use client";
 
-import {ShopSwitcher} from "./shop-switcher";
+import { ReportBootstrap } from "@/components/saas3/report-bootstrap";
+import { ShopSwitcher } from "./shop-switcher";
 import { MotionToggle } from "@/components/motion-preferences";
 import { DemoBadge } from "@/components/demo-watermark";
 import Link from "next/link";
@@ -29,13 +30,13 @@ const links = [
   ["/dashboard", "Painel", BarChart3],
   ["/agenda", "Agenda", Calendar],
   ["/clientes", "Clientes", Users],
-  ["/financeiro", "Financeiro", DollarSign],
-  ["/servicos", "Serviços", Scissors],
   ["/equipe", "Equipe", Clock],
+  ["/servicos", "Serviços", Scissors],
   ["/analises", "Análises", BarChart3],
   ["/raio-x", "Raio-X", ScanLine],
   ["/resgate", "Modo Resgate", Target],
   ["/fila-de-espera", "Fila de espera", ListOrdered],
+  ["/financeiro", "Financeiro", DollarSign],
   ["/configuracoes", "Configurações", Settings],
 ] as const;
 
@@ -44,7 +45,9 @@ export function AdminNavigation() {
     try {
       await deactivateDevicePush();
     } catch {
-      console.warn("[Notificações] Não foi possível remover completamente o push na saída.");
+      console.warn(
+        "[Notificações] Não foi possível remover completamente o push na saída.",
+      );
     }
     await logoutAction();
   };
@@ -54,6 +57,7 @@ export function AdminNavigation() {
 
   return (
     <>
+      <ReportBootstrap />
       {/* Mobile Top Brand Bar */}
       <div className="admin-mobile-brand">
         <div className="flex items-center gap-3">
@@ -75,18 +79,35 @@ export function AdminNavigation() {
           </span>
         </Link>
 
-        <ShopSwitcher/><nav aria-label="Navegação administrativa">
-          {links.map(([href, label, Icon]) => {
+        <ShopSwitcher />
+        <nav aria-label="Navegação administrativa">
+          {links.map(([href, label, Icon], index) => {
             const isActive = path === href;
             return (
-              <Link
-                href={href}
-                key={href}
-                aria-current={isActive ? "page" : undefined}
-              >
-                <Icon size={18} className={isActive ? "text-accent-light" : "text-text-muted"} />
-                <span>{label}</span>
-              </Link>
+              <span key={href}>
+                {[0, 5, 9].includes(index) && (
+                  <span className="s3-nav-group block">
+                    {index === 0
+                      ? "Gestão"
+                      : index === 5
+                        ? "Inteligência"
+                        : "Administração"}
+                  </span>
+                )}
+                <Link
+                  href={href}
+                  key={href}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <Icon
+                    size={18}
+                    className={
+                      isActive ? "text-accent-light" : "text-text-muted"
+                    }
+                  />
+                  <span>{label}</span>
+                </Link>
+              </span>
             );
           })}
         </nav>
@@ -147,7 +168,8 @@ export function AdminNavigation() {
             </button>
           </div>
           <div className="flex flex-col gap-2 my-2">
-            <ShopSwitcher/>{links.slice(4).map(([href, label, Icon]) => (
+            <ShopSwitcher />
+            {links.slice(4).map(([href, label, Icon]) => (
               <Link href={href} key={href} onClick={() => setMore(false)}>
                 <Icon size={18} />
                 <span>{label}</span>

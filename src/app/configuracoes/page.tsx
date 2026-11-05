@@ -1,7 +1,8 @@
 "use client";
-import {currentMembership} from "@/lib/browser-shop";
+import { currentMembership } from "@/lib/browser-shop";
 
-import {Support} from "@/components/saas2/support";
+import Link from "next/link";
+import { Support } from "@/components/saas2/support";
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
 import { NotificationControls } from "@/components/admin/notification-controls";
@@ -52,7 +53,11 @@ export default function ConfiguracoesPage() {
         return;
       }
 
-      const {data:member,error:memErr}=await currentMembership(supabase,user.id,"barbershop_id");
+      const { data: member, error: memErr } = await currentMembership(
+        supabase,
+        user.id,
+        "barbershop_id",
+      );
 
       if (memErr || !member) {
         setMessage({ type: "error", text: "Acesso não autorizado." });
@@ -97,8 +102,9 @@ export default function ConfiguracoesPage() {
     setMessage(null);
 
     const res = await updateSiteSettingsAction(barbershopId, {
-      deposit_percentage: depositPct.trim()===''?NaN:Number(depositPct),
-      cancellation_notice_hours: cancelHours.trim()===''?NaN:Number(cancelHours),
+      deposit_percentage: depositPct.trim() === "" ? NaN : Number(depositPct),
+      cancellation_notice_hours:
+        cancelHours.trim() === "" ? NaN : Number(cancelHours),
     });
 
     setIsSaving(false);
@@ -128,12 +134,33 @@ export default function ConfiguracoesPage() {
               Configurações do Sistema
             </h1>
             <p className="text-xs text-text-muted mt-1">
-              Sinal, cancelamento, notificações e ajuda para operar sua barbearia.
+              Sinal, cancelamento, notificações e ajuda para operar sua
+              barbearia.
             </p>
           </div>
         </header>
 
-        <NotificationControls />
+        <section
+          className="bg-surface border border-border rounded-2xl p-6 space-y-4"
+          aria-label="Funcionamento"
+        >
+          <h2>Funcionamento</h2>
+          <p className="text-sm text-text-muted">
+            Expediente, almoço, folgas e bloqueios ficam nas áreas operacionais,
+            sem duplicar configurações.
+          </p>
+          <div className="flex gap-4">
+            <Link className="text-accent-light" href="/equipe">
+              Configurar expediente →
+            </Link>
+            <Link className="text-accent-light" href="/agenda">
+              Gerenciar agenda →
+            </Link>
+          </div>
+        </section>
+        <section aria-label="Notificações">
+          <NotificationControls />
+        </section>
 
         {isLoading ? (
           <AdminSkeleton />
@@ -161,7 +188,7 @@ export default function ConfiguracoesPage() {
               <div className="flex items-center gap-2.5 pb-3 border-b border-hairline">
                 <CreditCard className="w-4 h-4 text-accent-light" />
                 <h2 className="text-base font-bold text-text">
-                  Políticas Financeiras & Regras de Agendamento
+                  Agendamentos e pagamentos
                 </h2>
               </div>
 
@@ -171,7 +198,8 @@ export default function ConfiguracoesPage() {
                     Sinal Pix Obrigatório (%)
                   </label>
                   <input
-                    aria-label="Percentual do sinal" step="0.01"
+                    aria-label="Percentual do sinal"
+                    step="0.01"
                     type="number"
                     min="0"
                     max="100"
@@ -197,8 +225,6 @@ export default function ConfiguracoesPage() {
                     className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
-
-
               </div>
             </div>
 
@@ -224,7 +250,7 @@ export default function ConfiguracoesPage() {
             </div>
           </form>
         )}
-        {!isLoading&&<Support/>}
+        {!isLoading && <Support />}
       </main>
     </div>
   );

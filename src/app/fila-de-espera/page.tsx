@@ -1,4 +1,1 @@
-import { WaitlistPage } from "@/components/saas2/waitlist-page";
-export default function Page() {
-  return <WaitlistPage />;
-}
+import {Waitlist3} from '@/components/saas3/waitlist';export default function Page(){return <Waitlist3/>}
