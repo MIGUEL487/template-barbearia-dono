@@ -1177,8 +1177,11 @@ try {
   throw error;
 } finally {
   await b?.close();
-  child.kill("SIGTERM");
-  await new Promise((r) => child.once("exit", r));
+  if (child.exitCode === null && child.signalCode === null) {
+    const stopped = new Promise((r) => child.once("exit", r));
+    child.kill("SIGTERM");
+    await stopped;
+  }
   await new Promise((r) => mock.close(r));
   await log.close();
   await fs.writeFile(

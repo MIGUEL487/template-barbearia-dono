@@ -27,3 +27,18 @@ Diagnósticos A/B/C/D são protegidos por owner/admin e pelo mesmo limite diári
 ## Preservação
 
 Nenhum SQL, migration, seed, RLS, tabela, reserva, hold, pagamento, service worker, assinatura push ou configuração Cloudflare foi alterado. A auditoria AST de contratos preserva as consultas e chamadas das páginas principais. Os testes de banco usam um servidor Supabase falso local, nunca dados reais.
+
+## Arquivos de implementação
+
+- `src/styles/management-premium.css`: shell integrado e navegação móvel contínua.
+- `src/styles/saas3.css`: uma coluna principal de conversa, drawer e composer compacto.
+- `src/components/saas3/chat.tsx`: histórico sob demanda e relatório expansível no próprio fluxo.
+- `src/components/saas3/gemini-diagnostic.tsx`: seleção A–D e apresentação de tempos/origem.
+- `src/app/actions/gemini-diagnostic-actions.ts`: autorização, perfis isolados, agregados reais sem dados pessoais e tempos por etapa.
+- `src/app/actions/chat-actions.ts`: medição do agregado e registro seguro da chamada já existente.
+- `src/lib/saas2/gemini.ts`: limite cancelável, uma tentativa, perfis e telemetria; cache continua por loja/modelo/agregado e agora também perfil.
+- `src/lib/saas2/gemini-errors.ts`: diagnóstico seguro com origem e falha distinta de consulta de indicadores.
+- `tests/saas31-gemini.test.mjs`: timeout local/HTTP 504, perfis, autorização, cota e ausência de segredo no retorno.
+- `scripts/qa-full-management.mjs`: evidências desta entrega, drawer, relatório no fluxo, Shift+Enter e alinhamento da sidebar ao viewport. Cleanup suporta subprocesso já encerrado.
+
+As capturas vêm de Next dev com dados sintéticos. O indicador N/Issues do ambiente de desenvolvimento não existe no build de produção e não foi interpretado como erro da aplicação; os testes também verificam erros JavaScript de página. Uma execução de QA sobreposta foi descartada por conflito de porta; a execução isolada é a referência válida.

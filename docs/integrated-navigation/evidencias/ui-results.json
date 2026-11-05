@@ -42,31 +42,31 @@
   "calls": [
     {
       "operation": "GET user",
-      "count": 513
+      "count": 499
     },
     {
       "operation": "OPTIONS user",
-      "count": 140
+      "count": 134
     },
     {
       "operation": "OPTIONS shop_members",
-      "count": 140
+      "count": 134
     },
     {
       "operation": "GET shop_members",
-      "count": 276
+      "count": 268
     },
     {
       "operation": "GET websocket",
-      "count": 83
+      "count": 80
     },
     {
       "operation": "OPTIONS financial_transactions",
-      "count": 18
+      "count": 17
     },
     {
       "operation": "GET financial_transactions",
-      "count": 248
+      "count": 245
     },
     {
       "operation": "OPTIONS bookings",
@@ -74,31 +74,31 @@
     },
     {
       "operation": "GET bookings",
-      "count": 282
+      "count": 278
     },
     {
       "operation": "GET barbershops",
-      "count": 135
+      "count": 133
     },
     {
       "operation": "GET barbers",
-      "count": 153
+      "count": 150
     },
     {
       "operation": "GET services",
-      "count": 154
+      "count": 152
     },
     {
       "operation": "GET working_hours",
-      "count": 162
+      "count": 158
     },
     {
       "operation": "GET time_off",
-      "count": 82
+      "count": 80
     },
     {
       "operation": "GET closed_days",
-      "count": 89
+      "count": 87
     },
     {
       "operation": "GET raiox_reports",
@@ -118,7 +118,7 @@
     },
     {
       "operation": "OPTIONS barbers",
-      "count": 15
+      "count": 14
     },
     {
       "operation": "OPTIONS services",

@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-05T13:35:45.649061+00:00",
+  "checkedAt": "2026-11-05T13:42:20.037412+00:00",
   "base": "54634ba24ba8fd45f37686ad9640fe03f336b9f2",
   "branch": "fix/integrated-navigation-gemini-timeout",
   "checks": {
@@ -26,5 +26,11 @@
     "Figma frame inspection unavailable under effective network policy",
     "Authenticated production Gemini A-D tests require real Worker access",
     "Active deployment and published application HTTP require independent confirmation beyond build check"
-  ]
+  ],
+  "codeCommits": [
+    "9be4b33",
+    "a296681"
+  ],
+  "discardedQaRun": "Concurrent local fixtures conflicted on port8897; replaced with isolated final run. No production data involved.",
+  "finalIsolatedQa": "passed;exit0;report expands in-place;Shift+Enter;sidebar at x0/y0/full viewport;12areas;1440/390"
 }
