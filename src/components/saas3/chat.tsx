@@ -18,7 +18,7 @@ import { money, localDate } from "@/lib/saas2/analytics";
 import { saveGoalAction } from "@/app/actions/intelligence-actions";
 import Link from "next/link";
 import { DialogPanel } from "@/components/ui/dialog-panel";
-import { GeminiDiagnostic } from "./gemini-diagnostic";
+import { AiDiagnostic } from "./ai-diagnostic";
 interface Message {
   id: string;
   role: string;
@@ -319,7 +319,7 @@ export function Chat3() {
                 </p>
               )}
             </Expandable>
-            <GeminiDiagnostic />
+            <AiDiagnostic />
             <Expandable>
               <summary className="text-xs text-text-muted p-2">
                 Meta e opções
@@ -404,7 +404,7 @@ export function Chat3() {
           {s && !s.compatible && (
             <p className="s3-notice" role="status">
               Histórico aguardando a migration SaaS 3.0. Você pode consultar uma
-              prévia calculada; mensagens não serão salvas e Gemini não será
+              prévia calculada; mensagens não serão salvas e OpenRouter não será
               chamado neste modo.
             </p>
           )}
@@ -636,9 +636,11 @@ export function Chat3() {
                           <span>
                             {m.role === "user"
                               ? "Você"
-                              : m.payload.mode === "gemini"
-                                ? "Raio-X · dados calculados + Gemini"
-                                : "Raio-X · resumo calculado"}
+                              : m.payload.mode === "openrouter"
+                                ? "Raio-X · dados calculados + OpenRouter"
+                                : m.payload.mode === "gemini"
+                                  ? "Raio-X · interpretação anterior"
+                                  : "Raio-X · resumo calculado"}
                           </span>
                           {m.payload.start && (
                             <small>

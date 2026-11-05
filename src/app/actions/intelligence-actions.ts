@@ -1,8 +1,8 @@
 "use server";
 import { resolveCurrentShop } from "@/lib/current-shop";
 import { localDate, validBooking } from "@/lib/saas2/analytics";
-import { geminiKey, geminiRuntime } from "@/lib/runtime-secret";
-import { cachedInterpretation } from "@/lib/saas2/gemini";
+import { aiKey, aiRuntime } from "@/lib/runtime-secret";
+import { cachedInterpretation } from "@/lib/saas2/openrouter";
 import { Filter, loadIntelligence } from "@/lib/saas2/source";
 export async function analyticsAction(filter: unknown) {
   try {
@@ -103,7 +103,7 @@ export async function raioXAction(filter: unknown, serviceId?: string) {
           Date.parse(b.ends_at) > Date.now(),
       ).length,
       diagnosis: diagnose(current, previous, valid.barber ? null : goalCents),
-      aiConfigured: Boolean(geminiKey()),
+      aiConfigured: Boolean(aiKey()),
       generatedAt,
     };
   } catch (error) {
@@ -207,12 +207,12 @@ export async function generateAiAction(date: string) {
       end: date,
       barber: null,
     });
-    const { key, model } = geminiRuntime();
+    const { key, model, timeoutMs } = aiRuntime();
     if (!key)
       return {
         ok: false as const,
         error:
-          "O secret Gemini não está disponível nesta execução. Confira Conexão Gemini no Raio-X. O diagnóstico determinístico continua disponível.",
+          "O secret OPENROUTER_API_KEY não está disponível nesta execução. Confira Conexão IA no Raio-X. O diagnóstico determinístico continua disponível.",
       };
     const aggregate = {
       date,
@@ -243,6 +243,8 @@ export async function generateAiAction(date: string) {
           );
       },
       model,
+      "D",
+      timeoutMs,
     );
     return { ok: true as const, output };
   } catch (error) {

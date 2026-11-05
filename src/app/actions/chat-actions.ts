@@ -8,10 +8,10 @@ import {
   analyze,
   dayStart,
 } from "@/lib/saas2/analytics";
-import { GeminiFailure, safeGeminiDiagnostic } from "@/lib/saas2/gemini-errors";
+import { AiFailure, safeAiDiagnostic } from "@/lib/saas2/ai-errors";
 import { diagnose } from "@/lib/saas2/diagnosis";
-import { geminiRuntime } from "@/lib/runtime-secret";
-import { cachedInterpretation } from "@/lib/saas2/gemini";
+import { aiRuntime } from "@/lib/runtime-secret";
+import { cachedInterpretation } from "@/lib/saas2/openrouter";
 import { pendingSchema } from "@/lib/saas3/ledger";
 import { cleanQuestion, questionRange } from "@/lib/saas3/questions";
 import { z } from "zod";
@@ -19,7 +19,13 @@ const uuid = z
   .string()
   .regex(/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i);
 export interface ChatPayload {
-  mode: "deterministic" | "gemini";
+  mode: "deterministic" | "gemini" | "openrouter";
+  aiUsage?: {
+    promptTokens: number | null;
+    outputTokens: number | null;
+    totalTokens: number | null;
+    costUsd: number | null;
+  };
   start: string;
   end: string;
   scope: string;
@@ -388,7 +394,7 @@ export async function askRaioXAction(raw: {
         aggregateMs,
       }),
     );
-    const { key, model } = geminiRuntime();
+    const { key, model, timeoutMs } = aiRuntime();
     if (key && conversation) {
       try {
         const interpreted = await cachedInterpretation(
@@ -413,7 +419,7 @@ export async function askRaioXAction(raw: {
             comparisonLabel,
             relevantDetail: JSON.stringify(
               range.scope === "services"
-                ? payload.services
+                ? payload.services.slice(0, 10)
                 : range.scope === "retention"
                   ? payload.retention
                   : range.scope === "availability"
@@ -425,14 +431,17 @@ export async function askRaioXAction(raw: {
             const { data, error } = await db.rpc("consume_raiox_ai_quota", {
               p_barbershop_id: shop,
             });
-            if (error) throw new GeminiFailure("quota_check", null, error.code);
-            if (!data) throw new GeminiFailure("app_quota");
+            if (error) throw new AiFailure("quota_check", null, error.code);
+            if (!data) throw new AiFailure("app_quota");
           },
           model,
+          "D",
+          timeoutMs,
         );
         text +=
           "\n\n" + interpreted.summary + "\n" + interpreted.actions.join("\n");
-        payload.mode = "gemini";
+        payload.mode = "openrouter";
+        payload.aiUsage = interpreted.usage;
         console.info(
           "[Raio-X]",
           JSON.stringify({
@@ -443,7 +452,7 @@ export async function askRaioXAction(raw: {
           }),
         );
       } catch (error) {
-        const diagnostic = safeGeminiDiagnostic(error);
+        const diagnostic = safeAiDiagnostic(error);
         console.warn(
           "[Raio-X]",
           JSON.stringify({
@@ -460,8 +469,8 @@ export async function askRaioXAction(raw: {
       }
     } else
       payload.notice = conversation
-        ? "O secret Gemini não está acessível neste runtime. Abra Conexão Gemini para conferir a origem. Resposta calculada pelo sistema."
-        : "Prévia calculada sem histórico: aplique a migration SaaS 3.0 para salvar e habilitar Gemini.";
+        ? "O secret OPENROUTER_API_KEY não está acessível neste runtime. Abra Conexão IA para conferir a origem. Resposta calculada pelo sistema."
+        : "Prévia calculada sem histórico: aplique a migration SaaS 3.0 para salvar e habilitar IA.";
     if (conversation) {
       const { error } = await db.from("raiox_messages").insert({
         conversation_id: conversation,

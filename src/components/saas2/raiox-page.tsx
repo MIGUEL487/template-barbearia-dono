@@ -1,5 +1,5 @@
 "use client";
-import {AnimatedSelect} from "@/components/ui/animated-select";
+import { AnimatedSelect } from "@/components/ui/animated-select";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AdminNavigation } from "@/components/admin/navigation";
@@ -288,7 +288,7 @@ export function RaioXPage() {
               )}
             </Card>
             <Card>
-              <CardTitle>Interpretação com Gemini · opcional</CardTitle>
+              <CardTitle>Interpretação com OpenRouter · opcional</CardTitle>
               <p className="mt-4 text-text-muted">
                 {d.aiConfigured
                   ? "Envia somente indicadores agregados. Até cinco solicitações por loja/dia, com resposta limitada; nenhuma ação automática."

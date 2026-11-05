@@ -1,19 +1,20 @@
 "use server";
 import { resolveCurrentShop } from "@/lib/current-shop";
-import { geminiRuntime } from "@/lib/runtime-secret";
+import { aiRuntime } from "@/lib/runtime-secret";
 import {
   cachedInterpretation,
-  geminiDeadlineMs,
-  type GeminiProbe,
-} from "@/lib/saas2/gemini";
-import { GeminiFailure, safeGeminiDiagnostic } from "@/lib/saas2/gemini-errors";
+  aiDeadlineMs,
+  type AiProbe,
+} from "@/lib/saas2/openrouter";
+import { AiFailure, safeAiDiagnostic } from "@/lib/saas2/ai-errors";
 import { loadIntelligence } from "@/lib/saas2/source";
 import { localDate, shiftDate } from "@/lib/saas2/analytics";
-export async function geminiDiagnosticAction(
+export async function aiDiagnosticAction(
   runProbe = false,
-  profile: GeminiProbe = "B",
+  profile: AiProbe = "B",
 ) {
   const started = performance.now();
+  let timeoutMs = aiDeadlineMs;
   let stage = "authorization",
     dataMs = 0,
     dataStarted = 0,
@@ -28,16 +29,18 @@ export async function geminiDiagnosticAction(
     | undefined;
   try {
     if (!["A", "B", "C", "D"].includes(profile))
-      throw new GeminiFailure("internal");
+      throw new AiFailure("internal");
     const { db, shop } = await resolveCurrentShop();
-    const runtime = geminiRuntime();
+    const runtime = aiRuntime();
+    timeoutMs = runtime.timeoutMs;
     metadata = {
       keyPresent: Boolean(runtime.key),
       source: runtime.source,
       workerContext: runtime.contextAvailable,
       model: runtime.model,
     };
-    if (!runtime.key) throw new GeminiFailure("missing_runtime_key");
+    if (!runtime.key) throw new AiFailure("missing_runtime_key");
+    if (!runtime.model) throw new AiFailure("invalid_model");
     if (!runProbe)
       return {
         ok: true as const,
@@ -53,7 +56,7 @@ export async function geminiDiagnosticAction(
     stage = "supabase_aggregate";
     dataStarted = performance.now();
     console.info(
-      "[Gemini diagnostic]",
+      "[IA diagnostic]",
       JSON.stringify({ stage, profile, status: "started" }),
     );
     if (profile === "C" || profile === "D") {
@@ -102,12 +105,13 @@ export async function geminiDiagnosticAction(
           p_barbershop_id: shop,
         });
         quotaMs = Math.round(performance.now() - quotaStarted);
-        if (error) throw new GeminiFailure("quota_check", null, error.code);
-        if (!data) throw new GeminiFailure("app_quota");
+        if (error) throw new AiFailure("quota_check", null, error.code);
+        if (!data) throw new AiFailure("app_quota");
         stage = "provider_request";
       },
       runtime.model,
       profile,
+      runtime.timeoutMs,
     );
     const timing = {
       profile,
@@ -116,10 +120,12 @@ export async function geminiDiagnosticAction(
       quotaMs,
       totalMs: Math.round(performance.now() - started),
       provider: result.trace,
-      deadlineMs: geminiDeadlineMs,
+      deadlineMs: runtime.timeoutMs,
+      cacheHit: result.cacheHit,
+      verifiedAt: result.trace.verifiedAt,
     };
     console.info(
-      "[Gemini diagnostic]",
+      "[IA diagnostic]",
       JSON.stringify({ ...timing, model: runtime.model, status: "success" }),
     );
     return {
@@ -138,26 +144,26 @@ export async function geminiDiagnosticAction(
       dataMs = Math.round(performance.now() - dataStarted);
     const original = error instanceof Error ? error.message : "";
     const failure =
-      error instanceof GeminiFailure
+      error instanceof AiFailure
         ? error
         : stage === "supabase_aggregate"
-          ? new GeminiFailure("data_query")
+          ? new AiFailure("data_query")
           : /sess|autoriz|Acesso|login/i.test(original)
-            ? new GeminiFailure("authorization")
+            ? new AiFailure("authorization")
             : /loja|barbearia|vínculo/i.test(original)
-              ? new GeminiFailure("shop_resolution")
-              : new GeminiFailure("internal");
-    const diagnostic = safeGeminiDiagnostic(failure);
+              ? new AiFailure("shop_resolution")
+              : new AiFailure("internal");
+    const diagnostic = safeAiDiagnostic(failure);
     const timing = {
       profile,
       stage,
       dataMs,
       quotaMs,
       totalMs: Math.round(performance.now() - started),
-      deadlineMs: geminiDeadlineMs,
+      deadlineMs: timeoutMs,
     };
     console.warn(
-      "[Gemini diagnostic]",
+      "[IA diagnostic]",
       JSON.stringify({ ...diagnostic, ...timing }),
     );
     return {

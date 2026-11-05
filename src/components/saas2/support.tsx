@@ -1,4 +1,4 @@
-import {Expandable} from "@/components/ui/expandable";
+import { Expandable } from "@/components/ui/expandable";
 import Link from "next/link";
 import { Card, CardTitle } from "@/components/ui/card";
 import packageInfo from "../../../package.json";
@@ -11,7 +11,7 @@ const answers = [
   ],
   [
     "Como converso com o Raio-X?",
-    "Faça perguntas sobre números e períodos. O servidor consulta dados autorizados; Gemini interpreta quando disponível. Sem provedor, a resposta é calculada e identificada. Não informe contatos pessoais. Conversas são privadas por usuário e loja.",
+    "Faça perguntas sobre números e períodos. O servidor consulta dados autorizados; OpenRouter interpreta quando disponível. Sem provedor, a resposta é calculada e identificada. Não informe contatos pessoais. Conversas são privadas por usuário e loja.",
     "/raio-x",
   ],
   [

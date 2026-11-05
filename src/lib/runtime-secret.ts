@@ -1,7 +1,11 @@
 import "server-only";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { geminiModel } from "@/lib/saas2/gemini";
-export function geminiRuntime() {
+import {
+  aiModel,
+  boundedAiTimeout,
+  validAiModel,
+} from "@/lib/saas2/openrouter";
+export function aiRuntime() {
   let env: Record<string, unknown> = {},
     contextAvailable = false;
   try {
@@ -11,14 +15,13 @@ export function geminiRuntime() {
     /* Local Node has no Worker binding. */
   }
   const binding =
-    typeof env.GEMINI_API_KEY === "string" ? env.GEMINI_API_KEY.trim() : "";
-  const nodeKey = process.env.GEMINI_API_KEY?.trim() || "";
-  const configuredModel = String(
-    env.GEMINI_MODEL || process.env.GEMINI_MODEL || "",
+      typeof env.OPENROUTER_API_KEY === "string"
+        ? env.OPENROUTER_API_KEY.trim()
+        : "",
+    nodeKey = process.env.OPENROUTER_API_KEY?.trim() || "";
+  const configured = String(
+    env.OPENROUTER_MODEL || process.env.OPENROUTER_MODEL || aiModel,
   ).trim();
-  const model = /^gemini-[a-zA-Z0-9._-]{1,100}$/.test(configuredModel)
-    ? configuredModel
-    : geminiModel;
   return {
     key: binding || nodeKey,
     source: binding
@@ -27,9 +30,12 @@ export function geminiRuntime() {
         ? "process_env"
         : "missing",
     contextAvailable,
-    model,
+    model: validAiModel(configured) ? configured : "",
+    timeoutMs: boundedAiTimeout(
+      env.OPENROUTER_TIMEOUT_MS || process.env.OPENROUTER_TIMEOUT_MS,
+    ),
   };
 }
-export function geminiKey() {
-  return geminiRuntime().key;
+export function aiKey() {
+  return aiRuntime().key;
 }

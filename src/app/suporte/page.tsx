@@ -15,7 +15,7 @@ export default function SupportPage() {
             "Controle financeiro",
             "Lançamentos, caixa e conciliação",
           ],
-          ["/raio-x", "Inteligência", "Conversas, relatórios e conexão Gemini"],
+          ["/raio-x", "Inteligência", "Conversas, relatórios e conexão IA"],
         ].map(([href, title, text]) => (
           <Link className="mg-panel mg-help-card" href={href} key={href}>
             <span className="mg-overline">Explorar</span>

@@ -20,12 +20,12 @@
     "spacing:check": "node scripts/check-spacing.mjs",
     "test:media": "node scripts/qa-media.mjs",
     "test:saas2": "node --experimental-strip-types --test tests/saas2*.test.mjs && node scripts/build-saas2-sql.mjs --check",
-    "test:shop-gemini": "node --test tests/shop-gemini.test.mjs",
     "test:saas3": "node --test tests/saas3.test.mjs && node scripts/build-saas3-sql.mjs --check",
-    "test:saas31": "node --test tests/saas31-gemini.test.mjs"
+    "test:saas31": "npm run test:openrouter",
+    "test:shop-selection": "node --test tests/shop-selection.test.mjs",
+    "test:openrouter": "node --test tests/openrouter.test.mjs"
   },
   "dependencies": {
-    "@google/genai": "^2.32.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.1",
     "clsx": "^2.1.1",

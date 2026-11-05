@@ -1,18 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
-import { geminiDiagnosticAction } from "@/app/actions/gemini-diagnostic-actions";
+import { aiDiagnosticAction } from "@/app/actions/ai-diagnostic-actions";
 import { Expandable } from "@/components/ui/expandable";
 import { AnimatedSelect } from "@/components/ui/animated-select";
-import type { GeminiProbe } from "@/lib/saas2/gemini";
+import type { AiProbe } from "@/lib/saas2/openrouter";
 import { Button } from "@/components/ui/button";
-export function GeminiDiagnostic() {
+export function AiDiagnostic() {
   const [result, setResult] = useState<Awaited<
-      ReturnType<typeof geminiDiagnosticAction>
+      ReturnType<typeof aiDiagnosticAction>
     > | null>(null),
     [busy, setBusy] = useState(false),
-    [profile, setProfile] = useState<GeminiProbe>("A");
+    [profile, setProfile] = useState<AiProbe>("A");
   useEffect(() => {
-    void geminiDiagnosticAction()
+    void aiDiagnosticAction()
       .then(setResult)
       .catch(() =>
         setResult({
@@ -38,7 +38,7 @@ export function GeminiDiagnostic() {
   async function probe() {
     setBusy(true);
     try {
-      setResult(await geminiDiagnosticAction(true, profile));
+      setResult(await aiDiagnosticAction(true, profile));
     } catch {
       setResult({
         ok: false,
@@ -64,7 +64,7 @@ export function GeminiDiagnostic() {
   }
   return (
     <Expandable className="s3-gemini-diagnostic">
-      <summary>Conexão Gemini</summary>
+      <summary>Conexão IA</summary>
       <div className="s3-diagnostic-meta">
         <span data-connection={result?.ok ? "ready" : "attention"}>
           {result
@@ -91,7 +91,9 @@ export function GeminiDiagnostic() {
         {result && !result.ok && "category" in result && (
           <code>
             código: {result.category}
-            {result.status ? ` · HTTP ${result.status}` : ""}
+            {result.status
+              ? ` · ${result.trace?.origin === "upstream_payload" ? "Código do provedor" : "HTTP"} ${result.status}`
+              : ""}
             {"rpcCode" in result && result.rpcCode
               ? ` · Supabase ${result.rpcCode}`
               : ""}
@@ -105,17 +107,29 @@ export function GeminiDiagnostic() {
           Limite API: {result.timing.deadlineMs} ms
         </p>
       )}
+      {result &&
+        "timing" in result &&
+        result.timing &&
+        "cacheHit" in result.timing && (
+          <p className="s3-note">
+            {result.timing.cacheHit
+              ? "Resultado em cache, sem nova chamada"
+              : "Nova chamada ao OpenRouter"}{" "}
+            · Verificado em {result.timing.verifiedAt}
+          </p>
+        )}
       {result && "trace" in result && result.trace && (
         <p className="s3-note">
           Origem: {result.trace.origin} · API: {result.trace.durationMs} ms ·
-          Entrada: {result.trace.inputBytes} bytes
+          Entrada: {result.trace.inputBytes} bytes · HTTP recebido:{" "}
+          {result.trace.httpStatus ?? "sem resposta HTTP"}
         </p>
       )}
       <label>
         Perfil de teste
         <AnimatedSelect
           value={profile}
-          onChange={(e) => setProfile(e.target.value as GeminiProbe)}
+          onChange={(e) => setProfile(e.target.value as AiProbe)}
           disabled={busy}
         >
           <option value="A">A · Prompt mínimo, sem schema</option>
