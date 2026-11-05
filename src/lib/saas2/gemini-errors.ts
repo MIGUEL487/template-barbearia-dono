@@ -11,6 +11,7 @@ export type GeminiCategory =
   | "provider_unavailable"
   | "app_quota"
   | "quota_check"
+  | "data_query"
   | "authorization"
   | "shop_resolution"
   | "internal";
@@ -35,6 +36,8 @@ const messages: Record<GeminiCategory, string> = {
   provider_unavailable: "O serviço Google está temporariamente indisponível.",
   app_quota:
     "O limite diário do Raio-X desta loja foi atingido. É um limite do aplicativo, separado da cota Google.",
+  data_query:
+    "Não foi possível consultar os indicadores reais no Supabase. A chamada ao Google não foi iniciada.",
   quota_check:
     "Não foi possível validar a cota do Raio-X no Supabase. Confira a RPC e suas permissões.",
   authorization:
@@ -49,6 +52,17 @@ export class GeminiFailure extends Error {
     public category: GeminiCategory,
     public status: number | null = null,
     public rpcCode: string | null = null,
+    public trace: {
+      stage: string;
+      durationMs: number;
+      origin:
+        | "application_deadline"
+        | "upstream_http"
+        | "sdk_or_network"
+        | "response_validation";
+      deadlineMs: number;
+      inputBytes: number;
+    } | null = null,
   ) {
     super("Gemini indisponível: " + messages[category]);
     this.name = "GeminiFailure";
@@ -118,5 +132,11 @@ export function classifyGeminiError(error: unknown): GeminiFailure {
 }
 export function safeGeminiDiagnostic(error: unknown) {
   const e = classifyGeminiError(error);
-  return { category: e.category, status: e.status, rpcCode: e.rpcCode&&/^[A-Z0-9]{5,12}$/.test(e.rpcCode)?e.rpcCode:null, message: e.message };
+  return {
+    trace: e.trace,
+    category: e.category,
+    status: e.status,
+    rpcCode: e.rpcCode && /^[A-Z0-9]{5,12}$/.test(e.rpcCode) ? e.rpcCode : null,
+    message: e.message,
+  };
 }

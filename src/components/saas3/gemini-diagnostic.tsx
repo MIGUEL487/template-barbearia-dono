@@ -2,12 +2,15 @@
 import { useEffect, useState } from "react";
 import { geminiDiagnosticAction } from "@/app/actions/gemini-diagnostic-actions";
 import { Expandable } from "@/components/ui/expandable";
+import { AnimatedSelect } from "@/components/ui/animated-select";
+import type { GeminiProbe } from "@/lib/saas2/gemini";
 import { Button } from "@/components/ui/button";
 export function GeminiDiagnostic() {
   const [result, setResult] = useState<Awaited<
       ReturnType<typeof geminiDiagnosticAction>
     > | null>(null),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [profile, setProfile] = useState<GeminiProbe>("A");
   useEffect(() => {
     void geminiDiagnosticAction()
       .then(setResult)
@@ -18,6 +21,15 @@ export function GeminiDiagnostic() {
           category: "network",
           status: null,
           rpcCode: null,
+          trace: null,
+          timing: {
+            profile: "A",
+            stage: "browser_transport",
+            dataMs: 0,
+            quotaMs: 0,
+            totalMs: 0,
+            deadlineMs: 30000,
+          },
           message: "Não foi possível consultar o diagnóstico do servidor.",
           checkedAt: new Date().toISOString(),
         }),
@@ -26,7 +38,7 @@ export function GeminiDiagnostic() {
   async function probe() {
     setBusy(true);
     try {
-      setResult(await geminiDiagnosticAction(true));
+      setResult(await geminiDiagnosticAction(true, profile));
     } catch {
       setResult({
         ok: false,
@@ -34,6 +46,15 @@ export function GeminiDiagnostic() {
         category: "network",
         status: null,
         rpcCode: null,
+        trace: null,
+        timing: {
+          profile: "A",
+          stage: "browser_transport",
+          dataMs: 0,
+          quotaMs: 0,
+          totalMs: 0,
+          deadlineMs: 30000,
+        },
         message: "Falha de transporte ao consultar o servidor.",
         checkedAt: new Date().toISOString(),
       });
@@ -77,9 +98,36 @@ export function GeminiDiagnostic() {
           </code>
         )}
       </div>
+      {result && "timing" in result && result.timing && (
+        <p className="s3-note">
+          Etapa: {result.timing.stage} · Total: {result.timing.totalMs} ms ·
+          Dados: {result.timing.dataMs} ms · Cota: {result.timing.quotaMs} ms ·
+          Limite API: {result.timing.deadlineMs} ms
+        </p>
+      )}
+      {result && "trace" in result && result.trace && (
+        <p className="s3-note">
+          Origem: {result.trace.origin} · API: {result.trace.durationMs} ms ·
+          Entrada: {result.trace.inputBytes} bytes
+        </p>
+      )}
+      <label>
+        Perfil de teste
+        <AnimatedSelect
+          value={profile}
+          onChange={(e) => setProfile(e.target.value as GeminiProbe)}
+          disabled={busy}
+        >
+          <option value="A">A · Prompt mínimo, sem schema</option>
+          <option value="B">B · Schema real, sem dados</option>
+          <option value="C">C · Agregado real de hoje</option>
+          <option value="D">D · Contexto real de 7 dias</option>
+        </AnimatedSelect>
+      </label>
       <p className="s3-note">
-        Teste autenticado no servidor, sem dados de clientes. Usa até uma
-        tentativa da cota diária da loja. Nenhuma chave é exibida.
+        Teste autenticado no servidor. C e D usam somente indicadores agregados,
+        sem nomes ou contatos. Execute um perfil por vez. Usa até uma tentativa
+        da cota diária da loja. Nenhuma chave é exibida.
       </p>
       <Button
         variant="secondary"

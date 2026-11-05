@@ -238,6 +238,11 @@ export async function askRaioXAction(raw: {
       }
       claimed = true;
     }
+    const aggregateStarted = performance.now();
+    console.info(
+      "[Raio-X]",
+      JSON.stringify({ stage: "supabase_aggregate", status: "started" }),
+    );
     const range = questionRange(question, localDate(), previous),
       {
         db,
@@ -374,6 +379,15 @@ export async function askRaioXAction(raw: {
         "\n" +
         payload.retention.map((r) => `${r.label}: ${r.count}.`).join(" ") +
         " Classificações históricas, sem expor nomes/contatos nem presumir intenção.";
+    const aggregateMs = Math.round(performance.now() - aggregateStarted);
+    console.info(
+      "[Raio-X]",
+      JSON.stringify({
+        stage: "supabase_aggregate",
+        status: "complete",
+        aggregateMs,
+      }),
+    );
     const { key, model } = geminiRuntime();
     if (key && conversation) {
       try {
@@ -419,11 +433,22 @@ export async function askRaioXAction(raw: {
         text +=
           "\n\n" + interpreted.summary + "\n" + interpreted.actions.join("\n");
         payload.mode = "gemini";
+        console.info(
+          "[Raio-X]",
+          JSON.stringify({
+            stage: "complete",
+            aggregateMs,
+            provider: interpreted.trace,
+            model,
+          }),
+        );
       } catch (error) {
         const diagnostic = safeGeminiDiagnostic(error);
         console.warn(
           "[Raio-X]",
           JSON.stringify({
+            trace: diagnostic.trace,
+            aggregateMs,
             category: diagnostic.category,
             status: diagnostic.status,
             model,
