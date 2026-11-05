@@ -5,6 +5,7 @@ import {
   boundedAiTimeout,
   validAiModel,
   canonicalAiModel,
+  isFreeAiModel,
 } from "@/lib/saas2/openrouter";
 export function aiRuntime() {
   let env: Record<string, unknown> = {},
@@ -23,7 +24,9 @@ export function aiRuntime() {
   const configured = String(
     env.OPENROUTER_MODEL || process.env.OPENROUTER_MODEL || aiModel,
   ).trim();
-  const effective = canonicalAiModel(configured);
+  const candidate = canonicalAiModel(configured);
+  const effective =
+    validAiModel(candidate) && !isFreeAiModel(candidate) ? aiModel : candidate;
   return {
     key: binding || nodeKey,
     source: binding

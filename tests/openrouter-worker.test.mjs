@@ -23,8 +23,9 @@ test("Real workerd reproduces legacy redirect TypeError and verifies fixed nativ
         JSON.stringify({
           data: [
             {
-              id: "fixture/worker",
+              id: "fixture/worker:free",
               supported_parameters: ["structured_outputs"],
+              pricing: { prompt: "0", completion: "0" },
             },
           ],
         }),
@@ -75,7 +76,7 @@ test("Real workerd reproduces legacy redirect TypeError and verifies fixed nativ
   const sourcePath = path.resolve("src/lib/saas2/openrouter.ts"),
     errorsPath = path.resolve("src/lib/saas2/ai-errors.ts");
   const worker = `import {cachedInterpretation} from ${JSON.stringify(sourcePath)};import {AiFailure,assertAiQuotaResult,safeAiDiagnostic} from ${JSON.stringify(errorsPath)};
- let calls=0;export default {async fetch(req){if(req.headers.get('x-fixture-session')!=='owner-fixture')return Response.json({error:'unauthorized'},{status:401});const u=new URL(req.url);let stage='authorization';try{const result=await cachedInterpretation('11111111-1111-1111-1111-111111111111','fixture-only-key',{question:u.searchParams.get('q')||'Resumo'},async()=>{assertAiQuotaResult(calls<5,null);calls++;},u.searchParams.get('model')||'fixture/worker',u.searchParams.get('profile')||'A',3000,s=>stage=s);return Response.json({ok:true,calls,stage,summary:result.summary,cacheHit:result.cacheHit});}catch(e){return Response.json({ok:false,calls,stage,...safeAiDiagnostic(e)});}}};`;
+ let calls=0;export default {async fetch(req){if(req.headers.get('x-fixture-session')!=='owner-fixture')return Response.json({error:'unauthorized'},{status:401});const u=new URL(req.url);let stage='authorization';try{const result=await cachedInterpretation('11111111-1111-1111-1111-111111111111','fixture-only-key',{question:u.searchParams.get('q')||'Resumo'},async()=>{assertAiQuotaResult(calls<5,null);calls++;},u.searchParams.get('model')||'fixture/worker:free',u.searchParams.get('profile')||'A',3000,s=>stage=s);return Response.json({ok:true,calls,stage,summary:result.summary,cacheHit:result.cacheHit});}catch(e){return Response.json({ok:false,calls,stage,...safeAiDiagnostic(e)});}}};`;
   async function runtime(legacy) {
     const out = await build({
       stdin: {

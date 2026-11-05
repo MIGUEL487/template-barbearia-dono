@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-11-05T21:53:13.481993+00:00",
+  "base": "14ae6f52b6c71e3ea96df70e3de403661356617e",
+  "branch": "fix/ai-free-only",
+  "checks": {
+    "unit": "17 passed",
+    "workerd": "passed;native HTTP local;only :free IDs and zero price",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build:cf": "passed;configured old paid model deliberately;no real key",
+    "playwright": "passed;1440/390;chat/history/fallback;:free fixtures and zero pricing",
+    "tokens:check": "passed",
+    "tenantSelection": "passed"
+  },
+  "externalProviderCallsByCodex": 0,
+  "freeProductionGenerationVerified": false,
+  "ownerReportedBeforePolicy": {
+    "diagnostic": "A complete",
+    "model": "openai/gpt-4o-mini",
+    "reportedAt": "2026-11-05T21:46:05.974Z",
+    "schemaDataHistoryVerified": false
+  },
+  "policy": "Only openrouter/free or :free variants with confirmed zero catalog pricing; price ceilings zero on every generation; old paid runtime value overridden."
+}

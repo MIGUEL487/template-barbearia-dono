@@ -1,6 +1,7 @@
 export type AiCategory =
   | "missing_runtime_key"
   | "invalid_model"
+  | "paid_model_forbidden"
   | "invalid_key"
   | "access_denied"
   | "insufficient_credits"
@@ -33,6 +34,8 @@ const messages: Record<AiCategory, string> = {
     "Configure OPENROUTER_API_KEY como secret de runtime no Worker e ambiente deste deployment. Nunca use NEXT_PUBLIC_OPENROUTER_API_KEY. O resumo calculado continua disponível.",
   invalid_model:
     "OPENROUTER_MODEL deve ser um identificador válido de modelo do OpenRouter, no formato provedor/modelo.",
+  paid_model_forbidden:
+    "Somente modelos gratuitos são permitidos. Use openrouter/free ou uma variante :free com preços confirmados em zero. Nenhuma geração paga foi iniciada.",
   invalid_key:
     "O OpenRouter recusou a chave (401). Confira validade e restrições do secret de runtime.",
   access_denied:

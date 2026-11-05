@@ -59,7 +59,7 @@ const answer = (content = JSON.stringify(valid), finish = "stop") =>
       prompt_tokens: 10,
       completion_tokens: 20,
       total_tokens: 30,
-      cost: 0.00003,
+      cost: 0,
     },
   });
 const catalog = (...ids) =>
@@ -67,6 +67,7 @@ const catalog = (...ids) =>
     data: ids.map((id) => ({
       id,
       supported_parameters: ["response_format", "structured_outputs"],
+      pricing: { prompt: "0", completion: "0" },
     })),
   });
 test("Runtime uses only OpenRouter secrets, validates model and bounds configurable deadline", () => {
@@ -85,12 +86,12 @@ test("Runtime uses only OpenRouter secrets, validates model and bounds configura
     process.env.GEMINI_API_KEY = "must-not-be-used";
     globalThis.fixtureWorkerEnv = {
       OPENROUTER_API_KEY: " fixture-worker-key ",
-      OPENROUTER_MODEL: "fixture/model",
+      OPENROUTER_MODEL: "fixture/model:free",
       OPENROUTER_TIMEOUT_MS: "12000",
     };
     assert.equal(aiRuntime().key, "fixture-worker-key");
     assert.equal(aiRuntime().source, "cloudflare_binding");
-    assert.equal(aiRuntime().model, "fixture/model");
+    assert.equal(aiRuntime().model, "fixture/model:free");
     assert.equal(aiRuntime().timeoutMs, 12000);
     globalThis.fixtureWorkerEnv.OPENROUTER_MODEL = "not-a-model";
     assert.equal(aiRuntime().model, "");
@@ -101,7 +102,7 @@ test("Runtime uses only OpenRouter secrets, validates model and bounds configura
     delete process.env.OPENROUTER_API_KEY;
     delete process.env.OPENROUTER_MODEL;
     assert.equal(aiRuntime().source, "missing");
-    assert.equal(aiRuntime().model, "openai/gpt-4o-mini");
+    assert.equal(aiRuntime().model, "openrouter/free");
     assert.equal(aiRuntime().key, "");
   } finally {
     delete globalThis.fixtureWorkerEnv;
@@ -170,7 +171,7 @@ test("Native HTTP request uses structured schema, bounded tokens, no tools and o
         receivedCents: 5000,
         phone: "private-customer",
       },
-      "fixture/model",
+      "fixture/model:free",
     );
     assert.equal(r.summary, valid.resumo);
     assert.equal(body.max_tokens, 1400);
@@ -181,12 +182,12 @@ test("Native HTTP request uses structured schema, bounded tokens, no tools and o
     assert.equal(body.response_format.type, "json_schema");
     assert.equal(body.response_format.json_schema.strict, true);
     assert(!JSON.stringify(body).includes("private-customer"));
-    assert.equal(r.usage.costUsd, 0.00003);
+    assert.equal(r.usage.costUsd, 0);
     assert.equal(r.usage.totalTokens, 30);
     await interpretWithOpenRouter(
       "fixture-secret",
       { question: "private-customer" },
-      "fixture/model",
+      "fixture/model:free",
       "A",
     );
     assert.equal(body.response_format, undefined);
@@ -268,7 +269,7 @@ test("Application deadline aborts one native fetch and does not invent an HTTP 5
     const response = interpretWithOpenRouter(
       "fixture",
       {},
-      "fixture/model",
+      "fixture/model:free",
       "B",
       1000,
     );
@@ -298,7 +299,7 @@ test("Catalog verification precedes quota; singleflight/cache are scoped to shop
     globalThis.fetch = async (url) => {
       if (String(url).endsWith("/models")) {
         order.push("catalog");
-        return catalog("fixture/dedupe", "fixture/other");
+        return catalog("fixture/dedupe:free", "fixture/other:free");
       }
       order.push("generation");
       generations++;
@@ -313,7 +314,7 @@ test("Catalog verification precedes quota; singleflight/cache are scoped to shop
       "fixture-key",
       { question: "Resumo" },
       consume,
-      "fixture/dedupe",
+      "fixture/dedupe:free",
     ];
     const [a, b] = await Promise.all([
       cachedInterpretation(...args),
@@ -335,7 +336,7 @@ test("Catalog verification precedes quota; singleflight/cache are scoped to shop
       "fixture-key",
       args[2],
       consume,
-      "fixture/other",
+      "fixture/other:free",
     );
     assert.equal(quota, 4);
     assert.equal(generations, 4);
@@ -353,7 +354,7 @@ test("Unavailable or incompatible model never consumes daily quota or invokes ge
         return json({
           data: [
             {
-              id: "fixture/unsupported",
+              id: "fixture/unsupported:free",
               supported_parameters: ["temperature"],
             },
           ],
@@ -362,8 +363,8 @@ test("Unavailable or incompatible model never consumes daily quota or invokes ge
       return answer();
     };
     for (const [model, category] of [
-      ["fixture/missing", "model_unavailable"],
-      ["fixture/unsupported", "structured_response"],
+      ["fixture/missing:free", "model_unavailable"],
+      ["fixture/unsupported:free", "structured_response"],
     ])
       await assert.rejects(
         () =>
@@ -391,7 +392,7 @@ test("402 has no retry; repeated identical clicks share failure cooldown; quota 
   try {
     globalThis.fetch = async (url) => {
       if (String(url).endsWith("/models"))
-        return catalog("fixture/credits", "fixture/quota");
+        return catalog("fixture/credits:free", "fixture/quota:free");
       generations++;
       return json({ error: { code: 402, message: "fixture-secret" } }, 402);
     };
@@ -405,7 +406,7 @@ test("402 has no retry; repeated identical clicks share failure cooldown; quota 
             async () => {
               quota++;
             },
-            "fixture/credits",
+            "fixture/credits:free",
           ),
         (e) => e.category === "insufficient_credits",
       );
@@ -420,7 +421,7 @@ test("402 has no retry; repeated identical clicks share failure cooldown; quota 
           async () => {
             throw new AiFailure("app_quota");
           },
-          "fixture/quota",
+          "fixture/quota:free",
         ),
       (e) => e.category === "app_quota",
     );
@@ -450,7 +451,7 @@ test("Authenticated A–D diagnostic separates data stage, preserves quota gate 
     )
     .replace(
       /import \{ aiRuntime \} from [^;]+;/,
-      'const aiRuntime=()=>({key:"fixture-private-key",source:"cloudflare_binding",contextAvailable:true,model:"fixture/model",timeoutMs:30000});',
+      'const aiRuntime=()=>({key:"fixture-private-key",source:"cloudflare_binding",contextAvailable:true,model:"fixture/model:free",timeoutMs:30000});',
     )
     .replace(
       /import \{ cachedInterpretation, aiDeadlineMs,?\s*\} from [^;]+;/,
@@ -511,7 +512,7 @@ test("Authenticated A–D diagnostic separates data stage, preserves quota gate 
     cached: async (shop, key, aggregate, consume, model, profile) => {
       assert.equal(shop, "shop-fixture");
       assert.equal(key, "fixture-private-key");
-      assert.equal(model, "fixture/model");
+      assert.equal(model, "fixture/model:free");
       assert(["A", "B", "C", "D"].includes(profile));
       assert(!JSON.stringify(aggregate).includes("must-not-leak"));
       await consume();
@@ -581,7 +582,7 @@ test("Native fetch preserves all HTTP failure categories without retry or leakin
         );
       };
       await assert.rejects(
-        () => interpretWithOpenRouter("fixture-key", {}, "fixture/model"),
+        () => interpretWithOpenRouter("fixture-key", {}, "fixture/model:free"),
         (e) =>
           e.category === category &&
           e.status === status &&
@@ -672,7 +673,7 @@ test("Redirect is refused without following Location and unknown preflight excep
       });
     };
     await assert.rejects(
-      () => interpretWithOpenRouter("fixture", {}, "fixture/model"),
+      () => interpretWithOpenRouter("fixture", {}, "fixture/model:free"),
       (e) => e.category === "provider_redirect" && e.status === 302,
     );
     assert.equal(calls, 1);
@@ -724,4 +725,97 @@ test("Supabase transport failure is a quota/database error, never an OpenRouter 
       e.exceptionType === "TypeError" &&
       !e.message.includes("alcançar a API OpenRouter"),
   );
+});
+
+test("Paid runtime binding is overridden with the free router and a visible policy flag", () => {
+  try {
+    globalThis.fixtureWorkerEnv = {
+      OPENROUTER_API_KEY: "fixture-key",
+      OPENROUTER_MODEL: "openai/gpt-4o-mini",
+    };
+    const r = aiRuntime();
+    assert.equal(r.model, "openrouter/free");
+    assert.equal(r.modelAdjusted, true);
+    assert.equal(r.source, "cloudflare_binding");
+  } finally {
+    delete globalThis.fixtureWorkerEnv;
+  }
+});
+test("Paid IDs are rejected by every provider entry point before HTTP or quota", async () => {
+  const original = globalThis.fetch;
+  let calls = 0,
+    quota = 0;
+  try {
+    globalThis.fetch = async () => {
+      calls++;
+      throw Error("Must never call a provider");
+    };
+    for (const model of [
+      "openai/gpt-4o-mini",
+      "openrouter/auto",
+      "fixture/paid",
+    ]) {
+      await assert.rejects(
+        () => verifyOpenRouterModel("fixture", model),
+        (e) => e.category === "paid_model_forbidden",
+      );
+      await assert.rejects(
+        () => interpretWithOpenRouter("fixture", {}, model),
+        (e) => e.category === "paid_model_forbidden",
+      );
+      await assert.rejects(
+        () =>
+          cachedInterpretation(
+            "paid-policy",
+            "fixture",
+            {},
+            async () => {
+              quota++;
+            },
+            model,
+          ),
+        (e) => e.category === "paid_model_forbidden",
+      );
+    }
+    assert.equal(calls, 0);
+    assert.equal(quota, 0);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+test("A :free label is insufficient when catalog pricing is nonzero", async () => {
+  const original = globalThis.fetch;
+  let quota = 0,
+    posts = 0;
+  try {
+    globalThis.fetch = async (url, init) => {
+      if (init?.method === "POST") posts++;
+      return json({
+        data: [
+          {
+            id: "fixture/nonzero:free",
+            supported_parameters: ["structured_outputs"],
+            pricing: { prompt: "0.0001", completion: "0" },
+          },
+        ],
+      });
+    };
+    await assert.rejects(
+      () =>
+        cachedInterpretation(
+          "pricing-policy",
+          "fixture",
+          {},
+          async () => {
+            quota++;
+          },
+          "fixture/nonzero:free",
+        ),
+      (e) => e.category === "paid_model_forbidden",
+    );
+    assert.equal(quota, 0);
+    assert.equal(posts, 0);
+  } finally {
+    globalThis.fetch = original;
+  }
 });

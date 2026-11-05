@@ -1,3 +1,5 @@
+> Política posterior obrigatória: [somente modelos gratuitos](../ai-free-only/README.md). Use `OPENROUTER_MODEL=openrouter/free`.
+
 > Correção posterior: [TypeError no Workers, roteador gratuito e diagnóstico por etapa](../openrouter-internal/README.md). O cliente HTTP usa `manual` com recusa explícita de redirects, compatível com Workers.
 
 # Raio-X — OpenRouter
@@ -10,14 +12,14 @@ Não há SQL ou migration para executar. Nenhuma configuração no painel Cloudf
 
 1. Abra o Worker real **template-barbearia-dono**, ambiente de produção, em Settings → Variables and Secrets. O nome no wrangler.jsonc é **auto-stilo-dono**, diferente do alvo do build integrado já existente; não configure a chave em um Worker diferente por engano.
 2. Adicione **OPENROUTER_API_KEY como Secret de runtime**. A chave precisa estar válida e ter créditos/limite suficiente no OpenRouter. Não coloque a chave em Build variables, `NEXT_PUBLIC_*`, arquivo versionado, screenshot ou chat. Se preferir CLI, o comando manual com alvo explícito é `npx wrangler secret put OPENROUTER_API_KEY --name template-barbearia-dono`; esta tarefa não executou esse comando.
-3. Adicione `OPENROUTER_MODEL=openai/gpt-4o-mini` como variável de runtime. Pode trocar por outro identificador real que aceite saída estruturada. O default do código é esse mesmo modelo; não há lista de modelos alternativos nem troca automática para um modelo mais caro.
+3. Adicione `OPENROUTER_MODEL=openrouter/free` como variável de runtime. Pode trocar por outro identificador real que aceite saída estruturada. O default do código é esse mesmo modelo; não há lista de modelos alternativos nem troca automática para um modelo mais caro.
 4. Opcional: `OPENROUTER_TIMEOUT_MS=30000`, em milissegundos. Valores inteiros de 1000 até 45000 são aceitos; ausente/inválido usa 30000. O catálogo tem limite separado de 5000 ms. Os tempos de consulta ao Supabase também aparecem no diagnóstico.
 5. Aplique as alterações ao deployment conforme o fluxo Cloudflare. Preview e produção podem ter bindings diferentes: confira o ambiente onde abre o Raio-X. Os arquivos `.env.example` e `.dev.vars.example` têm apenas placeholders; para desenvolvimento, preencher somente arquivos locais ignorados.
 6. `GEMINI_API_KEY` e `GEMINI_MODEL` não são mais lidos. A remoção desses secrets no provedor é opcional e deve ocorrer depois de conferir a migração; nenhuma variável externa foi apagada por esta tarefa. Sem chave OpenRouter, o sistema usa somente o resumo determinístico, claramente identificado.
 
 ## Modelo e documentação consultada
 
-Modelo escolhido: `openai/gpt-4o-mini`, modelo compacto adequado a português e JSON estruturado, documentado em exemplo oficial e na enumeração do SDK oficial. Não foi inventado um ID. A tabela de preços e a disponibilidade atual da conta não foram consultadas ao vivo nesta sessão; não se promete um preço fixo.
+Padrão atual: `openrouter/free`, roteador gratuito documentado que seleciona variantes gratuitas compatíveis com o schema. Modelos pagos são recusados; variantes concretas :free exigem catálogo com preços zero. Os exemplos históricos abaixo documentam o formato HTTP, não autorizam modelos pagos. A tabela de preços e a disponibilidade atual da conta não foram consultadas ao vivo nesta sessão; não se promete um preço fixo.
 
 Fontes oficiais lidas:
 

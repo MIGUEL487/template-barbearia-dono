@@ -6,7 +6,7 @@ import { spawn } from "node:child_process";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 const root = process.cwd(),
-  out = path.join(root, "docs/openrouter-internal/evidencias");
+  out = path.join(root, "docs/ai-free-only/evidencias");
 await fs.mkdir(out, { recursive: true });
 const shop = "11111111-1111-1111-1111-111111111111",
   uid = "99999999-9999-4999-8999-999999999999",
@@ -107,8 +107,9 @@ const mock = http.createServer(async (req, res) => {
       JSON.stringify({
         data: [
           {
-            id: "fixture/model",
+            id: "fixture/model:free",
             supported_parameters: ["response_format", "structured_outputs"],
+            pricing: { prompt: "0", completion: "0" },
           },
         ],
       }),
@@ -147,7 +148,7 @@ const mock = http.createServer(async (req, res) => {
           prompt_tokens: 10,
           completion_tokens: 20,
           total_tokens: 30,
-          cost: 0.00003,
+          cost: 0,
         },
       }),
     );
@@ -611,7 +612,7 @@ const child = spawn(
       NEXT_PUBLIC_DEMO_MODE: "false",
       NEXT_PUBLIC_DEMO_WATERMARK: "true",
       OPENROUTER_API_KEY: "",
-      OPENROUTER_MODEL: "fixture/model",
+      OPENROUTER_MODEL: "fixture/model:free",
     },
     stdio: ["ignore", log.fd, log.fd],
   },
@@ -1042,8 +1043,7 @@ try {
     assert(
       messages.some(
         (m) =>
-          m.payload?.mode === "openrouter" &&
-          m.payload?.aiUsage?.costUsd === 0.00003,
+          m.payload?.mode === "openrouter" && m.payload?.aiUsage?.costUsd === 0,
       ),
     );
     await p.reload();

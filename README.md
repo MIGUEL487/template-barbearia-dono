@@ -1,3 +1,5 @@
+> Política obrigatória de IA: [somente modelos gratuitos](docs/ai-free-only/README.md). A configuração paga antiga é substituída no runtime; não há fallback para modelos pagos.
+
 > Raio-X: a integração generativa atual usa OpenRouter. Veja [configuração de runtime, testes e rollback](docs/openrouter/README.md). Nenhuma migration é necessária para essa troca de provedor.
 
 # Auto Stilo — redesign Black

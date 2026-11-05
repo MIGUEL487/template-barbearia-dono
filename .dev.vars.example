@@ -8,5 +8,5 @@ ADMIN_BASE_URL=http://localhost:8788
 
 # IA: secrets somente no runtime do Worker
 OPENROUTER_API_KEY=
-OPENROUTER_MODEL=openai/gpt-4o-mini
+OPENROUTER_MODEL=openrouter/free
 OPENROUTER_TIMEOUT_MS=30000

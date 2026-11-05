@@ -83,7 +83,7 @@ export function AiDiagnostic() {
             {result.modelAdjusted && (
               <>
                 <br />
-                Identificador gratuito ajustado para o roteador documentado. Use
+                Política de modelos gratuitos aplicada. Use
                 OPENROUTER_MODEL=openrouter/free.
               </>
             )}
