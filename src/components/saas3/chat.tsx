@@ -17,6 +17,7 @@ import {
 import { money, localDate } from "@/lib/saas2/analytics";
 import { saveGoalAction } from "@/app/actions/intelligence-actions";
 import Link from "next/link";
+import { DialogPanel } from "@/components/ui/dialog-panel";
 import { GeminiDiagnostic } from "./gemini-diagnostic";
 interface Message {
   id: string;
@@ -112,6 +113,7 @@ export function Chat3() {
     [busy, setBusy] = useState(false),
     [notice, setNotice] = useState(""),
     [reportView, setReportView] = useState(false),
+    [historyOpen, setHistoryOpen] = useState(false),
     [goal, setGoal] = useState(""),
     [failedQuestion, setFailedQuestion] = useState<string | null>(null);
   const textarea = useRef<HTMLTextAreaElement>(null),
@@ -241,122 +243,158 @@ export function Chat3() {
       }
     >
       <div className="s3-chat-layout">
-        <aside className="s3-history" aria-label="Histórico do Raio-X">
-          <h2>Sua inteligência</h2>
-          <button
-            type="button"
-            aria-current={reportView ? "true" : undefined}
+        <div className="s3-chat-toolbar">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setHistoryOpen(true)}
+          >
+            Histórico e opções
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setReportView(!reportView)}
           >
-            ◷ Relatórios do expediente
-          </button>
-          <Expandable open>
-            <summary className="text-xs text-text-muted p-2">
-              Conversas recentes
-            </summary>
-            <div className="s3-thread-list">
-              {s?.threads.map((t) => (
-                <button
-                  className="block w-full"
-                  disabled={busy}
-                  key={t.id}
-                  aria-current={thread === t.id ? "true" : undefined}
-                  onClick={async () => {
-                    setBusy(true);
-                    setThread(t.id);
-                    setReportView(false);
-                    try {
-                      await load(t.id);
-                    } finally {
-                      setBusy(false);
-                    }
-                  }}
-                >
-                  {t.title}
-                </button>
-              ))}
+            {reportView ? "Voltar à conversa" : "Relatórios do expediente"}
+          </Button>
+        </div>
+        <DialogPanel
+          open={historyOpen}
+          onClose={() => setHistoryOpen(false)}
+          titleId="raiox-history-title"
+          className="s3-history-drawer"
+        >
+          <aside className="s3-history" aria-label="Histórico do Raio-X">
+            <div className="flex items-center justify-between gap-4">
+              <h2 id="raiox-history-title">Histórico e opções</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setHistoryOpen(false)}
+              >
+                Fechar
+              </Button>
             </div>
-            {s && !s.threads.length && (
-              <p className="text-xs text-text-muted p-2">
-                Suas conversas aparecerão aqui.
-              </p>
-            )}
-          </Expandable>
-          <GeminiDiagnostic />
-          <Expandable>
-            <summary className="text-xs text-text-muted p-2">
-              Meta e opções
-            </summary>
-            <label className="text-xs block p-2">
-              Meta de hoje (R$)
-              <input
-                className="w-full"
-                type="number"
-                min="0"
-                step="0.01"
-                value={goal}
-                onChange={(e) => setGoal(e.target.value)}
-              />
-            </label>
-            <Button
-              variant="ghost"
-              disabled={busy}
-              onClick={async () => {
-                const result = await saveGoalAction(
-                  localDate(),
-                  goal.trim() ? Number(goal) : NaN,
-                );
-                setNotice(result.ok ? "Meta salva para hoje." : result.error);
+            <button
+              type="button"
+              aria-current={reportView ? "true" : undefined}
+              onClick={() => {
+                setReportView(!reportView);
+                setHistoryOpen(false);
               }}
             >
-              Salvar meta
-            </Button>
-            {thread && (
-              <>
-                <Button
-                  variant="ghost"
-                  disabled={busy}
-                  onClick={async () => {
-                    const title = prompt("Novo nome da conversa:");
-                    if (!title) return;
-                    const r = await manageConversationAction(thread, title);
-                    setNotice(r.ok ? "Conversa renomeada." : r.error);
-                    await load(thread);
-                  }}
-                >
-                  Renomear conversa
-                </Button>
-                <Button
-                  variant="ghost"
-                  disabled={busy}
-                  onClick={async () => {
-                    if (
-                      !confirm(
-                        "Excluir esta conversa e suas mensagens? Relatórios da loja serão preservados.",
+              ◷ Relatórios do expediente
+            </button>
+            <Expandable open>
+              <summary className="text-xs text-text-muted p-2">
+                Conversas recentes
+              </summary>
+              <div className="s3-thread-list">
+                {s?.threads.map((t) => (
+                  <button
+                    className="block w-full"
+                    disabled={busy}
+                    key={t.id}
+                    aria-current={thread === t.id ? "true" : undefined}
+                    onClick={async () => {
+                      setBusy(true);
+                      setThread(t.id);
+                      setReportView(false);
+                      setHistoryOpen(false);
+                      try {
+                        await load(t.id);
+                      } finally {
+                        setBusy(false);
+                      }
+                    }}
+                  >
+                    {t.title}
+                  </button>
+                ))}
+              </div>
+              {s && !s.threads.length && (
+                <p className="text-xs text-text-muted p-2">
+                  Suas conversas aparecerão aqui.
+                </p>
+              )}
+            </Expandable>
+            <GeminiDiagnostic />
+            <Expandable>
+              <summary className="text-xs text-text-muted p-2">
+                Meta e opções
+              </summary>
+              <label className="text-xs block p-2">
+                Meta de hoje (R$)
+                <input
+                  className="w-full"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={goal}
+                  onChange={(e) => setGoal(e.target.value)}
+                />
+              </label>
+              <Button
+                variant="ghost"
+                disabled={busy}
+                onClick={async () => {
+                  const result = await saveGoalAction(
+                    localDate(),
+                    goal.trim() ? Number(goal) : NaN,
+                  );
+                  setNotice(result.ok ? "Meta salva para hoje." : result.error);
+                }}
+              >
+                Salvar meta
+              </Button>
+              {thread && (
+                <>
+                  <Button
+                    variant="ghost"
+                    disabled={busy}
+                    onClick={async () => {
+                      const title = prompt("Novo nome da conversa:");
+                      if (!title) return;
+                      const r = await manageConversationAction(thread, title);
+                      setNotice(r.ok ? "Conversa renomeada." : r.error);
+                      await load(thread);
+                    }}
+                  >
+                    Renomear conversa
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    disabled={busy}
+                    onClick={async () => {
+                      if (
+                        !confirm(
+                          "Excluir esta conversa e suas mensagens? Relatórios da loja serão preservados.",
+                        )
                       )
-                    )
-                      return;
-                    const r = await manageConversationAction(thread, null);
-                    if (r.ok) {
-                      setThread(null);
-                      setMessages([]);
-                      await load(null);
-                    }
-                    setNotice(r.ok ? "Conversa excluída." : r.error);
-                  }}
-                >
-                  Excluir conversa
-                </Button>
-              </>
-            )}
-            <Link
-              className="block text-xs p-2 text-accent-light"
-              href="/analises"
-            >
-              Abrir Análises →
-            </Link>
-          </Expandable>
-        </aside>
+                        return;
+                      const r = await manageConversationAction(thread, null);
+                      if (r.ok) {
+                        setThread(null);
+                        setMessages([]);
+                        await load(null);
+                      }
+                      setNotice(r.ok ? "Conversa excluída." : r.error);
+                    }}
+                  >
+                    Excluir conversa
+                  </Button>
+                </>
+              )}
+              <Link
+                className="block text-xs p-2 text-accent-light"
+                href="/analises"
+              >
+                Abrir Análises →
+              </Link>
+            </Expandable>
+          </aside>
+        </DialogPanel>
         <section className="s3-conversation" aria-label="Conversa com Raio-X">
           {state && !state.ok && (
             <p role="alert" className="s3-error">
@@ -534,25 +572,53 @@ export function Chat3() {
                             </button>
                           ))}
                         </div>
-                        {s?.reports.slice(0, 1).map((r) => (
-                          <button
-                            key={r.id}
-                            className="s3-message mt-6 text-left w-full"
-                            onClick={() => setReportView(true)}
-                          >
-                            <span className="s3-message-label">
-                              ◷{" "}
-                              {r.kind === "briefing"
-                                ? "Briefing do Dia"
-                                : "Fechamento do Dia"}{" "}
-                              · {r.date.split("-").reverse().join("/")}
-                            </span>
-                            <p>
-                              Seu relatório do expediente está disponível. Abrir
-                              →
-                            </p>
-                          </button>
-                        ))}
+                        {s?.reports.slice(0, 1).map((r) => {
+                          const p = r.payload as Record<string, unknown>;
+                          return (
+                            <article
+                              key={r.id}
+                              className="s3-message s3-report mt-6 text-left w-full"
+                            >
+                              <span className="s3-message-label">
+                                {r.kind === "briefing"
+                                  ? "Briefing do Dia"
+                                  : "Fechamento do Dia"}{" "}
+                                · {r.date.split("-").reverse().join("/")}
+                              </span>
+                              <p>
+                                {String(p.bookings ?? "—")} agendamentos ·
+                                Recebido{" "}
+                                {Number.isFinite(p.income)
+                                  ? money(Number(p.income))
+                                  : "não disponível"}
+                                .
+                              </p>
+                              <Expandable>
+                                <summary>Detalhes deste relatório</summary>
+                                <p>
+                                  Programado:{" "}
+                                  {Number.isFinite(p.forecast)
+                                    ? money(Number(p.forecast))
+                                    : "não disponível"}{" "}
+                                  · Despesas:{" "}
+                                  {Number.isFinite(p.expenses)
+                                    ? money(Number(p.expenses))
+                                    : "não disponível"}
+                                  .
+                                </p>
+                                <p>
+                                  Concluídos: {String(p.completed ?? "—")} ·
+                                  Cancelamentos: {String(p.cancelled ?? "—")} ·
+                                  Faltas: {String(p.noShow ?? "—")}.
+                                </p>
+                                <p className="s3-note">
+                                  Resumo calculado dos registros da loja.
+                                  Valores programados não são recebimentos.
+                                </p>
+                              </Expandable>
+                            </article>
+                          );
+                        })}
                       </div>
                     )}
                     {messages.map((m) => (
@@ -618,13 +684,18 @@ export function Chat3() {
                     </label>
                     <textarea
                       ref={textarea}
+                      rows={1}
                       id="raiox-question"
                       placeholder="Pergunte sobre os números e a agenda…"
                       maxLength={1000}
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
+                        if (
+                          e.key === "Enter" &&
+                          !e.shiftKey &&
+                          !e.nativeEvent.isComposing
+                        ) {
                           e.preventDefault();
                           if (input.trim()) void send();
                         }
