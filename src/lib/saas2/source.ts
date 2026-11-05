@@ -1,3 +1,4 @@
+import {readLedger,settled} from "@/lib/saas3/ledger";
 import { readAll as all } from "./pagination";
 export { readAll as all } from "./pagination";
 import "server-only";
@@ -59,16 +60,7 @@ export async function loadIntelligence(raw: unknown) {
           .order("id")
           .range(a, b),
       ),
-      all<Source["ledger"][number]>((a, b) =>
-        db
-          .from("financial_transactions")
-          .select("amount,type,created_at,booking_id,bookings(barber_id)")
-          .eq("barbershop_id", shop)
-          .gte("created_at", from)
-          .lt("created_at", end)
-          .order("id")
-          .range(a, b),
-      ),
+      readLedger(db,shop,from,end).then(result=>result.entries.filter(settled)),
       all<Source["barbers"][number]>((a, b) =>
         db
           .from("barbers")

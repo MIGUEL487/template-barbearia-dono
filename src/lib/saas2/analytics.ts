@@ -242,6 +242,12 @@ export function analyze(
       (b.is_active || bookings.some((x) => x.barber_id === b.id)) &&
       (!barberId || b.id === barberId),
   );
+  const heatmap: {
+    date: string;
+    hour: string;
+    minutes: number;
+    occupied: number;
+  }[] = [];
   let capacityMinutes = 0,
     occupiedMinutes = 0;
   const hourTotals = new Map<string, { minutes: number; occupied: number }>();
@@ -251,6 +257,11 @@ export function analyze(
       capacityMinutes += c.minutes;
       occupiedMinutes += c.occupied;
       for (const h of c.hourly) {
+        const cell = heatmap.find((x) => x.date === d && x.hour === h.hour);
+        if (cell) {
+          cell.minutes += h.minutes;
+          cell.occupied += h.occupied;
+        } else heatmap.push({ date: d, ...h });
         const prev = hourTotals.get(h.hour) || { minutes: 0, occupied: 0 };
         hourTotals.set(h.hour, {
           minutes: prev.minutes + h.minutes,
@@ -298,7 +309,22 @@ export function analyze(
       entries = ledger.filter(
         (l) => localDate(new Date(l.created_at)) === date,
       );
+    const people = [
+      ...new Set(
+        xs.filter((b) => b.status === "completed").map((b) => b.customer_id),
+      ),
+    ];
+    const returningCustomers = people.filter((id) =>
+      history.some(
+        (b) =>
+          b.customer_id === id &&
+          b.status === "completed" &&
+          Date.parse(b.starts_at) < dayStart(date),
+      ),
+    ).length;
     return {
+      newCustomers: people.length - returningCustomers,
+      returningCustomers,
       date,
       bookings: xs.length,
       income: entries
@@ -322,6 +348,7 @@ export function analyze(
     0,
   );
   return {
+    heatmap,
     income,
     refunds,
     expenses,

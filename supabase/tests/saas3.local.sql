@@ -1,0 +1,52 @@
+-- LOCAL synthetic fixture only. No production connection; all test writes roll back.
+BEGIN;
+INSERT INTO public.barbershops(id,name,slug) VALUES('77777777-7777-4777-8777-777777777777','Fixture outra loja','fixture-saas3-other') ON CONFLICT DO NOTHING;
+INSERT INTO auth.users(id) VALUES('88888888-8888-4888-8888-888888888888'),('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa') ON CONFLICT DO NOTHING;
+INSERT INTO public.shop_members(barbershop_id,user_id,role) VALUES('77777777-7777-4777-8777-777777777777','88888888-8888-4888-8888-888888888888','owner'),('11111111-1111-1111-1111-111111111111','88888888-8888-4888-8888-888888888888','admin') ON CONFLICT DO NOTHING;
+SELECT set_config('request.jwt.claim.sub','99999999-9999-4999-8999-999999999999',true);
+SET ROLE authenticated;
+SELECT public.save_manual_financial_entry('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1',null,'expense','Compra de fixture','Materiais',50,current_date,'Pix','settled','{}',null) AS saved \gset
+SELECT (:'saved'::jsonb->>'id') AS manual_id \gset
+SELECT set_config('qa.manual_id',:'manual_id',true);
+SELECT public.save_manual_financial_entry('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1',null,'expense','Compra de fixture','Materiais',50,current_date,'Pix','settled','{}',null);
+DO $$ BEGIN IF (SELECT count(*) FROM public.financial_transactions WHERE request_id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1')<>1 OR (SELECT count(*) FROM public.financial_entry_audit WHERE entry_id=current_setting('qa.manual_id')::uuid)<>1 THEN RAISE EXCEPTION 'Duplicate manual entry/audit';END IF;END $$;
+SELECT public.save_manual_financial_entry('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2',:'manual_id','expense','Compra corrigida','Materiais',60,current_date,'Pix','settled','{}',null);
+SELECT public.save_manual_financial_entry('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2',:'manual_id','expense','Compra corrigida','Materiais',60,current_date,'Pix','settled','{}',null);
+DO $$ BEGIN IF (SELECT count(*) FROM public.financial_entry_audit WHERE entry_id=current_setting('qa.manual_id')::uuid)<>2 THEN RAISE EXCEPTION 'Repeated edit not idempotent';END IF;END $$;
+SELECT public.void_manual_financial_entry('11111111-1111-1111-1111-111111111111',:'manual_id');
+SELECT public.void_manual_financial_entry('11111111-1111-1111-1111-111111111111',:'manual_id');
+DO $$ BEGIN IF EXISTS(SELECT 1 FROM public.financial_transactions WHERE id=current_setting('qa.manual_id')::uuid AND entry_status='settled') OR (SELECT count(*) FROM public.financial_entry_audit WHERE entry_id=current_setting('qa.manual_id')::uuid)<>3 THEN RAISE EXCEPTION 'Void must preserve row and audit once';END IF;END $$;
+SELECT public.save_manual_financial_entry('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa3',null,'income','Venda pendente fixture','Venda de produtos',100,current_date,'Pix','pending','{}',null);
+DO $$ BEGIN IF EXISTS(SELECT 1 FROM public.financial_transactions WHERE request_id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa3' AND entry_status='settled') THEN RAISE EXCEPTION 'Pending is not cash received';END IF;
+ BEGIN INSERT INTO public.financial_transactions(barbershop_id,type,amount,description) VALUES('11111111-1111-1111-1111-111111111111','income',100,'Bypass');RAISE EXCEPTION 'Direct financial mutation accepted';EXCEPTION WHEN insufficient_privilege THEN NULL;END;
+ BEGIN PERFORM public.save_manual_financial_entry('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa4',null,'expense','Quantidade errada','Materiais',50,current_date,'Pix','settled','{"quantity":2,"unit_price":20}',null);RAISE EXCEPTION 'Incorrect purchase accepted';EXCEPTION WHEN raise_exception THEN IF SQLERRM NOT LIKE 'Quantidade, preço%' THEN RAISE;END IF;END;
+ BEGIN PERFORM public.save_manual_financial_entry('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa5',(SELECT id FROM public.financial_transactions WHERE booking_id='55555555-5555-4555-8555-555555555552' AND type='income' LIMIT 1),'income','Editar conciliado','Serviços',10,current_date,'Pix','settled','{}',null);RAISE EXCEPTION 'Automatic entry editable';EXCEPTION WHEN raise_exception THEN IF SQLERRM NOT LIKE 'Lançamento conciliado%' THEN RAISE;END IF;END;
+END $$;
+SELECT public.save_manual_financial_entry('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa6',null,'income','Receita vinculada','Serviços',90,current_date,'Pix','settled','{}','55555555-5555-4555-8555-555555555552') AS reused \gset
+SELECT set_config('qa.reused',:'reused',true);
+DO $$ BEGIN IF (current_setting('qa.reused')::jsonb->>'reused')<>'true' OR (SELECT count(*) FROM public.financial_transactions WHERE booking_id='55555555-5555-4555-8555-555555555552' AND type='income')<>1 THEN RAISE EXCEPTION 'Booking income duplicated';END IF;END $$;
+INSERT INTO public.raiox_conversations(id,barbershop_id,user_id,title) VALUES('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb','11111111-1111-1111-1111-111111111111',auth.uid(),'Conversa de fixture');
+INSERT INTO public.raiox_messages(conversation_id,request_id,role,content) VALUES('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb','cccccccc-cccc-4ccc-8ccc-cccccccccccc','user','Como está o dia?') ON CONFLICT(conversation_id,request_id,role) DO NOTHING;
+INSERT INTO public.raiox_messages(conversation_id,request_id,role,content) VALUES('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb','cccccccc-cccc-4ccc-8ccc-cccccccccccc','user','Como está o dia?') ON CONFLICT(conversation_id,request_id,role) DO NOTHING;
+INSERT INTO public.raiox_messages(conversation_id,request_id,role,content,payload) VALUES('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb','cccccccc-cccc-4ccc-8ccc-cccccccccccc','assistant','Resumo calculado','{"mode":"deterministic"}');
+INSERT INTO public.raiox_reports(barbershop_id,date,kind,payload) VALUES('11111111-1111-1111-1111-111111111111',current_date,'briefing','{}'),('11111111-1111-1111-1111-111111111111',current_date,'closing','{}') ON CONFLICT(barbershop_id,date,kind) DO NOTHING;
+INSERT INTO public.raiox_reports(barbershop_id,date,kind,payload) VALUES('11111111-1111-1111-1111-111111111111',current_date,'briefing','{}'),('11111111-1111-1111-1111-111111111111',current_date,'closing','{}') ON CONFLICT(barbershop_id,date,kind) DO NOTHING;
+DO $$ BEGIN IF (SELECT count(*) FROM public.raiox_messages)<>2 OR (SELECT count(*) FROM public.raiox_reports WHERE date=current_date)<>2 THEN RAISE EXCEPTION 'Duplicate chat messages or daily reports';END IF;END $$;
+RESET ROLE;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SET ROLE authenticated;
+DO $$ BEGIN IF EXISTS(SELECT 1 FROM public.raiox_conversations) OR EXISTS(SELECT 1 FROM public.raiox_messages) THEN RAISE EXCEPTION 'Private conversations leaked to another manager';END IF;
+ BEGIN PERFORM public.save_manual_financial_entry('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1',null,'income','Outro tenant','Outros',10,current_date,'Pix','settled','{}',null);RAISE EXCEPTION 'Foreign shop mutation accepted';EXCEPTION WHEN insufficient_privilege THEN NULL;END;
+ BEGIN PERFORM public.delete_raiox_conversation('11111111-1111-1111-1111-111111111111','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');RAISE EXCEPTION 'Another manager deleted private chat';EXCEPTION WHEN insufficient_privilege THEN NULL;END;
+END $$;
+RESET ROLE;
+SELECT set_config('request.jwt.claim.sub','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',true);
+SET ROLE authenticated;
+DO $$ BEGIN IF EXISTS(SELECT 1 FROM public.raiox_reports) OR EXISTS(SELECT 1 FROM public.financial_transactions) OR EXISTS(SELECT 1 FROM public.financial_entry_audit) THEN RAISE EXCEPTION 'Tenant isolation failed';END IF;END $$;
+RESET ROLE;
+SELECT set_config('request.jwt.claim.sub','99999999-9999-4999-8999-999999999999',true);
+SET ROLE authenticated;
+SELECT public.delete_raiox_conversation('11111111-1111-1111-1111-111111111111','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');
+DO $$ BEGIN IF EXISTS(SELECT 1 FROM public.raiox_messages) OR EXISTS(SELECT 1 FROM public.raiox_conversations) OR (SELECT count(*) FROM public.raiox_reports)<>2 THEN RAISE EXCEPTION 'Delete conversation affected reports or missed messages';END IF;END $$;
+RESET ROLE;
+ROLLBACK;

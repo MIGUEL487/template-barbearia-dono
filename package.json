@@ -20,7 +20,8 @@
     "spacing:check": "node scripts/check-spacing.mjs",
     "test:media": "node scripts/qa-media.mjs",
     "test:saas2": "node --experimental-strip-types --test tests/saas2*.test.mjs && node scripts/build-saas2-sql.mjs --check",
-    "test:shop-gemini": "node --test tests/shop-gemini.test.mjs"
+    "test:shop-gemini": "node --test tests/shop-gemini.test.mjs",
+    "test:saas3": "node --test tests/saas3.test.mjs && node scripts/build-saas3-sql.mjs --check"
   },
   "dependencies": {
     "@google/genai": "^2.32.0",
