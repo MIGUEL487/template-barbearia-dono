@@ -1,5 +1,6 @@
 "use client";
 
+import {ShopSwitcher} from "./shop-switcher";
 import { MotionToggle } from "@/components/motion-preferences";
 import { DemoBadge } from "@/components/demo-watermark";
 import Link from "next/link";
@@ -74,7 +75,7 @@ export function AdminNavigation() {
           </span>
         </Link>
 
-        <nav aria-label="Navegação administrativa">
+        <ShopSwitcher/><nav aria-label="Navegação administrativa">
           {links.map(([href, label, Icon]) => {
             const isActive = path === href;
             return (
@@ -146,7 +147,7 @@ export function AdminNavigation() {
             </button>
           </div>
           <div className="flex flex-col gap-2 my-2">
-            {links.slice(4).map(([href, label, Icon]) => (
+            <ShopSwitcher/>{links.slice(4).map(([href, label, Icon]) => (
               <Link href={href} key={href} onClick={() => setMore(false)}>
                 <Icon size={18} />
                 <span>{label}</span>

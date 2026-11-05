@@ -1,4 +1,6 @@
 "use server";
+import {cookies} from "next/headers";
+import {shopCookie} from "@/lib/shop-selection";
 
 import { requireShopClient, requireBarberInShop } from "@/lib/authorization";
 import { z } from "zod";
@@ -183,6 +185,7 @@ export async function updateSiteSettingsAction(barbershopId:string,settings:{dep
 export async function logoutAction() {
   const supabase = await createServerActionClient();
   await supabase.auth.signOut();
+  (await cookies()).delete(shopCookie);
 }
 
 export async function toggleShopClosedTodayAction(

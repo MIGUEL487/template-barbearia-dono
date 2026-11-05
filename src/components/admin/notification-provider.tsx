@@ -1,4 +1,5 @@
 'use client';
+import {currentMembership} from '@/lib/browser-shop';
 import {createContext,useCallback,useContext,useEffect,useRef,useState} from 'react';
 import {usePathname} from 'next/navigation';
 import Link from 'next/link';
@@ -33,7 +34,7 @@ export function NotificationProvider({children}:{children:React.ReactNode}){
    const {data:{user},error}=await db.auth.getUser();
    if(cancelled||version!==revision)return;
    if(error||!user){setIdentity(null);return;}
-   const result=await db.from('shop_members').select('barbershop_id').eq('user_id',user.id).maybeSingle();
+   const result=await currentMembership(db,user.id);
    if(cancelled||version!==revision)return;
    if(result.error||!result.data){setIdentity(null);if(result.error)report('vínculo da loja',result.error);return;}
    const shopId=result.data.barbershop_id;

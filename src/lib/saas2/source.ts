@@ -1,7 +1,7 @@
 import { readAll as all } from "./pagination";
 export { readAll as all } from "./pagination";
 import "server-only";
-import { requireShopClient } from "@/lib/authorization";
+import {resolveCurrentShop} from "@/lib/current-shop";
 import { analyze, dayStart, daysIn, shiftDate, type Source } from "./analytics";
 import { z } from "zod";
 const date = z
@@ -34,9 +34,7 @@ export async function loadIntelligence(raw: unknown) {
   const previousStart = shiftDate(filter.start, -days.length),
     from = new Date(dayStart(previousStart)).toISOString(),
     end = new Date(dayStart(shiftDate(filter.end, 1))).toISOString();
-  const shop = process.env.NEXT_PUBLIC_BARBERSHOP_ID;
-  if (!shop) throw Error("Barbearia não configurada.");
-  const db = await requireShopClient(shop, ["owner", "admin"]);
+  const {db,shop}=await resolveCurrentShop();
   const fields =
     "id,barber_id,customer_id,starts_at,ends_at,status,hold_expires_at,total_price,booking_items(service_id,service_name,price,duration_minutes)";
   const [bookings, history, ledger, barbers, services, hours, off, closed] =

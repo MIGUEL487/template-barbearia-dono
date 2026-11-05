@@ -287,7 +287,7 @@ export function RaioXPage() {
               )}
             </Card>
             <Card>
-              <CardTitle>Interpretação com IA · opcional</CardTitle>
+              <CardTitle>Interpretação com Gemini · opcional</CardTitle>
               <p className="mt-4 text-text-muted">
                 {d.aiConfigured
                   ? "Envia somente indicadores agregados. Até cinco solicitações por loja/dia, com resposta limitada; nenhuma ação automática."

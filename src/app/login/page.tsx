@@ -49,7 +49,7 @@ export default function LoginPage() {
           .from("shop_members")
           .select("barbershop_id, role")
           .eq("user_id", data.user.id)
-          .single();
+          .limit(1).maybeSingle();
 
         if (memError || !membership) {
           setErrorMessage(

@@ -1,6 +1,8 @@
 "use server";
+import { resolveCurrentShop } from "@/lib/current-shop";
 import { localDate, validBooking } from "@/lib/saas2/analytics";
-import { requireShopClient } from "@/lib/authorization";
+import { geminiKey } from "@/lib/runtime-secret";
+import { cachedInterpretation } from "@/lib/saas2/gemini";
 import { Filter, loadIntelligence } from "@/lib/saas2/source";
 export async function analyticsAction(filter: unknown) {
   try {
@@ -101,7 +103,7 @@ export async function raioXAction(filter: unknown, serviceId?: string) {
           Date.parse(b.ends_at) > Date.now(),
       ).length,
       diagnosis: diagnose(current, previous, valid.barber ? null : goalCents),
-      aiConfigured: Boolean(process.env.OPENAI_API_KEY),
+      aiConfigured: Boolean(geminiKey()),
       generatedAt,
     };
   } catch (error) {
@@ -117,9 +119,7 @@ export async function raioXAction(filter: unknown, serviceId?: string) {
 export async function saveGoalAction(date: string, amount: number) {
   try {
     Filter.parse({ start: date, end: date, barber: null });
-    const shop = process.env.NEXT_PUBLIC_BARBERSHOP_ID;
-    if (!shop) throw Error("Barbearia não configurada.");
-    const db = await requireShopClient(shop, ["owner", "admin"]);
+    const { db, shop } = await resolveCurrentShop();
     if (!Number.isFinite(amount) || amount < 0 || amount > 99999999.99)
       throw Error("Meta inválida.");
     const { error } = await db.from("daily_goals").upsert({
@@ -202,37 +202,18 @@ export async function closeDayAction(date: string) {
 }
 export async function generateAiAction(date: string) {
   try {
-    if (date > localDate())
-      throw Error("Não é possível encerrar uma data futura.");
-    const { db, shop, current, previous, source } = await loadIntelligence({
+    const { db, shop, current, previous } = await loadIntelligence({
       start: date,
       end: date,
       barber: null,
     });
-    if (!process.env.OPENAI_API_KEY)
+    const key = geminiKey();
+    if (!key)
       return {
         ok: false as const,
         error:
-          "IA generativa não configurada. O diagnóstico determinístico continua disponível.",
+          "Gemini não configurado. O diagnóstico determinístico continua disponível.",
       };
-    const { data: allowed, error } = await db.rpc("consume_raiox_ai_quota", {
-      p_barbershop_id: shop,
-    });
-    if (error)
-      throw Error(
-        "Não foi possível validar a cota de IA. Confira a migration.",
-      );
-    if (!allowed)
-      throw Error(
-        "Limite de cinco análises generativas por loja/dia atingido.",
-      );
-    const { z } = await import("zod");
-    const schema = z
-      .object({
-        summary: z.string().max(1200),
-        actions: z.array(z.string().max(400)).max(4),
-      })
-      .strict();
     const aggregate = {
       date,
       receivedCents: current.income,
@@ -244,50 +225,23 @@ export async function generateAiAction(date: string) {
       occupancy: current.occupancy,
       previousReceivedCents: previous.income,
     };
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      signal: AbortSignal.timeout(12000),
-      headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
+    const output = await cachedInterpretation(
+      shop,
+      key,
+      aggregate,
+      async () => {
+        const { data, error } = await db.rpc("consume_raiox_ai_quota", {
+          p_barbershop_id: shop,
+        });
+        if (error)
+          throw Error(
+            "Cota de IA indisponível. Confira a migration de ai_daily_usage.",
+          );
+        if (!data)
+          throw Error(
+            "Limite de cinco análises generativas por loja/dia atingido.",
+          );
       },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        temperature: 0.2,
-        max_tokens: 700,
-        messages: [
-          {
-            role: "system",
-            content:
-              "Explique em português apenas os indicadores fornecidos. Não faça novos cálculos financeiros, não invente causas, clientes, produtos, lucro ou pagamentos. Não execute ações. Sugira até quatro ações manuais seguras. Nunca confunda previsão com recebimento.",
-          },
-          { role: "user", content: JSON.stringify(aggregate) },
-        ],
-        response_format: {
-          type: "json_schema",
-          json_schema: {
-            name: "raiox",
-            strict: true,
-            schema: {
-              type: "object",
-              properties: {
-                summary: { type: "string" },
-                actions: { type: "array", items: { type: "string" } },
-              },
-              required: ["summary", "actions"],
-              additionalProperties: false,
-            },
-          },
-        },
-      }),
-    });
-    if (!response.ok)
-      throw Error(
-        "Provedor de IA indisponível. Use o diagnóstico determinístico.",
-      );
-    const payload = await response.json();
-    const output = schema.parse(
-      JSON.parse(payload.choices?.[0]?.message?.content || "{}"),
     );
     return { ok: true as const, output };
   } catch (error) {
@@ -296,7 +250,7 @@ export async function generateAiAction(date: string) {
       error:
         error instanceof Error
           ? error.message
-          : "Falha na IA. O diagnóstico continua disponível.",
+          : "Análise generativa indisponível.",
     };
   }
 }

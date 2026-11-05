@@ -41,7 +41,7 @@ NEXT_PUBLIC_DEMO_MODE=false
 
 A marca d’água continua independente, por `NEXT_PUBLIC_DEMO_WATERMARK` e texto existentes. Mudar NEXT_PUBLIC exige novo build. No painel, preserve a `NEXT_PUBLIC_VAPID_PUBLIC_KEY` real já configurada; os testes usaram uma chave pública fictícia e não alteram sua configuração. Preserve os secrets existentes de push/pagamento, sem copiá-los para NEXT_PUBLIC.
 
-No Worker do dono, confira também as variáveis/secrets de runtime necessários aos Server Actions. **Opcional:** `OPENAI_API_KEY` como **secret de runtime do Worker**, sem prefixo NEXT_PUBLIC e nunca no repositório/site estático. Sem essa chave, não há chamada ao provedor e o Raio-X determinístico permanece funcional. O limite diário depende do SQL acima; se a cota não puder ser validada, o servidor não chama o modelo.
+No Worker do dono, confira também as variáveis/secrets de runtime necessários aos Server Actions. **Opcional:** `GEMINI_API_KEY` como **secret de runtime do Worker**, sem prefixo NEXT_PUBLIC e nunca no repositório/site estático. Sem essa chave, não há chamada ao provedor e o Raio-X determinístico permanece funcional. O limite diário depende do SQL acima; se a cota não puder ser validada, o servidor não chama o modelo.
 
 Google Analytics não foi instalado. Áudio do assistente, WhatsApp, jobs e envio de campanhas continuam inativos.
 

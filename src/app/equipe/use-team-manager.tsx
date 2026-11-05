@@ -1,4 +1,5 @@
 "use client";
+import {currentMembership} from "@/lib/browser-shop";
 
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
@@ -127,11 +128,7 @@ export function useTeamManager() {
         return;
       }
 
-      const { data: member, error: memErr } = await supabase
-        .from("shop_members")
-        .select("barbershop_id, barbershops(name)")
-        .eq("user_id", user.id)
-        .maybeSingle();
+      const {data:member,error:memErr}=await currentMembership(supabase,user.id,"barbershop_id, barbershops(name)");
 
       if (memErr || !member) {
         router.push("/login");

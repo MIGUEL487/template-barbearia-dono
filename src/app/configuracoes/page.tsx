@@ -1,4 +1,5 @@
 "use client";
+import {currentMembership} from "@/lib/browser-shop";
 
 import {Support} from "@/components/saas2/support";
 import { AdminSkeleton } from "@/components/admin/skeleton";
@@ -51,11 +52,7 @@ export default function ConfiguracoesPage() {
         return;
       }
 
-      const { data: member, error: memErr } = await supabase
-        .from("shop_members")
-        .select("barbershop_id")
-        .eq("user_id", user.id)
-        .maybeSingle();
+      const {data:member,error:memErr}=await currentMembership(supabase,user.id,"barbershop_id");
 
       if (memErr || !member) {
         setMessage({ type: "error", text: "Acesso não autorizado." });

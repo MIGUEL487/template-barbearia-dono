@@ -1,4 +1,5 @@
 "use server";
+import { resolveCurrentShop } from "@/lib/current-shop";
 import { z } from "zod";
 import { requireShopClient, requireBarberInShop } from "@/lib/authorization";
 import { loadIntelligence, all, Filter } from "@/lib/saas2/source";
@@ -79,9 +80,7 @@ export async function assistantAvailabilityAction(
   barberId: string | null,
 ) {
   try {
-    const shop = process.env.NEXT_PUBLIC_BARBERSHOP_ID;
-    if (!shop) throw Error("Barbearia não configurada.");
-    const db = await requireShopClient(shop, ["owner", "admin"]);
+    const { db, shop } = await resolveCurrentShop();
     uuid.parse(serviceId);
     if (barberId) await requireBarberInShop(db, shop, uuid.parse(barberId));
     const text = z.string().min(2).max(500).parse(input).toLowerCase();
@@ -145,9 +144,7 @@ export async function assistantAvailabilityAction(
 export async function listWaitlistAction(date: string) {
   try {
     Filter.parse({ start: date, end: date, barber: null });
-    const shop = process.env.NEXT_PUBLIC_BARBERSHOP_ID;
-    if (!shop) throw Error("Barbearia não configurada.");
-    const db = await requireShopClient(shop, ["owner", "admin"]);
+    const { db, shop } = await resolveCurrentShop();
     const entries = await all<{
       id: string;
       barber_id: string | null;
@@ -210,9 +207,7 @@ export async function listWaitlistAction(date: string) {
 }
 export async function waitlistSlotsAction(id: string) {
   try {
-    const shop = process.env.NEXT_PUBLIC_BARBERSHOP_ID;
-    if (!shop) throw Error("Barbearia não configurada.");
-    const db = await requireShopClient(shop, ["owner", "admin"]);
+    const { db, shop } = await resolveCurrentShop();
     uuid.parse(id);
     const { data: entry, error: eError } = await db
       .from("waitlist_entries")
@@ -257,9 +252,7 @@ export async function offerWaitlistAction(
   startsAt: string,
 ) {
   try {
-    const shop = process.env.NEXT_PUBLIC_BARBERSHOP_ID;
-    if (!shop) throw Error("Barbearia não configurada.");
-    const db = await requireShopClient(shop, ["owner", "admin"]);
+    const { db, shop } = await resolveCurrentShop();
     uuid.parse(id);
     await requireBarberInShop(db, shop, uuid.parse(barber));
     z.string().datetime({ offset: true }).parse(startsAt);
@@ -291,9 +284,7 @@ export async function offerWaitlistAction(
 }
 export async function cancelWaitlistAction(id: string) {
   try {
-    const shop = process.env.NEXT_PUBLIC_BARBERSHOP_ID;
-    if (!shop) throw Error("Barbearia não configurada.");
-    const db = await requireShopClient(shop, ["owner", "admin"]);
+    const { db, shop } = await resolveCurrentShop();
     uuid.parse(id);
     const { error } = await db.rpc("cancel_waitlist", {
       p_barbershop_id: shop,

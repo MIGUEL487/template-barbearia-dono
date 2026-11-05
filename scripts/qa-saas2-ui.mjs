@@ -21,7 +21,7 @@ let goal = [],
   closing = [],
   denied = false,
   memberRole = "owner",
-  failLedger = false;
+  failLedger = false, missingSaas=false,emptyData=false;
 const calls = [];
 const booking = (id, day, status = "completed") => ({
   id,
@@ -103,12 +103,14 @@ const mock = http.createServer(async (req, res) => {
     );
     return;
   }
+  if(missingSaas&&['daily_goals','day_closings','waitlist_entries'].includes(name)){res.statusCode=404;res.end(JSON.stringify({code:'42P01',message:'relation missing fixture'}));return;}
   let rows = [];
   if (name === "shop_members")
     rows = denied
       ? []
       : [{ user_id: uid, barbershop_id: shop, role: memberRole }];
   if (name === "bookings") rows = history;
+  if(name==="barbershops")rows=[{id:shop}];
   if (name === "barbers")
     rows = [
       { id: barber, barbershop_id: shop, name: "Carlos", is_active: true },
@@ -236,6 +238,7 @@ const mock = http.createServer(async (req, res) => {
                 : actual < v;
       });
   }
+  if(emptyData&&['bookings','financial_transactions'].includes(name))rows=[];
   const offset = Number(url.searchParams.get("offset") || 0),
     limit = Number(url.searchParams.get("limit") || 1000);
   rows = rows.slice(offset, offset + limit);
@@ -289,10 +292,10 @@ const child = spawn(
       ...process.env,
       NEXT_PUBLIC_SUPABASE_URL: supabaseUrl,
       NEXT_PUBLIC_SUPABASE_ANON_KEY: "fixture-public-key",
-      NEXT_PUBLIC_BARBERSHOP_ID: shop,
+      NEXT_PUBLIC_BARBERSHOP_ID: "",
       NEXT_PUBLIC_DEMO_MODE: "false",
       NEXT_PUBLIC_DEMO_WATERMARK: "true",
-      OPENAI_API_KEY: "",
+      GEMINI_API_KEY: "",
     },
     stdio: ["ignore", log.fd, log.fd],
   },
@@ -503,6 +506,8 @@ try {
     security: "database error never becomes fake financial totals",
     passed: true,
   });
+  failLedger=false;emptyData=true;await p.reload();await p.getByText('Como interpretar',{exact:true}).waitFor();assert((await p.getByText('Receita realizada',{exact:true}).locator('..').innerText()).includes('0,00'));results.push({security:'empty financial data yields real zero',passed:true});
+  missingSaas=true;await p.goto('http://127.0.0.1:8891/raio-x');await p.getByRole('alert').filter({hasText:'migration SaaS 2.0'}).waitFor();await p.getByText('Raio-X do seu dia',{exact:true}).waitFor();results.push({security:'missing migration remains distinct from resolved tenant',passed:true});
   await c.close();
   console.log(results);
 } finally {

@@ -123,6 +123,14 @@
     {
       "security": "database error never becomes fake financial totals",
       "passed": true
+    },
+    {
+      "security": "empty financial data yields real zero",
+      "passed": true
+    },
+    {
+      "security": "missing migration remains distinct from resolved tenant",
+      "passed": true
     }
   ],
   "calls": [
@@ -136,6 +144,10 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -148,10 +160,14 @@
     },
     {
       "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
       "method": "GET"
     },
     {
-      "name": "user",
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -163,7 +179,19 @@
       "method": "GET"
     },
     {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -235,6 +263,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "bookings",
       "method": "GET"
     },
@@ -304,6 +336,14 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -313,6 +353,14 @@
     {
       "name": "shop_members",
       "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
     },
     {
       "name": "shop_members",
@@ -332,6 +380,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -415,6 +467,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "daily_goals",
       "method": "POST"
     },
@@ -428,6 +484,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -511,6 +571,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "bookings",
       "method": "GET"
     },
@@ -584,6 +648,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -668,10 +736,26 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
       "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -696,6 +780,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -779,6 +867,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "barbers",
       "method": "GET"
     },
@@ -804,6 +896,14 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -816,10 +916,18 @@
     },
     {
       "name": "shop_members",
-      "method": "GET"
+      "method": "OPTIONS"
     },
     {
       "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -832,6 +940,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -851,10 +963,6 @@
       "method": "GET"
     },
     {
-      "name": "websocket",
-      "method": "GET"
-    },
-    {
       "name": "user",
       "method": "GET"
     },
@@ -864,6 +972,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -884,6 +996,14 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -893,6 +1013,14 @@
     {
       "name": "shop_members",
       "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
     },
     {
       "name": "shop_members",
@@ -912,6 +1040,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -983,6 +1115,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "bookings",
       "method": "GET"
     },
@@ -1048,7 +1184,23 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
       "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
     },
     {
       "name": "user",
@@ -1063,7 +1215,7 @@
       "method": "GET"
     },
     {
-      "name": "user",
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -1076,6 +1228,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1159,6 +1315,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "daily_goals",
       "method": "POST"
     },
@@ -1172,6 +1332,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1255,6 +1419,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "bookings",
       "method": "GET"
     },
@@ -1328,6 +1496,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1408,6 +1580,14 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -1417,6 +1597,14 @@
     {
       "name": "shop_members",
       "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
     },
     {
       "name": "shop_members",
@@ -1436,6 +1624,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1519,6 +1711,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "barbers",
       "method": "GET"
     },
@@ -1540,6 +1736,14 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -1549,6 +1753,14 @@
     {
       "name": "shop_members",
       "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
     },
     {
       "name": "shop_members",
@@ -1568,6 +1780,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1595,11 +1811,11 @@
       "method": "GET"
     },
     {
-      "name": "websocket",
+      "name": "shop_members",
       "method": "GET"
     },
     {
-      "name": "shop_members",
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1635,7 +1851,23 @@
       "method": "GET"
     },
     {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
       "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -1648,6 +1880,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1716,6 +1952,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1799,7 +2039,23 @@
       "method": "GET"
     },
     {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
       "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -1812,6 +2068,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1895,6 +2155,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "daily_goals",
       "method": "POST"
     },
@@ -1908,6 +2172,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -1991,6 +2259,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "bookings",
       "method": "GET"
     },
@@ -2064,6 +2336,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -2156,6 +2432,14 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -2163,6 +2447,14 @@
       "method": "GET"
     },
     {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
       "name": "user",
       "method": "GET"
     },
@@ -2172,6 +2464,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -2255,6 +2551,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "barbers",
       "method": "GET"
     },
@@ -2279,7 +2579,27 @@
       "method": "GET"
     },
     {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
       "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
       "method": "GET"
     },
     {
@@ -2291,10 +2611,6 @@
       "method": "GET"
     },
     {
-      "name": "websocket",
-      "method": "GET"
-    },
-    {
       "name": "user",
       "method": "GET"
     },
@@ -2304,6 +2620,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -2332,6 +2652,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -2352,6 +2676,14 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -2364,14 +2696,10 @@
     },
     {
       "name": "shop_members",
-      "method": "GET"
+      "method": "OPTIONS"
     },
     {
-      "name": "user",
-      "method": "GET"
-    },
-    {
-      "name": "user",
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -2379,7 +2707,23 @@
       "method": "GET"
     },
     {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
       "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -2451,6 +2795,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "bookings",
       "method": "GET"
     },
@@ -2516,6 +2864,14 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -2525,6 +2881,14 @@
     {
       "name": "shop_members",
       "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
     },
     {
       "name": "shop_members",
@@ -2544,6 +2908,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -2627,6 +2995,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "daily_goals",
       "method": "POST"
     },
@@ -2640,6 +3012,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -2723,6 +3099,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "bookings",
       "method": "GET"
     },
@@ -2796,6 +3176,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -2880,6 +3264,14 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -2889,6 +3281,14 @@
     {
       "name": "shop_members",
       "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
     },
     {
       "name": "shop_members",
@@ -2908,6 +3308,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -2991,6 +3395,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "barbers",
       "method": "GET"
     },
@@ -3012,6 +3420,14 @@
     },
     {
       "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
       "method": "GET"
     },
     {
@@ -3024,10 +3440,18 @@
     },
     {
       "name": "shop_members",
-      "method": "GET"
+      "method": "OPTIONS"
     },
     {
       "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -3040,6 +3464,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -3071,16 +3499,16 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "waitlist_entries",
       "method": "GET"
     },
     {
       "name": "get_group_availability",
       "method": "POST"
-    },
-    {
-      "name": "websocket",
-      "method": "GET"
     },
     {
       "name": "user",
@@ -3092,6 +3520,10 @@
     },
     {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -3115,6 +3547,10 @@
       "method": "GET"
     },
     {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
       "name": "waitlist_entries",
       "method": "GET"
     },
@@ -3131,7 +3567,7 @@
       "method": "GET"
     },
     {
-      "name": "user",
+      "name": "websocket",
       "method": "GET"
     },
     {
@@ -3144,35 +3580,11 @@
     },
     {
       "name": "user",
-      "method": "GET"
-    },
-    {
-      "name": "shop_members",
       "method": "OPTIONS"
     },
     {
       "name": "user",
       "method": "GET"
-    },
-    {
-      "name": "shop_members",
-      "method": "GET"
-    },
-    {
-      "name": "user",
-      "method": "GET"
-    },
-    {
-      "name": "shop_members",
-      "method": "GET"
-    },
-    {
-      "name": "user",
-      "method": "GET"
-    },
-    {
-      "name": "user",
-      "method": "OPTIONS"
     },
     {
       "name": "user",
@@ -3188,10 +3600,66 @@
     },
     {
       "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
       "method": "GET"
     },
     {
       "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -3203,12 +3671,20 @@
       "method": "GET"
     },
     {
+      "name": "user",
+      "method": "GET"
+    },
+    {
       "name": "shop_members",
       "method": "GET"
     },
     {
       "name": "user",
       "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
     },
     {
       "name": "user",
@@ -3223,6 +3699,14 @@
       "method": "GET"
     },
     {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
       "name": "shop_members",
       "method": "OPTIONS"
     },
@@ -3231,7 +3715,7 @@
       "method": "GET"
     },
     {
-      "name": "user",
+      "name": "shop_members",
       "method": "GET"
     },
     {
@@ -3243,7 +3727,15 @@
       "method": "GET"
     },
     {
+      "name": "user",
+      "method": "GET"
+    },
+    {
       "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
       "method": "GET"
     },
     {
@@ -3297,6 +3789,226 @@
     {
       "name": "working_hours",
       "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "day_closings",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
     }
   ]
 }
