@@ -18,6 +18,8 @@ Build do dono com as variáveis públicas de uma fixture: `npm run build:cf`. Cl
 - No cliente, `npm run test:saas2`: serve `out/` localmente e intercepta as requests Supabase. Varia quantidade de profissionais, pessoas, percentuais, fusos e fila. O build precisa estar atualizado.
 - Hero/landing do cliente: servir `out/` em `127.0.0.1:8792`, depois executar `node scripts/qa-saas2-hero.mjs` e `node scripts/qa-saas2-landing.mjs`.
 
+Regressão de assinatura: `python3 scripts/qa-saas2-defaults.py` cria um banco Docker local novo, copia somente schema de fixture e usa seed sintético. Reproduz o 42P13 e valida duas instalações com os sete defaults informados, preservação de OID/grants/dependências/dados e chamadas opcionais. Não aceita URL remota.
+
 SQL: `supabase/tests/saas2.local.sql` é **somente para fixture PostgreSQL local com seed de teste**, roda em transação e termina com rollback. Usa usuário local `999...999` e shop `111...111`, sem dados reais. Neste ambiente foi usado o contêiner `booking-repair-test` / banco descartável `saas2_qa`, preparado a partir das migrations/fixtures anteriores; o bundle novo foi aplicado duas vezes antes dos testes. Não execute o arquivo de testes no SQL Editor de produção.
 
 `python3 scripts/qa-saas2-concurrency.py` tem alvo fixo nesse contêiner/banco, abre duas conexões e remove somente seus registros locais identificados. Precisa de Docker local. Não aceita URL de Supabase como argumento.

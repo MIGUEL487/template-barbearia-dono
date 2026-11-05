@@ -2,6 +2,8 @@
 
 O código não executa migrations em build, navegação ou deploy. Não use as chaves fictícias dos testes em produção.
 
+Se a tentativa anterior retornou `42P13` em `create_booking_hold`, use a versão corrigida e siga [CORRECAO-42P13.md](CORRECAO-42P13.md). Antes da instalação, a consulta `supabase/saas2-function-audit.sql` permite conferir defaults, dependências e overloads sem ler dados de clientes.
+
 ## 1. Banco — revisão e execução manual
 
 1. No projeto Supabase `jrzabortkpouqkwndpcq`, faça um backup/exportação antes de mudar funções. Confirme a barbearia `11111111-1111-1111-1111-111111111111` e o vínculo do proprietário em `shop_members`.

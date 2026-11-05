@@ -1,0 +1,231 @@
+{
+  "database": "saas2_defaults_qa_20261105003647289110",
+  "productionAccess": false,
+  "syntheticDataOnly": true,
+  "reproducedSQLSTATE": "42P13",
+  "fixedInstallerAppliedTwice": true,
+  "existingRowsPreserved": true,
+  "dependencyPreserved": true,
+  "positionalArities": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "namedOptionalCalls": true,
+  "validOptionalHold": true,
+  "rowFingerprintsBefore": {
+    "customers": "986b2dd002264fbe56372c5a28ac73f5",
+    "bookings": "81aec4d2cbb87fe3297f7fbf125d1b41",
+    "booking_items": "8256c615c0be0e9a0e75d6264d1e5690",
+    "payments": "e92f835e95a996c51d2f1b05c88b1a3a",
+    "financial_transactions": "7f51a07f814a499bed8a3760d134a6d7"
+  },
+  "rowFingerprintsAfter": {
+    "customers": "986b2dd002264fbe56372c5a28ac73f5",
+    "bookings": "81aec4d2cbb87fe3297f7fbf125d1b41",
+    "booking_items": "8256c615c0be0e9a0e75d6264d1e5690",
+    "payments": "e92f835e95a996c51d2f1b05c88b1a3a",
+    "financial_transactions": "7f51a07f814a499bed8a3760d134a6d7"
+  },
+  "functionsAudited": [
+    {
+      "oid": "29200",
+      "identity": "cancel_waitlist(uuid,uuid)",
+      "proname": "cancel_waitlist",
+      "proargnames": [
+        "p_barbershop_id",
+        "p_entry_id"
+      ],
+      "types": "2950 2950",
+      "arguments": "p_barbershop_id uuid, p_entry_id uuid",
+      "result": "void",
+      "pronargdefaults": 0,
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public, pg_temp"
+      ],
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "oid": "29163",
+      "identity": "consume_raiox_ai_quota(uuid)",
+      "proname": "consume_raiox_ai_quota",
+      "proargnames": [
+        "p_barbershop_id"
+      ],
+      "types": "2950",
+      "arguments": "p_barbershop_id uuid",
+      "result": "boolean",
+      "pronargdefaults": 0,
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public, pg_temp"
+      ],
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "oid": "28501",
+      "identity": "create_booking_hold(uuid,uuid,timestamp with time zone,uuid[],text,text,text,boolean)",
+      "proname": "create_booking_hold",
+      "proargnames": [
+        "p_barbershop_id",
+        "p_barber_id",
+        "p_starts_at",
+        "p_service_ids",
+        "p_customer_name",
+        "p_customer_phone",
+        "p_customer_email",
+        "p_marketing_consent"
+      ],
+      "types": "2950 2950 1184 2951 25 25 25 16",
+      "arguments": "p_barbershop_id uuid, p_barber_id uuid DEFAULT NULL::uuid, p_starts_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_service_ids uuid[] DEFAULT '{}'::uuid[], p_customer_name text DEFAULT ''::text, p_customer_phone text DEFAULT ''::text, p_customer_email text DEFAULT NULL::text, p_marketing_consent boolean DEFAULT false",
+      "result": "jsonb",
+      "pronargdefaults": 7,
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public, extensions, pg_temp"
+      ],
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}"
+    },
+    {
+      "oid": "29113",
+      "identity": "create_group_booking_hold(uuid,uuid,timestamp with time zone,uuid[],text,text,text,boolean)",
+      "proname": "create_group_booking_hold",
+      "proargnames": [
+        "p_barbershop_id",
+        "p_barber_id",
+        "p_starts_at",
+        "p_service_ids",
+        "p_customer_name",
+        "p_customer_phone",
+        "p_customer_email",
+        "p_marketing_consent"
+      ],
+      "types": "2950 2950 1184 2951 25 25 25 16",
+      "arguments": "p_barbershop_id uuid, p_barber_id uuid, p_starts_at timestamp with time zone, p_service_ids uuid[], p_customer_name text, p_customer_phone text, p_customer_email text, p_marketing_consent boolean DEFAULT false",
+      "result": "jsonb",
+      "pronargdefaults": 1,
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public, extensions, pg_temp"
+      ],
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "oid": "28504",
+      "identity": "get_availability(uuid,uuid,date,uuid[])",
+      "proname": "get_availability",
+      "proargnames": [
+        "p_barbershop_id",
+        "p_barber_id",
+        "p_date",
+        "p_service_ids",
+        "barber_id",
+        "start_time",
+        "end_time"
+      ],
+      "types": "2950 2950 1082 2951",
+      "arguments": "p_barbershop_id uuid, p_barber_id uuid, p_date date, p_service_ids uuid[]",
+      "result": "TABLE(barber_id uuid, start_time timestamp with time zone, end_time timestamp with time zone)",
+      "pronargdefaults": 0,
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public, extensions, pg_temp"
+      ],
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "oid": "29111",
+      "identity": "get_group_availability(uuid,uuid,date,uuid[])",
+      "proname": "get_group_availability",
+      "proargnames": [
+        "p_barbershop_id",
+        "p_barber_id",
+        "p_date",
+        "p_service_ids",
+        "barber_id",
+        "start_time",
+        "end_time"
+      ],
+      "types": "2950 2950 1082 2951",
+      "arguments": "p_barbershop_id uuid, p_barber_id uuid, p_date date, p_service_ids uuid[]",
+      "result": "TABLE(barber_id uuid, start_time timestamp with time zone, end_time timestamp with time zone)",
+      "pronargdefaults": 0,
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public, extensions, pg_temp"
+      ],
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "oid": "29198",
+      "identity": "join_waitlist(uuid,uuid,uuid[],date,time without time zone,time without time zone,text,text,text,text,boolean)",
+      "proname": "join_waitlist",
+      "proargnames": [
+        "p_barbershop_id",
+        "p_barber_id",
+        "p_service_ids",
+        "p_date",
+        "p_window_start",
+        "p_window_end",
+        "p_customer_name",
+        "p_phone",
+        "p_email",
+        "p_contact_channel",
+        "p_consent"
+      ],
+      "types": "2950 2950 2951 1082 1083 1083 25 25 25 25 16",
+      "arguments": "p_barbershop_id uuid, p_barber_id uuid, p_service_ids uuid[], p_date date, p_window_start time without time zone, p_window_end time without time zone, p_customer_name text, p_phone text, p_email text, p_contact_channel text, p_consent boolean",
+      "result": "uuid",
+      "pronargdefaults": 0,
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public, extensions, pg_temp"
+      ],
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "oid": "29199",
+      "identity": "offer_waitlist(uuid,uuid,uuid,timestamp with time zone)",
+      "proname": "offer_waitlist",
+      "proargnames": [
+        "p_barbershop_id",
+        "p_entry_id",
+        "p_barber_id",
+        "p_starts_at"
+      ],
+      "types": "2950 2950 2950 1184",
+      "arguments": "p_barbershop_id uuid, p_entry_id uuid, p_barber_id uuid, p_starts_at timestamp with time zone",
+      "result": "jsonb",
+      "pronargdefaults": 0,
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public, extensions, pg_temp"
+      ],
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "oid": "29119",
+      "identity": "saas_can_manage(uuid)",
+      "proname": "saas_can_manage",
+      "proargnames": [
+        "p_shop"
+      ],
+      "types": "2950",
+      "arguments": "p_shop uuid",
+      "result": "boolean",
+      "pronargdefaults": 0,
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, public, pg_temp"
+      ],
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}"
+    }
+  ],
+  "catalogAudit": "cancel_waitlist(uuid,uuid)|p_barbershop_id uuid, p_entry_id uuid|void|2|t|{\"search_path=pg_catalog, public, pg_temp\"}|{postgres=X/postgres,authenticated=X/postgres}\nconsume_raiox_ai_quota(uuid)|p_barbershop_id uuid|boolean|1|t|{\"search_path=pg_catalog, public, pg_temp\"}|{postgres=X/postgres,authenticated=X/postgres}\ncreate_booking_hold(uuid,uuid,timestamp with time zone,uuid[],text,text,text,boolean)|p_barbershop_id uuid, p_barber_id uuid DEFAULT NULL::uuid, p_starts_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_service_ids uuid[] DEFAULT '{}'::uuid[], p_customer_name text DEFAULT ''::text, p_customer_phone text DEFAULT ''::text, p_customer_email text DEFAULT NULL::text, p_marketing_consent boolean DEFAULT false|jsonb|1|t|{\"search_path=pg_catalog, public, extensions, pg_temp\"}|{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}\ncreate_group_booking_hold(uuid,uuid,timestamp with time zone,uuid[],text,text,text,boolean)|p_barbershop_id uuid, p_barber_id uuid, p_starts_at timestamp with time zone, p_service_ids uuid[], p_customer_name text, p_customer_phone text, p_customer_email text, p_marketing_consent boolean DEFAULT false|jsonb|7|t|{\"search_path=pg_catalog, public, extensions, pg_temp\"}|{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}\nget_availability(uuid,uuid,date,uuid[])|p_barbershop_id uuid, p_barber_id uuid, p_date date, p_service_ids uuid[]|TABLE(barber_id uuid, start_time timestamp with time zone, end_time timestamp with time zone)|4|t|{\"search_path=pg_catalog, public, extensions, pg_temp\"}|{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}\nget_group_availability(uuid,uuid,date,uuid[])|p_barbershop_id uuid, p_barber_id uuid, p_date date, p_service_ids uuid[]|TABLE(barber_id uuid, start_time timestamp with time zone, end_time timestamp with time zone)|4|t|{\"search_path=pg_catalog, public, extensions, pg_temp\"}|{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}\njoin_waitlist(uuid,uuid,uuid[],date,time without time zone,time without time zone,text,text,text,text,boolean)|p_barbershop_id uuid, p_barber_id uuid, p_service_ids uuid[], p_date date, p_window_start time without time zone, p_window_end time without time zone, p_customer_name text, p_phone text, p_email text, p_contact_channel text, p_consent boolean|uuid|11|t|{\"search_path=pg_catalog, public, extensions, pg_temp\"}|{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}\noffer_waitlist(uuid,uuid,uuid,timestamp with time zone)|p_barbershop_id uuid, p_entry_id uuid, p_barber_id uuid, p_starts_at timestamp with time zone|jsonb|4|t|{\"search_path=pg_catalog, public, extensions, pg_temp\"}|{postgres=X/postgres,authenticated=X/postgres}\nsaas_can_manage(uuid)|p_shop uuid|boolean|1|t|{\"search_path=pg_catalog, public, pg_temp\"}|{postgres=X/postgres,authenticated=X/postgres}\nrule _RETURN on view saas2_defaults_dependency_probe|n|function create_booking_hold(uuid,uuid,timestamp with time zone,uuid[],text,text,text,boolean)\n"
+}

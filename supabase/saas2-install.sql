@@ -296,7 +296,17 @@ GRANT EXECUTE ON FUNCTION public.create_group_booking_hold(uuid,uuid,timestamptz
 
 CREATE OR REPLACE FUNCTION public.get_availability(p_barbershop_id uuid,p_barber_id uuid,p_date date,p_service_ids uuid[])
 RETURNS TABLE(barber_id uuid,start_time timestamptz,end_time timestamptz) LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,public,extensions,pg_temp AS $$ SELECT * FROM public.get_group_availability(p_barbershop_id,p_barber_id,p_date,p_service_ids); $$;
-CREATE OR REPLACE FUNCTION public.create_booking_hold(p_barbershop_id uuid,p_barber_id uuid,p_starts_at timestamptz,p_service_ids uuid[],p_customer_name text,p_customer_phone text,p_customer_email text,p_marketing_consent boolean DEFAULT false)
+-- Keep production parameter names/defaults: removing defaults during replacement raises 42P13.
+CREATE OR REPLACE FUNCTION public.create_booking_hold(
+  p_barbershop_id uuid,
+  p_barber_id uuid DEFAULT NULL::uuid,
+  p_starts_at timestamptz DEFAULT NULL::timestamptz,
+  p_service_ids uuid[] DEFAULT '{}'::uuid[],
+  p_customer_name text DEFAULT ''::text,
+  p_customer_phone text DEFAULT ''::text,
+  p_customer_email text DEFAULT NULL::text,
+  p_marketing_consent boolean DEFAULT false
+)
 RETURNS jsonb LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,public,extensions,pg_temp AS $$ SELECT public.create_group_booking_hold(p_barbershop_id,p_barber_id,p_starts_at,p_service_ids,p_customer_name,p_customer_phone,p_customer_email,p_marketing_consent); $$;
 REVOKE ALL ON FUNCTION public.get_availability(uuid,uuid,date,uuid[]) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.get_availability(uuid,uuid,date,uuid[]) TO anon,authenticated;
