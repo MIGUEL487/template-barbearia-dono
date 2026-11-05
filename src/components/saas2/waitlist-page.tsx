@@ -1,4 +1,5 @@
 "use client";
+import {AnimatedSelect} from "@/components/ui/animated-select";
 import { waitlistState } from "@/lib/saas2/waitlist";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -124,7 +125,7 @@ export function WaitlistPage() {
                   >
                     Consultar vagas compatíveis
                   </Button>
-                  <select
+                  <AnimatedSelect
                     aria-label={"Encaixe para " + e.customer_name}
                     value={selection[e.id] || ""}
                     onChange={(ev) =>
@@ -160,7 +161,7 @@ export function WaitlistPage() {
                         · {d.barbers.find((b) => b.id === s.barber_id)?.name}
                       </option>
                     ))}
-                  </select>
+                  </AnimatedSelect>
                   <Button
                     disabled={busy || !selection[e.id]}
                     onClick={async () => {

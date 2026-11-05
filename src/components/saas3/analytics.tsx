@@ -1,4 +1,7 @@
 "use client";
+import { AnimatedSelect } from "@/components/ui/animated-select";
+import { Tooltip } from "@/components/ui/tooltip";
+import { Expandable } from "@/components/ui/expandable";
 import { useEffect, useRef, useState } from "react";
 import { analyticsAction } from "@/app/actions/intelligence-actions";
 import { Workspace, Metric } from "./shell";
@@ -89,48 +92,93 @@ export function Analytics3() {
               tip="Valor dos serviços concluídos dividido por atendimentos concluídos; não é ticket de recebimentos."
             />
           </div>
-          <section className="s3-panel">
-            <div className="s3-section-title">
-              <div>
-                <h2>Evolução da receita</h2>
-                <p>
-                  Caixa recebido e valor dos serviços programados · valores em
-                  reais
-                </p>
+          <div className="s3-overview-grid">
+            <section className="s3-panel s3-revenue-panel">
+              <div className="s3-section-title">
+                <div>
+                  <h2>Evolução da receita</h2>
+                  <p>
+                    Caixa recebido e valor dos serviços programados · valores em
+                    reais
+                  </p>
+                </div>
+                <div className="s3-inline">
+                  {d.barbers.length > 1 && (
+                    <AnimatedSelect
+                      aria-label="Profissional nas análises"
+                      value={barber}
+                      onChange={(e) => setBarber(e.target.value)}
+                    >
+                      <option value="">Toda a equipe</option>
+                      {d.barbers.map((b) => (
+                        <option key={b.id} value={b.id}>
+                          {b.name}
+                        </option>
+                      ))}
+                    </AnimatedSelect>
+                  )}
+                  <Button variant="ghost" disabled={busy} onClick={load}>
+                    Atualizar
+                  </Button>
+                </div>
               </div>
-              <div className="s3-inline">
-                {d.barbers.length > 1 && (
-                  <select
-                    aria-label="Profissional nas análises"
-                    value={barber}
-                    onChange={(e) => setBarber(e.target.value)}
-                  >
-                    <option value="">Toda a equipe</option>
-                    {d.barbers.map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {b.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
-                <Button variant="ghost" disabled={busy} onClick={load}>
-                  Atualizar
-                </Button>
+              <LineChart rows={c.daily} />
+              {!c.bookings && !c.income && (
+                <div className="s3-empty">
+                  <h3>Sua história começa com os registros.</h3>
+                  <p>
+                    À medida que atendimentos e recebimentos forem registrados,
+                    você verá tendências aqui. Nenhum valor de demonstração foi
+                    incluído.
+                  </p>
+                  <Link href="/agenda">Abrir agenda →</Link>
+                </div>
+              )}
+            </section>
+            <aside className="s3-panel s3-performance">
+              <p className="s3-eyebrow">Capacidade real</p>
+              <h2>Desempenho da agenda</h2>
+              <strong className="s3-performance-number">
+                {c.occupancy === null
+                  ? "—"
+                  : `${(c.occupancy * 100).toFixed(1)}%`}
+              </strong>
+              <p className="s3-note">do expediente disponível ocupado</p>
+              <div
+                role="progressbar"
+                aria-label="Ocupação no período"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round((c.occupancy || 0) * 100)}
+                className="s3-progress"
+              >
+                <span
+                  style={{
+                    width: `${Math.min(100, (c.occupancy || 0) * 100)}%`,
+                  }}
+                />
               </div>
-            </div>
-            <LineChart rows={c.daily} />
-            {!c.bookings && !c.income && (
-              <div className="s3-empty">
-                <h3>Sua história começa com os registros.</h3>
-                <p>
-                  À medida que atendimentos e recebimentos forem registrados,
-                  você verá tendências aqui. Nenhum valor de demonstração foi
-                  incluído.
-                </p>
-                <Link href="/agenda">Abrir agenda →</Link>
-              </div>
-            )}
-          </section>
+              <dl>
+                <div>
+                  <dt>Concluídos</dt>
+                  <dd>{c.completed}</dd>
+                </div>
+                <div>
+                  <dt>Pré-reservas válidas</dt>
+                  <dd>{c.pending}</dd>
+                </div>
+                <div>
+                  <dt>Cancelamentos</dt>
+                  <dd>{c.cancelled}</dd>
+                </div>
+                <div>
+                  <dt>Minutos livres</dt>
+                  <dd>{Math.round(c.freeMinutes)}</dd>
+                </div>
+              </dl>
+              <Link href="/agenda">Explorar agenda ↗</Link>
+            </aside>
+          </div>
           <div className="s3-analytics-grid">
             <section className="s3-panel">
               <div className="s3-section-title">
@@ -172,26 +220,26 @@ export function Analytics3() {
                             ? `${date} ${hour}: ${(ratio * 100).toFixed(0)}%, ${Math.round(h.occupied)} de ${Math.round(h.minutes)} min.`
                             : `${date} ${hour}: sem capacidade cadastrada`;
                           return (
-                            <button
-                              key={hour}
-                              type="button"
-                              title={title}
-                              aria-label={title}
-                              className={!h ? "s3-closed" : ""}
-                              style={
-                                h
-                                  ? {
-                                      background: `color-mix(in srgb,var(--accent) ${Math.round(8 + ratio * 72)}%,var(--surface-2))`,
-                                    }
-                                  : undefined
-                              }
-                              onClick={(e) => {
-                                const output = e.currentTarget
-                                  .closest(".s3-panel")
-                                  ?.querySelector("output");
-                                if (output) output.textContent = title;
-                              }}
-                            />
+                            <Tooltip key={hour} text={title}>
+                              <button
+                                type="button"
+                                aria-label={title}
+                                className={!h ? "s3-closed" : ""}
+                                style={
+                                  h
+                                    ? {
+                                        background: `color-mix(in srgb,var(--accent) ${Math.round(8 + ratio * 72)}%,var(--surface-2))`,
+                                      }
+                                    : undefined
+                                }
+                                onClick={(e) => {
+                                  const output = e.currentTarget
+                                    .closest(".s3-panel")
+                                    ?.querySelector("output");
+                                  if (output) output.textContent = title;
+                                }}
+                              />
+                            </Tooltip>
                           );
                         })}
                       </div>
@@ -203,6 +251,10 @@ export function Analytics3() {
                   Cadastre o expediente para visualizar a capacidade.
                 </p>
               )}
+              <div className="s3-heat-legend">
+                Ocupação <i style={{ opacity: 0.2 }} /> 0%{" "}
+                <i style={{ opacity: 0.55 }} /> 50% <i /> 100%
+              </div>
               <output className="s3-chart-caption">
                 Toque ou passe o cursor em uma célula para consultar.
               </output>
@@ -306,7 +358,7 @@ export function Analytics3() {
               série de churn confiável sem acompanhamento de coortes.
             </p>
           </section>
-          <details className="s3-panel">
+          <Expandable className="s3-panel">
             <summary>Como interpretar os cálculos</summary>
             {c.notes.map((n) => (
               <p className="s3-note" key={n}>
@@ -320,7 +372,7 @@ export function Analytics3() {
               Analytics não configurado no código: navegação e caixa não são
               misturados.
             </p>
-          </details>
+          </Expandable>
         </>
       )}
     </Workspace>

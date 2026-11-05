@@ -1,4 +1,5 @@
 "use client";
+import {AnimatedSelect} from "@/components/ui/animated-select";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AdminNavigation } from "@/components/admin/navigation";
@@ -85,7 +86,7 @@ export function RaioXPage() {
             {d && d.barbers.length > 1 && (
               <label>
                 Profissional
-                <select
+                <AnimatedSelect
                   value={barber}
                   onChange={(e) => setBarber(e.target.value)}
                 >
@@ -95,7 +96,7 @@ export function RaioXPage() {
                       {b.name}
                     </option>
                   ))}
-                </select>
+                </AnimatedSelect>
               </label>
             )}
             <Button disabled={busy} onClick={load}>
@@ -154,7 +155,7 @@ export function RaioXPage() {
               <CardTitle>Horários realmente disponíveis</CardTitle>
               <label className="block mt-4">
                 Serviço de referência
-                <select
+                <AnimatedSelect
                   value={service || d.serviceId}
                   onChange={(e) => setService(e.target.value)}
                 >
@@ -164,7 +165,7 @@ export function RaioXPage() {
                       preparação
                     </option>
                   ))}
-                </select>
+                </AnimatedSelect>
               </label>
               <p className="text-sm text-text-muted mt-4">
                 Inícios possíveis, consultados no get_availability. Alternativas

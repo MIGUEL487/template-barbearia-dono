@@ -1,4 +1,6 @@
 "use client";
+import { AnimatedSelect } from "@/components/ui/animated-select";
+import { Expandable } from "@/components/ui/expandable";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Workspace } from "./shell";
@@ -102,7 +104,7 @@ export function Waitlist3() {
               concorrência são conferidas novamente no banco.
             </p>
           </div>
-          <select
+          <AnimatedSelect
             aria-label="Status da fila"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
@@ -110,7 +112,7 @@ export function Waitlist3() {
             <option value="waiting">Aguardando / reavaliar</option>
             <option value="offered">Em acompanhamento / retirados</option>
             <option value="all">Todos os registros</option>
-          </select>
+          </AnimatedSelect>
         </div>
         {busy && (
           <p role="status" className="s3-updating">
@@ -180,11 +182,11 @@ export function Waitlist3() {
                       : "Nenhuma vaga compatível agora"}
                   </p>
                 )}
-                <details className="mt-4 text-xs text-text-muted">
+                <Expandable className="mt-4 text-xs text-text-muted">
                   <summary>Contato manual autorizado</summary>
                   <p>{e.contact_channel === "email" ? e.email : e.phone}</p>
                   <p>WhatsApp automático é integração futura.</p>
-                </details>
+                </Expandable>
               </div>
               <div className="s3-inline">
                 {state.canOffer ? (
@@ -204,7 +206,7 @@ export function Waitlist3() {
                     </Button>
                     {slots.length > 0 && (
                       <>
-                        <select
+                        <AnimatedSelect
                           aria-label={"Vaga para " + e.customer_name}
                           value={selection[e.id] || ""}
                           onChange={(ev) =>
@@ -235,7 +237,7 @@ export function Waitlist3() {
                               }
                             </option>
                           ))}
-                        </select>
+                        </AnimatedSelect>
                         <Button
                           disabled={busy || !selection[e.id]}
                           onClick={async () => {

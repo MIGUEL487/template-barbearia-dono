@@ -1,4 +1,5 @@
 "use client";
+import {AnimatedSelect} from "@/components/ui/animated-select";
 import { useEffect, useRef, useState } from "react";
 import { AdminNavigation } from "@/components/admin/navigation";
 import { AdminSkeleton } from "@/components/admin/skeleton";
@@ -61,7 +62,7 @@ export function AnalyticsPage() {
           <div className="flex flex-wrap gap-4">
             <label>
               Período
-              <select
+              <AnimatedSelect
                 aria-label="Período"
                 defaultValue="7"
                 onChange={(e) => {
@@ -74,7 +75,7 @@ export function AnalyticsPage() {
                 <option value="30">Últimos 30 dias</option>
                 <option value="month">Mês atual</option>
                 <option value="custom">Personalizado</option>
-              </select>
+              </AnimatedSelect>
             </label>
             <label>
               Início
@@ -97,7 +98,7 @@ export function AnalyticsPage() {
             {data && data.barbers.length > 1 && (
               <label>
                 Profissional
-                <select
+                <AnimatedSelect
                   value={barber}
                   onChange={(e) => setBarber(e.target.value)}
                 >
@@ -107,7 +108,7 @@ export function AnalyticsPage() {
                       {b.name}
                     </option>
                   ))}
-                </select>
+                </AnimatedSelect>
               </label>
             )}
             <Button onClick={load} disabled={busy}>

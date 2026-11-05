@@ -179,7 +179,7 @@
 .s3-legend i.s3-line-secondary {
   background: var(--text-muted);
 }
-.s3-chart svg {
+.s3-chart > svg {
   display: block;
   width: 100%;
   height: auto;
@@ -736,4 +736,692 @@
   .saas3 .s3-thread-list {
     max-height: 160px;
   }
+}
+
+/* SaaS 3.1: shared controls use the existing management tokens and motion curve. */
+.management-scope .ui-select-field,
+.management-scope .ui-select {
+  position: relative;
+  min-width: 0;
+}
+.management-scope .ui-select-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.management-scope .ui-select-trigger[aria-expanded="true"] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+.management-scope .ui-select-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.management-scope .ui-select-value small {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.management-scope .ui-select-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 100%;
+  width: 100%;
+  max-width: min(400px, calc(100vw - 32px));
+  z-index: 50;
+  border-radius: 16px;
+  padding: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 16px 32px #0005,
+    inset 0 1px 0 #fff08;
+}
+.management-scope .ui-select-above {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+.management-scope .ui-select-panel ul {
+  max-height: 240px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.management-scope .ui-select-panel li[role="option"] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 13px;
+}
+.management-scope .ui-select-panel li > span {
+  flex: 1;
+}
+.management-scope .ui-select-panel li small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.management-scope .ui-select-panel [data-active="true"] {
+  background: var(--accent-soft);
+}
+.management-scope .ui-select-panel [aria-selected="true"] {
+  color: var(--accent-light);
+}
+.management-scope .ui-expandable-trigger {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 40px;
+  text-align: left;
+  background: transparent;
+  color: var(--text);
+  padding: 8px 0;
+  border: 0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.management-scope .ui-expandable-trigger > span:first-child {
+  min-width: 0;
+}
+.ui-expandable-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ui-expandable-grid[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.ui-expandable-clip {
+  overflow: hidden;
+  min-height: 0;
+}
+.ui-expandable-content {
+  padding-top: 16px;
+}
+.ui-tooltip-panel {
+  position: fixed;
+  z-index: 100;
+  max-width: 240px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px #0005;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.management-scope .saas3 button:not(.ui-select-trigger):not([role="option"]) {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+.management-scope .saas3 button:not(:disabled):active {
+  transform: scale(0.98);
+}
+.management-scope .saas3 button:not(:disabled):hover {
+  filter: brightness(1.06);
+}
+.management-scope .admin-content.saas3 > .s3-heading {
+  background: transparent;
+  padding: 8px 0 24px;
+  border-radius: 0;
+  border-bottom: 1px solid var(--hairline);
+  align-items: flex-end;
+}
+.saas3 .s3-heading h1 {
+  font-size: 32px !important;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+.saas3 .s3-kpis {
+  gap: 16px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+}
+.saas3 .s3-metric {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  padding: 24px;
+  box-shadow: inset 0 1px 0 #fff04;
+}
+.saas3 .s3-metric:last-child {
+  border: 1px solid var(--border);
+}
+.s3-metric-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-soft);
+  border-radius: 12px;
+  color: var(--accent);
+  width: 40px;
+  height: 40px;
+  margin-bottom: 16px;
+}
+.saas3 .s3-metric p {
+  font-size: 12px;
+  justify-content: space-between;
+}
+.saas3 .s3-metric > strong {
+  font-size: clamp(24px, 2.3vw, 36px);
+  margin: 8px 0 16px;
+  line-height: 1.15;
+}
+.saas3 .s3-metric .s3-info {
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  min-height: 24px;
+  color: var(--text-muted);
+  background: transparent;
+}
+.s3-metric-change {
+  display: inline-flex;
+  max-width: 100%;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: var(--bg);
+  line-height: 1.5;
+}
+.s3-metric-change[data-trend="up"] {
+  color: var(--accent-light);
+  background: var(--accent-soft);
+}
+.s3-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.6fr) minmax(232px, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+.s3-performance {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+.s3-performance h2 {
+  font-size: 16px;
+}
+.s3-performance .s3-performance-number {
+  font-size: 48px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.s3-performance .s3-note {
+  margin: 0;
+}
+.s3-progress {
+  height: 8px;
+  border-radius: 8px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+.s3-progress > span {
+  height: 100%;
+  display: block;
+  background: var(--accent);
+  border-radius: inherit;
+}
+.s3-performance dl {
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+.s3-performance dl > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.s3-performance dt {
+  color: var(--text-muted);
+}
+.s3-performance dd {
+  margin: 0;
+  font-weight: 500;
+}
+.s3-performance a {
+  font-size: 12px;
+  color: var(--accent);
+  padding-top: 16px;
+  border-top: 1px solid var(--hairline);
+}
+.saas3 .s3-panel {
+  border-color: color-mix(in srgb, var(--border) 65%, transparent);
+  box-shadow: inset 0 1px 0 #fff04;
+  border-radius: 24px;
+}
+.saas3 .s3-chart {
+  position: relative;
+}
+.saas3 .s3-chart-toolbar .ui-select-field {
+  max-width: 200px;
+}
+.saas3 .s3-chart-readout .ui-select-field {
+  max-width: 200px;
+}
+.saas3 .s3-chart-readout .ui-select-trigger {
+  min-height: 32px;
+  font-size: 12px;
+}
+.saas3 .s3-revenue-panel .s3-chart > svg {
+  min-height: 240px;
+}
+.saas3 .s3-section-title h2 {
+  font-size: 16px;
+  font-weight: 500;
+}
+.saas3 .s3-section-title p {
+  font-size: 12px;
+}
+.saas3 .s3-filters {
+  gap: 8px;
+  align-items: center;
+}
+.saas3 .s3-filters > .ui-select-field {
+  flex: 1 1 144px;
+}
+.saas3 .s3-filters input {
+  flex: 2 1 224px;
+}
+.saas3 table thead {
+  background: var(--surface-2);
+}
+.saas3 table th {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+.saas3 table tbody tr {
+  transition: background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.saas3 .s3-status {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  padding: 4px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.saas3 .s3-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.saas3 .s3-chat-layout {
+  grid-template-columns: 224px minmax(0, 1fr);
+  gap: 24px;
+}
+.saas3 .s3-history {
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 20px;
+  align-self: start;
+}
+.saas3 .s3-history > button {
+  min-height: 40px;
+  border-radius: 12px;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 12px;
+}
+.saas3 .s3-history .s3-thread-list button {
+  font-size: 12px;
+  border: 0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  min-height: 40px;
+  color: var(--text-muted);
+}
+.saas3 .s3-history .s3-thread-list button[aria-current="true"] {
+  background: var(--accent-soft);
+  color: var(--accent-light);
+}
+.saas3 .s3-messages {
+  gap: 24px;
+  padding: 8px 0;
+}
+.saas3 .s3-message {
+  border-color: var(--hairline);
+  border-radius: 20px;
+  padding: 24px;
+  line-height: 1.75;
+}
+.saas3 .s3-message-user {
+  border-radius: 20px 20px 4px 20px;
+  background: var(--accent-soft);
+}
+.saas3 .s3-message-label {
+  font-size: 11px;
+}
+.saas3 .s3-message p {
+  font-size: 14px;
+}
+.saas3 .s3-message-metrics {
+  gap: 16px;
+}
+.saas3 .s3-message-metrics > span {
+  padding: 8px 0;
+}
+.saas3 .s3-composer {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+  box-shadow:
+    0 16px 40px #0003,
+    inset 0 1px 0 #fff06;
+  padding: 16px;
+  border-radius: 20px;
+}
+.saas3 .s3-composer:focus-within {
+  border-color: var(--accent);
+}
+.saas3 .s3-composer textarea {
+  min-height: 72px;
+  max-height: 160px;
+  resize: none;
+  line-height: 1.6;
+  border: 0;
+  outline: none !important;
+  box-shadow: none;
+  background: transparent;
+  padding: 8px;
+}
+.saas3 .s3-report {
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+}
+.s3-gemini-diagnostic {
+  border-top: 1px solid var(--hairline);
+  padding-top: 8px;
+  margin-top: 8px;
+}
+.s3-diagnostic-meta {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.s3-diagnostic-meta > span {
+  color: var(--accent-light);
+}
+.s3-diagnostic-meta p {
+  line-height: 1.6;
+}
+.s3-diagnostic-meta code {
+  font-size: 11px;
+}
+.s3-generating {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.s3-generating > span {
+  display: inline-flex;
+  gap: 4px;
+}
+.s3-generating i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: s3-thinking 0.8s cubic-bezier(0.16, 1, 0.3, 1) infinite alternate;
+}
+.s3-generating i:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.s3-generating i:nth-child(3) {
+  animation-delay: 0.24s;
+}
+@keyframes s3-thinking {
+  to {
+    opacity: 0.3;
+    transform: translateY(-3px);
+  }
+}
+.saas3 .s3-dialog {
+  border-color: var(--border);
+  box-shadow:
+    0 24px 80px #0008,
+    inset 0 1px 0 #fff08;
+}
+.saas3 .s3-dialog header {
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.saas3 .s3-form-grid label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.saas3 .s3-form-grid input,
+.saas3 .s3-form-grid .ui-select-trigger {
+  color: var(--text);
+}
+@media (max-width: 1279px) {
+  .s3-overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .s3-performance {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 32px;
+  }
+  .s3-performance dl {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    align-self: center;
+  }
+  .s3-performance a {
+    grid-column: 1/-1;
+  }
+  .saas3 .s3-metric {
+    padding: 16px;
+  }
+  .saas3 .s3-chat-layout {
+    grid-template-columns: 192px minmax(0, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .management-scope .admin-content.saas3 > .s3-heading {
+    align-items: flex-start;
+    padding: 8px 0 16px;
+  }
+  .saas3 .s3-kpis {
+    gap: 8px;
+  }
+  .s3-metric-icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 8px;
+  }
+  .saas3 .s3-metric > strong {
+    font-size: 26px;
+  }
+  .s3-metric-change {
+    font-size: 10px !important;
+    padding: 4px;
+  }
+  .saas3 .s3-chat-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  .saas3 .s3-history {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 16px;
+  }
+  .saas3 .s3-history > .ui-expandable {
+    min-width: 0;
+  }
+  .saas3 .s3-history .s3-gemini-diagnostic {
+    grid-column: 1/-1;
+  }
+  .saas3 .s3-history .ui-expandable:has(.s3-thread-list) {
+    grid-column: 1/-1;
+  }
+  .saas3 .s3-thread-list {
+    max-height: 128px;
+  }
+  .saas3 .s3-history .s3-thread-list button {
+    width: 100%;
+  }
+  .saas3 .s3-message {
+    padding: 16px;
+  }
+  .saas3 .s3-composer {
+    bottom: 88px;
+  }
+  .s3-performance {
+    padding: 24px;
+  }
+  .saas3 .s3-filters > .ui-select-field {
+    flex-basis: calc(50% - 8px);
+  }
+  .saas3 .s3-chart-toolbar {
+    gap: 8px;
+  }
+  .saas3 .s3-chart-toolbar .ui-select-field {
+    max-width: 160px;
+  }
+  .management-scope .ui-select-trigger {
+    font-size: 12px;
+    padding: 8px;
+  }
+  .saas3 .s3-revenue-panel .s3-chart > svg {
+    min-height: 176px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui-expandable-grid {
+    transition: none;
+  }
+  .s3-generating i {
+    animation: none;
+  }
+  .management-scope .saas3 button:active {
+    transform: none;
+  }
+  .ui-tooltip-panel {
+    transition: none;
+  }
+}
+.motion-off .ui-expandable-grid {
+  transition: none;
+}
+.motion-off .s3-generating i {
+  animation: none;
+}
+
+.management-scope .ui-select-trigger svg {
+  width: 16px;
+  height: 16px;
+  min-height: 0;
+  flex-shrink: 0;
+}
+.saas3 .s3-metric-icon {
+  float: right;
+  width: 32px;
+  height: 32px;
+  margin: 0 0 0 8px;
+}
+.saas3 .s3-metric > p {
+  min-height: 32px;
+  margin: 0;
+  align-items: flex-start;
+}
+.saas3 .s3-metric > strong {
+  clear: both;
+}
+.s3-form-caption {
+  grid-column: 1/-1;
+  padding-top: 8px;
+  color: var(--accent-light);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-top: 1px solid var(--hairline);
+}
+.s3-amount-bar {
+  display: block;
+  height: 3px;
+  max-width: 96px;
+  border-radius: 4px;
+  margin-top: 8px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+.s3-heat-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+.s3-heat-legend i {
+  width: 16px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--accent);
+}
+.s3-chart-tooltip {
+  position: absolute;
+  top: 56px;
+  right: 16px;
+  padding: 12px 16px;
+  max-width: 224px;
+  display: grid;
+  gap: 4px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px #0004;
+  pointer-events: none;
+  font-size: 12px;
+}
+.s3-chart-tooltip span {
+  color: var(--text-muted);
+  font-size: 11px;
 }

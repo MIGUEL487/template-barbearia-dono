@@ -1,4 +1,7 @@
 "use client";
+import { Expandable } from "@/components/ui/expandable";
+import { useAnimatedDialog } from "@/components/ui/use-animated-dialog";
+import { AnimatedSelect } from "@/components/ui/animated-select";
 import { useEffect, useRef, useState } from "react";
 import { Workspace, Metric } from "./shell";
 import { PeriodControl, periodFor, type PeriodValue } from "./period";
@@ -47,8 +50,12 @@ export function Finance3() {
     [editing, setEditing] = useState<Entry | null>(null),
     [mode, setMode] = useState("Movimentação"),
     [error, setError] = useState("");
-  const dialog = useRef<HTMLDialogElement>(null),
-    request = useRef(""),
+  const {
+    ref: dialog,
+    show: showDialog,
+    close: closeDialog,
+  } = useAnimatedDialog();
+  const request = useRef(""),
     revision = useRef(0);
   useEffect(() => setPeriod(periodFor("7")), []);
   async function load() {
@@ -157,7 +164,7 @@ export function Finance3() {
                   : "Outras despesas",
           },
     );
-    dialog.current?.showModal();
+    showDialog();
   }
   function field<K extends keyof typeof defaults>(
     key: K,
@@ -218,7 +225,7 @@ export function Finance3() {
             ? "Esta solicitação já foi registrada. Atualize para editar."
             : "Movimentação salva no livro-caixa.",
       );
-      dialog.current?.close();
+      void closeDialog();
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Não foi possível salvar.");
@@ -357,7 +364,7 @@ export function Finance3() {
             Exportar CSV
           </Button>
         </div>
-        <div className="s3-ledger-tools">
+        <div className="s3-ledger-tools s3-filters">
           <input
             className="s3-search"
             aria-label="Pesquisar movimentações"
@@ -365,7 +372,7 @@ export function Finance3() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <select
+          <AnimatedSelect
             aria-label="Categoria"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
@@ -376,8 +383,8 @@ export function Finance3() {
               .map((c) => (
                 <option key={c}>{c}</option>
               ))}
-          </select>
-          <select
+          </AnimatedSelect>
+          <AnimatedSelect
             aria-label="Tipo de movimentação"
             value={type}
             onChange={(e) => setType(e.target.value)}
@@ -386,8 +393,8 @@ export function Finance3() {
             <option value="income">Entrada</option>
             <option value="expense">Saída</option>
             <option value="refund">Estorno</option>
-          </select>
-          <select
+          </AnimatedSelect>
+          <AnimatedSelect
             aria-label="Status financeiro"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
@@ -396,15 +403,15 @@ export function Finance3() {
             <option value="settled">Pago / recebido</option>
             <option value="pending">Pendente</option>
             <option value="void">Anulado</option>
-          </select>
-          <select
+          </AnimatedSelect>
+          <AnimatedSelect
             aria-label="Ordenar movimentações"
             value={sort}
             onChange={(e) => setSort(e.target.value)}
           >
             <option value="date">Mais recentes</option>
             <option value="amount">Maior valor</option>
-          </select>
+          </AnimatedSelect>
         </div>
         <div className="s3-table-wrap">
           <table>
@@ -442,7 +449,19 @@ export function Finance3() {
                         : "Saída"}
                   </td>
                   <td>{e.payment_label || "Não informado"}</td>
-                  <td>{money(Math.round(Number(e.amount) * 100))}</td>
+                  <td>
+                    {money(Math.round(Number(e.amount) * 100))}
+                    {e.entry_status !== "void" && (
+                      <span
+                        aria-hidden="true"
+                        title="Valor em relação ao maior movimento deste filtro"
+                        className="s3-amount-bar"
+                        style={{
+                          width: `${Math.max(2, (Number(e.amount) / Math.max(1, ...filtered.map((x) => Number(x.amount)))) * 96)}px`,
+                        }}
+                      />
+                    )}
+                  </td>
                   <td>
                     <span
                       className={
@@ -547,7 +566,15 @@ export function Finance3() {
         Custos não cadastrados não entram no cálculo. Não há alteração
         automática de estoque.
       </p>
-      <dialog ref={dialog} className="s3-dialog" aria-labelledby="entry-title">
+      <dialog
+        onCancel={(e) => {
+          e.preventDefault();
+          void closeDialog();
+        }}
+        ref={dialog}
+        className="s3-dialog"
+        aria-labelledby="entry-title"
+      >
         <form onSubmit={save}>
           <div className="s3-section-title">
             <h2 id="entry-title">
@@ -558,15 +585,16 @@ export function Finance3() {
             <button
               type="button"
               aria-label="Fechar movimentação"
-              onClick={() => dialog.current?.close()}
+              onClick={() => void closeDialog()}
             >
               ×
             </button>
           </div>
           <div className="s3-form-grid">
+            <div className="s3-form-caption">Identificação do lançamento</div>
             <label>
               Tipo
-              <select
+              <AnimatedSelect
                 value={form.type}
                 onChange={(e) =>
                   field("type", e.target.value as typeof form.type)
@@ -574,11 +602,11 @@ export function Finance3() {
               >
                 <option value="income">Entrada</option>
                 <option value="expense">Saída</option>
-              </select>
+              </AnimatedSelect>
             </label>
             <label>
               Status
-              <select
+              <AnimatedSelect
                 aria-label="Status"
                 value={form.status}
                 onChange={(e) =>
@@ -587,7 +615,7 @@ export function Finance3() {
               >
                 <option value="settled">Pago / recebido</option>
                 <option value="pending">Pendente</option>
-              </select>
+              </AnimatedSelect>
             </label>
             <label className="s3-form-full">
               Descrição
@@ -637,6 +665,7 @@ export function Finance3() {
                   ))}
               </datalist>
             </label>
+            <div className="s3-form-caption">Valor e pagamento</div>
             <label>
               Valor total (R$)
               <input
@@ -658,7 +687,7 @@ export function Finance3() {
             </label>
             <label>
               Forma de pagamento
-              <select
+              <AnimatedSelect
                 value={form.method}
                 onChange={(e) => field("method", e.target.value)}
               >
@@ -672,7 +701,7 @@ export function Finance3() {
                 ].map((s) => (
                   <option key={s}>{s}</option>
                 ))}
-              </select>
+              </AnimatedSelect>
             </label>
             {(mode === "Compra" || mode === "Venda" || form.quantity) && (
               <>
@@ -708,49 +737,57 @@ export function Finance3() {
                 />
               </label>
             )}
-            {form.type === "income" && !editing && (
-              <label className="s3-form-full">
-                Vincular recebimento de agendamento
-                <select
-                  value={form.booking}
-                  onChange={(e) => {
-                    field("booking", e.target.value);
-                    const b = d?.bookings.find((b) => b.id === e.target.value);
-                    if (b) {
-                      field(
-                        "description",
-                        "Recebimento de agendamento existente",
-                      );
-                      field("category", "Serviços realizados");
-                      field("amount", currencyInput(Number(b.total_price)));
-                    }
-                  }}
-                >
-                  <option value="">Sem vínculo · receita manual</option>
-                  {d?.bookings.map((b) => (
-                    <option key={b.id} value={b.id}>
-                      {new Date(b.starts_at).toLocaleString("pt-BR", {
-                        timeZone: "America/Sao_Paulo",
-                      })}{" "}
-                      · {money(Math.round(Number(b.total_price) * 100))}
-                    </option>
-                  ))}
-                </select>
-                <small>
-                  Com vínculo, reutilizamos uma receita conciliada existente.
-                  Sem ela, use o fluxo de pagamento; não criamos receita
-                  duplicada.
-                </small>
-              </label>
-            )}
-            <label className="s3-form-full">
-              Observação (opcional)
-              <textarea
-                value={form.notes}
-                maxLength={500}
-                onChange={(e) => field("notes", e.target.value)}
-              />
-            </label>
+            <Expandable className="s3-form-full">
+              <summary>Observação e vínculo (opcionais)</summary>
+              <div className="s3-form-grid">
+                {" "}
+                {form.type === "income" && !editing && (
+                  <label className="s3-form-full">
+                    Vincular recebimento de agendamento
+                    <AnimatedSelect
+                      value={form.booking}
+                      onChange={(e) => {
+                        field("booking", e.target.value);
+                        const b = d?.bookings.find(
+                          (b) => b.id === e.target.value,
+                        );
+                        if (b) {
+                          field(
+                            "description",
+                            "Recebimento de agendamento existente",
+                          );
+                          field("category", "Serviços realizados");
+                          field("amount", currencyInput(Number(b.total_price)));
+                        }
+                      }}
+                    >
+                      <option value="">Sem vínculo · receita manual</option>
+                      {d?.bookings.map((b) => (
+                        <option key={b.id} value={b.id}>
+                          {new Date(b.starts_at).toLocaleString("pt-BR", {
+                            timeZone: "America/Sao_Paulo",
+                          })}{" "}
+                          · {money(Math.round(Number(b.total_price) * 100))}
+                        </option>
+                      ))}
+                    </AnimatedSelect>
+                    <small>
+                      Com vínculo, reutilizamos uma receita conciliada
+                      existente. Sem ela, use o fluxo de pagamento; não criamos
+                      receita duplicada.
+                    </small>
+                  </label>
+                )}
+                <label className="s3-form-full">
+                  Observação (opcional)
+                  <textarea
+                    value={form.notes}
+                    maxLength={500}
+                    onChange={(e) => field("notes", e.target.value)}
+                  />
+                </label>
+              </div>
+            </Expandable>
           </div>
           {error && (
             <p role="alert" className="s3-error">
@@ -761,7 +798,7 @@ export function Finance3() {
             <Button
               variant="secondary"
               type="button"
-              onClick={() => dialog.current?.close()}
+              onClick={() => void closeDialog()}
             >
               Cancelar
             </Button>

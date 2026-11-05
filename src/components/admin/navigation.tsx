@@ -7,7 +7,9 @@ import { DemoBadge } from "@/components/demo-watermark";
 import Link from "next/link";
 import { BrandLogo } from "@/components/brand-logo";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { useInterfaceReducedMotion } from "@/components/ui/use-interface-motion";
 import {
   Calendar,
   BarChart3,
@@ -54,6 +56,26 @@ export function AdminNavigation() {
 
   const path = usePathname();
   const [more, setMore] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null),
+    moreTrigger = useRef<HTMLButtonElement>(null),
+    reduced = useInterfaceReducedMotion();
+  useEffect(() => {
+    if (!more) return;
+    menuRef.current?.querySelector<HTMLElement>("button,a")?.focus();
+    const outside = (e: PointerEvent) => {
+      if (
+        !menuRef.current?.contains(e.target as Node) &&
+        !moreTrigger.current?.contains(e.target as Node)
+      )
+        setMore(false);
+    };
+    document.addEventListener("pointerdown", outside);
+    return () => {
+      document.removeEventListener("pointerdown", outside);
+      if (menuRef.current?.contains(document.activeElement))
+        moreTrigger.current?.focus();
+    };
+  }, [more]);
 
   return (
     <>
@@ -139,6 +161,7 @@ export function AdminNavigation() {
           </Link>
         ))}
         <button
+          ref={moreTrigger}
           aria-expanded={more}
           aria-controls="admin-more"
           onClick={() => setMore(!more)}
@@ -149,45 +172,57 @@ export function AdminNavigation() {
       </nav>
 
       {/* Mobile "Mais" Drawer */}
-      {more && (
-        <div
-          className="admin-more"
-          id="admin-more"
-          onKeyDown={(e) => {
-            if (e.key === "Escape") setMore(false);
-          }}
-        >
-          <div className="flex items-center justify-between pb-2 border-b border-hairline">
-            <h2>Mais opções</h2>
-            <button
-              onClick={() => setMore(false)}
-              className="p-2 text-text-muted hover:text-text rounded-full"
-              aria-label="Fechar menu"
-            >
-              <X size={18} />
-            </button>
-          </div>
-          <div className="flex flex-col gap-2 my-2">
-            <ShopSwitcher />
-            {links.slice(4).map(([href, label, Icon]) => (
-              <Link href={href} key={href} onClick={() => setMore(false)}>
-                <Icon size={18} />
-                <span>{label}</span>
-              </Link>
-            ))}
-          </div>
-          <div className="pt-2 border-t border-hairline flex flex-col gap-3">
-            <MotionToggle />
-            <button
-              onClick={() => void logout()}
-              className="text-danger flex items-center justify-center gap-2"
-            >
-              <LogOut size={16} />
-              <span>Sair do painel</span>
-            </button>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {more && (
+          <motion.div
+            ref={menuRef}
+            role="region"
+            aria-label="Mais opções"
+            initial={reduced ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            transition={{
+              duration: reduced ? 0 : 0.18,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="admin-more"
+            id="admin-more"
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setMore(false);
+            }}
+          >
+            <div className="flex items-center justify-between pb-2 border-b border-hairline">
+              <h2>Mais opções</h2>
+              <button
+                onClick={() => setMore(false)}
+                className="p-2 text-text-muted hover:text-text rounded-full"
+                aria-label="Fechar menu"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="flex flex-col gap-2 my-2">
+              <ShopSwitcher />
+              {links.slice(4).map(([href, label, Icon]) => (
+                <Link href={href} key={href} onClick={() => setMore(false)}>
+                  <Icon size={18} />
+                  <span>{label}</span>
+                </Link>
+              ))}
+            </div>
+            <div className="pt-2 border-t border-hairline flex flex-col gap-3">
+              <MotionToggle />
+              <button
+                onClick={() => void logout()}
+                className="text-danger flex items-center justify-center gap-2"
+              >
+                <LogOut size={16} />
+                <span>Sair do painel</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

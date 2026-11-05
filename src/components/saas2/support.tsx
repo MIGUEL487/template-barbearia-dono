@@ -1,3 +1,4 @@
+import {Expandable} from "@/components/ui/expandable";
 import Link from "next/link";
 import { Card, CardTitle } from "@/components/ui/card";
 import packageInfo from "../../../package.json";
@@ -64,13 +65,13 @@ export function Support() {
       </p>
       <div className="space-y-4 mt-4">
         {answers.map(([q, a, href]) => (
-          <details key={q} className="border border-border rounded-xl p-4">
+          <Expandable key={q} className="border border-border rounded-xl p-4">
             <summary className="cursor-pointer">{q}</summary>
             <p className="text-sm text-text-muted mt-4">{a}</p>
             <Link className="text-accent-light text-sm block mt-4" href={href}>
               Abrir área →
             </Link>
-          </details>
+          </Expandable>
         ))}
       </div>
     </Card>

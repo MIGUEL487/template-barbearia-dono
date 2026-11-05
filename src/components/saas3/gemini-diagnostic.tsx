@@ -1,0 +1,94 @@
+"use client";
+import { useEffect, useState } from "react";
+import { geminiDiagnosticAction } from "@/app/actions/gemini-diagnostic-actions";
+import { Expandable } from "@/components/ui/expandable";
+import { Button } from "@/components/ui/button";
+export function GeminiDiagnostic() {
+  const [result, setResult] = useState<Awaited<
+      ReturnType<typeof geminiDiagnosticAction>
+    > | null>(null),
+    [busy, setBusy] = useState(false);
+  useEffect(() => {
+    void geminiDiagnosticAction()
+      .then(setResult)
+      .catch(() =>
+        setResult({
+          ok: false,
+          tested: false,
+          category: "network",
+          status: null,
+          rpcCode: null,
+          message: "Não foi possível consultar o diagnóstico do servidor.",
+          checkedAt: new Date().toISOString(),
+        }),
+      );
+  }, []);
+  async function probe() {
+    setBusy(true);
+    try {
+      setResult(await geminiDiagnosticAction(true));
+    } catch {
+      setResult({
+        ok: false,
+        tested: false,
+        category: "network",
+        status: null,
+        rpcCode: null,
+        message: "Falha de transporte ao consultar o servidor.",
+        checkedAt: new Date().toISOString(),
+      });
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <Expandable className="s3-gemini-diagnostic">
+      <summary>Conexão Gemini</summary>
+      <div className="s3-diagnostic-meta">
+        <span data-connection={result?.ok ? "ready" : "attention"}>
+          {result
+            ? result.ok
+              ? result.tested
+                ? "Chamada verificada"
+                : "Secret disponível · chamada não testada"
+              : "Diagnóstico requer atenção"
+            : "Verificando runtime…"}
+        </span>
+        {result && "model" in result && (
+          <p>
+            Modelo: <strong>{result.model}</strong>
+            <br />
+            Origem: {result.source} · Worker:{" "}
+            {result.workerContext
+              ? "contexto disponível"
+              : "contexto não detectado"}
+          </p>
+        )}
+        {result && "message" in result && (
+          <p role={result.ok ? "status" : "alert"}>{result.message}</p>
+        )}
+        {result && !result.ok && "category" in result && (
+          <code>
+            código: {result.category}
+            {result.status ? ` · HTTP ${result.status}` : ""}
+            {"rpcCode" in result && result.rpcCode
+              ? ` · Supabase ${result.rpcCode}`
+              : ""}
+          </code>
+        )}
+      </div>
+      <p className="s3-note">
+        Teste autenticado no servidor, sem dados de clientes. Usa até uma
+        tentativa da cota diária da loja. Nenhuma chave é exibida.
+      </p>
+      <Button
+        variant="secondary"
+        size="sm"
+        isLoading={busy}
+        onClick={() => void probe()}
+      >
+        Testar integração
+      </Button>
+    </Expandable>
+  );
+}

@@ -1,4 +1,6 @@
 "use client";
+import {AnimatedSelect} from "@/components/ui/animated-select";
+import {Expandable} from "@/components/ui/expandable";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AdminNavigation } from "@/components/admin/navigation";
@@ -103,14 +105,14 @@ export function RescuePage() {
                     const el = document.getElementById(
                       "rescue-campaign",
                     ) as HTMLDetailsElement | null;
-                    if (el) el.open = true;
+                    el?.dispatchEvent(new Event("expand"));
                   }}
                 >
                   Ver prévia →
                 </a>
               </article>
             </section>
-            <details className="bg-surface border border-border rounded-2xl p-6">
+            <Expandable className="bg-surface border border-border rounded-2xl p-6">
               <summary>Entender as oportunidades</summary>
               <Card>
                 <CardTitle>Oportunidades de agenda</CardTitle>
@@ -129,8 +131,8 @@ export function RescuePage() {
                   histórico de quando ocorreram.
                 </p>
               </Card>
-            </details>
-            <details
+            </Expandable>
+            <Expandable
               id="rescue-campaign"
               className="bg-surface border border-border rounded-2xl p-6"
             >
@@ -160,7 +162,7 @@ export function RescuePage() {
                   manual.
                 </p>
               </Card>
-            </details>
+            </Expandable>
             <Card>
               <CardTitle>Retenção de clientes</CardTitle>
               <p className="text-text-muted mt-4">
@@ -243,7 +245,7 @@ export function RescuePage() {
               <div className="flex flex-wrap gap-4 mt-4">
                 <label>
                   Serviço
-                  <select
+                  <AnimatedSelect
                     value={service}
                     onChange={(e) => setService(e.target.value)}
                   >
@@ -252,12 +254,12 @@ export function RescuePage() {
                         {s.name}
                       </option>
                     ))}
-                  </select>
+                  </AnimatedSelect>
                 </label>
                 {d.barbers.length > 1 && (
                   <label>
                     Profissional
-                    <select
+                    <AnimatedSelect
                       value={barber}
                       onChange={(e) => setBarber(e.target.value)}
                     >
@@ -267,7 +269,7 @@ export function RescuePage() {
                           {b.name}
                         </option>
                       ))}
-                    </select>
+                    </AnimatedSelect>
                   </label>
                 )}
                 <Button

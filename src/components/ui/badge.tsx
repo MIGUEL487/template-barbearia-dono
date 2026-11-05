@@ -24,7 +24,7 @@ export function Badge({
       className={cn(
         "inline-flex items-center rounded-full px-4 py-2 text-xs font-medium tracking-wide transition-colors",
         variants[variant],
-        className
+        className,
       )}
       {...props}
     >

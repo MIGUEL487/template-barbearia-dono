@@ -1,4 +1,5 @@
 "use client";
+import {AnimatedSelect} from "@/components/ui/animated-select";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import { shopCookie } from "@/lib/shop-selection";
@@ -42,7 +43,7 @@ export function ShopSwitcher() {
   return (
     <label className="block p-2 text-xs">
       Barbearia
-      <select
+      <AnimatedSelect
         aria-label="Barbearia ativa"
         className="w-full bg-surface border border-border rounded-xl p-2 mt-2"
         value={selected}
@@ -63,7 +64,7 @@ export function ShopSwitcher() {
             {s.name || `Loja ${i + 1}`}
           </option>
         ))}
-      </select>
+      </AnimatedSelect>
     </label>
   );
 }

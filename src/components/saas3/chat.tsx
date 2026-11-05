@@ -1,6 +1,8 @@
 "use client";
+import { useInterfaceReducedMotion as useReducedMotion } from "@/components/ui/use-interface-motion";
+import { Expandable } from "@/components/ui/expandable";
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { Workspace } from "./shell";
 import { Button } from "@/components/ui/button";
 import { LineChart } from "./line-chart";
@@ -15,6 +17,7 @@ import {
 import { money, localDate } from "@/lib/saas2/analytics";
 import { saveGoalAction } from "@/app/actions/intelligence-actions";
 import Link from "next/link";
+import { GeminiDiagnostic } from "./gemini-diagnostic";
 interface Message {
   id: string;
   role: string;
@@ -109,10 +112,30 @@ export function Chat3() {
     [busy, setBusy] = useState(false),
     [notice, setNotice] = useState(""),
     [reportView, setReportView] = useState(false),
-    [goal, setGoal] = useState("");
+    [goal, setGoal] = useState(""),
+    [failedQuestion, setFailedQuestion] = useState<string | null>(null);
+  const textarea = useRef<HTMLTextAreaElement>(null),
+    follow = useRef(true);
   const end = useRef<HTMLDivElement>(null),
     reduced = useReducedMotion(),
     revision = useRef(0);
+  useEffect(() => {
+    const field = textarea.current;
+    if (field) {
+      field.style.height = "auto";
+      field.style.height = Math.min(160, field.scrollHeight) + "px";
+    }
+  }, [input, reportView]);
+  useEffect(() => {
+    const track = () => {
+      follow.current = Boolean(
+        end.current &&
+          end.current.getBoundingClientRect().bottom < innerHeight + 160,
+      );
+    };
+    window.addEventListener("scroll", track, { passive: true });
+    return () => window.removeEventListener("scroll", track);
+  }, []);
   async function load(id = thread) {
     const v = ++revision.current;
     let result: Awaited<ReturnType<typeof chatStateAction>>;
@@ -147,6 +170,7 @@ export function Chat3() {
     if (busy || !s || !question.trim()) return;
     setBusy(true);
     setNotice("");
+    setFailedQuestion(null);
     let id = thread;
     try {
       if (s?.compatible && !id) {
@@ -182,10 +206,12 @@ export function Chat3() {
       if (id) await load(id);
     } catch (e) {
       setNotice(e instanceof Error ? e.message : "Não foi possível responder.");
+      setFailedQuestion(question);
     } finally {
       setBusy(false);
       setTimeout(
         () =>
+          follow.current &&
           end.current?.scrollIntoView({
             behavior: reduced ? "auto" : "smooth",
             block: "nearest",
@@ -224,7 +250,7 @@ export function Chat3() {
           >
             ◷ Relatórios do expediente
           </button>
-          <details open>
+          <Expandable open>
             <summary className="text-xs text-text-muted p-2">
               Conversas recentes
             </summary>
@@ -255,8 +281,9 @@ export function Chat3() {
                 Suas conversas aparecerão aqui.
               </p>
             )}
-          </details>
-          <details>
+          </Expandable>
+          <GeminiDiagnostic />
+          <Expandable>
             <summary className="text-xs text-text-muted p-2">
               Meta e opções
             </summary>
@@ -328,7 +355,7 @@ export function Chat3() {
             >
               Abrir Análises →
             </Link>
-          </details>
+          </Expandable>
         </aside>
         <section className="s3-conversation" aria-label="Conversa com Raio-X">
           {state && !state.ok && (
@@ -343,259 +370,296 @@ export function Chat3() {
               chamado neste modo.
             </p>
           )}
-          {reportView ? (
-            <div className="s3-messages">
-              {!s?.reports.length && (
-                <div className="s3-empty">
-                  <h2>Seu expediente, em perspectiva.</h2>
-                  <p>
-                    Briefing e fechamento são salvos uma vez por data após o
-                    horário cadastrado, na primeira abertura. Não há job em
-                    segundo plano configurado.
-                  </p>
-                  <Button
-                    variant="secondary"
-                    onClick={async () => {
-                      const r = await ensureOperationalReportsAction();
-                      setNotice(
-                        r.ok
-                          ? "Relatórios verificados, sem duplicações."
-                          : r.error,
-                      );
-                      await load(thread);
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={reportView ? "reports" : "conversation"}
+              initial={reduced ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 4 }}
+              transition={{
+                duration: reduced ? 0 : 0.15,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
+              {reportView ? (
+                <div className="s3-messages">
+                  {!s?.reports.length && (
+                    <div className="s3-empty">
+                      <h2>Seu expediente, em perspectiva.</h2>
+                      <p>
+                        Briefing e fechamento são salvos uma vez por data após o
+                        horário cadastrado, na primeira abertura. Não há job em
+                        segundo plano configurado.
+                      </p>
+                      <Button
+                        variant="secondary"
+                        onClick={async () => {
+                          const r = await ensureOperationalReportsAction();
+                          setNotice(
+                            r.ok
+                              ? "Relatórios verificados, sem duplicações."
+                              : r.error,
+                          );
+                          await load(thread);
+                        }}
+                      >
+                        Verificar relatórios
+                      </Button>
+                    </div>
+                  )}
+                  {s?.reports.map((r) => {
+                    const p = r.payload as Record<string, unknown>;
+                    return (
+                      <article className="s3-message s3-report" key={r.id}>
+                        <div className="s3-message-label">
+                          <span>
+                            ◷{" "}
+                            {r.kind === "briefing"
+                              ? "Briefing do Dia"
+                              : "Fechamento do Dia"}
+                          </span>
+                          <span>{r.date.split("-").reverse().join("/")}</span>
+                        </div>
+                        <p>
+                          {r.kind === "briefing"
+                            ? "Um retrato do dia na abertura do painel."
+                            : "Resultado dos registros disponíveis após o expediente."}
+                        </p>
+                        <div className="s3-message-metrics">
+                          {[
+                            ["income", "Recebido"],
+                            ["forecast", "Programado"],
+                            ["expenses", "Despesas"],
+                            ["balance", "Saldo registrado"],
+                          ].map(([key, label]) => (
+                            <span key={key}>
+                              <strong>
+                                {Number.isFinite(p[key])
+                                  ? money(Number(p[key]))
+                                  : "Não disponível"}
+                              </strong>
+                              {label}
+                            </span>
+                          ))}
+                        </div>
+                        <p className="mt-4">
+                          Agendados: {String(p.bookings ?? "—")} · Inícios
+                          disponíveis:{" "}
+                          {String(p.availableStarts ?? "Não consultados")} ·
+                          Concluídos: {String(p.completed ?? "—")} ·
+                          Cancelamentos: {String(p.cancelled ?? "—")} · Faltas:{" "}
+                          {String(p.noShow ?? "—")} · Meta:{" "}
+                          {typeof p.goal === "number"
+                            ? money(p.goal)
+                            : "Não definida"}
+                        </p>
+                        <p className="text-sm mt-2">
+                          Recebido no dia anterior:{" "}
+                          {typeof p.previousIncome === "number"
+                            ? money(p.previousIncome)
+                            : "Sem base"}
+                          .{" "}
+                          {typeof p.goal === "number" && p.goal > 0
+                            ? `Meta atingida em ${((Number(p.income || 0) / p.goal) * 100).toFixed(1)}%.`
+                            : "Sem meta para comparar."}
+                        </p>
+                        {typeof p.referenceService === "string" && (
+                          <p className="text-xs text-text-muted">
+                            Vagas consultadas para {p.referenceService}; inícios
+                            podem se sobrepor e não equivalem a atendimentos
+                            adicionais.
+                          </p>
+                        )}
+                        {Array.isArray(p.attention) && (
+                          <ul className="space-y-2 mt-4 text-sm">
+                            {p.attention
+                              .filter(
+                                (line): line is string =>
+                                  typeof line === "string",
+                              )
+                              .map((line) => (
+                                <li key={line}>{line}</li>
+                              ))}
+                          </ul>
+                        )}
+                        <small>
+                          {String(
+                            p.generation || "Gerado na abertura do painel.",
+                          )}{" "}
+                          {p.partial
+                            ? "Parcial até o instante de geração."
+                            : "Não representa fechamento contábil."}{" "}
+                          ·{" "}
+                          {new Date(r.generated_at).toLocaleString("pt-BR", {
+                            timeZone: "America/Sao_Paulo",
+                          })}
+                        </small>
+                      </article>
+                    );
+                  })}
+                </div>
+              ) : (
+                <>
+                  <div
+                    className="s3-messages"
+                    role="log"
+                    aria-label="Mensagens do Raio-X"
+                  >
+                    {!messages.length && (
+                      <div className="s3-empty">
+                        <p className="s3-eyebrow">
+                          Clareza para o próximo passo
+                        </p>
+                        <h2>O que você quer entender hoje?</h2>
+                        <p>
+                          Converse sobre agenda, receitas, despesas, serviços e
+                          metas. Os números são consultados com as permissões da
+                          sua loja.
+                        </p>
+                        <div className="s3-shortcuts mt-6">
+                          {[
+                            "Resumo de hoje",
+                            "Horários disponíveis",
+                            "Analisar despesas",
+                            "Minha meta",
+                            "Como melhorar a agenda?",
+                            "Compare esta semana com a anterior.",
+                          ].map((q) => (
+                            <button
+                              disabled={busy || !s}
+                              key={q}
+                              onClick={() => void send(q)}
+                            >
+                              {q}
+                            </button>
+                          ))}
+                        </div>
+                        {s?.reports.slice(0, 1).map((r) => (
+                          <button
+                            key={r.id}
+                            className="s3-message mt-6 text-left w-full"
+                            onClick={() => setReportView(true)}
+                          >
+                            <span className="s3-message-label">
+                              ◷{" "}
+                              {r.kind === "briefing"
+                                ? "Briefing do Dia"
+                                : "Fechamento do Dia"}{" "}
+                              · {r.date.split("-").reverse().join("/")}
+                            </span>
+                            <p>
+                              Seu relatório do expediente está disponível. Abrir
+                              →
+                            </p>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {messages.map((m) => (
+                      <motion.article
+                        key={m.id}
+                        className={
+                          "s3-message " +
+                          (m.role === "user" ? "s3-message-user" : "")
+                        }
+                        initial={reduced ? false : { opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <div className="s3-message-label">
+                          <span>
+                            {m.role === "user"
+                              ? "Você"
+                              : m.payload.mode === "gemini"
+                                ? "Raio-X · dados calculados + Gemini"
+                                : "Raio-X · resumo calculado"}
+                          </span>
+                          {m.payload.start && (
+                            <small>
+                              {m.payload.start} → {m.payload.end}
+                            </small>
+                          )}
+                        </div>
+                        <p>{m.content}</p>
+                        {m.role === "assistant" && (
+                          <>
+                            <RichAnswer payload={m.payload} />
+                            {m.payload.notice && (
+                              <p className="s3-note">{m.payload.notice}</p>
+                            )}
+                          </>
+                        )}
+                      </motion.article>
+                    ))}
+                    {busy && (
+                      <div role="status" className="s3-message">
+                        <span className="s3-message-label">Raio-X</span>
+                        <p className="s3-generating">
+                          <span aria-hidden="true">
+                            <i />
+                            <i />
+                            <i />
+                          </span>{" "}
+                          Consultando os registros da sua loja…
+                        </p>
+                      </div>
+                    )}
+                    <div ref={end} />
+                  </div>
+                  <form
+                    className="s3-composer"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      void send();
                     }}
                   >
-                    Verificar relatórios
-                  </Button>
-                </div>
-              )}
-              {s?.reports.map((r) => {
-                const p = r.payload as Record<string, unknown>;
-                return (
-                  <article className="s3-message" key={r.id}>
-                    <div className="s3-message-label">
-                      <span>
-                        ◷{" "}
-                        {r.kind === "briefing"
-                          ? "Briefing do Dia"
-                          : "Fechamento do Dia"}
-                      </span>
-                      <span>{r.date.split("-").reverse().join("/")}</span>
-                    </div>
-                    <p>
-                      {r.kind === "briefing"
-                        ? "Um retrato do dia na abertura do painel."
-                        : "Resultado dos registros disponíveis após o expediente."}
-                    </p>
-                    <div className="s3-message-metrics">
-                      {[
-                        ["income", "Recebido"],
-                        ["forecast", "Programado"],
-                        ["expenses", "Despesas"],
-                        ["balance", "Saldo registrado"],
-                      ].map(([key, label]) => (
-                        <span key={key}>
-                          <strong>
-                            {Number.isFinite(p[key])
-                              ? money(Number(p[key]))
-                              : "Não disponível"}
-                          </strong>
-                          {label}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="mt-4">
-                      Agendados: {String(p.bookings ?? "—")} · Inícios
-                      disponíveis:{" "}
-                      {String(p.availableStarts ?? "Não consultados")} ·
-                      Concluídos: {String(p.completed ?? "—")} · Cancelamentos:{" "}
-                      {String(p.cancelled ?? "—")} · Faltas:{" "}
-                      {String(p.noShow ?? "—")} · Meta:{" "}
-                      {typeof p.goal === "number"
-                        ? money(p.goal)
-                        : "Não definida"}
-                    </p>
-                    <p className="text-sm mt-2">
-                      Recebido no dia anterior:{" "}
-                      {typeof p.previousIncome === "number"
-                        ? money(p.previousIncome)
-                        : "Sem base"}
-                      .{" "}
-                      {typeof p.goal === "number" && p.goal > 0
-                        ? `Meta atingida em ${((Number(p.income || 0) / p.goal) * 100).toFixed(1)}%.`
-                        : "Sem meta para comparar."}
-                    </p>
-                    {typeof p.referenceService === "string" && (
-                      <p className="text-xs text-text-muted">
-                        Vagas consultadas para {p.referenceService}; inícios
-                        podem se sobrepor e não equivalem a atendimentos
-                        adicionais.
-                      </p>
-                    )}
-                    {Array.isArray(p.attention) && (
-                      <ul className="space-y-2 mt-4 text-sm">
-                        {p.attention
-                          .filter(
-                            (line): line is string => typeof line === "string",
-                          )
-                          .map((line) => (
-                            <li key={line}>{line}</li>
-                          ))}
-                      </ul>
-                    )}
-                    <small>
-                      {String(p.generation || "Gerado na abertura do painel.")}{" "}
-                      {p.partial
-                        ? "Parcial até o instante de geração."
-                        : "Não representa fechamento contábil."}{" "}
-                      ·{" "}
-                      {new Date(r.generated_at).toLocaleString("pt-BR", {
-                        timeZone: "America/Sao_Paulo",
-                      })}
-                    </small>
-                  </article>
-                );
-              })}
-            </div>
-          ) : (
-            <>
-              <div
-                className="s3-messages"
-                role="log"
-                aria-label="Mensagens do Raio-X"
-              >
-                {!messages.length && (
-                  <div className="s3-empty">
-                    <p className="s3-eyebrow">Clareza para o próximo passo</p>
-                    <h2>O que você quer entender hoje?</h2>
-                    <p>
-                      Converse sobre agenda, receitas, despesas, serviços e
-                      metas. Os números são consultados com as permissões da sua
-                      loja.
-                    </p>
-                    <div className="s3-shortcuts mt-6">
-                      {[
-                        "Resumo de hoje",
-                        "Horários disponíveis",
-                        "Analisar despesas",
-                        "Minha meta",
-                        "Como melhorar a agenda?",
-                        "Compare esta semana com a anterior.",
-                      ].map((q) => (
-                        <button
-                          disabled={busy || !s}
-                          key={q}
-                          onClick={() => void send(q)}
-                        >
-                          {q}
-                        </button>
-                      ))}
-                    </div>
-                    {s?.reports.slice(0, 1).map((r) => (
-                      <button
-                        key={r.id}
-                        className="s3-message mt-6 text-left w-full"
-                        onClick={() => setReportView(true)}
+                    <label className="sr-only" htmlFor="raiox-question">
+                      Mensagem para o Raio-X
+                    </label>
+                    <textarea
+                      ref={textarea}
+                      id="raiox-question"
+                      placeholder="Pergunte sobre os números e a agenda…"
+                      maxLength={1000}
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          if (input.trim()) void send();
+                        }
+                      }}
+                    />
+                    <div className="s3-composer-footer">
+                      <small>
+                        Sem contatos pessoais. Respostas generativas podem
+                        conter erros.
+                      </small>
+                      <Button
+                        type="submit"
+                        disabled={busy || !s || input.trim().length < 2}
                       >
-                        <span className="s3-message-label">
-                          ◷{" "}
-                          {r.kind === "briefing"
-                            ? "Briefing do Dia"
-                            : "Fechamento do Dia"}{" "}
-                          · {r.date.split("-").reverse().join("/")}
-                        </span>
-                        <p>
-                          Seu relatório do expediente está disponível. Abrir →
-                        </p>
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {messages.map((m) => (
-                  <motion.article
-                    key={m.id}
-                    className={
-                      "s3-message " +
-                      (m.role === "user" ? "s3-message-user" : "")
-                    }
-                    initial={reduced ? false : { opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <div className="s3-message-label">
-                      <span>
-                        {m.role === "user"
-                          ? "Você"
-                          : m.payload.mode === "gemini"
-                            ? "Raio-X · dados calculados + Gemini"
-                            : "Raio-X · resumo calculado"}
-                      </span>
-                      {m.payload.start && (
-                        <small>
-                          {m.payload.start} → {m.payload.end}
-                        </small>
-                      )}
+                        Enviar ↗
+                      </Button>
                     </div>
-                    <p>{m.content}</p>
-                    {m.role === "assistant" && (
-                      <>
-                        <RichAnswer payload={m.payload} />
-                        {m.payload.notice && (
-                          <p className="s3-note">{m.payload.notice}</p>
-                        )}
-                      </>
-                    )}
-                  </motion.article>
-                ))}
-                {busy && (
-                  <div role="status" className="s3-message">
-                    <span className="s3-message-label">Raio-X</span>
-                    <p>Consultando os registros da sua loja…</p>
-                  </div>
-                )}
-                <div ref={end} />
-              </div>
-              <form
-                className="s3-composer"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  void send();
-                }}
-              >
-                <label className="sr-only" htmlFor="raiox-question">
-                  Mensagem para o Raio-X
-                </label>
-                <textarea
-                  id="raiox-question"
-                  placeholder="Pergunte sobre os números e a agenda…"
-                  maxLength={1000}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      if (input.trim()) void send();
-                    }
-                  }}
-                />
-                <div className="s3-composer-footer">
-                  <small>
-                    Sem contatos pessoais. Respostas generativas podem conter
-                    erros.
-                  </small>
-                  <Button
-                    type="submit"
-                    disabled={busy || !s || input.trim().length < 2}
-                  >
-                    Enviar ↗
-                  </Button>
-                </div>
-              </form>
-            </>
-          )}
+                  </form>
+                </>
+              )}
+            </motion.div>
+          </AnimatePresence>
           {notice && (
             <p role="status" className="s3-notice">
               {notice}
+              {failedQuestion && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  disabled={busy}
+                  onClick={() => void send(failedQuestion)}
+                >
+                  Tentar novamente
+                </Button>
+              )}
             </p>
           )}
         </section>

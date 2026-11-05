@@ -1,6 +1,8 @@
 "use client";
+import { useInterfaceReducedMotion as useReducedMotion } from "@/components/ui/use-interface-motion";
+import { AnimatedSelect } from "@/components/ui/animated-select";
 import { useId, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { money } from "@/lib/saas2/analytics";
 export function LineChart({
   rows,
@@ -15,7 +17,8 @@ export function LineChart({
 }) {
   const reduced = useReducedMotion();
   const [series, setSeries] = useState<"both" | "income" | "forecast">("both"),
-    [active, setActive] = useState(0);
+    [active, setActive] = useState(0),
+    [hovered, setHovered] = useState(false);
   const id = useId().replaceAll(":", "");
   const max = Math.max(1, ...rows.flatMap((r) => [r.income, r.forecast])),
     w = 800,
@@ -47,7 +50,7 @@ export function LineChart({
         <label className="sr-only" htmlFor={id}>
           Séries da receita
         </label>
-        <select
+        <AnimatedSelect
           id={id}
           aria-label="Séries da receita"
           value={series}
@@ -56,13 +59,14 @@ export function LineChart({
           <option value="both">Comparar séries</option>
           <option value="income">{first}</option>
           <option value="forecast">{secondary}</option>
-        </select>
+        </AnimatedSelect>
       </div>
       {!rows.length ? (
         <p className="s3-empty">Os lançamentos do período aparecerão aqui.</p>
       ) : (
         <>
           <svg
+            onMouseLeave={() => setHovered(false)}
             viewBox={`0 0 ${w} ${h}`}
             role="img"
             aria-label={`Evolução de ${first} e ${secondary}. Valores acessíveis na seleção de datas abaixo.`}
@@ -132,7 +136,13 @@ export function LineChart({
               />
             )}
             {rows.map((r, i) => (
-              <g key={r.date} onMouseEnter={() => setActive(i)}>
+              <g
+                key={r.date}
+                onMouseEnter={() => {
+                  setActive(i);
+                  setHovered(true);
+                }}
+              >
                 {[0, Math.floor(rows.length / 2), rows.length - 1].includes(
                   i,
                 ) && (
@@ -168,10 +178,32 @@ export function LineChart({
               />
             )}
           </svg>
+          <AnimatePresence>
+            {hovered && selected && (
+              <motion.div
+                className="s3-chart-tooltip"
+                initial={reduced ? false : { opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 2 }}
+                transition={{
+                  duration: reduced ? 0 : 0.12,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                <span>{selected.date.split("-").reverse().join("/")}</span>
+                <strong>
+                  {first}: {format(selected.income)}
+                </strong>
+                <strong>
+                  {secondary}: {format(selected.forecast)}
+                </strong>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <div className="s3-chart-readout" aria-live="polite">
             <label>
               Consultar data
-              <select
+              <AnimatedSelect
                 aria-label="Data no gráfico"
                 value={Math.min(active, rows.length - 1)}
                 onChange={(e) => setActive(Number(e.target.value))}
@@ -181,7 +213,7 @@ export function LineChart({
                     {r.date.split("-").reverse().join("/")}
                   </option>
                 ))}
-              </select>
+              </AnimatedSelect>
             </label>
             {selected && (
               <span>
