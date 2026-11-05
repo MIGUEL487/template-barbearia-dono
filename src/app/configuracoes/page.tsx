@@ -4,7 +4,7 @@ import { currentMembership } from "@/lib/browser-shop";
 import Link from "next/link";
 import { Support } from "@/components/saas2/support";
 import { AdminSkeleton } from "@/components/admin/skeleton";
-import { AdminNavigation } from "@/components/admin/navigation";
+import { ManagementLayout } from "@/components/admin/management-layout";
 import { NotificationControls } from "@/components/admin/notification-controls";
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -123,135 +123,133 @@ export default function ConfiguracoesPage() {
   };
 
   return (
-    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
-      <AdminNavigation />
-
-      <main className="admin-content flex-1 space-y-6 max-w-5xl">
-        {/* Header Bar */}
-        <header className="bg-surface border border-border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-soft">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-text">
-              Configurações do Sistema
-            </h1>
-            <p className="text-xs text-text-muted mt-1">
-              Sinal, cancelamento, notificações e ajuda para operar sua
-              barbearia.
+    <ManagementLayout
+      title="Configurações"
+      subtitle="Operação, agendamentos, pagamentos e notificações."
+    >
+      <div className="mg-settings-layout">
+        <nav className="mg-settings-nav" aria-label="Seções de configurações">
+          <a href="#funcionamento">Funcionamento</a>
+          <a href="#avisos">Notificações</a>
+          <a href="#pagamentos">Agendamentos e pagamentos</a>
+          <a href="/suporte">Central de ajuda ↗</a>
+        </nav>
+        <div className="mg-settings-panels">
+          <section
+            className="bg-surface border border-border rounded-2xl p-6 space-y-4"
+            id="funcionamento"
+            aria-label="Funcionamento"
+          >
+            <h2>Funcionamento</h2>
+            <p className="text-sm text-text-muted">
+              Expediente, almoço, folgas e bloqueios ficam nas áreas
+              operacionais, sem duplicar configurações.
             </p>
-          </div>
-        </header>
+            <div className="flex gap-4">
+              <Link className="text-accent-light" href="/equipe">
+                Configurar expediente →
+              </Link>
+              <Link className="text-accent-light" href="/agenda">
+                Gerenciar agenda →
+              </Link>
+            </div>
+          </section>
+          <section id="avisos" aria-label="Notificações">
+            <NotificationControls />
+          </section>
 
-        <section
-          className="bg-surface border border-border rounded-2xl p-6 space-y-4"
-          aria-label="Funcionamento"
-        >
-          <h2>Funcionamento</h2>
-          <p className="text-sm text-text-muted">
-            Expediente, almoço, folgas e bloqueios ficam nas áreas operacionais,
-            sem duplicar configurações.
-          </p>
-          <div className="flex gap-4">
-            <Link className="text-accent-light" href="/equipe">
-              Configurar expediente →
-            </Link>
-            <Link className="text-accent-light" href="/agenda">
-              Gerenciar agenda →
-            </Link>
-          </div>
-        </section>
-        <section aria-label="Notificações">
-          <NotificationControls />
-        </section>
+          {isLoading ? (
+            <AdminSkeleton />
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {message && (
+                <div
+                  className={`p-4 rounded-xl text-xs flex items-center gap-2 border ${
+                    message.type === "success"
+                      ? "bg-emerald-500/10 border-emerald-500/25 text-emerald-400"
+                      : "bg-danger/10 border-danger/25 text-danger"
+                  }`}
+                >
+                  {message.type === "success" ? (
+                    <Check className="w-4 h-4 shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                  )}
+                  <span>{message.text}</span>
+                </div>
+              )}
 
-        {isLoading ? (
-          <AdminSkeleton />
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {message && (
-              <div
-                className={`p-4 rounded-xl text-xs flex items-center gap-2 border ${
-                  message.type === "success"
-                    ? "bg-emerald-500/10 border-emerald-500/25 text-emerald-400"
-                    : "bg-danger/10 border-danger/25 text-danger"
-                }`}
-              >
-                {message.type === "success" ? (
-                  <Check className="w-4 h-4 shrink-0" />
-                ) : (
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                )}
-                <span>{message.text}</span>
-              </div>
-            )}
-
-            {/* Section 2: Políticas Financeiras & Agendamento */}
-            <div className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-5">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-hairline">
-                <CreditCard className="w-4 h-4 text-accent-light" />
-                <h2 className="text-base font-bold text-text">
-                  Agendamentos e pagamentos
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Sinal Pix Obrigatório (%)
-                  </label>
-                  <input
-                    aria-label="Percentual do sinal"
-                    step="0.01"
-                    type="number"
-                    min="0"
-                    max="100"
-                    required
-                    value={depositPct}
-                    onChange={(e) => setDepositPct(e.target.value)}
-                    className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none font-mono"
-                  />
+              <span id="pagamentos" />
+              {/* Section 2: Políticas Financeiras & Agendamento */}
+              <div className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-5">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-hairline">
+                  <CreditCard className="w-4 h-4 text-accent-light" />
+                  <h2 className="text-base font-bold text-text">
+                    Agendamentos e pagamentos
+                  </h2>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-text-muted mb-1.5">
-                    Aviso Mínimo Cancelamento (Horas)
-                  </label>
-                  <input
-                    aria-label="Antecedência mínima para cancelamento em horas"
-                    type="number"
-                    min="0"
-                    max="8760"
-                    required
-                    value={cancelHours}
-                    onChange={(e) => setCancelHours(e.target.value)}
-                    className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none font-mono"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-text-muted mb-1.5">
+                      Sinal Pix Obrigatório (%)
+                    </label>
+                    <input
+                      aria-label="Percentual do sinal"
+                      step="0.01"
+                      type="number"
+                      min="0"
+                      max="100"
+                      required
+                      value={depositPct}
+                      onChange={(e) => setDepositPct(e.target.value)}
+                      className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-text-muted mb-1.5">
+                      Aviso Mínimo Cancelamento (Horas)
+                    </label>
+                    <input
+                      aria-label="Antecedência mínima para cancelamento em horas"
+                      type="number"
+                      min="0"
+                      max="8760"
+                      required
+                      value={cancelHours}
+                      onChange={(e) => setCancelHours(e.target.value)}
+                      className="w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-xs text-text focus:border-accent focus:outline-none font-mono"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Save Button */}
-            <div className="flex items-center justify-end">
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="bg-accent hover:bg-accent-hover text-white px-6 py-2.5 rounded-xl text-xs font-semibold shadow-glow flex items-center gap-2 disabled:opacity-50 transition-all active:scale-[0.99]"
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Salvando alterações...</span>
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4" />
-                    <span>Salvar Alterações</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-        )}
-        {!isLoading && <Support />}
-      </main>
-    </div>
+              {/* Save Button */}
+              <div className="flex items-center justify-end">
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="bg-accent hover:bg-accent-hover text-white px-6 py-2.5 rounded-xl text-xs font-semibold shadow-glow flex items-center gap-2 disabled:opacity-50 transition-all active:scale-[0.99]"
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Salvando alterações...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" />
+                      <span>Salvar Alterações</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          )}
+          {!isLoading && <Support />}
+        </div>
+      </div>
+    </ManagementLayout>
   );
 }

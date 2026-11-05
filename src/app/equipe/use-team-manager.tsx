@@ -1,5 +1,5 @@
 "use client";
-import {currentMembership} from "@/lib/browser-shop";
+import { currentMembership } from "@/lib/browser-shop";
 
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { AdminNavigation } from "@/components/admin/navigation";
@@ -93,6 +93,7 @@ export function useTeamManager() {
   >([]);
 
   // 2. Barbeiros
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newBarberName, setNewBarberName] = useState("");
@@ -113,6 +114,7 @@ export function useTeamManager() {
   const [isSavingServices, setIsSavingServices] = useState(false);
 
   const loadData = useCallback(async () => {
+    setLoadError(null);
     setIsLoading(true);
     setStatusMsg(null);
 
@@ -128,7 +130,11 @@ export function useTeamManager() {
         return;
       }
 
-      const {data:member,error:memErr}=await currentMembership(supabase,user.id,"barbershop_id, barbershops(name)");
+      const { data: member, error: memErr } = await currentMembership(
+        supabase,
+        user.id,
+        "barbershop_id, barbershops(name)",
+      );
 
       if (memErr || !member) {
         router.push("/login");
@@ -144,12 +150,13 @@ export function useTeamManager() {
       const todayStr = new Date().toISOString().split("T")[0];
 
       // Buscar closed_days
-      const { data: closedData } = await supabase
+      const { data: closedData, error: closedError } = await supabase
         .from("closed_days")
         .select("id, date, reason")
         .eq("barbershop_id", shopId)
         .order("date", { ascending: true });
 
+      if (closedError) throw closedError;
       if (closedData) {
         setClosedDaysList(closedData);
         const closedNow = closedData.some((cd) => cd.date === todayStr);
@@ -157,12 +164,13 @@ export function useTeamManager() {
       }
 
       // Buscar barbeiros
-      const { data: barbData } = await supabase
+      const { data: barbData, error: barberError } = await supabase
         .from("barbers")
         .select("id, name, bio, avatar_url, is_active")
         .eq("barbershop_id", shopId)
         .order("name");
 
+      if (barberError) throw barberError;
       if (barbData) {
         const cleaned = barbData.map((b) => ({
           ...b,
@@ -176,13 +184,14 @@ export function useTeamManager() {
       }
 
       // Buscar serviços
-      const { data: srvData } = await supabase
+      const { data: srvData, error: serviceError } = await supabase
         .from("services")
         .select("id, name, price")
         .eq("barbershop_id", shopId)
         .eq("is_active", true)
         .order("name");
 
+      if (serviceError) throw serviceError;
       if (srvData) {
         setAllServices(
           srvData.map((s) => ({
@@ -192,6 +201,7 @@ export function useTeamManager() {
         );
       }
     } catch (err: any) {
+      setLoadError(err.message || "Não foi possível consultar a operação.");
       setStatusMsg({
         type: "error",
         text: err.message || "Erro ao carregar dados",
@@ -214,7 +224,7 @@ export function useTeamManager() {
         const supabase = createClient();
 
         // Working hours (incluindo horário de almoço)
-        const { data: whData } = await supabase
+        const { data: whData, error: hoursError } = await supabase
           .from("working_hours")
           .select(
             "day_of_week, start_time, end_time, is_off, lunch_start, lunch_end",
@@ -222,6 +232,7 @@ export function useTeamManager() {
           .eq("barber_id", selectedBarberId)
           .order("day_of_week");
 
+        if (hoursError) throw hoursError;
         if (whData && whData.length > 0) {
           const map: WorkingHour[] = [];
           for (let i = 0; i < 7; i++) {
@@ -274,7 +285,11 @@ export function useTeamManager() {
           setBarberSelectedServices(bsData.map((bs) => bs.service_id));
         }
       } catch (err: any) {
-        console.error(err);
+        setLoadError(err.message || "Não foi possível consultar o expediente.");
+        setStatusMsg({
+          type: "error",
+          text: err.message || "Não foi possível consultar o expediente.",
+        });
       }
     }
 
@@ -440,6 +455,7 @@ export function useTeamManager() {
   };
 
   return {
+    loadError,
     router,
     barbershopId,
     setBarbershopId,

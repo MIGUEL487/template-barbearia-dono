@@ -2,7 +2,7 @@
 import { useInterfaceReducedMotion as useReducedMotion } from "@/components/ui/use-interface-motion";
 import { Tooltip } from "@/components/ui/tooltip";
 import type { ReactNode } from "react";
-import { AdminNavigation } from "@/components/admin/navigation";
+import { ManagementLayout } from "@/components/admin/management-layout";
 import { motion } from "motion/react";
 export function Workspace({
   title,
@@ -17,27 +17,16 @@ export function Workspace({
 }) {
   const reduced = useReducedMotion();
   return (
-    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
-      <AdminNavigation />
-      <main className="admin-content flex-1 space-y-6 saas3">
-        <header className="s3-heading">
-          <div>
-            <p className="s3-eyebrow">Auto Stilo · Gestão</p>
-            <h1>{title}</h1>
-            <p>{subtitle}</p>
-          </div>
-          {actions && <div className="s3-heading-actions">{actions}</div>}
-        </header>
-        <motion.div
-          className="s3-body"
-          initial={reduced ? false : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {children}
-        </motion.div>
-      </main>
-    </div>
+    <ManagementLayout title={title} subtitle={subtitle} actions={actions}>
+      <motion.div
+        className="s3-body"
+        initial={reduced ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {children}
+      </motion.div>
+    </ManagementLayout>
   );
 }
 export function Metric({

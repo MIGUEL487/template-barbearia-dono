@@ -1,8 +1,11 @@
 "use client";
-import {currentMembership} from "@/lib/browser-shop";
+import { Metric } from "@/components/saas3/shell";
+import { DialogPanel } from "@/components/ui/dialog-panel";
+import { Button } from "@/components/ui/button";
+import { currentMembership } from "@/lib/browser-shop";
 
 import { AdminSkeleton } from "@/components/admin/skeleton";
-import { AdminNavigation } from "@/components/admin/navigation";
+import { ManagementLayout } from "@/components/admin/management-layout";
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -29,6 +32,12 @@ interface CustomerRecord {
   visits_count: number;
   total_spent: number;
   last_visit: string | null;
+  history: {
+    id: string;
+    starts_at: string;
+    status: string;
+    total_price: number;
+  }[];
 }
 
 export default function ClientesPage() {
@@ -36,6 +45,8 @@ export default function ClientesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [selectedCustomer, setSelectedCustomer] =
+    useState<CustomerRecord | null>(null);
   const [customers, setCustomers] = useState<CustomerRecord[]>([]);
 
   const loadCustomers = useCallback(async () => {
@@ -54,7 +65,11 @@ export default function ClientesPage() {
         return;
       }
 
-      const {data:member,error:memErr}=await currentMembership(supabase,user.id,"barbershop_id");
+      const { data: member, error: memErr } = await currentMembership(
+        supabase,
+        user.id,
+        "barbershop_id",
+      );
 
       if (memErr || !member) {
         setErrorMsg("Acesso não autorizado.");
@@ -66,7 +81,8 @@ export default function ClientesPage() {
 
       const { data: custData, error: custErr } = await supabase
         .from("customers")
-        .select(`
+        .select(
+          `
           id,
           name,
           phone,
@@ -79,7 +95,8 @@ export default function ClientesPage() {
             status,
             total_price
           )
-        `)
+        `,
+        )
         .eq("barbershop_id", shopId)
         .order("name");
 
@@ -94,12 +111,10 @@ export default function ClientesPage() {
             (sum: number, b: any) => sum + Number(b.total_price),
             0,
           );
-          const lastBooking = (c.bookings || [])
-            .sort(
-              (a: any, b: any) =>
-                new Date(b.starts_at).getTime() -
-                new Date(a.starts_at).getTime(),
-            )[0];
+          const lastBooking = (c.bookings || []).sort(
+            (a: any, b: any) =>
+              new Date(b.starts_at).getTime() - new Date(a.starts_at).getTime(),
+          )[0];
 
           return {
             id: c.id,
@@ -111,6 +126,7 @@ export default function ClientesPage() {
             visits_count: completedBookings.length,
             total_spent: totalSpent,
             last_visit: lastBooking ? lastBooking.starts_at : null,
+            history: c.bookings || [],
           };
         });
         setCustomers(mapped);
@@ -137,130 +153,214 @@ export default function ClientesPage() {
   const repeatClients = customers.filter((c) => c.visits_count > 1).length;
 
   return (
-    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
-      <AdminNavigation />
-
-      <main className="admin-content flex-1 space-y-6">
-        {/* Header Bar */}
-        <header className="bg-surface border border-border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-soft">
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-xl sm:text-2xl font-bold text-text">
-                Carteira de Clientes
-              </h1>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-2 text-text-muted border border-hairline">
-                {customers.length} clientes
-              </span>
-            </div>
-            <p className="text-xs text-text-muted mt-1">
-              Histórico de visitas, contatos e faturamento por cliente
-            </p>
-          </div>
-
+    <ManagementLayout
+      title="Clientes"
+      subtitle="Relacionamento, histórico e informações da sua carteira."
+      actions={
+        <>
           <div className="relative w-full sm:w-80">
             <Search className="w-4 h-4 text-text-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
+              aria-label="Buscar clientes"
               placeholder="Buscar por nome, telefone ou e-mail..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-bg border border-border rounded-xl pl-10 pr-4 py-2 text-xs text-text focus:border-accent focus:outline-none transition-all placeholder:text-text-muted/50"
             />
           </div>
-        </header>
+        </>
+      }
+    >
+      <div className="s3-kpis mg-kpis-three">
+        <Metric
+          label="Clientes cadastrados"
+          value={isLoading || errorMsg ? "—" : String(customers.length)}
+          tip="Contatos da barbearia autorizada."
+        />
+        <Metric
+          label="Clientes recorrentes"
+          value={isLoading || errorMsg ? "—" : String(repeatClients)}
+          tip="Clientes com mais de um atendimento concluído."
+        />
+        <Metric
+          label="Serviços concluídos"
+          value={isLoading || errorMsg ? "—" : formatCurrency(totalSpentAll)}
+          tip="Soma do preço dos serviços concluídos por estes clientes; não é saldo de caixa."
+        />
+      </div>
+      {errorMsg && (
+        <div
+          role="alert"
+          className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-xs"
+        >
+          {errorMsg}
+        </div>
+      )}
 
-        {/* Quick KPI stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-surface border border-border rounded-xl p-4 shadow-soft">
-            <span className="text-xs text-text-muted">Clientes Cadastrados</span>
-            <div className="text-2xl font-bold text-text mt-1">{customers.length}</div>
-          </div>
-          <div className="bg-surface border border-border rounded-xl p-4 shadow-soft">
-            <span className="text-xs text-text-muted">Clientes Recorrentes</span>
-            <div className="text-2xl font-bold text-accent-light mt-1">{repeatClients}</div>
-          </div>
-          <div className="bg-surface border border-border rounded-xl p-4 shadow-soft">
-            <span className="text-xs text-text-muted">Faturamento Total Gerado</span>
-            <div className="text-2xl font-bold text-emerald-400 mt-1">
-              {formatCurrency(totalSpentAll)}
-            </div>
-          </div>
+      {/* Customers List Card */}
+      <div className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-hairline">
+          <h2 className="text-base font-bold text-text">Lista de Contatos</h2>
+          <span className="text-xs text-text-muted font-mono">
+            Exibindo {filtered.length} de {customers.length}
+          </span>
         </div>
 
-        {errorMsg && (
-          <div className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-xs">
-            {errorMsg}
+        {isLoading ? (
+          <AdminSkeleton />
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-12 space-y-2">
+            <div className="w-12 h-12 rounded-2xl bg-surface-2 border border-hairline text-text-muted mx-auto flex items-center justify-center">
+              <Users className="w-6 h-6" />
+            </div>
+            <p className="text-xs text-text-muted">
+              Nenhum cliente localizado na pesquisa.
+            </p>
+          </div>
+        ) : (
+          <div className="s3-table-wrap">
+            <table className="mg-data-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Contato</th>
+                  <th>Visitas</th>
+                  <th>Serviços concluídos</th>
+                  <th>Último atendimento</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((c) => (
+                  <tr key={c.id}>
+                    <td>
+                      <div className="mg-person">
+                        <span className="mg-avatar">
+                          {c.name.charAt(0).toUpperCase()}
+                        </span>
+                        <strong>{c.name}</strong>
+                      </div>
+                    </td>
+                    <td>
+                      <span>{c.phone}</span>
+                      {c.email && (
+                        <small className="mg-cell-detail">{c.email}</small>
+                      )}
+                    </td>
+                    <td>
+                      <span className="mg-status">
+                        {c.visits_count} visitas
+                      </span>
+                    </td>
+                    <td>{formatCurrency(c.total_spent)}</td>
+                    <td>
+                      {c.last_visit
+                        ? new Date(c.last_visit).toLocaleDateString("pt-BR", {
+                            timeZone: "America/Sao_Paulo",
+                          })
+                        : "Sem atendimento"}
+                    </td>
+                    <td>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => setSelectedCustomer(c)}
+                      >
+                        Ver perfil
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
+      </div>
 
-        {/* Customers List Card */}
-        <div className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-hairline">
-            <h2 className="text-base font-bold text-text">Lista de Contatos</h2>
-            <span className="text-xs text-text-muted font-mono">
-              Exibindo {filtered.length} de {customers.length}
-            </span>
+      <DialogPanel
+        open={Boolean(selectedCustomer)}
+        onClose={() => setSelectedCustomer(null)}
+        titleId="customer-profile-title"
+        className="mg-profile-dialog"
+      >
+        <div className="mg-section-heading">
+          <div>
+            <p className="mg-overline">Perfil do cliente</p>
+            <h2 id="customer-profile-title">
+              {selectedCustomer?.name || "Cliente"}
+            </h2>
           </div>
-
-          {isLoading ? (
-            <AdminSkeleton />
-          ) : filtered.length === 0 ? (
-            <div className="text-center py-12 space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-surface-2 border border-hairline text-text-muted mx-auto flex items-center justify-center">
-                <Users className="w-6 h-6" />
-              </div>
-              <p className="text-xs text-text-muted">
-                Nenhum cliente localizado na pesquisa.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {filtered.map((c, idx) => (
-                <motion.div
-                  key={c.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.02 }}
-                  className="bg-surface-2 hover:bg-surface-3/70 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all border border-hairline/60 hover:border-hairline"
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-11 h-11 rounded-xl bg-accent-soft text-accent-light border border-accent/20 flex items-center justify-center font-bold text-sm shrink-0">
-                      {c.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-text text-sm">{c.name}</h3>
-                      <div className="flex items-center gap-3 text-xs text-text-muted mt-1 flex-wrap">
-                        <span className="flex items-center gap-1 font-mono">
-                          <Phone className="w-3 h-3 text-text-muted/70" />
-                          {c.phone}
-                        </span>
-                        {c.email && (
-                          <span className="flex items-center gap-1">
-                            <Mail className="w-3 h-3 text-text-muted/70" />
-                            {c.email}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between sm:justify-end gap-5 pt-3 sm:pt-0 border-t sm:border-t-0 border-hairline/60">
-                    <span className="px-3 py-1 rounded-full bg-surface text-accent-light text-xs font-semibold border border-hairline">
-                      {c.visits_count} {c.visits_count === 1 ? "visita" : "visitas"}
-                    </span>
-                    <div className="text-right min-w-[90px]">
-                      <span className="text-[11px] text-text-muted block">Investimento</span>
-                      <strong className="font-bold text-sm text-emerald-400">
-                        {formatCurrency(c.total_spent)}
-                      </strong>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => setSelectedCustomer(null)}
+          >
+            Fechar perfil
+          </Button>
         </div>
-      </main>
-    </div>
+        {selectedCustomer && (
+          <>
+            <dl className="mg-profile-fields">
+              <div>
+                <dt>Telefone</dt>
+                <dd>{selectedCustomer.phone}</dd>
+              </div>
+              <div>
+                <dt>E-mail</dt>
+                <dd>{selectedCustomer.email || "Não informado"}</dd>
+              </div>
+              <div>
+                <dt>Visitas concluídas</dt>
+                <dd>{selectedCustomer.visits_count}</dd>
+              </div>
+              <div>
+                <dt>Serviços concluídos</dt>
+                <dd>{formatCurrency(selectedCustomer.total_spent)}</dd>
+              </div>
+            </dl>
+            {selectedCustomer.notes && (
+              <section className="mg-panel">
+                <h3>Observações</h3>
+                <p>{selectedCustomer.notes}</p>
+              </section>
+            )}
+            <section>
+              <h3>Histórico de atendimentos</h3>
+              {selectedCustomer.history.length ? (
+                <div className="s3-table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>Valor dos serviços</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedCustomer.history.map((b) => (
+                        <tr key={b.id}>
+                          <td>
+                            {new Date(b.starts_at).toLocaleString("pt-BR", {
+                              timeZone: "America/Sao_Paulo",
+                            })}
+                          </td>
+                          <td>{b.status}</td>
+                          <td>{formatCurrency(Number(b.total_price))}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="s3-note">
+                  Nenhum atendimento registrado para este contato.
+                </p>
+              )}
+            </section>
+          </>
+        )}
+      </DialogPanel>
+    </ManagementLayout>
   );
 }

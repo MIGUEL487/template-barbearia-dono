@@ -1,7 +1,8 @@
 "use client";
+import { useAnimatedDialog } from "@/components/ui/use-animated-dialog";
 
-import {UpsellSuggestions} from "@/components/saas2/upsell-suggestions";
-import { useRef, useState } from "react";
+import { UpsellSuggestions } from "@/components/saas2/upsell-suggestions";
+import { useState } from "react";
 import {
   completeBookingAction,
   cancelBookingAction,
@@ -18,7 +19,11 @@ export function BookingActions({
   bookingId: string;
   onUpdated: () => Promise<void>;
 }) {
-  const dialog = useRef<HTMLDialogElement>(null);
+  const {
+    ref: dialog,
+    show: showDialog,
+    close: closeDialog,
+  } = useAnimatedDialog();
   const [action, setAction] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -40,7 +45,7 @@ export function BookingActions({
         return;
       }
       await onUpdated();
-      dialog.current?.close();
+      void closeDialog();
     } catch {
       setError("Não foi possível atualizar. Tente novamente.");
     } finally {
@@ -52,13 +57,17 @@ export function BookingActions({
     <>
       <button
         className="row-action inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-text-muted hover:text-white bg-surface-2 hover:bg-surface-3 rounded-lg border border-hairline transition-colors"
-        onClick={() => dialog.current?.showModal()}
+        onClick={() => showDialog()}
       >
         <MoreVertical className="w-3.5 h-3.5" />
         <span>Gerenciar</span>
       </button>
 
       <dialog
+        onCancel={(e) => {
+          e.preventDefault();
+          void closeDialog();
+        }}
         ref={dialog}
         className="booking-sheet bg-surface border border-border text-text rounded-2xl p-6 shadow-soft max-w-md w-full"
         aria-labelledby={`booking-title-${bookingId}`}
@@ -68,12 +77,15 @@ export function BookingActions({
         }}
       >
         <div className="flex items-center justify-between pb-3 border-b border-hairline mb-4">
-          <h2 id={`booking-title-${bookingId}`} className="text-lg font-bold text-text">
+          <h2
+            id={`booking-title-${bookingId}`}
+            className="text-lg font-bold text-text"
+          >
             Gerenciar Atendimento
           </h2>
           <button
             type="button"
-            onClick={() => dialog.current?.close()}
+            onClick={() => void closeDialog()}
             className="p-1.5 text-text-muted hover:text-text rounded-lg hover:bg-surface-2 transition-colors !min-h-0 !w-auto"
             aria-label="Fechar"
           >
@@ -129,7 +141,9 @@ export function BookingActions({
           </button>
         </div>
 
-        {action === "Concluir" && <UpsellSuggestions shopId={shopId} bookingId={bookingId}/>}
+        {action === "Concluir" && (
+          <UpsellSuggestions shopId={shopId} bookingId={bookingId} />
+        )}
         {action === "Cancelar" && (
           <label className="block text-xs font-medium text-text-muted mb-4">
             Motivo do cancelamento (opcional)
@@ -157,13 +171,19 @@ export function BookingActions({
             className="flex-1 bg-accent hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed text-white py-2.5 px-4 rounded-lg text-xs font-semibold shadow-glow transition-all flex items-center justify-center gap-2 !min-h-0"
           >
             {busy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-            <span>{busy ? "Salvando…" : action ? `Confirmar ${action}` : "Escolha uma ação"}</span>
+            <span>
+              {busy
+                ? "Salvando…"
+                : action
+                  ? `Confirmar ${action}`
+                  : "Escolha uma ação"}
+            </span>
           </button>
 
           <button
             type="button"
             disabled={busy}
-            onClick={() => dialog.current?.close()}
+            onClick={() => void closeDialog()}
             className="py-2.5 px-4 rounded-lg text-xs font-semibold bg-surface-2 hover:bg-surface-3 text-text border border-hairline transition-colors !min-h-0"
           >
             Voltar

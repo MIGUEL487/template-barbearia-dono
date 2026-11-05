@@ -24,6 +24,7 @@ import {
   Settings,
   LogOut,
   X,
+  LifeBuoy,
 } from "lucide-react";
 import { logoutAction } from "@/app/actions/admin-actions";
 import { deactivateDevicePush } from "@/lib/device-push";
@@ -40,6 +41,7 @@ const links = [
   ["/fila-de-espera", "Fila de espera", ListOrdered],
   ["/financeiro", "Financeiro", DollarSign],
   ["/configuracoes", "Configurações", Settings],
+  ["/suporte", "Suporte", LifeBuoy],
 ] as const;
 
 export function AdminNavigation() {
@@ -61,19 +63,21 @@ export function AdminNavigation() {
     reduced = useInterfaceReducedMotion();
   useEffect(() => {
     if (!more) return;
-    menuRef.current?.querySelector<HTMLElement>("button,a")?.focus();
+    const currentMenu = menuRef.current,
+      currentTrigger = moreTrigger.current;
+    currentMenu?.querySelector<HTMLElement>("button,a")?.focus();
     const outside = (e: PointerEvent) => {
       if (
-        !menuRef.current?.contains(e.target as Node) &&
-        !moreTrigger.current?.contains(e.target as Node)
+        !currentMenu?.contains(e.target as Node) &&
+        !currentTrigger?.contains(e.target as Node)
       )
         setMore(false);
     };
     document.addEventListener("pointerdown", outside);
     return () => {
       document.removeEventListener("pointerdown", outside);
-      if (menuRef.current?.contains(document.activeElement))
-        moreTrigger.current?.focus();
+      if (currentMenu?.contains(document.activeElement))
+        currentTrigger?.focus();
     };
   }, [more]);
 

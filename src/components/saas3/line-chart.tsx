@@ -9,11 +9,13 @@ export function LineChart({
   secondary = "Previsão",
   first = "Recebido",
   monetary = true,
+  singleSeries = false,
 }: {
   rows: { date: string; income: number; forecast: number }[];
   secondary?: string;
   first?: string;
   monetary?: boolean;
+  singleSeries?: boolean;
 }) {
   const reduced = useReducedMotion();
   const [series, setSeries] = useState<"both" | "income" | "forecast">("both"),
@@ -42,24 +44,28 @@ export function LineChart({
             <i />
             {first}
           </span>
-          <span>
-            <i className="s3-line-secondary" />
-            {secondary}
-          </span>
+          {!singleSeries && (
+            <span>
+              <i className="s3-line-secondary" />
+              {secondary}
+            </span>
+          )}
         </div>
         <label className="sr-only" htmlFor={id}>
           Séries da receita
         </label>
-        <AnimatedSelect
-          id={id}
-          aria-label="Séries da receita"
-          value={series}
-          onChange={(e) => setSeries(e.target.value as typeof series)}
-        >
-          <option value="both">Comparar séries</option>
-          <option value="income">{first}</option>
-          <option value="forecast">{secondary}</option>
-        </AnimatedSelect>
+        {!singleSeries && (
+          <AnimatedSelect
+            id={id}
+            aria-label="Séries da receita"
+            value={series}
+            onChange={(e) => setSeries(e.target.value as typeof series)}
+          >
+            <option value="both">Comparar séries</option>
+            <option value="income">{first}</option>
+            <option value="forecast">{secondary}</option>
+          </AnimatedSelect>
+        )}
       </div>
       {!rows.length ? (
         <p className="s3-empty">Os lançamentos do período aparecerão aqui.</p>
@@ -122,7 +128,7 @@ export function LineChart({
                 />
               </>
             )}
-            {series !== "income" && (
+            {!singleSeries && series !== "income" && (
               <motion.path
                 initial={reduced ? false : { pathLength: 0 }}
                 animate={{ pathLength: 1 }}
@@ -195,7 +201,11 @@ export function LineChart({
                   {first}: {format(selected.income)}
                 </strong>
                 <strong>
-                  {secondary}: {format(selected.forecast)}
+                  {!singleSeries && (
+                    <>
+                      {secondary}: {format(selected.forecast)}
+                    </>
+                  )}
                 </strong>
               </motion.div>
             )}
@@ -217,8 +227,13 @@ export function LineChart({
             </label>
             {selected && (
               <span>
-                {first}: <strong>{format(selected.income)}</strong> ·{" "}
-                {secondary}: <strong>{format(selected.forecast)}</strong>
+                {first}: <strong>{format(selected.income)}</strong>
+                {!singleSeries && (
+                  <>
+                    {" "}
+                    · {secondary}: <strong>{format(selected.forecast)}</strong>
+                  </>
+                )}
               </span>
             )}
           </div>

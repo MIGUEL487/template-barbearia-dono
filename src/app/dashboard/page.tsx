@@ -1,9 +1,10 @@
 "use client";
-import {readLedger,settled} from "@/lib/saas3/ledger";
-import {currentMembership} from "@/lib/browser-shop";
+import { Metric } from "@/components/saas3/shell";
+import { readLedger, settled } from "@/lib/saas3/ledger";
+import { currentMembership } from "@/lib/browser-shop";
 
 import { AdminSkeleton } from "@/components/admin/skeleton";
-import { AdminNavigation } from "@/components/admin/navigation";
+import { ManagementLayout } from "@/components/admin/management-layout";
 import { AnimatedNumber } from "@/components/admin/animated-number";
 import { RevenueChart } from "@/components/admin/revenue-chart";
 import { BookingActions } from "@/components/admin/booking-actions";
@@ -79,7 +80,11 @@ export default function DashboardPage() {
         return;
       }
 
-      const {data:member,error:memErr}=await currentMembership(supabase,user.id,"barbershop_id, role, barbershops(name)");
+      const { data: member, error: memErr } = await currentMembership(
+        supabase,
+        user.id,
+        "barbershop_id, role, barbershops(name)",
+      );
 
       if (memErr || !member) {
         setNoAccess(true);
@@ -98,8 +103,15 @@ export default function DashboardPage() {
       if (period === "mes") periodStart.setDate(1);
       const periodEnd = new Date();
       periodEnd.setHours(23, 59, 59, 999);
-      const {entries:periodLedger}=await readLedger(supabase,shopId,periodStart.toISOString(),new Date(periodEnd.getTime()+1).toISOString());
-      const txData=periodLedger.filter(e=>e.type==='income'&&settled(e));
+      const { entries: periodLedger } = await readLedger(
+        supabase,
+        shopId,
+        periodStart.toISOString(),
+        new Date(periodEnd.getTime() + 1).toISOString(),
+      );
+      const txData = periodLedger.filter(
+        (e) => e.type === "income" && settled(e),
+      );
       const totalReceived = (txData || []).reduce(
         (acc: number, cur: any) => acc + Number(cur.amount),
         0,
@@ -108,8 +120,17 @@ export default function DashboardPage() {
       const chartStart = new Date();
       chartStart.setHours(0, 0, 0, 0);
       chartStart.setDate(chartStart.getDate() - 6);
-      const {entries:seriesLedger}=await readLedger(supabase,shopId,chartStart.toISOString(),new Date(Date.now()+86400000).toISOString());
-      setRevenueEntries(seriesLedger.filter(e=>e.type==='income'&&settled(e)).map(e=>({created_at:e.created_at,amount:Number(e.amount)})));
+      const { entries: seriesLedger } = await readLedger(
+        supabase,
+        shopId,
+        chartStart.toISOString(),
+        new Date(Date.now() + 86400000).toISOString(),
+      );
+      setRevenueEntries(
+        seriesLedger
+          .filter((e) => e.type === "income" && settled(e))
+          .map((e) => ({ created_at: e.created_at, amount: Number(e.amount) })),
+      );
 
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
@@ -179,12 +200,11 @@ export default function DashboardPage() {
           <div className="w-16 h-16 rounded-full bg-danger/10 text-danger mx-auto flex items-center justify-center">
             <XCircle className="w-8 h-8" />
           </div>
-          <h1 className="text-xl font-bold text-text">
-            Acesso Não Autorizado
-          </h1>
+          <h1 className="text-xl font-bold text-text">Acesso Não Autorizado</h1>
           <p className="text-xs text-text-muted">
             Seu usuário autenticado não possui vínculo ativo em{" "}
-            <code className="text-accent-light">shop_members</code> nesta barbearia.
+            <code className="text-accent-light">shop_members</code> nesta
+            barbearia.
           </p>
           <button
             onClick={handleLogout}
@@ -198,29 +218,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="admin-page min-h-screen bg-bg text-text flex flex-col lg:flex-row p-4 lg:p-6 gap-6">
-      {/* Sidebar Navigation */}
-      <AdminNavigation />
-
-      {/* Main Content Area */}
-      <main className="admin-content flex-1 space-y-6">
-        {/* Top Header Bar (Dashdark X style) */}
-        <header className="bg-surface border border-border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-soft">
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-xl sm:text-2xl font-bold text-text">
-                Visão Geral
-              </h1>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Ao vivo
-              </span>
-            </div>
-            <p className="text-xs text-text-muted mt-1">
-              {shopName} · Gestão operacional e indicadores financeiros
-            </p>
-          </div>
-
+    <ManagementLayout
+      title="Painel"
+      subtitle={`${shopName} · Visão operacional da barbearia`}
+      actions={
+        <>
           <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
             {/* Period selector pill tabs */}
             <div className="bg-surface-2 p-1 rounded-xl flex gap-1 border border-hairline">
@@ -247,217 +249,191 @@ export default function DashboardPage() {
               <span>Novo Agendamento</span>
             </Link>
           </div>
-        </header>
+        </>
+      }
+    >
+      {errorMsg && (
+        <div
+          role="alert"
+          className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-xs flex items-center gap-2"
+        >
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{errorMsg}</span>
+        </div>
+      )}
 
-        {errorMsg && (
-          <div className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
-            <span>{errorMsg}</span>
+      <div className="s3-kpis mg-kpis-three">
+        <Metric
+          label="Receita recebida"
+          value={isLoading || errorMsg ? "—" : formatCurrency(revenueReceived)}
+          previous="Caixa efetivado no período"
+          tip="Recebimentos registrados no livro-caixa, conforme o período escolhido."
+        />
+        <Metric
+          label="A receber hoje"
+          value={isLoading || errorMsg ? "—" : formatCurrency(revenuePending)}
+          previous="Agendamentos confirmados"
+          tip="Saldo calculado dos atendimentos confirmados de hoje; não é receita já recebida."
+        />
+        <Metric
+          label="Atendimentos de hoje"
+          value={isLoading || errorMsg ? "—" : String(bookingsToday.length)}
+          previous="Agenda operacional"
+          tip="Reservas carregadas para o dia de hoje. Consulte a agenda para ver status e disponibilidade."
+        />
+      </div>
+      <div className="mg-dashboard-overview">
+        <RevenueChart entries={revenueEntries} />
+        <section className="mg-panel mg-day-summary">
+          <p className="mg-overline">Sua operação</p>
+          <h2>Hoje na Auto Stilo</h2>
+          <strong>{bookingsToday.length}</strong>
+          <p>atendimentos na agenda</p>
+          <dl>
+            <div>
+              <dt>Confirmados</dt>
+              <dd>
+                {bookingsToday.filter((b) => b.status === "confirmed").length}
+              </dd>
+            </div>
+            <div>
+              <dt>Pré-reservas</dt>
+              <dd>{bookingsToday.filter((b) => b.status === "hold").length}</dd>
+            </div>
+            <div>
+              <dt>Concluídos</dt>
+              <dd>
+                {bookingsToday.filter((b) => b.status === "completed").length}
+              </dd>
+            </div>
+          </dl>
+          <Link href="/agenda">Organizar meu dia ↗</Link>
+        </section>
+      </div>
+      {/* Revenue Chart Component */}
+
+      {/* Today's Bookings Section */}
+      <section className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-hairline">
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-bold text-text">
+              Atendimentos de Hoje
+            </h2>
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-2 text-text-muted border border-hairline">
+              {bookingsToday.length}{" "}
+              {bookingsToday.length === 1 ? "agendamento" : "agendamentos"}
+            </span>
           </div>
-        )}
 
-        {/* 3 Metric Cards (Dashdark X architecture) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {/* Card 1: Receita Liquidada */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-            className="bg-surface border border-border hover:border-emerald-500/30 rounded-2xl p-6 shadow-soft space-y-3 transition-colors"
+          <Link
+            href="/agenda"
+            className="text-xs text-accent-light hover:text-white font-semibold flex items-center gap-1.5 transition-colors self-start sm:self-auto"
           >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                Receita Liquidada
-              </span>
-              <span className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-                <DollarSign className="w-4 h-4" />
-              </span>
-            </div>
-            <div className="text-3xl font-bold text-emerald-400">
-              <AnimatedNumber value={revenueReceived} currency />
-            </div>
-            <div className="flex items-center justify-between text-xs text-text-muted pt-1 border-t border-hairline/60">
-              <span>Pagamentos confirmados</span>
-              <span className="text-emerald-400 font-medium capitalize">{period}</span>
-            </div>
-          </motion.div>
-
-          {/* Card 2: Aguardando no Balcão */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2, delay: 0.05 }}
-            className="bg-surface border border-border hover:border-accent/30 rounded-2xl p-6 shadow-soft space-y-3 transition-colors"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                Aguardando no Balcão
-              </span>
-              <span className="w-9 h-9 rounded-xl bg-accent-soft text-accent-light border border-accent/20 flex items-center justify-center">
-                <Clock className="w-4 h-4" />
-              </span>
-            </div>
-            <div className="text-3xl font-bold text-accent-light">
-              <AnimatedNumber value={revenuePending} currency />
-            </div>
-            <div className="flex items-center justify-between text-xs text-text-muted pt-1 border-t border-hairline/60">
-              <span>Agendamentos confirmados hoje</span>
-              <span className="text-accent-light font-medium">A receber</span>
-            </div>
-          </motion.div>
-
-          {/* Card 3: Atendimentos Hoje */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2, delay: 0.1 }}
-            className="bg-surface border border-border hover:border-white/20 rounded-2xl p-6 shadow-soft space-y-3 sm:col-span-2 lg:col-span-1 transition-colors"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                Atendimentos Hoje
-              </span>
-              <span className="w-9 h-9 rounded-xl bg-surface-2 text-text border border-hairline flex items-center justify-center">
-                <Calendar className="w-4 h-4" />
-              </span>
-            </div>
-            <div className="text-3xl font-bold text-text">
-              {bookingsToday.length}
-            </div>
-            <div className="flex items-center justify-between text-xs text-text-muted pt-1 border-t border-hairline/60">
-              <span>Clientes na grade do dia</span>
-              <Link href="/agenda" className="text-accent-light hover:underline font-medium flex items-center gap-1">
-                Ver grade <ArrowUpRight className="w-3 h-3" />
-              </Link>
-            </div>
-          </motion.div>
+            <span>Abrir Agenda Completa</span>
+            <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
 
-        {/* Revenue Chart Component */}
-        <RevenueChart entries={revenueEntries} />
-
-        {/* Today's Bookings Section */}
-        <section className="bg-surface border border-border rounded-2xl p-6 shadow-soft space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-hairline">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-bold text-text">
-                Atendimentos de Hoje
-              </h2>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-2 text-text-muted border border-hairline">
-                {bookingsToday.length} {bookingsToday.length === 1 ? "agendamento" : "agendamentos"}
-              </span>
+        {isLoading ? (
+          <AdminSkeleton />
+        ) : bookingsToday.length === 0 ? (
+          <div className="text-center py-12 space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-surface-2 border border-hairline text-text-muted mx-auto flex items-center justify-center">
+              <Calendar className="w-6 h-6" />
             </div>
-
+            <p className="text-xs text-text-muted">
+              Nenhum agendamento marcado para o dia de hoje.
+            </p>
             <Link
               href="/agenda"
-              className="text-xs text-accent-light hover:text-white font-semibold flex items-center gap-1.5 transition-colors self-start sm:self-auto"
+              className="inline-flex items-center gap-1.5 text-xs text-accent-light hover:underline font-medium"
             >
-              <span>Abrir Agenda Completa</span>
-              <ChevronRight className="w-4 h-4" />
+              <Plus className="w-3.5 h-3.5" /> Adicionar na agenda
             </Link>
           </div>
-
-          {isLoading ? (
-            <AdminSkeleton />
-          ) : bookingsToday.length === 0 ? (
-            <div className="text-center py-12 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-surface-2 border border-hairline text-text-muted mx-auto flex items-center justify-center">
-                <Calendar className="w-6 h-6" />
-              </div>
-              <p className="text-xs text-text-muted">
-                Nenhum agendamento marcado para o dia de hoje.
-              </p>
-              <Link
-                href="/agenda"
-                className="inline-flex items-center gap-1.5 text-xs text-accent-light hover:underline font-medium"
+        ) : (
+          <div className="space-y-3">
+            {bookingsToday.map((b, idx) => (
+              <motion.div
+                key={b.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.03 }}
+                className="bg-surface-2 hover:bg-surface-3/60 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all border border-hairline/60 hover:border-hairline"
               >
-                <Plus className="w-3.5 h-3.5" /> Adicionar na agenda
-              </Link>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {bookingsToday.map((b, idx) => (
-                <motion.div
-                  key={b.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.03 }}
-                  className="bg-surface-2 hover:bg-surface-3/60 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all border border-hairline/60 hover:border-hairline"
-                >
-                  {/* Left: Time + Customer Info */}
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-surface flex flex-col items-center justify-center font-mono text-xs font-bold text-accent-light shrink-0 border border-hairline">
-                      <span>
-                        {new Date(b.starts_at).toLocaleTimeString("pt-BR", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                {/* Left: Time + Customer Info */}
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-surface flex flex-col items-center justify-center font-mono text-xs font-bold text-accent-light shrink-0 border border-hairline">
+                    <span>
+                      {new Date(b.starts_at).toLocaleTimeString("pt-BR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h4 className="font-semibold text-text text-sm">
+                      {fixMojibake(b.customers?.name) || "Cliente"}
+                    </h4>
+                    <div className="flex items-center gap-3 text-xs text-text-muted flex-wrap">
+                      <span className="flex items-center gap-1">
+                        <User className="w-3.5 h-3.5 text-text-muted/70" />
+                        {fixMojibake(b.barbers?.name) || "Profissional"}
                       </span>
-                    </div>
-
-                    <div className="space-y-1">
-                      <h4 className="font-semibold text-text text-sm">
-                        {fixMojibake(b.customers?.name) || "Cliente"}
-                      </h4>
-                      <div className="flex items-center gap-3 text-xs text-text-muted flex-wrap">
+                      {b.customers?.phone && (
                         <span className="flex items-center gap-1">
-                          <User className="w-3.5 h-3.5 text-text-muted/70" />
-                          {fixMojibake(b.barbers?.name) || "Profissional"}
+                          <Phone className="w-3 h-3 text-text-muted/70" />
+                          {b.customers.phone}
                         </span>
-                        {b.customers?.phone && (
-                          <span className="flex items-center gap-1">
-                            <Phone className="w-3 h-3 text-text-muted/70" />
-                            {b.customers.phone}
-                          </span>
-                        )}
-                      </div>
+                      )}
                     </div>
                   </div>
+                </div>
 
-                  {/* Right: Status badge, Price & Actions */}
-                  <div className="booking-row-status flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-hairline/60">
-                    {/* Status Pill Badge */}
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        b.status === "completed"
-                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                          : b.status === "confirmed"
-                            ? "bg-accent/15 text-accent-light border border-accent/25"
-                            : b.status === "hold"
-                              ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                              : "bg-danger/10 text-danger border border-danger/20"
-                      }`}
-                    >
-                      {(
-                        {
-                          confirmed: "Confirmado",
-                          completed: "Concluído",
-                          hold: "Pré-reserva",
-                          cancelled: "Cancelado",
-                          no_show: "Faltou",
-                          expired: "Expirado",
-                        } as Record<string, string>
-                      )[b.status] || b.status}
-                    </span>
+                {/* Right: Status badge, Price & Actions */}
+                <div className="booking-row-status flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-hairline/60">
+                  {/* Status Pill Badge */}
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      b.status === "completed"
+                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                        : b.status === "confirmed"
+                          ? "bg-accent/15 text-accent-light border border-accent/25"
+                          : b.status === "hold"
+                            ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                            : "bg-danger/10 text-danger border border-danger/20"
+                    }`}
+                  >
+                    {(
+                      {
+                        confirmed: "Confirmado",
+                        completed: "Concluído",
+                        hold: "Pré-reserva",
+                        cancelled: "Cancelado",
+                        no_show: "Faltou",
+                        expired: "Expirado",
+                      } as Record<string, string>
+                    )[b.status] || b.status}
+                  </span>
 
-                    <span className="font-bold text-sm text-text min-w-[70px] text-right">
-                      {formatCurrency(b.total_price)}
-                    </span>
+                  <span className="font-bold text-sm text-text min-w-[70px] text-right">
+                    {formatCurrency(b.total_price)}
+                  </span>
 
-                    {b.status === "confirmed" && barbershopId && (
-                      <BookingActions
-                        shopId={barbershopId}
-                        bookingId={b.id}
-                        onUpdated={loadDashboardData}
-                      />
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </section>
-      </main>
-    </div>
+                  {b.status === "confirmed" && barbershopId && (
+                    <BookingActions
+                      shopId={barbershopId}
+                      bookingId={b.id}
+                      onUpdated={loadDashboardData}
+                    />
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </section>
+    </ManagementLayout>
   );
 }

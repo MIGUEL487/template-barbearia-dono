@@ -40,8 +40,8 @@ export function PremiumDatePicker({
   className = "",
 }: PremiumDatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [mounted,setMounted]=useState(false);
-  useEffect(()=>setMounted(true),[]);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Parse current selected date safely without UTC shift
@@ -203,7 +203,22 @@ export function PremiumDatePicker({
   };
 
   return (
-    <div ref={containerRef} className={`relative inline-block ${className}`}>
+    <div
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && isOpen) {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsOpen(false);
+          containerRef.current
+            ?.querySelector<HTMLButtonElement>(
+              'button[aria-label="Abrir seletor de data"]',
+            )
+            ?.focus();
+        }
+      }}
+      ref={containerRef}
+      className={`relative inline-block ${className}`}
+    >
       {/* Trigger Bar with Prev / Date Button / Next */}
       <div className="flex items-center bg-surface-2 rounded-xl border border-hairline p-1 shadow-sm">
         <button
@@ -230,10 +245,10 @@ export function PremiumDatePicker({
 
           <div className="flex flex-col text-left">
             <span className="text-text font-bold text-xs truncate">
-              {mounted?trigger.label:'Selecionar data'}
+              {mounted ? trigger.label : "Selecionar data"}
             </span>
             <span className="text-[10px] text-text-muted font-normal">
-              {mounted?trigger.fullYear:'Agenda'}
+              {mounted ? trigger.fullYear : "Agenda"}
             </span>
           </div>
 
