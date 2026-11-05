@@ -1,0 +1,56 @@
+{
+  "base": "45cbd1ba1dfaca1c79ec1863f174514ee7b6b5b9",
+  "codeCommit": "7aa7cff",
+  "routes": [
+    "dashboard",
+    "agenda",
+    "clientes",
+    "servicos",
+    "equipe",
+    "financeiro",
+    "analises",
+    "raio-x",
+    "resgate",
+    "fila-de-espera",
+    "configuracoes",
+    "suporte"
+  ],
+  "widths": [
+    1440,
+    390
+  ],
+  "checks": {
+    "typecheck": "passed",
+    "lint": "passed without warnings",
+    "nextOpenNext": "passed",
+    "wranglerDryRun": "passed",
+    "allManagementAndIntelligencePages": "passed",
+    "profileHistoryAndModals": "passed",
+    "serviceCreateServerActionFixture": "passed",
+    "emptyAndDataFailureStates": "passed",
+    "keyboardAndEscape": "passed",
+    "SaaS2And3": "passed",
+    "GeminiSDKSafeDiagnostics": "passed with mocked provider",
+    "paymentSignature": "passed",
+    "notificationSoundRealtime": "passed with mocked events",
+    "tokens": "passed",
+    "databaseAndActionCallContracts": "unchanged"
+  },
+  "productionSQLExecuted": false,
+  "newMigrations": false,
+  "productionGemini": "unverified: runtime credentials/logs unavailable",
+  "figmaFrames": "not inspected: connector unavailable and blocked egress",
+  "deployment": "not confirmed: Cloudflare API inaccessible",
+  "networkDraft": {
+    "status": "saved",
+    "requires_publish": true,
+    "addedDomains": [
+      "www.figma.com",
+      "figma.com",
+      "api.figma.com",
+      "api.cloudflare.com",
+      "generativelanguage.googleapis.com",
+      "ai.google.dev"
+    ]
+  }
+}
