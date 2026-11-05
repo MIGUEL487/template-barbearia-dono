@@ -394,7 +394,7 @@ export async function askRaioXAction(raw: {
         aggregateMs,
       }),
     );
-    const { key, model, timeoutMs } = aiRuntime();
+    const { key, model, timeoutMs, dailyQuotaEnabled } = aiRuntime(shop);
     if (key && conversation) {
       try {
         const interpreted = await cachedInterpretation(
@@ -428,6 +428,7 @@ export async function askRaioXAction(raw: {
             ),
           },
           async () => {
+            if (!dailyQuotaEnabled) return;
             const { data, error } = await db.rpc("consume_raiox_ai_quota", {
               p_barbershop_id: shop,
             });

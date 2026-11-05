@@ -6,7 +6,7 @@ import { spawn } from "node:child_process";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 const root = process.cwd(),
-  out = path.join(root, "docs/ai-free-only/evidencias");
+  out = path.join(root, "docs/ai-quota-temporary/evidencias");
 await fs.mkdir(out, { recursive: true });
 const shop = "11111111-1111-1111-1111-111111111111",
   uid = "99999999-9999-4999-8999-999999999999",
@@ -155,7 +155,7 @@ const mock = http.createServer(async (req, res) => {
     return;
   }
   if (name === "consume_raiox_ai_quota") {
-    res.end("true");
+    res.end("false");
     return;
   }
   if (req.method === "OPTIONS") {
@@ -557,12 +557,14 @@ const credentialFlag = path.join(fixture, ".qa-ai-enabled");
 await fs.writeFile(
   runtimePath,
   'import {existsSync} from "node:fs";\n' +
-    (await fs.readFile(runtimePath, "utf8")).replace(
-      'nodeKey = process.env.OPENROUTER_API_KEY?.trim() || "";',
-      `nodeKey = existsSync(${JSON.stringify(credentialFlag)}) ? "fixture-server-key" : "";`,
-    ),
+    (await fs.readFile(runtimePath, "utf8"))
+      .replace("now = Date.now()", 'now = Date.parse("2026-11-05T23:00:00Z")')
+      .replace(
+        'nodeKey = process.env.OPENROUTER_API_KEY?.trim() || "";',
+        `nodeKey = existsSync(${JSON.stringify(credentialFlag)}) ? "fixture-server-key" : "";`,
+      ),
 );
-// Only the isolated report action gets an explicit after-close test clock.
+// The isolated quota scenario uses a fixed in-window clock; the report gets an after-close clock.
 // No clock override or fixture code is copied back into production source.
 const reportActionPath = path.join(fixture, "src/app/actions/chat-actions.ts");
 await fs.writeFile(
@@ -613,6 +615,7 @@ const child = spawn(
       NEXT_PUBLIC_DEMO_WATERMARK: "true",
       OPENROUTER_API_KEY: "",
       OPENROUTER_MODEL: "fixture/model:free",
+      AI_DAILY_QUOTA_ENABLED: "false",
     },
     stdio: ["ignore", log.fd, log.fd],
   },
@@ -1040,6 +1043,11 @@ try {
       .getByText("Raio-X · dados calculados + OpenRouter", { exact: true })
       .waitFor();
     await p.getByText(/Interpretação OpenRouter da fixture/).waitFor();
+    assert.equal(
+      calls.filter((c) => c.name === "consume_raiox_ai_quota").length,
+      0,
+      "Daily quota RPC must not be invoked while paused",
+    );
     assert(
       messages.some(
         (m) =>

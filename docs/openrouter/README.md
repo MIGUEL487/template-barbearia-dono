@@ -1,3 +1,5 @@
+> Atualização: [cota da Auto Stilo suspensa por até 24h](../ai-quota-temporary/README.md), sem reset de dados e sem liberar modelos pagos.
+
 > Política posterior obrigatória: [somente modelos gratuitos](../ai-free-only/README.md). Use `OPENROUTER_MODEL=openrouter/free`.
 
 > Correção posterior: [TypeError no Workers, roteador gratuito e diagnóstico por etapa](../openrouter-internal/README.md). O cliente HTTP usa `manual` com recusa explícita de redirects, compatível com Workers.

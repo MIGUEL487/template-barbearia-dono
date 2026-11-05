@@ -30,13 +30,15 @@ export async function aiDiagnosticAction(
         workerContext: boolean;
         model: string;
         modelAdjusted: boolean;
+        dailyQuotaEnabled: boolean;
+        dailyQuotaPauseUntil: string | null;
       }
     | undefined;
   try {
     if (!["A", "B", "C", "D"].includes(profile))
       throw new AiFailure("internal");
     const { db, shop } = await resolveCurrentShop();
-    const runtime = aiRuntime();
+    const runtime = aiRuntime(shop);
     timeoutMs = runtime.timeoutMs;
     metadata = {
       keyPresent: Boolean(runtime.key),
@@ -44,6 +46,8 @@ export async function aiDiagnosticAction(
       workerContext: runtime.contextAvailable,
       model: runtime.model,
       modelAdjusted: runtime.modelAdjusted,
+      dailyQuotaEnabled: runtime.dailyQuotaEnabled,
+      dailyQuotaPauseUntil: runtime.dailyQuotaPauseUntil,
     };
     if (!runtime.key) throw new AiFailure("missing_runtime_key");
     if (!runtime.model) throw new AiFailure("invalid_model");
@@ -105,6 +109,10 @@ export async function aiDiagnosticAction(
       runtime.key,
       aggregate,
       async () => {
+        if (!runtime.dailyQuotaEnabled) {
+          stage = "provider_request";
+          return;
+        }
         stage = "supabase_quota";
         const quotaStarted = performance.now();
         const { data, error } = await db.rpc("consume_raiox_ai_quota", {

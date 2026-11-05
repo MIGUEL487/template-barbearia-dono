@@ -7,7 +7,10 @@ import {
   canonicalAiModel,
   isFreeAiModel,
 } from "@/lib/saas2/openrouter";
-export function aiRuntime() {
+export const aiQuotaPauseShop = "11111111-1111-1111-1111-111111111111";
+export const aiQuotaPauseStart = "2026-11-05T22:09:03Z";
+export const aiQuotaPauseUntil = "2026-11-06T22:09:03Z";
+export function aiRuntime(shop?: string, now = Date.now()) {
   let env: Record<string, unknown> = {},
     contextAvailable = false;
   try {
@@ -35,6 +38,21 @@ export function aiRuntime() {
         ? "process_env"
         : "missing",
     contextAvailable,
+    dailyQuotaEnabled: !(
+      shop === aiQuotaPauseShop &&
+      now >= Date.parse(aiQuotaPauseStart) &&
+      now < Date.parse(aiQuotaPauseUntil) &&
+      !["true", "1"].includes(
+        String(
+          env.AI_DAILY_QUOTA_ENABLED ??
+            process.env.AI_DAILY_QUOTA_ENABLED ??
+            "false",
+        )
+          .trim()
+          .toLowerCase(),
+      )
+    ),
+    dailyQuotaPauseUntil: shop === aiQuotaPauseShop ? aiQuotaPauseUntil : null,
     model: validAiModel(effective) ? effective : "",
     modelAdjusted: configured !== effective,
     timeoutMs: boundedAiTimeout(

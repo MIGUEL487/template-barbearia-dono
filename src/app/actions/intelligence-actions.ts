@@ -208,7 +208,7 @@ export async function generateAiAction(date: string) {
       end: date,
       barber: null,
     });
-    const { key, model, timeoutMs } = aiRuntime();
+    const { key, model, timeoutMs, dailyQuotaEnabled } = aiRuntime(shop);
     if (!key)
       return {
         ok: false as const,
@@ -231,6 +231,7 @@ export async function generateAiAction(date: string) {
       key,
       aggregate,
       async () => {
+        if (!dailyQuotaEnabled) return;
         const { data, error } = await db.rpc("consume_raiox_ai_quota", {
           p_barbershop_id: shop,
         });

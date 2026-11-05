@@ -150,8 +150,13 @@ export function AiDiagnostic() {
       </label>
       <p className="s3-note">
         Teste autenticado no servidor. C e D usam somente indicadores agregados,
-        sem nomes ou contatos. Execute um perfil por vez. Usa até uma tentativa
-        da cota diária da loja. Nenhuma chave é exibida.
+        sem nomes ou contatos. Execute um perfil por vez.{" "}
+        {result && "dailyQuotaEnabled" in result
+          ? result.dailyQuotaEnabled
+            ? "Usa até uma tentativa da cota diária da loja."
+            : `Cota da Auto Stilo suspensa até ${new Date(result.dailyQuotaPauseUntil!).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })} (São Paulo). Limites do provedor continuam valendo.`
+          : "Consulte o diagnóstico para verificar a cota desta loja."}{" "}
+        Nenhuma chave é exibida.
       </p>
       <Button
         variant="secondary"

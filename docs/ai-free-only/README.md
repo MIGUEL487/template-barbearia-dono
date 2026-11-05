@@ -12,7 +12,7 @@ O resultado de produção informado pelo proprietário comprovou uma completion 
 - Somente o roteador documentado `openrouter/free` ou IDs de variantes `:free` são aceitos. O roteador dinâmico usa apenas a rota gratuita, sem lista de modelos alternativos pagos.
 - Para modelos concretos `:free`, o catálogo precisa confirmar preços de prompt/completion em zero e nenhum campo de preço positivo/inválido. O sufixo sozinho não basta. Se não for possível confirmar o preço, a geração falha fechada.
 - Todas as completions levam `provider.max_price` de prompt/completion zero, `require_parameters=true` e `allow_fallbacks=false`.
-- Cota atômica de cinco chamadas, autenticação, RLS, validação JSON, limites de tokens, timeout e histórico permanecem ativos. Gratuito não significa sem rate limit ou disponibilidade garantida; falhas mantêm fallback determinístico, sem trocar para modelo pago.
+- Autenticação, RLS, validação JSON, limites de tokens, timeout e histórico permanecem ativos. A cota da Auto Stilo foi posteriormente [suspensa em janela de 24h](../ai-quota-temporary/README.md), até 06/11/2026 19:09:03 São Paulo; outras lojas permanecem limitadas. AI_DAILY_QUOTA_ENABLED=true restaura antecipadamente e o prazo expira automaticamente. Gratuito não significa sem rate limit ou disponibilidade garantida; falhas mantêm fallback determinístico, sem trocar para modelo pago.
 
 Configuração recomendada: `OPENROUTER_MODEL=openrouter/free` no runtime. O secret continua `OPENROUTER_API_KEY`, nunca NEXT_PUBLIC_. A proteção do código independe de corrigir a variável paga antiga. Nenhuma conta, secret ou configuração externa foi alterada por esta tarefa.
 

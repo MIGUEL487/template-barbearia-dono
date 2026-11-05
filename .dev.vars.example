@@ -10,3 +10,6 @@ ADMIN_BASE_URL=http://localhost:8788
 OPENROUTER_API_KEY=
 OPENROUTER_MODEL=openrouter/free
 OPENROUTER_TIMEOUT_MS=30000
+
+# Somente Auto Stilo: pausa até 06/11/2026 19:09:03 São Paulo; true restaura antes. Outras lojas sempre têm cota.
+AI_DAILY_QUOTA_ENABLED=false

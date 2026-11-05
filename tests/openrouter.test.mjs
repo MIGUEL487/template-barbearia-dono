@@ -451,7 +451,7 @@ test("Authenticated A–D diagnostic separates data stage, preserves quota gate 
     )
     .replace(
       /import \{ aiRuntime \} from [^;]+;/,
-      'const aiRuntime=()=>({key:"fixture-private-key",source:"cloudflare_binding",contextAvailable:true,model:"fixture/model:free",timeoutMs:30000});',
+      'const aiRuntime=()=>({key:"fixture-private-key",source:"cloudflare_binding",contextAvailable:true,model:"fixture/model:free",timeoutMs:30000,dailyQuotaEnabled:globalThis.diagnosticFixture?.dailyEnabled??true});',
     )
     .replace(
       /import \{ cachedInterpretation, aiDeadlineMs,?\s*\} from [^;]+;/,
@@ -545,9 +545,22 @@ test("Authenticated A–D diagnostic separates data stage, preserves quota gate 
     assert.equal(quota, 5);
     assert(!JSON.stringify(dataFailure).includes("sensitive provider text"));
     authorized = false;
+    fixture.dailyEnabled = false;
     const denied = await aiDiagnosticAction(true, "A");
     assert.equal(denied.category, "authorization");
     assert.equal(quota, 5);
+    authorized = true;
+    dataFails = false;
+    fixture.dailyEnabled = false;
+    const paused = await aiDiagnosticAction(true, "A");
+    assert(paused.ok);
+    assert.equal(paused.dailyQuotaEnabled, false);
+    assert.equal(quota, 5);
+    assert.equal(providerCalls, 5);
+    fixture.dailyEnabled = true;
+    const resumed = await aiDiagnosticAction(true, "A");
+    assert.equal(resumed.category, "app_quota");
+    assert.equal(quota, 6);
   } finally {
     delete globalThis.diagnosticFixture;
   }
@@ -817,5 +830,50 @@ test("A :free label is insufficient when catalog pricing is nonzero", async () =
     assert.equal(posts, 0);
   } finally {
     globalThis.fetch = original;
+  }
+});
+
+test("Temporary quota pause applies only to Auto Stilo during the fixed window and can be restored early", () => {
+  const old = process.env.AI_DAILY_QUOTA_ENABLED;
+  const shop = "11111111-1111-1111-1111-111111111111",
+    during = Date.parse("2026-11-05T23:00:00Z");
+  try {
+    delete process.env.AI_DAILY_QUOTA_ENABLED;
+    globalThis.fixtureWorkerEnv = {
+      OPENROUTER_API_KEY: "fixture",
+      OPENROUTER_MODEL: "openrouter/free",
+    };
+    assert.equal(aiRuntime(shop, during).dailyQuotaEnabled, false);
+    assert.equal(
+      aiRuntime("99999999-9999-9999-9999-999999999999", during)
+        .dailyQuotaEnabled,
+      true,
+    );
+    assert.equal(aiRuntime(undefined, during).dailyQuotaEnabled, true);
+    for (const now of [
+      Date.parse("2026-11-05T22:09:02Z"),
+      Date.parse("2026-11-06T22:09:03Z"),
+      Date.parse("2026-11-07T00:00:00Z"),
+      NaN,
+    ])
+      assert.equal(aiRuntime(shop, now).dailyQuotaEnabled, true);
+    for (const flag of ["true", "True", "TRUE", "1"]) {
+      globalThis.fixtureWorkerEnv.AI_DAILY_QUOTA_ENABLED = flag;
+      assert.equal(aiRuntime(shop, during).dailyQuotaEnabled, true);
+    }
+    for (const flag of ["false", "False", "FALSE", "0"]) {
+      globalThis.fixtureWorkerEnv.AI_DAILY_QUOTA_ENABLED = flag;
+      assert.equal(aiRuntime(shop, during).dailyQuotaEnabled, false);
+      assert.equal(aiRuntime("other-shop", during).dailyQuotaEnabled, true);
+      assert.equal(
+        aiRuntime(shop, Date.parse("2026-11-07T00:00:00Z")).dailyQuotaEnabled,
+        true,
+      );
+    }
+    assert.equal(aiRuntime(shop, during).model, "openrouter/free");
+  } finally {
+    delete globalThis.fixtureWorkerEnv;
+    if (old === undefined) delete process.env.AI_DAILY_QUOTA_ENABLED;
+    else process.env.AI_DAILY_QUOTA_ENABLED = old;
   }
 });

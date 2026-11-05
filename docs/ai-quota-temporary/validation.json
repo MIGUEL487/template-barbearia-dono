@@ -1,0 +1,21 @@
+{
+  "base": "2a4461a1f40ffee4db979bf01be21ab26bde40fe",
+  "checkedAt": "2026-11-05T22:14:37.807304+00:00",
+  "checks": {
+    "unit": "18 passed;other shops and expired window always enforce quota;early restoration;unauthorized session denied",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build:cf": "passed",
+    "playwright": "passed;1440/390;authenticated Auto Stilo chat persisted;zero quota RPC calls"
+  },
+  "pauseShop": "11111111-1111-1111-1111-111111111111",
+  "pauseStart": "2026-11-05T22:09:03Z",
+  "pauseUntil": "2026-11-06T22:09:03Z",
+  "otherShopsQuotaEnabled": true,
+  "globalQuotaDisable": false,
+  "paidModelsAllowed": false,
+  "productionDatabaseWritesByCodex": false,
+  "sqlChanges": false,
+  "productionChatVerified": false,
+  "rejectedProposal": "Global no-expiration pause was rejected by automatic review; never published. Replaced with shop-scoped 24h exception."
+}
