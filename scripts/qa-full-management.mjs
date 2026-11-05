@@ -6,7 +6,7 @@ import { spawn } from "node:child_process";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 const root = process.cwd(),
-  out = path.join(root, "docs/openrouter/evidencias");
+  out = path.join(root, "docs/openrouter-internal/evidencias");
 await fs.mkdir(out, { recursive: true });
 const shop = "11111111-1111-1111-1111-111111111111",
   uid = "99999999-9999-4999-8999-999999999999",

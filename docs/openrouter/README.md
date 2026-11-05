@@ -1,3 +1,5 @@
+> Correção posterior: [TypeError no Workers, roteador gratuito e diagnóstico por etapa](../openrouter-internal/README.md). O cliente HTTP usa `manual` com recusa explícita de redirects, compatível com Workers.
+
 # Raio-X — OpenRouter
 
 Migração da base `2fe103f52c2e70c8303f6ea718c82385627af39a`, preservada em `backup/pre-openrouter`. Branch `feat/openrouter-raiox`.
@@ -24,7 +26,7 @@ Fontes oficiais lidas:
 - [Preferências de provedor: require_parameters/allow_fallbacks](https://github.com/OpenRouterTeam/typescript-sdk/blob/680c2f4703e11205fc089440c5f7ff73e484c44c/src/models/providerpreferences.ts).
 - [Documentação oficial](https://openrouter.ai/docs) e [catálogo ao vivo](https://openrouter.ai/api/v1/models), cuja consulta direta permaneceu indisponível na rede efetiva desta sessão.
 
-No runtime, o código consulta `/api/v1/models`, exige o ID exato e o parâmetro `structured_outputs`, e só depois autoriza uma tentativa de geração/cota. Catálogo validado é reutilizado por até dez minutos. Modelo ausente/incompatível causa erro explícito, sem geração, sem substituição automática e sem consumo de cota da aplicação nesse preflight. A aceitação da chave é comprovada somente por uma completion bem-sucedida, não pela leitura de um catálogo público nem pela existência do secret.
+Para modelos concretos, o código consulta `/api/v1/models`, exige o ID exato e o parâmetro `structured_outputs`, e só depois autoriza uma tentativa de geração/cota. A rota dinâmica documentada `openrouter/free` segue o contrato do roteador com schema obrigatório e preço máximo zero; a configuração antiga `openrouter/auto:free` é ajustada com aviso explícito para essa rota. Catálogo validado é reutilizado por até dez minutos. Modelo ausente/incompatível causa erro explícito, sem geração, sem substituição automática e sem consumo de cota da aplicação nesse preflight. A aceitação da chave é comprovada somente por uma completion bem-sucedida, não pela leitura de um catálogo público nem pela existência do secret.
 
 ## Arquitetura e limites
 

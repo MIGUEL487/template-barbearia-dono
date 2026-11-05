@@ -1,0 +1,212 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "missingSchema": true,
+      "readOnlyLedger": true,
+      "explicitUnsavedChat": true
+    },
+    {
+      "emptyAnalytics": true,
+      "emptyLedger": true,
+      "generatedBriefing": true,
+      "generatedClosing": true
+    },
+    {
+      "managementPages": true,
+      "supportRoute": true,
+      "profileHistory": true,
+      "quickBookingAndStaffModals": true,
+      "emptyManagement": true,
+      "dataErrors": true,
+      "login": true
+    }
+  ],
+  "calls": [
+    {
+      "operation": "GET user",
+      "count": 598
+    },
+    {
+      "operation": "OPTIONS user",
+      "count": 146
+    },
+    {
+      "operation": "OPTIONS shop_members",
+      "count": 146
+    },
+    {
+      "operation": "GET shop_members",
+      "count": 320
+    },
+    {
+      "operation": "GET websocket",
+      "count": 87
+    },
+    {
+      "operation": "OPTIONS financial_transactions",
+      "count": 17
+    },
+    {
+      "operation": "GET financial_transactions",
+      "count": 293
+    },
+    {
+      "operation": "OPTIONS bookings",
+      "count": 6
+    },
+    {
+      "operation": "GET bookings",
+      "count": 342
+    },
+    {
+      "operation": "GET barbershops",
+      "count": 173
+    },
+    {
+      "operation": "GET barbers",
+      "count": 182
+    },
+    {
+      "operation": "GET services",
+      "count": 184
+    },
+    {
+      "operation": "GET working_hours",
+      "count": 190
+    },
+    {
+      "operation": "GET time_off",
+      "count": 96
+    },
+    {
+      "operation": "GET closed_days",
+      "count": 103
+    },
+    {
+      "operation": "GET raiox_reports",
+      "count": 81
+    },
+    {
+      "operation": "GET daily_goals",
+      "count": 14
+    },
+    {
+      "operation": "POST get_availability",
+      "count": 1
+    },
+    {
+      "operation": "POST raiox_reports",
+      "count": 3
+    },
+    {
+      "operation": "OPTIONS barbers",
+      "count": 14
+    },
+    {
+      "operation": "OPTIONS services",
+      "count": 17
+    },
+    {
+      "operation": "OPTIONS working_hours",
+      "count": 6
+    },
+    {
+      "operation": "OPTIONS time_off",
+      "count": 4
+    },
+    {
+      "operation": "OPTIONS closed_days",
+      "count": 11
+    },
+    {
+      "operation": "OPTIONS customers",
+      "count": 4
+    },
+    {
+      "operation": "GET customers",
+      "count": 8
+    },
+    {
+      "operation": "POST services",
+      "count": 1
+    },
+    {
+      "operation": "OPTIONS barber_services",
+      "count": 2
+    },
+    {
+      "operation": "GET barber_services",
+      "count": 2
+    },
+    {
+      "operation": "OPTIONS site_settings",
+      "count": 5
+    },
+    {
+      "operation": "GET site_settings",
+      "count": 5
+    },
+    {
+      "operation": "POST save_manual_financial_entry",
+      "count": 6
+    },
+    {
+      "operation": "POST void_manual_financial_entry",
+      "count": 2
+    },
+    {
+      "operation": "GET raiox_conversations",
+      "count": 36
+    },
+    {
+      "operation": "POST raiox_conversations",
+      "count": 6
+    },
+    {
+      "operation": "GET raiox_messages",
+      "count": 24
+    },
+    {
+      "operation": "POST raiox_messages",
+      "count": 20
+    },
+    {
+      "operation": "GET models",
+      "count": 2
+    },
+    {
+      "operation": "POST consume_raiox_ai_quota",
+      "count": 4
+    },
+    {
+      "operation": "POST completions",
+      "count": 4
+    },
+    {
+      "operation": "GET consents",
+      "count": 2
+    },
+    {
+      "operation": "GET waitlist_entries",
+      "count": 6
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "runtime": "workerd",
+  "compatibilityDate": "2026-10-27",
+  "externalCalls": 0,
+  "before": {
+    "ok": false,
+    "calls": 0,
+    "stage": "model_catalog",
+    "category": "runtime_incompatible",
+    "status": null,
+    "rpcCode": null,
+    "message": "IA indisponível: O cliente HTTP encontrou uma incompatibilidade com o runtime Workers. Consulte o diagnóstico de etapa.",
+    "trace": {
+      "stage": "model_catalog",
+      "durationMs": 0,
+      "origin": "network",
+      "deadlineMs": 5000,
+      "inputBytes": 0,
+      "httpStatus": null
+    },
+    "exceptionType": "TypeError"
+  },
+  "after": {
+    "minimum": {
+      "ok": true,
+      "calls": 1,
+      "stage": "provider_request",
+      "summary": "Chamada mínima concluída.",
+      "cacheHit": false
+    },
+    "structured": {
+      "ok": true,
+      "calls": 2,
+      "stage": "provider_request",
+      "summary": "Resposta estruturada do provedor HTTP local.",
+      "cacheHit": false
+    },
+    "free": {
+      "ok": true,
+      "calls": 3,
+      "stage": "provider_request",
+      "summary": "Resposta estruturada do provedor HTTP local.",
+      "cacheHit": false
+    },
+    "redirect": {
+      "ok": false,
+      "calls": 4,
+      "stage": "provider_request",
+      "category": "provider_redirect",
+      "status": 302,
+      "rpcCode": null,
+      "message": "IA indisponível: A API solicitou redirecionamento. O servidor recusou encaminhar a credencial para outro destino.",
+      "trace": {
+        "stage": "provider_request",
+        "durationMs": 1,
+        "deadlineMs": 3000,
+        "inputBytes": 31,
+        "httpStatus": 302,
+        "origin": "upstream_http"
+      },
+      "exceptionType": null
+    },
+    "quotaDenied": {
+      "ok": false,
+      "calls": 5,
+      "stage": "supabase_quota",
+      "category": "app_quota",
+      "status": null,
+      "rpcCode": null,
+      "message": "IA indisponível: O limite diário de cinco chamadas do Raio-X desta loja foi atingido. Esse limite é separado dos créditos OpenRouter.",
+      "trace": {
+        "stage": "supabase_quota",
+        "durationMs": 0,
+        "origin": "application",
+        "deadlineMs": 3000,
+        "inputBytes": 0,
+        "httpStatus": null
+      },
+      "exceptionType": null
+    },
+    "counts": {
+      "catalog": 1,
+      "generation": 5,
+      "leaked": 0
+    }
+  }
+}

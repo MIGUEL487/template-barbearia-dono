@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-11-05T21:32:35.797298+00:00",
+  "base": "8186bb9ddf11e91f23bdbf69cf8ab57a4adfe216",
+  "branch": "fix/openrouter-preflight-internal",
+  "reproducedException": "TypeError: Invalid redirect value; workerd supports follow/manual, not error",
+  "before": {
+    "stage": "model_catalog",
+    "httpStatus": null,
+    "quotaCalls": 0,
+    "providerCalls": 0
+  },
+  "checks": {
+    "unit": "14 passed",
+    "workerd": "passed;before/after native HTTP;see worker-verification.json",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build:cf": "passed",
+    "playwright": "passed;1440/390;authenticated fake-Supabase flow;OpenRouter fixture;history;402 fallback;quota errors",
+    "tokens:check": "passed",
+    "test:saas2": "passed;SQL installer check",
+    "test:saas3": "passed;SQL installer check",
+    "test:shop-selection": "passed",
+    "test:security": "passed"
+  },
+  "sourceSqlStylesPublicWranglerChanged": false,
+  "realProductionVerified": false,
+  "realProviderCalls": 0,
+  "liveBlocker": "Public production URL request failed at managed proxy with CONNECT403; no production session or provider credential in Codex",
+  "productionUrl": "https://template-barbearia-dono.mi-c-openheimer.workers.dev/raio-x",
+  "productionAcceptance": [
+    "New authenticated completion A succeeds",
+    "Actual aggregate question renders OpenRouter reply without fallback",
+    "Same generated response saved and reopened after reload"
+  ]
+}
