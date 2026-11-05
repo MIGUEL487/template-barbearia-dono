@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-11-05T13:35:45.649061+00:00",
+  "base": "54634ba24ba8fd45f37686ad9640fe03f336b9f2",
+  "branch": "fix/integrated-navigation-gemini-timeout",
+  "checks": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "build:cf": "passed",
+    "wrangler deploy --dry-run": "passed; no deploy",
+    "tokens:check": "passed;48ebe6b7",
+    "test:saas2": "passed;installer check included",
+    "test:saas3": "passed;installer check included",
+    "test:shop-gemini": "passed",
+    "test:saas31": "passed;direct execution 7 tests",
+    "test:security": "passed",
+    "playwright_management": "passed;12 areas;1440x1000 and390x1000;isolated fake Supabase",
+    "playwright_notifications": "passed;1440 and390;subscribe,sound,realtime,deduplication,service-worker,unsubscribe,iPhone guidance",
+    "dataContracts": "unchanged;see contracts.json",
+    "diffWhitespace": "passed"
+  },
+  "productionDatabaseWrites": false,
+  "clientRepositoryChanged": false,
+  "liveGeminiVerified": false,
+  "figmaFramesInspected": false,
+  "remaining": [
+    "Figma frame inspection unavailable under effective network policy",
+    "Authenticated production Gemini A-D tests require real Worker access",
+    "Active deployment and published application HTTP require independent confirmation beyond build check"
+  ]
+}

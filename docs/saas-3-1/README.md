@@ -1,3 +1,5 @@
+> Atualização: timeout, diagnóstico A–D e navegação foram revisados em [navegação integrada](../integrated-navigation/README.md). A descrição de 12 s abaixo registra a entrega anterior.
+
 # Auto Stilo SaaS 3.1
 
 ## Referência e preservação

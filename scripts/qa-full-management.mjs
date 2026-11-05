@@ -6,7 +6,7 @@ import { spawn } from "node:child_process";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 const root = process.cwd(),
-  out = path.join(root, "docs/full-redesign/evidencias");
+  out = path.join(root, "docs/integrated-navigation/evidencias");
 await fs.mkdir(out, { recursive: true });
 const shop = "11111111-1111-1111-1111-111111111111",
   uid = "99999999-9999-4999-8999-999999999999",
@@ -873,6 +873,24 @@ try {
       false,
     );
     await p.goto("http://127.0.0.1:8897/raio-x");
+    const reportDetails = p.getByRole("button", {
+      name: "Detalhes deste relatório",
+      exact: true,
+    });
+    await reportDetails.waitFor();
+    await reportDetails.click();
+    await p.getByText(/Resumo calculado dos registros da loja/).waitFor();
+    assert(p.url().endsWith("/raio-x"));
+    await p.waitForTimeout(220);
+    await p.screenshot({
+      path: `${out}/raio-x-relatorio-inline-${width}.png`,
+      fullPage: true,
+    });
+    const entry = p.getByRole("textbox", { name: "Mensagem para o Raio-X" });
+    await entry.fill("Teste de quebra");
+    await entry.press("Shift+Enter");
+    assert((await entry.inputValue()).includes("\n"));
+    await entry.fill("");
     await p
       .locator(".s3-shortcuts")
       .getByRole("button", { name: "Resumo de hoje", exact: true })
@@ -909,14 +927,25 @@ try {
       .first()
       .waitFor();
     await p.reload();
+    assert.equal(await p.getByRole("dialog").isVisible(), false);
+    if (width >= 1024) {
+      const sidebar = await p.locator(".admin-sidebar").boundingBox();
+      assert.equal(sidebar.x, 0);
+      assert.equal(sidebar.y, 0);
+      assert.equal(Math.round(sidebar.height), p.viewportSize().height);
+    }
     await p
-      .getByRole("button", { name: "Resumo de hoje", exact: true })
-      .first()
-      .waitFor();
+      .getByRole("button", { name: "Histórico e opções", exact: true })
+      .click();
+    await p.getByRole("dialog").waitFor();
+    await p.waitForTimeout(220);
+    await p.screenshot({ path: `${out}/raio-x-historico-${width}.png` });
     await p
+      .getByRole("dialog")
       .getByRole("button", { name: "Resumo de hoje", exact: true })
       .first()
       .click();
+    await p.getByRole("dialog").waitFor({ state: "hidden" });
     await p
       .getByText("Raio-X · resumo calculado", { exact: true })
       .first()
@@ -925,7 +954,7 @@ try {
     await p.screenshot({ path: `${out}/raio-x-${width}.png`, fullPage: true });
     const before = reports.length;
     await p
-      .getByRole("button", { name: "◷ Relatórios do expediente", exact: true })
+      .getByRole("button", { name: "Relatórios do expediente", exact: true })
       .click();
     await p.waitForTimeout(250);
     await p.screenshot({
@@ -934,7 +963,7 @@ try {
     });
     await p.reload();
     await p
-      .getByRole("button", { name: "◷ Relatórios do expediente", exact: true })
+      .getByRole("button", { name: "Relatórios do expediente", exact: true })
       .waitFor();
     assert.equal(reports.length, before);
     assert.equal(
@@ -1024,6 +1053,9 @@ try {
     .fill("Quanto faturei hoje?");
   await p.getByRole("button", { name: "Enviar ↗" }).click();
   await p.getByText(/Prévia calculada sem histórico/).waitFor();
+  await p
+    .getByRole("button", { name: "Histórico e opções", exact: true })
+    .click();
   await p.getByRole("button", { name: "Conexão Gemini", exact: true }).click();
   await p.getByText(/missing_runtime_key/).waitFor();
   const quotaBefore = calls.filter(
