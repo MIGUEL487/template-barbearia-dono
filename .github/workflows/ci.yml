@@ -35,7 +35,7 @@ jobs:
         run: npm run build
 
       - name: Validate OpenRouter contracts and tenant isolation
-        run: npm run test:openrouter && npm run test:shop-selection
+        run: npm run test:openrouter && npm run test:openrouter:worker && npm run test:shop-selection
 
       - name: Run existing security unit tests
         run: npm run test:security --if-present

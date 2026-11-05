@@ -6,7 +6,11 @@ import {
   aiDeadlineMs,
   type AiProbe,
 } from "@/lib/saas2/openrouter";
-import { AiFailure, safeAiDiagnostic } from "@/lib/saas2/ai-errors";
+import {
+  AiFailure,
+  safeAiDiagnostic,
+  assertAiQuotaResult,
+} from "@/lib/saas2/ai-errors";
 import { loadIntelligence } from "@/lib/saas2/source";
 import { localDate, shiftDate } from "@/lib/saas2/analytics";
 export async function aiDiagnosticAction(
@@ -25,6 +29,7 @@ export async function aiDiagnosticAction(
         source: string;
         workerContext: boolean;
         model: string;
+        modelAdjusted: boolean;
       }
     | undefined;
   try {
@@ -38,6 +43,7 @@ export async function aiDiagnosticAction(
       source: runtime.source,
       workerContext: runtime.contextAvailable,
       model: runtime.model,
+      modelAdjusted: runtime.modelAdjusted,
     };
     if (!runtime.key) throw new AiFailure("missing_runtime_key");
     if (!runtime.model) throw new AiFailure("invalid_model");
@@ -105,13 +111,15 @@ export async function aiDiagnosticAction(
           p_barbershop_id: shop,
         });
         quotaMs = Math.round(performance.now() - quotaStarted);
-        if (error) throw new AiFailure("quota_check", null, error.code);
-        if (!data) throw new AiFailure("app_quota");
+        assertAiQuotaResult(data, error);
         stage = "provider_request";
       },
       runtime.model,
       profile,
       runtime.timeoutMs,
+      (value) => {
+        stage = value;
+      },
     );
     const timing = {
       profile,
@@ -126,7 +134,7 @@ export async function aiDiagnosticAction(
     };
     console.info(
       "[IA diagnostic]",
-      JSON.stringify({ ...timing, model: runtime.model, status: "success" }),
+      JSON.stringify({ ...timing, modelConfigured: true, status: "success" }),
     );
     return {
       ok: true as const,
@@ -156,7 +164,7 @@ export async function aiDiagnosticAction(
     const diagnostic = safeAiDiagnostic(failure);
     const timing = {
       profile,
-      stage,
+      stage: failure.trace?.stage || stage,
       dataMs,
       quotaMs,
       totalMs: Math.round(performance.now() - started),

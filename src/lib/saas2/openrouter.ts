@@ -38,6 +38,9 @@ export function boundedAiTimeout(value: unknown) {
   const n = Number(value);
   return Number.isInteger(n) && n >= 1000 && n <= 45000 ? n : aiDeadlineMs;
 }
+export function canonicalAiModel(model: string) {
+  return model === "openrouter/auto:free" ? "openrouter/free" : model;
+}
 export function validAiModel(model: string) {
   return /^[a-z0-9][a-z0-9._-]{0,80}\/[a-z0-9][a-z0-9._:-]{0,120}$/i.test(
     model,
@@ -110,6 +113,10 @@ async function readJson(response: Response, maxBytes: number) {
   }
 }
 async function responseJson(response: Response, maxBytes: number) {
+  if (response.status >= 300 && response.status < 400) {
+    await response.body?.cancel();
+    throw new AiFailure("provider_redirect", response.status);
+  }
   if (!response.ok) {
     let message = "";
     try {
@@ -135,6 +142,9 @@ const models = new Map<
 export async function verifyOpenRouterModel(key: string, model: string) {
   if (!key) throw new AiFailure("missing_runtime_key");
   if (!validAiModel(model)) throw new AiFailure("invalid_model");
+  // Documented virtual free router chooses a compatible free model per request.
+  // It is not a fixed catalog model; strict response_format remains required at generation.
+  if (model === "openrouter/free") return { id: model, structured: true };
   const existing = models.get(model);
   if (existing && existing.expires > Date.now()) return existing.value;
   const value = (async () => {
@@ -151,7 +161,7 @@ export async function verifyOpenRouterModel(key: string, model: string) {
         headers: { Authorization: `Bearer ${key}` },
         signal: controller.signal,
         cache: "no-store",
-        redirect: "error",
+        redirect: "manual",
       });
       httpStatus = response.status;
       const data = await responseJson(response, 4 * 1024 * 1024);
@@ -226,12 +236,18 @@ export async function interpretWithOpenRouter(
       },
       signal: controller.signal,
       cache: "no-store",
-      redirect: "error",
+      redirect: "manual",
       body: JSON.stringify({
         model,
         stream: false,
         max_tokens: profile === "A" ? 64 : 1400,
-        provider: { require_parameters: true, allow_fallbacks: false },
+        provider: {
+          require_parameters: true,
+          allow_fallbacks: false,
+          ...(model === "openrouter/free"
+            ? { max_price: { prompt: 0, completion: 0 } }
+            : {}),
+        },
         messages:
           profile === "A"
             ? [{ role: "user", content: contents }]
@@ -303,7 +319,13 @@ export async function interpretWithOpenRouter(
     }
     console.info(
       "[OpenRouter]",
-      JSON.stringify({ ...trace, ...usage, model, status: "success" }),
+      JSON.stringify({
+        ...trace,
+        ...usage,
+        modelConfigured: true,
+        freeRouter: model === "openrouter/free",
+        status: "success",
+      }),
     );
     return {
       summary: result.resumo,
@@ -336,7 +358,11 @@ export async function interpretWithOpenRouter(
     };
     console.warn(
       "[OpenRouter]",
-      JSON.stringify({ ...safeAiDiagnostic(e), model }),
+      JSON.stringify({
+        ...safeAiDiagnostic(e),
+        modelConfigured: true,
+        freeRouter: model === "openrouter/free",
+      }),
     );
     throw e;
   } finally {
@@ -358,41 +384,86 @@ export async function cachedInterpretation(
   model = aiModel,
   profile: AiProbe = "D",
   timeout = aiDeadlineMs,
+  onStage?: (stage: string) => void,
 ) {
-  const digest = await crypto.subtle.digest(
-    "SHA-256",
-    new TextEncoder().encode(
-      JSON.stringify({
-        provider: "openrouter",
-        key,
-        model,
-        profile,
-        timeout: boundedAiTimeout(timeout),
-        context: profile === "A" ? "minimal" : context(aggregate),
-      }),
-    ),
-  );
-  const id =
-    shop +
-    ":" +
-    Array.from(new Uint8Array(digest), (b) =>
-      b.toString(16).padStart(2, "0"),
-    ).join("");
-  for (const [k, v] of pending) if (v.expires < Date.now()) pending.delete(k);
-  const existing = pending.get(id);
-  if (existing) return { ...(await existing.value), cacheHit: true };
-  const value = (async () => {
-    await verifyOpenRouterModel(key, model);
-    await consume();
-    return interpretWithOpenRouter(key, aggregate, model, profile, timeout);
-  })();
-  const entry = { expires: Date.now() + 300000, value };
-  if (pending.size >= 100) pending.delete(pending.keys().next().value!);
-  pending.set(id, entry);
+  model = canonicalAiModel(model);
+  let stage = "cache_digest";
+  const started = performance.now();
+  const update = (value: string) => {
+    stage = value;
+    onStage?.(value);
+  };
   try {
-    return { ...(await value), cacheHit: false };
-  } catch (e) {
-    entry.expires = Date.now() + 15000;
-    throw e;
+    update("cache_digest");
+    const digest = await crypto.subtle.digest(
+      "SHA-256",
+      new TextEncoder().encode(
+        JSON.stringify({
+          provider: "openrouter",
+          key,
+          model,
+          profile,
+          timeout: boundedAiTimeout(timeout),
+          context: profile === "A" ? "minimal" : context(aggregate),
+        }),
+      ),
+    );
+    const id =
+      shop +
+      ":" +
+      Array.from(new Uint8Array(digest), (b) =>
+        b.toString(16).padStart(2, "0"),
+      ).join("");
+    update("cache_lookup");
+    for (const [k, v] of pending) if (v.expires < Date.now()) pending.delete(k);
+    const existing = pending.get(id);
+    if (existing) {
+      update("cache_hit");
+      return { ...(await existing.value), cacheHit: true };
+    }
+    const value = (async () => {
+      update(model === "openrouter/free" ? "model_router" : "model_catalog");
+      await verifyOpenRouterModel(key, model);
+      update("supabase_quota");
+      await consume();
+      update("provider_request");
+      return interpretWithOpenRouter(key, aggregate, model, profile, timeout);
+    })();
+    const entry = { expires: Date.now() + 300000, value };
+    if (pending.size >= 100) pending.delete(pending.keys().next().value!);
+    pending.set(id, entry);
+    try {
+      return { ...(await value), cacheHit: false };
+    } catch (e) {
+      entry.expires = Date.now() + 15000;
+      throw e;
+    }
+  } catch (error) {
+    let failure = classifyAiError(error);
+    if (
+      failure.category === "internal" ||
+      (stage === "supabase_quota" && !(error instanceof AiFailure))
+    ) {
+      const category =
+        stage === "supabase_quota"
+          ? "quota_check"
+          : stage.startsWith("cache_")
+            ? "cache_error"
+            : "internal";
+      const mapped = new AiFailure(category);
+      mapped.exceptionType = failure.exceptionType;
+      failure = mapped;
+    }
+    if (!failure.trace)
+      failure.trace = {
+        stage,
+        durationMs: Math.round(performance.now() - started),
+        origin: "application",
+        deadlineMs: boundedAiTimeout(timeout),
+        inputBytes: 0,
+        httpStatus: null,
+      };
+    onStage?.(failure.trace.stage);
+    throw failure;
   }
 }

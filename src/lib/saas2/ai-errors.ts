@@ -21,6 +21,12 @@ export type AiCategory =
   | "data_query"
   | "authorization"
   | "shop_resolution"
+  | "runtime_incompatible"
+  | "cache_error"
+  | "provider_redirect"
+  | "quota_forbidden"
+  | "quota_missing"
+  | "quota_contract"
   | "internal";
 const messages: Record<AiCategory, string> = {
   missing_runtime_key:
@@ -64,6 +70,18 @@ const messages: Record<AiCategory, string> = {
     "A sessão não tem autorização owner/admin para executar este diagnóstico.",
   shop_resolution:
     "Não foi possível resolver a barbearia da sessão. Confira o vínculo em shop_members.",
+  runtime_incompatible:
+    "O cliente HTTP encontrou uma incompatibilidade com o runtime Workers. Consulte o diagnóstico de etapa.",
+  cache_error:
+    "Não foi possível preparar a solicitação de IA no servidor. A chamada de geração não foi iniciada.",
+  provider_redirect:
+    "A API solicitou redirecionamento. O servidor recusou encaminhar a credencial para outro destino.",
+  quota_forbidden:
+    "A sessão não tem permissão para consumir a cota desta loja. Confira vínculo owner/admin e permissões da RPC.",
+  quota_missing:
+    "A RPC de cota não está disponível com o contrato esperado. Confira a instalação SaaS existente e o cache de schema do Supabase.",
+  quota_contract:
+    "A RPC de cota retornou um formato inesperado. A geração foi bloqueada para preservar o limite de uso.",
   internal:
     "O servidor encontrou uma falha interna na integração. Consulte o diagnóstico seguro.",
 };
@@ -75,13 +93,15 @@ export type AiTrace = {
     | "upstream_http"
     | "upstream_payload"
     | "network"
-    | "response_validation";
+    | "response_validation"
+    | "application";
   deadlineMs: number;
   inputBytes: number;
   httpStatus: number | null;
 };
 export class AiFailure extends Error {
   trace: AiTrace | null = null;
+  exceptionType: string | null = null;
   constructor(
     public category: AiCategory,
     public status: number | null = null,
@@ -99,41 +119,61 @@ export function classifyAiError(error: unknown): AiFailure {
     name?: unknown;
   } | null;
   const status = Number(e?.status) || null;
+  const failure = (
+    category: AiCategory,
+    statusCode: number | null = status,
+  ) => {
+    const f = new AiFailure(category, statusCode);
+    f.exceptionType = [
+      "Error",
+      "TypeError",
+      "ReferenceError",
+      "RangeError",
+      "SyntaxError",
+      "AbortError",
+    ].includes(String(e?.name))
+      ? String(e?.name)
+      : null;
+    return f;
+  };
   const text = String(e?.message || "")
     .slice(0, 20000)
     .toLowerCase();
-  if (status === 401) return new AiFailure("invalid_key", status);
-  if (status === 402) return new AiFailure("insufficient_credits", status);
-  if (status === 403) return new AiFailure("access_denied", status);
+  if (/invalid redirect value|unsupported.*redirect/.test(text))
+    return failure("runtime_incompatible");
+  if (status && status >= 300 && status < 400)
+    return failure("provider_redirect");
+  if (status === 401) return failure("invalid_key", status);
+  if (status === 402) return failure("insufficient_credits", status);
+  if (status === 403) return failure("access_denied", status);
   if (
     status === 404 ||
     /model.*not found|invalid model|no endpoints found/.test(text)
   )
-    return new AiFailure("model_unavailable", status);
-  if (status === 408) return new AiFailure("request_timeout", status);
-  if (status === 429) return new AiFailure("rate_limit", status);
-  if (status === 502) return new AiFailure("bad_gateway", status);
-  if (status === 503) return new AiFailure("provider_unavailable", status);
-  if (status === 504) return new AiFailure("gateway_timeout", status);
+    return failure("model_unavailable", status);
+  if (status === 408) return failure("request_timeout", status);
+  if (status === 429) return failure("rate_limit", status);
+  if (status === 502) return failure("bad_gateway", status);
+  if (status === 503) return failure("provider_unavailable", status);
+  if (status === 504) return failure("gateway_timeout", status);
   if (
     status === 400 &&
     /schema|response_format|structured|support.*parameter/.test(text)
   )
-    return new AiFailure("structured_response", status);
-  if (status === 400) return new AiFailure("invalid_request", status);
+    return failure("structured_response", status);
+  if (status === 400) return failure("invalid_request", status);
   if (
     /abort|timeout|timed out/.test(text + String(e?.name || "").toLowerCase())
   )
-    return new AiFailure("timeout", status);
+    return failure("timeout", status);
   if (
     /fetch failed|network|econn|enotfound|connect tunnel|failed to fetch/.test(
       text,
     )
   )
-    return new AiFailure("network", status);
-  if (status && status >= 500)
-    return new AiFailure("provider_unavailable", status);
-  return new AiFailure("internal", status);
+    return failure("network", status);
+  if (status && status >= 500) return failure("provider_unavailable", status);
+  return failure("internal", status);
 }
 export function safeAiDiagnostic(error: unknown) {
   const e = classifyAiError(error);
@@ -143,5 +183,23 @@ export function safeAiDiagnostic(error: unknown) {
     rpcCode: e.rpcCode && /^[A-Z0-9]{5,12}$/.test(e.rpcCode) ? e.rpcCode : null,
     message: e.message,
     trace: e.trace,
+    exceptionType: e.exceptionType,
   };
+}
+
+export function assertAiQuotaResult(
+  data: unknown,
+  error: { code?: string } | null,
+) {
+  if (error) {
+    const code = error.code || null;
+    if (code === "42501") throw new AiFailure("quota_forbidden", null, code);
+    if (code === "PGRST301" || code === "28000")
+      throw new AiFailure("authorization", null, code);
+    if (code === "PGRST202" || code === "42883")
+      throw new AiFailure("quota_missing", null, code);
+    throw new AiFailure("quota_check", null, code);
+  }
+  if (typeof data !== "boolean") throw new AiFailure("quota_contract");
+  if (!data) throw new AiFailure("app_quota");
 }

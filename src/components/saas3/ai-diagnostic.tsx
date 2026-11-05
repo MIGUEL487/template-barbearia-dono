@@ -22,6 +22,7 @@ export function AiDiagnostic() {
           status: null,
           rpcCode: null,
           trace: null,
+          exceptionType: null,
           timing: {
             profile: "A",
             stage: "browser_transport",
@@ -47,6 +48,7 @@ export function AiDiagnostic() {
         status: null,
         rpcCode: null,
         trace: null,
+        exceptionType: null,
         timing: {
           profile: "A",
           stage: "browser_transport",
@@ -78,6 +80,13 @@ export function AiDiagnostic() {
         {result && "model" in result && (
           <p>
             Modelo: <strong>{result.model}</strong>
+            {result.modelAdjusted && (
+              <>
+                <br />
+                Identificador gratuito ajustado para o roteador documentado. Use
+                OPENROUTER_MODEL=openrouter/free.
+              </>
+            )}
             <br />
             Origem: {result.source} · Worker:{" "}
             {result.workerContext
@@ -94,6 +103,7 @@ export function AiDiagnostic() {
             {result.status
               ? ` · ${result.trace?.origin === "upstream_payload" ? "Código do provedor" : "HTTP"} ${result.status}`
               : ""}
+            {result.exceptionType ? ` · Tipo ${result.exceptionType}` : ""}
             {"rpcCode" in result && result.rpcCode
               ? ` · Supabase ${result.rpcCode}`
               : ""}

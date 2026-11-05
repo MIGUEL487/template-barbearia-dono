@@ -4,6 +4,7 @@ import {
   aiModel,
   boundedAiTimeout,
   validAiModel,
+  canonicalAiModel,
 } from "@/lib/saas2/openrouter";
 export function aiRuntime() {
   let env: Record<string, unknown> = {},
@@ -22,6 +23,7 @@ export function aiRuntime() {
   const configured = String(
     env.OPENROUTER_MODEL || process.env.OPENROUTER_MODEL || aiModel,
   ).trim();
+  const effective = canonicalAiModel(configured);
   return {
     key: binding || nodeKey,
     source: binding
@@ -30,7 +32,8 @@ export function aiRuntime() {
         ? "process_env"
         : "missing",
     contextAvailable,
-    model: validAiModel(configured) ? configured : "",
+    model: validAiModel(effective) ? effective : "",
+    modelAdjusted: configured !== effective,
     timeoutMs: boundedAiTimeout(
       env.OPENROUTER_TIMEOUT_MS || process.env.OPENROUTER_TIMEOUT_MS,
     ),

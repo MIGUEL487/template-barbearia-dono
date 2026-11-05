@@ -8,7 +8,7 @@ import {
   analyze,
   dayStart,
 } from "@/lib/saas2/analytics";
-import { AiFailure, safeAiDiagnostic } from "@/lib/saas2/ai-errors";
+import { safeAiDiagnostic, assertAiQuotaResult } from "@/lib/saas2/ai-errors";
 import { diagnose } from "@/lib/saas2/diagnosis";
 import { aiRuntime } from "@/lib/runtime-secret";
 import { cachedInterpretation } from "@/lib/saas2/openrouter";
@@ -431,8 +431,7 @@ export async function askRaioXAction(raw: {
             const { data, error } = await db.rpc("consume_raiox_ai_quota", {
               p_barbershop_id: shop,
             });
-            if (error) throw new AiFailure("quota_check", null, error.code);
-            if (!data) throw new AiFailure("app_quota");
+            assertAiQuotaResult(data, error);
           },
           model,
           "D",
@@ -448,7 +447,7 @@ export async function askRaioXAction(raw: {
             stage: "complete",
             aggregateMs,
             provider: interpreted.trace,
-            model,
+            modelConfigured: true,
           }),
         );
       } catch (error) {
@@ -460,7 +459,7 @@ export async function askRaioXAction(raw: {
             aggregateMs,
             category: diagnostic.category,
             status: diagnostic.status,
-            model,
+            modelConfigured: true,
           }),
         );
         payload.notice =

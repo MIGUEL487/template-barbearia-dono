@@ -34,7 +34,7 @@ const { interpretWithOpenRouter, cachedInterpretation, verifyOpenRouterModel } =
 const { aiRuntime } = await import(
   pathToFileURL(path.join(dir, "runtime.mjs"))
 );
-const { AiFailure, safeAiDiagnostic } = await import(
+const { AiFailure, safeAiDiagnostic, assertAiQuotaResult } = await import(
   pathToFileURL(path.join(dir, "ai-errors.mjs"))
 );
 after(() => fs.rm(dir, { recursive: true, force: true }));
@@ -158,7 +158,7 @@ test("Native HTTP request uses structured schema, bounded tokens, no tools and o
         "https://openrouter.ai/api/v1/chat/completions",
       );
       assert.equal(init.headers.Authorization, "Bearer fixture-secret");
-      assert.equal(init.redirect, "error");
+      assert.equal(init.redirect, "manual");
       assert.equal(init.cache, "no-store");
       body = JSON.parse(init.body);
       return answer();
@@ -441,8 +441,8 @@ test("Authenticated A–D diagnostic separates data stage, preserves quota gate 
   ).outputText;
   code = code
     .replace(
-      /import \{ AiFailure, safeAiDiagnostic \} from [^;]+;/,
-      'import { AiFailure, safeAiDiagnostic } from "./ai-errors.mjs";',
+      /import \{ AiFailure, safeAiDiagnostic, assertAiQuotaResult,?\s*\} from [^;]+;/,
+      'import { AiFailure, safeAiDiagnostic, assertAiQuotaResult } from "./ai-errors.mjs";',
     )
     .replace(
       /import \{ resolveCurrentShop \} from [^;]+;/,
@@ -596,4 +596,132 @@ test("Native fetch preserves all HTTP failure categories without retry or leakin
     globalThis.fetch = original;
     console.warn = warn;
   }
+});
+
+test("Quota RPC accepts only a boolean and distinguishes RLS, missing function and contract errors", () => {
+  assert.doesNotThrow(() => assertAiQuotaResult(true, null));
+  for (const value of [null, [], {}, "true", 1])
+    assert.throws(
+      () => assertAiQuotaResult(value, null),
+      (e) => e.category === "quota_contract",
+    );
+  assert.throws(
+    () => assertAiQuotaResult(false, null),
+    (e) => e.category === "app_quota",
+  );
+  for (const [code, category] of [
+    ["42501", "quota_forbidden"],
+    ["PGRST202", "quota_missing"],
+    ["42883", "quota_missing"],
+    ["PGRST301", "authorization"],
+    ["XX000", "quota_check"],
+  ])
+    assert.throws(
+      () => assertAiQuotaResult(null, { code }),
+      (e) => e.category === category && e.rpcCode === code,
+    );
+});
+test("Known free-router misconfiguration is corrected without a paid fallback or static catalog dependency", async () => {
+  const original = globalThis.fetch;
+  let calls = 0,
+    quota = 0,
+    body;
+  const old = process.env.OPENROUTER_MODEL;
+  process.env.OPENROUTER_MODEL = "openrouter/auto:free";
+  try {
+    const runtime = aiRuntime();
+    assert.equal(runtime.model, "openrouter/free");
+    assert.equal(runtime.modelAdjusted, true);
+    globalThis.fetch = async (url, init) => {
+      calls++;
+      assert(String(url).endsWith("/chat/completions"));
+      assert.equal(init.redirect, "manual");
+      body = JSON.parse(init.body);
+      return answer();
+    };
+    await cachedInterpretation(
+      "free-router-fixture",
+      "fixture",
+      {},
+      async () => {
+        quota++;
+      },
+      runtime.model,
+      "B",
+    );
+    assert.equal(body.model, "openrouter/free");
+    assert.deepEqual(body.provider.max_price, { prompt: 0, completion: 0 });
+    assert.equal(body.response_format.type, "json_schema");
+    assert.equal(calls, 1);
+    assert.equal(quota, 1);
+  } finally {
+    globalThis.fetch = original;
+    if (old === undefined) delete process.env.OPENROUTER_MODEL;
+    else process.env.OPENROUTER_MODEL = old;
+  }
+});
+test("Redirect is refused without following Location and unknown preflight exceptions have precise stage", async () => {
+  const original = globalThis.fetch;
+  let calls = 0;
+  try {
+    globalThis.fetch = async () => {
+      calls++;
+      return new Response(null, {
+        status: 302,
+        headers: { location: "https://example.invalid/steal" },
+      });
+    };
+    await assert.rejects(
+      () => interpretWithOpenRouter("fixture", {}, "fixture/model"),
+      (e) => e.category === "provider_redirect" && e.status === 302,
+    );
+    assert.equal(calls, 1);
+    const stages = [];
+    await assert.rejects(
+      () =>
+        cachedInterpretation(
+          "stage-fixture",
+          "fixture",
+          {},
+          async () => {
+            throw new TypeError("private-fixture-error");
+          },
+          "openrouter/free",
+          "A",
+          30000,
+          (s) => stages.push(s),
+        ),
+      (e) =>
+        e.category === "quota_check" &&
+        e.exceptionType === "TypeError" &&
+        e.trace.stage === "supabase_quota" &&
+        !JSON.stringify(safeAiDiagnostic(e)).includes("private-fixture-error"),
+    );
+    assert(stages.includes("cache_digest"));
+    assert(stages.includes("model_router"));
+    assert(stages.includes("supabase_quota"));
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test("Supabase transport failure is a quota/database error, never an OpenRouter connectivity error", async () => {
+  await assert.rejects(
+    () =>
+      cachedInterpretation(
+        "db-network-fixture",
+        "fixture",
+        {},
+        async () => {
+          throw new TypeError("fetch failed");
+        },
+        "openrouter/free",
+        "A",
+      ),
+    (e) =>
+      e.category === "quota_check" &&
+      e.trace.stage === "supabase_quota" &&
+      e.exceptionType === "TypeError" &&
+      !e.message.includes("alcançar a API OpenRouter"),
+  );
 });

@@ -1,4 +1,5 @@
 "use server";
+import { assertAiQuotaResult } from "@/lib/saas2/ai-errors";
 import { resolveCurrentShop } from "@/lib/current-shop";
 import { localDate, validBooking } from "@/lib/saas2/analytics";
 import { aiKey, aiRuntime } from "@/lib/runtime-secret";
@@ -233,14 +234,7 @@ export async function generateAiAction(date: string) {
         const { data, error } = await db.rpc("consume_raiox_ai_quota", {
           p_barbershop_id: shop,
         });
-        if (error)
-          throw Error(
-            "Cota de IA indisponível. Confira a migration de ai_daily_usage.",
-          );
-        if (!data)
-          throw Error(
-            "Limite de cinco análises generativas por loja/dia atingido.",
-          );
+        assertAiQuotaResult(data, error);
       },
       model,
       "D",
