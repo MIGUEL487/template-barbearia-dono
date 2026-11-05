@@ -1,0 +1,36 @@
+{
+  "localChecks": {
+    "typescript": "passed",
+    "lint": "passed",
+    "nextOpenNextBuild": "passed",
+    "wranglerDryRun": "passed",
+    "saas2RegressionsAndInstallerParity": "passed",
+    "saas3RegressionsAndInstallerParity": "passed",
+    "paymentSignature": "passed",
+    "geminiSDKAndDiagnosticFixtures": "passed",
+    "runtimeBindingPrecedence": "passed",
+    "safeErrorLogs": "passed",
+    "tokensOwnerAndClient": "passed",
+    "visualMatrixWidths": [
+      1440,
+      1024,
+      820,
+      390
+    ],
+    "keyboardSelectAndEscape": "passed",
+    "mobileMenuFocusAndReducedMotion": "passed",
+    "ledgerPurchaseEditVoidPendingCsv": "passed",
+    "chatHistoryAndReports": "passed",
+    "missingSchemaAndEmptyStates": "passed",
+    "notificationsSoundRealtimeRegression": "passed",
+    "managementAndAgendaRegression": "passed"
+  },
+  "productionVerification": {
+    "gemini": "pending: Worker secret not accessible to this environment; Google CONNECT 403",
+    "exactPublishedFallbackCause": "pending: authenticated production diagnostic/log required",
+    "figmaFrames": "not inspected: connector unavailable and CONNECT 403",
+    "cloudflareDeployment": "not confirmed: API blocked"
+  },
+  "productionDatabaseWrites": false,
+  "newMigrations": false
+}

@@ -1,0 +1,165 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "width": 1024,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "width": 820,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "missingSchema": true,
+      "readOnlyLedger": true,
+      "explicitUnsavedChat": true
+    },
+    {
+      "emptyAnalytics": true,
+      "emptyLedger": true,
+      "generatedBriefing": true,
+      "generatedClosing": true
+    }
+  ],
+  "calls": [
+    {
+      "operation": "GET user",
+      "count": 519
+    },
+    {
+      "operation": "OPTIONS user",
+      "count": 80
+    },
+    {
+      "operation": "OPTIONS shop_members",
+      "count": 80
+    },
+    {
+      "operation": "GET shop_members",
+      "count": 269
+    },
+    {
+      "operation": "GET websocket",
+      "count": 61
+    },
+    {
+      "operation": "GET barbershops",
+      "count": 189
+    },
+    {
+      "operation": "GET bookings",
+      "count": 344
+    },
+    {
+      "operation": "GET financial_transactions",
+      "count": 308
+    },
+    {
+      "operation": "GET barbers",
+      "count": 168
+    },
+    {
+      "operation": "GET services",
+      "count": 168
+    },
+    {
+      "operation": "GET working_hours",
+      "count": 164
+    },
+    {
+      "operation": "GET time_off",
+      "count": 82
+    },
+    {
+      "operation": "GET closed_days",
+      "count": 82
+    },
+    {
+      "operation": "GET raiox_reports",
+      "count": 68
+    },
+    {
+      "operation": "GET daily_goals",
+      "count": 20
+    },
+    {
+      "operation": "POST get_availability",
+      "count": 1
+    },
+    {
+      "operation": "POST raiox_reports",
+      "count": 3
+    },
+    {
+      "operation": "POST save_manual_financial_entry",
+      "count": 12
+    },
+    {
+      "operation": "POST void_manual_financial_entry",
+      "count": 4
+    },
+    {
+      "operation": "GET raiox_conversations",
+      "count": 41
+    },
+    {
+      "operation": "POST raiox_conversations",
+      "count": 12
+    },
+    {
+      "operation": "GET raiox_messages",
+      "count": 32
+    },
+    {
+      "operation": "POST raiox_messages",
+      "count": 32
+    },
+    {
+      "operation": "GET customers",
+      "count": 8
+    },
+    {
+      "operation": "GET consents",
+      "count": 4
+    },
+    {
+      "operation": "GET waitlist_entries",
+      "count": 8
+    },
+    {
+      "operation": "OPTIONS site_settings",
+      "count": 4
+    },
+    {
+      "operation": "GET site_settings",
+      "count": 4
+    }
+  ]
+}
