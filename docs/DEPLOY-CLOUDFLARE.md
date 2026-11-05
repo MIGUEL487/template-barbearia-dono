@@ -51,3 +51,8 @@ Os arquivos estão preparados e versionados, sem FFmpeg no build. No preview Wor
 JPEGs têm hash no nome e cache imutável; manifesto revalida. MP4s sem hash têm cache curto (não imutável). CSP permite media-src self e img-src blob exclusivamente para a alternativa HTMLImageElement do decoder. Sem afrouxar script-src ou acesso ao banco. Vídeo maior preparado: 7.573 MB, abaixo do limite conhecido de 25 MiB por asset; o limite foi confirmado na fonte oficial atual (https://developers.cloudflare.com/workers/platform/limits/#static-assets, fonte cloudflare-docs/production/src/content/docs/workers/platform/limits.mdx consultada em 2026-10-27). Limites adicionais: 20.000 assets no plano Free e 100.000 no Paid; 2.000 caracteres por linha de _headers.
 
 Windows: instalar FFmpeg e ffprobe via `winget install Gyan.FFmpeg`, abrir novo terminal e executar `node scripts/encode-hero-video.mjs` (cliente); `--desktop-gsap` gera GOP 15 e sem B frames. Importadores originais estão em scripts para consulta. Preservar src/config/frames.json idêntico a public/frames/manifest.json após reimportar; o importador original de PC atualiza o manifesto público, então copie para src/config antes de build. Os 183 frames móveis atuais são recorte central dos horizontais; substitua por material próprio para direção móvel específica.
+
+
+## Raio-X com OpenRouter
+
+Configure `OPENROUTER_API_KEY` como secret de runtime no Worker correto, nunca `NEXT_PUBLIC_*` ou Build variable. Modelo e timeout podem ser definidos por `OPENROUTER_MODEL` e `OPENROUTER_TIMEOUT_MS` no runtime. Consulte [passo a passo, diagnóstico, limites e rollback](openrouter/README.md). Os secrets Gemini não são mais lidos; sem chave OpenRouter, o fallback determinístico permanece ativo.

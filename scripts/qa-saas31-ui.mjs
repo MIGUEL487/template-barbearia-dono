@@ -455,7 +455,7 @@ const child = spawn(
       NEXT_PUBLIC_BARBERSHOP_ID: "",
       NEXT_PUBLIC_DEMO_MODE: "false",
       NEXT_PUBLIC_DEMO_WATERMARK: "true",
-      GEMINI_API_KEY: "",
+      OPENROUTER_API_KEY: "",
     },
     stdio: ["ignore", log.fd, log.fd],
   },
@@ -800,7 +800,7 @@ try {
     .fill("Quanto faturei hoje?");
   await p.getByRole("button", { name: "Enviar ↗" }).click();
   await p.getByText(/Prévia calculada sem histórico/).waitFor();
-  await p.getByRole("button", { name: "Conexão Gemini", exact: true }).click();
+  await p.getByRole("button", { name: "Conexão IA", exact: true }).click();
   await p.getByText(/missing_runtime_key/).waitFor();
   const quotaBefore=calls.filter(c=>c.name==="consume_raiox_ai_quota").length;
   await p.getByRole("button",{name:"Testar integração",exact:true}).click();

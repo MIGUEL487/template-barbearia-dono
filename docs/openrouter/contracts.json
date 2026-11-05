@@ -1,0 +1,65 @@
+{
+  "base": "2fe103f52c2e70c8303f6ea718c82385627af39a",
+  "results": [
+    {
+      "file": "src/app/dashboard/page.tsx",
+      "calls": 3,
+      "unchanged": true,
+      "hash": "58d60431362e7723e1a0929d6fadd9d79c489c17793082fab867cfc4b80b736c"
+    },
+    {
+      "file": "src/app/agenda/page.tsx",
+      "calls": 13,
+      "unchanged": true,
+      "hash": "59a8e7b6afeb138cc32fdf7380f7f28d8a58e7b3bee07d49a7da80b84e70af7f"
+    },
+    {
+      "file": "src/app/clientes/page.tsx",
+      "calls": 2,
+      "unchanged": true,
+      "hash": "27b46558d43a2051de0511100ad476f4eb7fa6a8d25dc72ad7f9670d41d1af0c"
+    },
+    {
+      "file": "src/app/servicos/page.tsx",
+      "calls": 4,
+      "unchanged": true,
+      "hash": "f6712f3416a708fa9f7d8124f91538cb76cc329b25234baddcddf1533e62c4ad"
+    },
+    {
+      "file": "src/app/equipe/page.tsx",
+      "calls": 0,
+      "unchanged": true,
+      "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "file": "src/app/configuracoes/page.tsx",
+      "calls": 3,
+      "unchanged": true,
+      "hash": "fbc59c0103f1d6a041017efeec310619ad3df858edadf59cdcef8ea10ff26d8f"
+    },
+    {
+      "file": "src/components/saas2/rescue-page.tsx",
+      "calls": 2,
+      "unchanged": true,
+      "hash": "5959b6e7028727152771d54fbd66c37d0e3db8b41675a078c0d8cd04b376759c"
+    },
+    {
+      "file": "src/app/equipe/use-team-manager.tsx",
+      "calls": 17,
+      "unchanged": true,
+      "hash": "58cb45f34a3d59ef39a1d02ecf318539af1abe794e1f099001119d0822c15cf8"
+    },
+    {
+      "file": "src/app/actions/chat-actions.ts",
+      "calls": 38,
+      "unchanged": true,
+      "hash": "629b58bd27c8c21d19245e709279d6d2f90df97f7c1ecd1cb7a1d7e20a5dc545"
+    },
+    {
+      "file": "src/app/actions/intelligence-actions.ts",
+      "calls": 10,
+      "unchanged": true,
+      "hash": "822cef74e85043e10da0f0a67eb22d901f438f84e444ad10c40ee604fbf9983f"
+    }
+  ]
+}

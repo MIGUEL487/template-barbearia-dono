@@ -6,7 +6,7 @@ import { spawn } from "node:child_process";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 const root = process.cwd(),
-  out = path.join(root, "docs/integrated-navigation/evidencias");
+  out = path.join(root, "docs/openrouter/evidencias");
 await fs.mkdir(out, { recursive: true });
 const shop = "11111111-1111-1111-1111-111111111111",
   uid = "99999999-9999-4999-8999-999999999999",
@@ -30,6 +30,7 @@ let threads = [],
   manualLedger = [],
   missing3 = false;
 const calls = [];
+let providerFails = false;
 let emptyManagement = false,
   failManagement = false;
 let fixtureServices = [],
@@ -101,6 +102,61 @@ const mock = http.createServer(async (req, res) => {
     "Access-Control-Allow-Methods",
     "GET,POST,PATCH,DELETE,OPTIONS",
   );
+  if (url.pathname === "/openrouter/models") {
+    res.end(
+      JSON.stringify({
+        data: [
+          {
+            id: "fixture/model",
+            supported_parameters: ["response_format", "structured_outputs"],
+          },
+        ],
+      }),
+    );
+    return;
+  }
+  if (url.pathname === "/openrouter/chat/completions") {
+    if (providerFails) {
+      res.statusCode = 402;
+      res.end(
+        JSON.stringify({
+          error: { code: 402, message: "fixture-private-error-must-not-leak" },
+        }),
+      );
+      return;
+    }
+    res.end(
+      JSON.stringify({
+        choices: [
+          {
+            message: {
+              role: "assistant",
+              content: JSON.stringify({
+                resumo:
+                  "Interpretação OpenRouter da fixture, sem chamada real.",
+                pontos_positivos: [],
+                pontos_de_atencao: [],
+                sugestoes: [],
+                prioridade: "normal",
+              }),
+            },
+            finish_reason: "stop",
+          },
+        ],
+        usage: {
+          prompt_tokens: 10,
+          completion_tokens: 20,
+          total_tokens: 30,
+          cost: 0.00003,
+        },
+      }),
+    );
+    return;
+  }
+  if (name === "consume_raiox_ai_quota") {
+    res.end("true");
+    return;
+  }
   if (req.method === "OPTIONS") {
     res.end();
     return;
@@ -486,6 +542,25 @@ const fixture = await fs.mkdtemp("/workspace/full-owner-qa-");
 await fs.cp(path.join(root, "src"), path.join(fixture, "src"), {
   recursive: true,
 });
+// Fixture-only provider endpoint and runtime switch. Never copied into production.
+const providerPath = path.join(fixture, "src/lib/saas2/openrouter.ts");
+await fs.writeFile(
+  providerPath,
+  (await fs.readFile(providerPath, "utf8")).replace(
+    'const api = "https://openrouter.ai/api/v1";',
+    `const api = "${supabaseUrl}/openrouter";`,
+  ),
+);
+const runtimePath = path.join(fixture, "src/lib/runtime-secret.ts");
+const credentialFlag = path.join(fixture, ".qa-ai-enabled");
+await fs.writeFile(
+  runtimePath,
+  'import {existsSync} from "node:fs";\n' +
+    (await fs.readFile(runtimePath, "utf8")).replace(
+      'nodeKey = process.env.OPENROUTER_API_KEY?.trim() || "";',
+      `nodeKey = existsSync(${JSON.stringify(credentialFlag)}) ? "fixture-server-key" : "";`,
+    ),
+);
 // Only the isolated report action gets an explicit after-close test clock.
 // No clock override or fixture code is copied back into production source.
 const reportActionPath = path.join(fixture, "src/app/actions/chat-actions.ts");
@@ -535,7 +610,8 @@ const child = spawn(
       NEXT_PUBLIC_BARBERSHOP_ID: "",
       NEXT_PUBLIC_DEMO_MODE: "false",
       NEXT_PUBLIC_DEMO_WATERMARK: "true",
-      GEMINI_API_KEY: "",
+      OPENROUTER_API_KEY: "",
+      OPENROUTER_MODEL: "fixture/model",
     },
     stdio: ["ignore", log.fd, log.fd],
   },
@@ -952,6 +1028,75 @@ try {
       .waitFor();
     await p.waitForTimeout(250);
     await p.screenshot({ path: `${out}/raio-x-${width}.png`, fullPage: true });
+    await fs.writeFile(credentialFlag, "fixture");
+    await p.goto("http://127.0.0.1:8897/raio-x");
+    const integrationQuestion = `OpenRouter integração ${width}`;
+    await p
+      .getByRole("textbox", { name: "Mensagem para o Raio-X" })
+      .fill(integrationQuestion);
+    await p.getByRole("button", { name: "Enviar ↗", exact: true }).click();
+    await p
+      .getByText("Raio-X · dados calculados + OpenRouter", { exact: true })
+      .waitFor();
+    await p.getByText(/Interpretação OpenRouter da fixture/).waitFor();
+    assert(
+      messages.some(
+        (m) =>
+          m.payload?.mode === "openrouter" &&
+          m.payload?.aiUsage?.costUsd === 0.00003,
+      ),
+    );
+    await p.reload();
+    await p
+      .getByRole("button", { name: "Histórico e opções", exact: true })
+      .click();
+    await p
+      .getByRole("dialog")
+      .getByRole("button", { name: integrationQuestion, exact: true })
+      .click();
+    await p
+      .getByText("Raio-X · dados calculados + OpenRouter", { exact: true })
+      .waitFor();
+    await p.getByRole("dialog").waitFor({ state: "hidden" });
+    await p.waitForFunction(() => {
+      const b = Array.from(document.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === "+ Nova conversa",
+      );
+      return b && !b.disabled;
+    });
+    await p.waitForTimeout(250);
+    await p.screenshot({
+      path: `${out}/openrouter-chat-${width}.png`,
+      fullPage: true,
+    });
+    providerFails = true;
+    const postBefore = calls.filter((c) => c.name === "completions").length;
+    await p
+      .getByRole("textbox", { name: "Mensagem para o Raio-X" })
+      .fill(`Verificar créditos ${width}`);
+    assert.equal(
+      await p
+        .getByRole("textbox", { name: "Mensagem para o Raio-X" })
+        .inputValue(),
+      `Verificar créditos ${width}`,
+    );
+    await p.getByRole("button", { name: "Enviar ↗", exact: true }).click();
+    await p
+      .getByText(/Créditos insuficientes no OpenRouter/)
+      .first()
+      .waitFor();
+    assert.equal(
+      calls.filter((c) => c.name === "completions").length,
+      postBefore + 1,
+    );
+    assert(
+      !(await p.locator("body").innerText()).includes(
+        "fixture-private-error-must-not-leak",
+      ),
+    );
+    providerFails = false;
+    await fs.rm(credentialFlag, { force: true });
+    await p.goto("http://127.0.0.1:8897/raio-x");
     const before = reports.length;
     await p
       .getByRole("button", { name: "Relatórios do expediente", exact: true })
@@ -1056,7 +1201,7 @@ try {
   await p
     .getByRole("button", { name: "Histórico e opções", exact: true })
     .click();
-  await p.getByRole("button", { name: "Conexão Gemini", exact: true }).click();
+  await p.getByRole("button", { name: "Conexão IA", exact: true }).click();
   await p.getByText(/missing_runtime_key/).waitFor();
   const quotaBefore = calls.filter(
     (c) => c.name === "consume_raiox_ai_quota",
@@ -1070,7 +1215,7 @@ try {
     quotaBefore,
   );
   await p.screenshot({
-    path: `${out}/gemini-diagnostic-missing-runtime.png`,
+    path: `${out}/ai-diagnostic-missing-runtime.png`,
     fullPage: true,
   });
   results.push({

@@ -1,3 +1,5 @@
+> Raio-X: a integração generativa atual usa OpenRouter. Veja [configuração de runtime, testes e rollback](docs/openrouter/README.md). Nenhuma migration é necessária para essa troca de provedor.
+
 # Auto Stilo — redesign Black
 
 Trabalho na branch `redesign-black`. Design preto/violeta compartilhado; nenhum banco real foi alterado e nenhum deploy foi feito.

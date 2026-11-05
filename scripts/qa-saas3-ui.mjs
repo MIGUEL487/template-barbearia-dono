@@ -445,7 +445,7 @@ const child = spawn(
       NEXT_PUBLIC_BARBERSHOP_ID: "",
       NEXT_PUBLIC_DEMO_MODE: "false",
       NEXT_PUBLIC_DEMO_WATERMARK: "true",
-      GEMINI_API_KEY: "",
+      OPENROUTER_API_KEY: "",
     },
     stdio: ["ignore", log.fd, log.fd],
   },

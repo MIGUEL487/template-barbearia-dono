@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-11-05T14:49:13.721424+00:00",
+  "base": "2fe103f52c2e70c8303f6ea718c82385627af39a",
+  "branch": "feat/openrouter-raiox",
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build:cf": "passed",
+    "wrangler deploy --dry-run": "passed;no deploy",
+    "test:openrouter": "passed;10 direct tests",
+    "test:shop-selection": "passed",
+    "test:saas2": "passed;SQL bundle check included",
+    "test:saas3": "passed;SQL bundle check included",
+    "test:security": "passed",
+    "tokens:check": "passed;48ebe6b7",
+    "playwright": "passed;1440x1000 and390x1000;12areas;native HTTP against local fake OpenRouter;response persisted/reopened;402 fallback no retry;missing key no generation",
+    "databaseContractAst": "unchanged;10files;see contracts.json",
+    "googleSdk": "removed;35unused packages removed;no Google generative endpoint in built server bundle",
+    "stylesPublicSqlWranglerDiff": "unchanged"
+  },
+  "realApiValidated": false,
+  "realApiCalls": 0,
+  "productionDatabaseWrites": false,
+  "clientRepositoryChanged": false,
+  "runtimeConfigurationRequired": [
+    "OPENROUTER_API_KEY secret",
+    "OPENROUTER_MODEL optional default openai/gpt-4o-mini",
+    "OPENROUTER_TIMEOUT_MS optional bounded1000..45000 default30000"
+  ],
+  "externalBlockers": [
+    "No OpenRouter credential bound to Codex",
+    "Effective egress does not include openrouter.ai or published Worker",
+    "Production authentication,credits,model response and active app HTTP require live validation"
+  ]
+}

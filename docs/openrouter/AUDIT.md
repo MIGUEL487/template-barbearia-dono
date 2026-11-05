@@ -1,0 +1,17 @@
+# Auditoria da migração
+
+Base: 2fe103f52c2e70c8303f6ea718c82385627af39a. Branch feat/openrouter-raiox. Backup backup/pre-openrouter. O worktree original do dono com alterações locais permanece preservado; o diff SHA256 continua cdca2c3b4d01a20bc57fdd9a291057755dc0dc97b3035b9f77f601bf82c7c7bc. Repositório do cliente não alterado.
+
+Fontes generativas identificadas antes da mudança: `lib/saas2/gemini.ts`, `runtime-secret.ts`, ações chat/intelligence/gemini-diagnostic e componente de diagnóstico. SDK @google/genai. UI também mencionava o provedor em Suporte e na interface legada. Migração troca cliente HTTP, parâmetros, parser, classificação de erros, runtime bindings, diagnósticos, dependências e testes; não é só renomear secret.
+
+Implementação principal: `src/lib/saas2/openrouter.ts`, `ai-errors.ts`, `runtime-secret.ts`, `src/app/actions/ai-diagnostic-actions.ts`, ações chat/intelligence e componente `src/components/saas3/ai-diagnostic.tsx`. Os arquivos Gemini ativos foram removidos. `payload.mode=gemini` e o nome da classe CSS antiga permanecem somente por compatibilidade de histórico e preservação visual, sem import/SDK/endpoint Google. Documentos de entregas passadas são históricos, não instruções atuais.
+
+Preservados: autorização e resolução da loja, consultas e cálculos, RPC de cota, histórico e gerenciamento das conversas, briefing/fechamento, disponibilidade, tabelas/RLS, agenda/holds/pagamentos, configurações/arquivos push e todos os estilos/fontes/layouts. `payload.aiUsage` usa JSONB já existente. Nenhum SQL novo e nenhuma migration executada. Texto do diagnóstico e rótulos do provedor foram atualizados sem redesign.
+
+Skills pertinentes lidas: cloud-environment-runtime + rede, apple-design (preservação da interface), webapp-testing (fixture Playwright existente), strix-nextjs e referência de Server Actions/cache/autorização, supabase-postgres-best-practices (preservação de cota/RLS). Não foi instalado/alegado runtime Strix nem executada varredura ofensiva no site publicado. Outras skills visuais e de animação não foram aplicadas porque a tarefa proíbe redesign.
+
+Rede observada: restricted/enforced, sem allowed_hosts customizados nem secret OpenRouter vinculado ao ambiente Codex. Repositórios oficiais GitHub acessíveis; catálogo/API OpenRouter ao vivo e aplicação publicada não verificados. Ausência no Codex não prova ausência no Worker do proprietário.
+
+Os testes novos cobrem contrato HTTP nativo, schema, limite de tokens, allowlist/contexto, runtime, timeout, códigos 401/402/408/429/502/503/504, resposta incompleta, erro lógico em HTTP 200, catálogo, cache por loja/modelo/credencial, gate da cota, cooldown sem retry, ações autenticadas A–D e ausência de segredo nos logs/retornos. A matriz Playwright cobre o fluxo real de ações e banco falso: resposta OpenRouter sintética exibida, persistida e reaberta; crédito insuficiente com fallback e uma única geração; chave ausente sem custo de teste. Não declarar esses casos como chamadas reais à API externa.
+
+A fixture altera o endpoint apenas na cópia temporária do código para um servidor HTTP local e alterna uma credencial sintética por marcador em arquivo dessa cópia. Esses caminhos/marcadores não existem no código de produção, que sempre usa endpoint fixo e secret runtime. A primeira execução foi descartada porque uma alteração de process.env no processo da fixture não propagou para os demais processos Next; a alternância compartilhada por arquivo elimina essa dependência. Nenhum secret real foi lido/escrito.
