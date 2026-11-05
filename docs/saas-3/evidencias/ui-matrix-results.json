@@ -1,0 +1,10933 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "width": 1024,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "width": 820,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "persistentChat": true,
+      "idempotentReports": true,
+      "noOverflow": true
+    },
+    {
+      "missingSchema": true,
+      "readOnlyLedger": true,
+      "explicitUnsavedChat": true
+    },
+    {
+      "emptyAnalytics": true,
+      "emptyLedger": true,
+      "generatedBriefing": true,
+      "generatedClosing": true
+    }
+  ],
+  "calls": [
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "get_availability",
+      "method": "POST"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "POST"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "POST"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "void_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "consents",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "site_settings",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "site_settings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "void_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "consents",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "site_settings",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "site_settings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "void_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "consents",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "site_settings",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "site_settings",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "void_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "save_manual_financial_entry",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "POST"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_messages",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "customers",
+      "method": "GET"
+    },
+    {
+      "name": "consents",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "waitlist_entries",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "site_settings",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "site_settings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_conversations",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "daily_goals",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "OPTIONS"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "websocket",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "time_off",
+      "method": "GET"
+    },
+    {
+      "name": "closed_days",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "barbers",
+      "method": "GET"
+    },
+    {
+      "name": "services",
+      "method": "GET"
+    },
+    {
+      "name": "working_hours",
+      "method": "GET"
+    },
+    {
+      "name": "raiox_reports",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "user",
+      "method": "GET"
+    },
+    {
+      "name": "shop_members",
+      "method": "GET"
+    },
+    {
+      "name": "barbershops",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "financial_transactions",
+      "method": "GET"
+    },
+    {
+      "name": "bookings",
+      "method": "GET"
+    }
+  ]
+}

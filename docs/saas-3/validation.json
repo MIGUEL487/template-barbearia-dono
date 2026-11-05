@@ -1,0 +1,35 @@
+{
+  "scope": "Isolated fixtures only; no production database writes",
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "nextAndOpenNextBuild": "passed",
+    "wranglerDryRun": "passed",
+    "saas2UnitAndSqlBundle": "passed",
+    "geminiProviderCacheQuotaFallback": "passed",
+    "paymentSignature": "passed",
+    "saas3MoneyDatesCsvStatus": "passed",
+    "tokens": "passed",
+    "sqlAppliedTwice": "passed",
+    "legacyHoldPaymentWaitlistSQL": "passed",
+    "ledgerAuditDeduplicationAndRLS": "passed",
+    "privateChatAndReportsSQL": "passed",
+    "browserResponsiveWidths": [
+      1440,
+      1024,
+      820,
+      390
+    ],
+    "missingSchemaCompatibility": "passed",
+    "emptyStates": "passed",
+    "generatedBriefingAndClosing": "passed",
+    "bookingBrowserRegression": "passed",
+    "notificationsSoundRealtimeRegression": "passed",
+    "managementRegression": "passed"
+  },
+  "remoteLimitations": {
+    "cloudflareAPI": "CONNECT tunnel 403; deployed version not confirmed",
+    "githubCLI": "GH_TOKEN invalid; git transport checked separately",
+    "liveGeminiAndPush": "Not exercised with real credentials/devices"
+  }
+}

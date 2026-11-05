@@ -1,0 +1,6 @@
+{
+  "database": "saas3_qa_20261105013758",
+  "sourceSyntheticOnly": true,
+  "productionAccess": false,
+  "idempotentInstallation": true
+}

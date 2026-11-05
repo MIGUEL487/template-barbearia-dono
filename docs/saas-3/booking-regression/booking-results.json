@@ -1,0 +1,62 @@
+[
+  {
+    "width": 1440,
+    "pct": 0,
+    "singleBarberSkipped": true,
+    "serverHold": true,
+    "calendarLayout": true,
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "width": 1440,
+    "multipleBarbers": true,
+    "zeroBarbers": true,
+    "waitlistConsent": true,
+    "noAutomaticBooking": true
+  },
+  {
+    "width": 1024,
+    "pct": 50,
+    "singleBarberSkipped": true,
+    "serverHold": true,
+    "calendarLayout": true,
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "width": 1024,
+    "multipleBarbers": true,
+    "zeroBarbers": true,
+    "waitlistConsent": true,
+    "noAutomaticBooking": true
+  },
+  {
+    "width": 820,
+    "pct": 100,
+    "singleBarberSkipped": true,
+    "serverHold": true,
+    "calendarLayout": true,
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "width": 820,
+    "multipleBarbers": true,
+    "zeroBarbers": true,
+    "waitlistConsent": true,
+    "noAutomaticBooking": true
+  },
+  {
+    "width": 390,
+    "pct": 33.33,
+    "singleBarberSkipped": true,
+    "serverHold": true,
+    "calendarLayout": true,
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "width": 390,
+    "multipleBarbers": true,
+    "zeroBarbers": true,
+    "waitlistConsent": true,
+    "noAutomaticBooking": true
+  }
+]
