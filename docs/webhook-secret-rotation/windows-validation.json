@@ -1,0 +1,16 @@
+{
+  "windowsNativeSupportImplemented": true,
+  "pythonTests": 8,
+  "windowsAclBeforeGeneration": true,
+  "windowsAclFailuresFailClosed": true,
+  "powershellCallsCarryNoSecret": true,
+  "powershellExecutionPolicyChanged": false,
+  "nativeWindowsAclTested": false,
+  "windowsCasesMockedOnLinux": true,
+  "localUserCheckoutAccessibleFromCloud": false,
+  "syncStrategy": "separate detached worktree; original checkout unchanged",
+  "productionActionsPerformed": false,
+  "pythonTestsPassed": 8,
+  "nativeWindowsTestIncluded": true,
+  "nativeWindowsTestSkippedOnLinux": true
+}

@@ -55,3 +55,7 @@ next-env.d.ts
 !/docs/raiox4/history-evidence/*.json
 !/docs/raiox4/history-evidence/preferencias-390.png
 !/docs/raiox4/history-evidence/raio-x-390.png
+
+# Local Python test caches
+__pycache__/
+*.py[cod]

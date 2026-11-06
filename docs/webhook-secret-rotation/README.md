@@ -2,7 +2,7 @@
 
 ## Estado real desta entrega
 
-Foi preparado um novo segredo de 256 bits com `secrets.token_hex(32)`, sem imprimir seu valor. Os arquivos privados estão fora do Git, em diretório temporário 700 e arquivos 600. O valor não foi enviado a nenhum provedor, log ou relatório. Não tentamos recuperar o segredo antigo.
+Foi preparado um novo segredo de 256 bits com `secrets.token_hex(32)`, sem imprimir seu valor. Os arquivos privados estão fora do Git. POSIX usa diretório 700 e arquivos 600; Windows usa DACL restrita ao usuário atual. O valor não foi enviado a nenhum provedor, log ou relatório. Não tentamos recuperar o segredo antigo.
 
 **A rotação em produção ainda não foi executada.** O ambiente não fornece acesso administrativo ao Supabase/Cloudflare. A branch `fix/booking-webhook-secret-rotation` contém apenas a preparação compatível e os testes. Nenhuma configuração incompleta foi publicada em produção. O segredo anterior não foi revogado porque a migração real ainda não foi confirmada.
 
@@ -28,11 +28,15 @@ Durante a transição, o único log adicional é `[WebhookAuth] { credential: "p
 
 A aceitação dupla é encerrada por uma etapa explícita após confirmação, **não por expiração automática**: expirar NEXT enquanto um emissor já o usa criaria uma interrupção. Sem confirmação dos dois caminhos reais, não promova nem remova nada. Não deixe a etapa de encerramento esquecida: registre responsável, testes e término nesta mesma janela de manutenção.
 
+## Windows nativo e sincronização
+
+Se o CMD retornar `[Errno 2]`, confira branch e diretório: o arquivo está na branch `fix/booking-webhook-secret-rotation`, não na `master`. Siga o [guia Windows/PowerShell](WINDOWS.md) para criar um checkout separado, preservar suas modificações e gerar os arquivos sem WSL. `create` não faz rede, deploy ou mudanças de secrets.
+
 ## Procedimento manual, em ordem, em terminal já autenticado
 
 É necessário acesso a Supabase Secrets/Functions/Database Webhooks e ao Worker da Cloudflare. Não envie tokens ao chat e não use `--debug`, `set -x`, `cat` ou `echo` com os valores. As chaves VAPID existentes não participam da rotação.
 
-1. Gere o pacote em **WSL, Linux ou macOS**, fora do repo:
+1. Gere o pacote em **Windows nativo, Linux ou macOS**, fora do repo:
 
    ```sh
    python scripts/booking-webhook-rotation.py create
@@ -59,7 +63,7 @@ A aceitação dupla é encerrada por uma etapa explícita após confirmação, *
 
 4. Supabase → Database → Webhooks → webhook existente de `bookings`: altere somente `x-booking-webhook-secret` para o valor novo de `scheduler.stdin`. Preserve URL, INSERT/UPDATE, payload e timeout. Use campo seguro do dashboard/gerenciador de senhas; não coloque o valor no SQL Editor.
 
-   Para transferir sem imprimir o valor, um terminal WSL com acesso ao clipboard do Windows pode usar `clip.exe < "$ROTATION_DIR/scheduler.stdin"`; no macOS, `pbcopy < "$ROTATION_DIR/scheduler.stdin"`. Use clipboard sem histórico e limpe-o depois de colar. Não abra o arquivo em um viewer público nem envie captura desse campo. Esse passo é uma alteração da configuração da integração, não uma migration ou edição de dados/tabelas. Se sua restrição incluir também mudar a configuração do webhook, mantenha a rotação pendente: revogar o receptor sem atualizar esse emissor não é seguro.
+   Para Windows nativo, use os comandos PowerShell do [guia Windows](WINDOWS.md). Em CMD, `clip.exe < "%ROTATION_DIR%\scheduler.stdin"` copia sem imprimir; no macOS, `pbcopy < "$ROTATION_DIR/scheduler.stdin"`. Use clipboard sem histórico e limpe-o depois de colar. Não abra o arquivo em um viewer público nem envie captura desse campo. Esse passo é uma alteração da configuração da integração, não uma migration ou edição de dados/tabelas. Se sua restrição incluir também mudar a configuração do webhook, mantenha a rotação pendente: revogar o receptor sem atualizar esse emissor não é seguro.
 
 5. No **Worker agendado existente** `auto-stilo-raiox-scheduler`, atualize somente o binding secreto:
 

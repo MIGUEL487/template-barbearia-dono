@@ -37,6 +37,9 @@ jobs:
       - name: Validate deterministic reports and tenant isolation
         run: npm run test:raiox4 && npm run test:shop-selection
 
+      - name: Validate private rotation helper
+        run: python3 -m unittest discover -s tests -p test_booking_webhook_rotation.py -v
+
       - name: Run existing security unit tests
         run: npm run test:security --if-present
 
