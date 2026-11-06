@@ -1,0 +1,166 @@
+{
+  "results": [
+    {
+      "width": 1920,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "deterministicDashboard": true,
+      "reportsReadOnlyInBrowser": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "deterministicDashboard": true,
+      "reportsReadOnlyInBrowser": true,
+      "noOverflow": true
+    },
+    {
+      "missingSchema": true,
+      "readOnlyLedger": true
+    },
+    {
+      "emptyAnalytics": true,
+      "emptyLedger": true,
+      "emptyRaioX": true
+    },
+    {
+      "managementPages": true,
+      "supportRoute": true,
+      "profileHistory": true,
+      "quickBookingAndStaffModals": true,
+      "emptyManagement": true,
+      "dataErrors": true,
+      "login": true
+    }
+  ],
+  "calls": [
+    {
+      "operation": "GET user",
+      "count": 247
+    },
+    {
+      "operation": "OPTIONS user",
+      "count": 95
+    },
+    {
+      "operation": "OPTIONS shop_members",
+      "count": 95
+    },
+    {
+      "operation": "GET shop_members",
+      "count": 133
+    },
+    {
+      "operation": "GET websocket",
+      "count": 49
+    },
+    {
+      "operation": "GET barbershops",
+      "count": 38
+    },
+    {
+      "operation": "GET bookings",
+      "count": 76
+    },
+    {
+      "operation": "GET financial_transactions",
+      "count": 64
+    },
+    {
+      "operation": "GET barbers",
+      "count": 46
+    },
+    {
+      "operation": "GET services",
+      "count": 45
+    },
+    {
+      "operation": "GET working_hours",
+      "count": 42
+    },
+    {
+      "operation": "GET time_off",
+      "count": 21
+    },
+    {
+      "operation": "GET closed_days",
+      "count": 24
+    },
+    {
+      "operation": "GET raiox_reports",
+      "count": 28
+    },
+    {
+      "operation": "GET daily_goals",
+      "count": 15
+    },
+    {
+      "operation": "GET raiox_settings",
+      "count": 15
+    },
+    {
+      "operation": "POST get_availability",
+      "count": 15
+    },
+    {
+      "operation": "POST daily_goals",
+      "count": 2
+    },
+    {
+      "operation": "OPTIONS site_settings",
+      "count": 7
+    },
+    {
+      "operation": "GET site_settings",
+      "count": 7
+    },
+    {
+      "operation": "GET raiox_notification_preferences",
+      "count": 7
+    },
+    {
+      "operation": "POST raiox_notification_preferences",
+      "count": 2
+    },
+    {
+      "operation": "GET customers",
+      "count": 6
+    },
+    {
+      "operation": "GET consents",
+      "count": 2
+    },
+    {
+      "operation": "GET waitlist_entries",
+      "count": 6
+    },
+    {
+      "operation": "OPTIONS financial_transactions",
+      "count": 5
+    },
+    {
+      "operation": "OPTIONS bookings",
+      "count": 2
+    },
+    {
+      "operation": "OPTIONS barbers",
+      "count": 4
+    },
+    {
+      "operation": "OPTIONS services",
+      "count": 4
+    },
+    {
+      "operation": "OPTIONS closed_days",
+      "count": 3
+    },
+    {
+      "operation": "OPTIONS customers",
+      "count": 2
+    }
+  ]
+}

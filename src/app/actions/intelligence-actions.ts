@@ -1,9 +1,6 @@
 "use server";
-import { assertAiQuotaResult } from "@/lib/saas2/ai-errors";
 import { resolveCurrentShop } from "@/lib/current-shop";
 import { localDate, validBooking } from "@/lib/saas2/analytics";
-import { aiKey, aiRuntime } from "@/lib/runtime-secret";
-import { cachedInterpretation } from "@/lib/saas2/openrouter";
 import { Filter, loadIntelligence } from "@/lib/saas2/source";
 export async function analyticsAction(filter: unknown) {
   try {
@@ -104,7 +101,6 @@ export async function raioXAction(filter: unknown, serviceId?: string) {
           Date.parse(b.ends_at) > Date.now(),
       ).length,
       diagnosis: diagnose(current, previous, valid.barber ? null : goalCents),
-      aiConfigured: Boolean(aiKey()),
       generatedAt,
     };
   } catch (error) {
@@ -198,57 +194,6 @@ export async function closeDayAction(date: string) {
         error instanceof Error
           ? error.message
           : "Não foi possível gerar o encerramento. Confira a migration.",
-    };
-  }
-}
-export async function generateAiAction(date: string) {
-  try {
-    const { db, shop, current, previous } = await loadIntelligence({
-      start: date,
-      end: date,
-      barber: null,
-    });
-    const { key, model, timeoutMs, dailyQuotaEnabled } = aiRuntime(shop);
-    if (!key)
-      return {
-        ok: false as const,
-        error:
-          "O secret OPENROUTER_API_KEY não está disponível nesta execução. Confira Conexão IA no Raio-X. O diagnóstico determinístico continua disponível.",
-      };
-    const aggregate = {
-      date,
-      receivedCents: current.income,
-      forecastCents: current.expected,
-      completed: current.completed,
-      holds: current.pending,
-      cancelled: current.cancelled,
-      noShow: current.noShow,
-      occupancy: current.occupancy,
-      previousReceivedCents: previous.income,
-    };
-    const output = await cachedInterpretation(
-      shop,
-      key,
-      aggregate,
-      async () => {
-        if (!dailyQuotaEnabled) return;
-        const { data, error } = await db.rpc("consume_raiox_ai_quota", {
-          p_barbershop_id: shop,
-        });
-        assertAiQuotaResult(data, error);
-      },
-      model,
-      "D",
-      timeoutMs,
-    );
-    return { ok: true as const, output };
-  } catch (error) {
-    return {
-      ok: false as const,
-      error:
-        error instanceof Error
-          ? error.message
-          : "Análise generativa indisponível.",
     };
   }
 }

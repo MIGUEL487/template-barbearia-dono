@@ -1,3 +1,4 @@
+import {sendReportPush} from './report.ts';
 import {createClient} from '@supabase/supabase-js';
 // @deno-types="npm:@types/web-push@3.6.4"
 import webpush from 'web-push';
@@ -14,14 +15,20 @@ async function secretMatches(actual:string,expected:string){
  const hash=async(value:string)=>new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)));
  const [a,b]=await Promise.all([hash(actual),hash(expected)]);let mismatch=0;for(let i=0;i<a.length;i++)mismatch|=a[i]^b[i];return mismatch===0;
 }
-export async function handleRequest(request:Request){
+async function handlePushRequest(request:Request){
  if(request.method!=='POST')return json({error:'Method not allowed'},405);
  const secret=Deno.env.get('BOOKING_WEBHOOK_SECRET');
- if(!secret||secret.length<32)return json({error:'Webhook not configured'},503);
- if(!await secretMatches(request.headers.get('x-booking-webhook-secret')||'',secret))return json({error:'Unauthorized'},401);
  if(Number(request.headers.get('content-length')||0)>65536)return json({error:'Payload too large'},413);
  let event;
  try{const body=await request.text();if(body.length>65536)return json({error:'Payload too large'},413);event=JSON.parse(body);}catch{return json({error:'Invalid JSON'},400);}
+ if(!event||typeof event!=='object'||Array.isArray(event))return json({error:'Invalid event'},400);
+ const isTest=event.type==='RAIOX_TEST';
+ if(!isTest){if(!secret||secret.length<32)return json({error:'Webhook not configured'},503);if(!await secretMatches(request.headers.get('x-booking-webhook-secret')||'',secret))return json({error:'Unauthorized'},401);}
+ if(['RAIOX_REPORT','RAIOX_TEST'].includes(event.type)){
+  if(!uuid.test((isTest?event.barbershop_id:event.report_id)||''))return json({error:'Invalid report event'},400);
+  const url=Deno.env.get('SUPABASE_URL'),key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');if(!url||!key)return json({error:'Server not configured'},503);
+  try{return await sendReportPush(createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}}),event,request,allowedPushEndpoint)}catch(e){console.error('[RaioXPush]',{code:(e as {code?:string}).code||'internal'});return json({error:'Report push unavailable'},503)}
+ }
  if(event.schema!=='public'||event.table!=='bookings'||!['INSERT','UPDATE'].includes(event.type)||!uuid.test(event.record?.id||'')||!uuid.test(event.record?.barbershop_id||''))return json({error:'Invalid booking event'},400);
  const url=Deno.env.get('SUPABASE_URL'),key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
  const publicKey=Deno.env.get('VAPID_PUBLIC_KEY'),privateKey=Deno.env.get('VAPID_PRIVATE_KEY'),subject=Deno.env.get('VAPID_SUBJECT');
@@ -78,4 +85,15 @@ export async function handleRequest(request:Request){
   }));
   return json({sent,failed,removed,eventId},failed?503:200);
  }catch(error){console.error('[BookingPush] Handler failed',{code:(error as {code?:string}).code||'internal'});return json({error:'Push processing failed; retry this webhook'},500);}
+}
+
+// Restrict browser access to the owner's site. JWT/shop checks remain mandatory.
+export async function handleRequest(request:Request){
+ const allowed=Deno.env.get('PUSH_ALLOWED_ORIGIN')||'https://template-barbearia-dono.mi-c-openheimer.workers.dev';
+ const origin=request.headers.get('origin'),permitted=origin===allowed;
+ const headers:Record<string,string>=permitted?{'Access-Control-Allow-Origin':allowed,'Access-Control-Allow-Headers':'authorization, x-client-info, apikey, content-type','Access-Control-Allow-Methods':'POST, OPTIONS','Vary':'Origin'}:{};
+ if(request.method==='OPTIONS')return new Response(null,{status:permitted?204:403,headers});
+ let response:Response;
+ try{response=await handlePushRequest(request)}catch{console.error('[Push] Invalid request');response=json({error:'Push processing failed'},500)}
+ const result=new Response(response.body,{status:response.status,headers:response.headers});for(const [key,value]of Object.entries(headers))result.headers.set(key,value);return result;
 }

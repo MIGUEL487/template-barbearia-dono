@@ -1467,3 +1467,14 @@
 .management-scope .saas3 .s3-composer textarea {
   min-height: 40px;
 }
+/* Raio-X 4 uses the same surfaces, type and motion as the management workspace. */
+.r4-editorial{display:grid;grid-template-columns:minmax(0,2fr) minmax(240px,1fr);gap:24px;align-items:start}
+.r4-operations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding:24px 0;border-block:1px solid var(--hairline)}
+.r4-operations>div{display:flex;flex-direction:column;gap:8px;min-width:0}.r4-operations span{font-size:12px;color:var(--text-muted)}.r4-operations strong{font-size:20px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.r4-goal{display:block;font-size:clamp(24px,3vw,40px);margin-block:24px 16px}.r4-form{display:flex;align-items:end;flex-wrap:wrap;gap:16px;margin-top:16px}.r4-form label{display:grid;gap:8px;font-size:14px;min-width:0}.r4-form input{max-width:100%}.r4-toggle{display:flex!important;align-items:center;min-height:48px;width:100%}.r4-toggle input{flex:0 0 24px;width:24px!important;min-height:24px!important;height:24px!important;accent-color:var(--accent)}
+.r4-insights{display:grid;gap:16px;margin-top:24px}.r4-insights>div{padding-left:16px;border-left:2px solid var(--accent)}.r4-insights small{color:var(--text-muted)}
+.r4-ranking{display:grid;gap:24px;margin-block:24px}.r4-ranking>div{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}.r4-ranking progress{flex:1 0 100%}
+.management-scope progress{width:100%;height:8px;accent-color:var(--accent);border-radius:8px;overflow:hidden}.management-scope progress::-webkit-progress-bar{background:var(--surface-3)}.management-scope progress::-webkit-progress-value{background:var(--accent)}
+.r4-slots{display:flex;gap:8px;flex-wrap:wrap;margin-block:24px}.r4-slots a{display:flex;align-items:center;min-height:48px;padding:8px 16px;background:var(--accent-soft);color:var(--accent-light);border-radius:16px}.r4-history{margin-block:16px}.r4-history code{white-space:pre-wrap;overflow-wrap:anywhere}.r4-history:target{outline:2px solid var(--accent)}
+@media(max-width:1023px){.r4-editorial{grid-template-columns:minmax(0,1fr)}.r4-operations{gap:16px}.management-scope .s3-chart-toolbar{flex-wrap:wrap}}
+@media(max-width:639px){.r4-operations{grid-template-columns:repeat(2,minmax(0,1fr))}.r4-form>label:not(.r4-toggle){flex:1 1 100%}.r4-form>button{width:100%}.r4-operations strong{font-size:18px}}

@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "../styles/management-premium.css";
 import "../styles/saas3.css";
+import "../styles/mobile-experience.css";
 import {NotificationProvider} from '@/components/admin/notification-provider';
 const display=localFont({src:"./fonts/cinzel.ttf",weight:"400 900",variable:"--font-serif",display:"swap"});
 const manrope=localFont({src:"./fonts/outfit.ttf",weight:"100 900",variable:"--font-sans",display:"swap"});

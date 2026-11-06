@@ -1,0 +1,50 @@
+{
+  "baseCommit": "158923307e1de3e8d47fd327cc5335a1dc3d8a1c",
+  "lint": true,
+  "typecheck": true,
+  "buildOpenNext": true,
+  "tokensCheck": true,
+  "deterministicUnitTests": 10,
+  "edgeFunctionTests": 2,
+  "localSqlAppliedTwice": true,
+  "localSqlTenantIsolation": true,
+  "localLegacyBookingPaymentLedgerRegression": true,
+  "playwrightViewports": [
+    [
+      1920,
+      1080
+    ],
+    [
+      1366,
+      768
+    ],
+    [
+      820,
+      1180
+    ],
+    [
+      430,
+      932
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      360,
+      800
+    ]
+  ],
+  "historyAndPreferencesFocusedBrowser": true,
+  "schedulerDryRun": true,
+  "productionMigrationsExecuted": false,
+  "cloudflareSecretsChanged": false,
+  "productionCronVerified": false,
+  "realDevicePushVerified": false,
+  "deploymentStatus": "See remote verification after push; build alone does not prove cron or delivery.",
+  "historyBrowserViewports": [
+    1920,
+    390
+  ],
+  "backendTestsUseSyntheticData": true
+}

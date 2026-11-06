@@ -1,0 +1,11 @@
+{
+  "database": "raiox4_qa_20261105231953",
+  "sourceSyntheticOnly": true,
+  "productionAccess": false,
+  "idempotentInstallation": true,
+  "ownPreferences": true,
+  "tenantIsolation": true,
+  "anonymousDenied": true,
+  "pushClaims": true,
+  "legacyBookingPaymentLedgerRegression": true
+}

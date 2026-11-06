@@ -21,10 +21,10 @@
     "test:media": "node scripts/qa-media.mjs",
     "test:saas2": "node --experimental-strip-types --test tests/saas2*.test.mjs && node scripts/build-saas2-sql.mjs --check",
     "test:saas3": "node --test tests/saas3.test.mjs && node scripts/build-saas3-sql.mjs --check",
-    "test:saas31": "npm run test:openrouter",
+    "test:saas31": "npm run test:raiox4",
     "test:shop-selection": "node --test tests/shop-selection.test.mjs",
-    "test:openrouter": "node --test tests/openrouter.test.mjs",
-    "test:openrouter:worker": "node --test tests/openrouter-worker.test.mjs"
+    "test:raiox4": "node --test tests/raiox4.test.mjs && node scripts/build-raiox4-sql.mjs --check",
+    "test:mobile": "node scripts/qa-full-management.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

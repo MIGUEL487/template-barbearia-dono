@@ -1,7 +1,7 @@
 "use client";
 import { useInterfaceReducedMotion as useReducedMotion } from "@/components/ui/use-interface-motion";
 import { AnimatedSelect } from "@/components/ui/animated-select";
-import { useId, useState } from "react";
+import { useId, useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { money } from "@/lib/saas2/analytics";
 export function LineChart({
@@ -18,26 +18,29 @@ export function LineChart({
   singleSeries?: boolean;
 }) {
   const reduced = useReducedMotion();
+  const root=useRef<HTMLDivElement>(null);
+  const [chartWidth,setChartWidth]=useState(800);
+  useEffect(()=>{const el=root.current;if(!el)return;const observer=new ResizeObserver(()=>setChartWidth(Math.min(800,Math.max(280,Math.round(el.clientWidth)))));observer.observe(el);return()=>observer.disconnect()},[]);
   const [series, setSeries] = useState<"both" | "income" | "forecast">("both"),
     [active, setActive] = useState(0),
     [hovered, setHovered] = useState(false);
   const id = useId().replaceAll(":", "");
   const max = Math.max(1, ...rows.flatMap((r) => [r.income, r.forecast])),
-    w = 800,
+    w = chartWidth,
     h = 210,
     left = 64,
     right = 16,
     top = 16,
     bottom = 32,
     x = (i: number) =>
-      left + (i * (w - left - right)) / Math.max(1, rows.length - 1),
+      rows.length===1?left+(w-left-right)/2:left + (i * (w - left - right)) / Math.max(1, rows.length - 1),
     y = (n: number) => top + (1 - n / max) * (h - top - bottom);
   const path = (key: "income" | "forecast") =>
     rows.map((r, i) => `${i ? "L" : "M"}${x(i)},${y(r[key])}`).join(" ");
   const format = (n: number) => (monetary ? money(n) : String(n));
   const selected = rows[Math.min(active, rows.length - 1)];
   return (
-    <div className="s3-chart">
+    <div ref={root} className="s3-chart">
       <div className="s3-chart-toolbar">
         <div className="s3-legend">
           <span>

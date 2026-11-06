@@ -1,0 +1,27 @@
+/* Adapt existing management components; preserve desktop visual language. */
+.management-scope :is(.admin-content,.s3-body,.mg-panel,.s3-chart,.mg-settings-panels){min-width:0}
+.management-scope :is(.s3-table-scroll,.table-scroll){max-width:100%;overflow:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.management-scope :is(input,textarea,select){scroll-margin-block:96px}
+@media(max-width:1023px){
+ .management-scope .admin-bottom{padding-bottom:max(8px,env(safe-area-inset-bottom));height:auto;min-height:72px}
+ .management-scope .admin-bottom :is(a,button){min-height:48px;min-width:48px}
+ .management-scope .admin-more{max-height:calc(100dvh - 160px - env(safe-area-inset-bottom));overflow:auto;overscroll-behavior:contain;padding:24px 16px;bottom:calc(88px + env(safe-area-inset-bottom))}
+ .management-scope .admin-more :is(a,button){min-height:48px}
+ .management-scope .admin-mobile-brand{padding-top:max(16px,env(safe-area-inset-top))!important}
+ .management-scope .mg-layout .management-workspace{padding-bottom:calc(32px + env(safe-area-inset-bottom))}
+ .management-scope :is(dialog,.booking-sheet,.mg-dialog){max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px - env(safe-area-inset-top));overflow:auto;overscroll-behavior:contain}
+ .management-scope .management-workspace>.mg-page-header{flex-wrap:wrap}
+}
+@media(max-width:639px){
+ .management-scope :is(input:not([type=checkbox]):not([type=radio]),textarea,.ui-select-trigger){font-size:16px!important;min-height:48px}
+ .management-scope .s3-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+ .management-scope .s3-metric{padding:16px;min-width:0}.management-scope .s3-metric>strong{font-size:clamp(20px,6vw,28px);overflow-wrap:anywhere}.management-scope .s3-metric>p{font-size:12px}.management-scope .s3-metric-icon{display:none}
+ .management-scope .s3-date-range{flex-wrap:wrap}.management-scope .s3-date-range label{flex:1 1 128px}.management-scope .s3-date-range input{max-width:100%;width:100%}
+ .management-scope .s3-segment{gap:8px;padding:8px}.management-scope .s3-segment button{min-height:48px;padding:8px 16px}
+ .management-scope .mg-layout .management-workspace{gap:24px}
+ .management-scope .mg-settings-panels>section{padding:24px 16px}
+ .management-scope .s3-chart-toolbar{gap:16px}.management-scope .s3-chart-tooltip{max-width:calc(100% - 32px)}
+ .management-scope .agenda-grid{grid-template-columns:minmax(0,1fr)}
+ .management-scope :is(.mg-page-actions,.s3-inline){gap:8px;flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){.management-scope :is(.admin-more,.s3-body){scroll-behavior:auto}}

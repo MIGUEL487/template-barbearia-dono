@@ -31,7 +31,7 @@ self.addEventListener('push', event => {
     try { await self.registration.showNotification(data.title.slice(0, 80), {
       body: data.body.slice(0, 420), icon:'/pwa/icon-192.png', badge:'/pwa/badge-96.png',
       tag:data.eventId, renotify:false, silent:windows.some(client => client.visibilityState === 'visible'),
-      data:{url:'/agenda'},
+      data:{url:typeof data.url==='string'&&/^\/raio-x(?:\?date=\d{4}-\d{2}-\d{2}&report=(?:briefing|closing))?$/.test(data.url)?data.url:'/agenda'},
     }); } catch (error) {
       // A failed OS display must remain retryable, rather than poisoning dedup.
       if (db) await new Promise(resolve => {
@@ -40,16 +40,18 @@ self.addEventListener('push', event => {
       });
       throw error;
     } finally { if (db) db.close(); }
-    windows.forEach(client => client.postMessage({type:'BOOKING_PUSH',eventId:data.eventId,title:data.title,body:data.body}));
+    windows.forEach(client => client.postMessage({type:data.type==='RAIOX_REPORT'?'RAIOX_REPORT':'BOOKING_PUSH',eventId:data.eventId,title:data.title,body:data.body,url:data.type==='RAIOX_REPORT'?data.url:'/agenda'}));
   })());
 });
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil((async () => {
+    const target=event.notification.data?.url;
+    const destination=typeof target==='string'&&/^\/raio-x(?:\?date=\d{4}-\d{2}-\d{2}&report=(?:briefing|closing))?$/.test(target)?target:'/agenda';
     const windows = await self.clients.matchAll({type:'window',includeUncontrolled:true});
     for (const client of windows) {
-      if (new URL(client.url).origin === self.location.origin) { await client.navigate('/agenda'); await client.focus(); return; }
+      if (new URL(client.url).origin === self.location.origin) { await client.navigate(destination); await client.focus(); return; }
     }
-    await self.clients.openWindow('/agenda');
+    await self.clients.openWindow(destination);
   })());
 });

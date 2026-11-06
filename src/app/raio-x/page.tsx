@@ -1,1 +1,2 @@
-import {Chat3} from '@/components/saas3/chat';export default function Page(){return <Chat3/>}
+import {OperationalDashboard} from '@/components/saas3/operational';
+export default function Page(){return <OperationalDashboard/>}

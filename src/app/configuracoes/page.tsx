@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Support } from "@/components/saas2/support";
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { ManagementLayout } from "@/components/admin/management-layout";
+import {ReportNotificationControls} from "@/components/admin/report-notification-controls";
 import { NotificationControls } from "@/components/admin/notification-controls";
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -157,6 +158,8 @@ export default function ConfiguracoesPage() {
           <section id="avisos" aria-label="Notificações">
             <NotificationControls />
           </section>
+
+          <ReportNotificationControls />
 
           {isLoading ? (
             <AdminSkeleton />

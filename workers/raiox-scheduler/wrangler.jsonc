@@ -1,0 +1,10 @@
+{
+ "$schema":"../../node_modules/wrangler/config-schema.json",
+ "name":"auto-stilo-raiox-scheduler",
+ "main":"index.ts",
+ "compatibility_date":"2026-11-05",
+ "compatibility_flags":["nodejs_compat"],
+ "triggers":{"crons":["*/5 * * * *"]},
+ "observability":{"enabled":true},
+ "vars":{"SUPABASE_URL":"https://jrzabortkpouqkwndpcq.supabase.co"}
+}

@@ -9,7 +9,7 @@ import {applicationServerKey,deactivateDevicePush,deviceSubscription,pushSupport
 import {Button} from '@/components/ui/button';
 
 type Identity={userId:string;shopId:string};
-type Notice={eventId:string;title:string;body:string};
+type Notice={eventId:string;title:string;body:string;url?:string};
 type Context={identity:Identity|null;pushEnabled:boolean;busy:boolean;message:string;support:string;permission:string;connected:boolean;soundEnabled:boolean;soundReady:boolean;enablePush:()=>Promise<void>;disablePush:()=>Promise<void>;toggleSound:()=>Promise<void>};
 const Notifications=createContext<Context|null>(null);
 export const useNotifications=()=>useContext(Notifications);
@@ -112,10 +112,10 @@ export function NotificationProvider({children}:{children:React.ReactNode}){
     present({eventId,title:event.title,body:bookingNotificationBody(row,barber?.name||'Profissional',items?.map(item=>item.service_name)||[])});
    }).subscribe(status=>{if(active){setConnected(status==='SUBSCRIBED');if(status==='SUBSCRIBED')void snapshot();if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')report('Realtime',status);}});
   const fromWorker=(event:MessageEvent)=>{
-   if(!active||event.data?.type!=='BOOKING_PUSH'||!/^[a-f0-9]{64}$/.test(event.data.eventId||''))return;
+   if(!active||!['BOOKING_PUSH','RAIOX_REPORT'].includes(event.data?.type)||!/^[a-f0-9]{64}$/.test(event.data.eventId||''))return;
    // Only accept this app's worker, not an arbitrary window message.
    if(!(event.source instanceof ServiceWorker)||new URL(event.source.scriptURL).pathname!=='/booking-push-sw.js')return;
-   refreshAgenda();present(event.data);
+   if(event.data.type==='RAIOX_REPORT'){const url=event.data.url;present({...event.data,url:typeof url==='string'&&/^\/raio-x(?:\?date=\d{4}-\d{2}-\d{2}&report=(?:briefing|closing))?$/.test(url)?url:'/raio-x'})}else{refreshAgenda();present({...event.data,url:'/agenda'})}
   };
   navigator.serviceWorker?.addEventListener('message',fromWorker);
   return()=>{active=false;setConnected(false);void db.removeChannel(channel);navigator.serviceWorker?.removeEventListener('message',fromWorker);};
@@ -163,7 +163,7 @@ export function NotificationProvider({children}:{children:React.ReactNode}){
  return <Notifications.Provider value={{identity,pushEnabled,busy,message,support,permission,connected,soundEnabled,soundReady,enablePush,disablePush,toggleSound}}>{children}
   {identity&&notice&&<aside aria-label="Aviso de reserva" role="status" className="fixed top-6 right-4 left-4 md:left-auto md:w-96 z-50 bg-surface text-text rounded-[28px] p-6 shadow-soft space-y-4">
    <h2 className="font-serif text-xl">{notice.title}</h2><p className="text-sm text-text-muted">{notice.body}</p>
-   <div className="flex items-center gap-4"><Link href="/agenda" className="text-sm text-accent">Abrir agenda</Link><Button type="button" variant="ghost" size="sm" onClick={()=>setNotice(null)}>Fechar aviso</Button></div>
+   <div className="flex items-center gap-4"><Link href={notice.url||"/agenda"} className="text-sm text-accent">{notice.url?.startsWith("/raio-x")?"Abrir Raio-X":"Abrir agenda"}</Link><Button type="button" variant="ghost" size="sm" onClick={()=>setNotice(null)}>Fechar aviso</Button></div>
   </aside>}
  </Notifications.Provider>;
 }

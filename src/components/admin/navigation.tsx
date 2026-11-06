@@ -1,6 +1,5 @@
 "use client";
 
-import { ReportBootstrap } from "@/components/saas3/report-bootstrap";
 import { ShopSwitcher } from "./shop-switcher";
 import { MotionToggle } from "@/components/motion-preferences";
 import { DemoBadge } from "@/components/demo-watermark";
@@ -83,7 +82,6 @@ export function AdminNavigation() {
 
   return (
     <>
-      <ReportBootstrap />
       {/* Mobile Top Brand Bar */}
       <div className="admin-mobile-brand">
         <div className="flex items-center gap-3">

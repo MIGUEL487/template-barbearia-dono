@@ -42,3 +42,16 @@ next-env.d.ts
 .open-next/
 .dev.vars*
 !.dev.vars.example
+
+# QA artifacts: keep reports and selected review images.
+/docs/raiox4/evidencias/*
+!/docs/raiox4/evidencias/*.json
+!/docs/raiox4/evidencias/menu-aberto-390.png
+!/docs/raiox4/evidencias/raio-x-1920.png
+!/docs/raiox4/evidencias/raio-x-390.png
+
+# QA artifacts: keep reports and selected review images.
+/docs/raiox4/history-evidence/*
+!/docs/raiox4/history-evidence/*.json
+!/docs/raiox4/history-evidence/preferencias-390.png
+!/docs/raiox4/history-evidence/raio-x-390.png

@@ -6,7 +6,7 @@ import { spawn } from "node:child_process";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 const root = process.cwd(),
-  out = path.join(root, "docs/ai-quota-temporary/evidencias");
+  out = path.join(root, process.env.QA_FOCUS ? "docs/raiox4/history-evidence" : "docs/raiox4/evidencias");
 await fs.mkdir(out, { recursive: true });
 const shop = "11111111-1111-1111-1111-111111111111",
   uid = "99999999-9999-4999-8999-999999999999",
@@ -29,8 +29,8 @@ let threads = [],
   reports = [],
   manualLedger = [],
   missing3 = false;
+let reportPreference={barbershop_id:shop,user_id:uid,morning:true,evening:true};
 const calls = [];
-let providerFails = false;
 let emptyManagement = false,
   failManagement = false;
 let fixtureServices = [],
@@ -102,62 +102,6 @@ const mock = http.createServer(async (req, res) => {
     "Access-Control-Allow-Methods",
     "GET,POST,PATCH,DELETE,OPTIONS",
   );
-  if (url.pathname === "/openrouter/models") {
-    res.end(
-      JSON.stringify({
-        data: [
-          {
-            id: "fixture/model:free",
-            supported_parameters: ["response_format", "structured_outputs"],
-            pricing: { prompt: "0", completion: "0" },
-          },
-        ],
-      }),
-    );
-    return;
-  }
-  if (url.pathname === "/openrouter/chat/completions") {
-    if (providerFails) {
-      res.statusCode = 402;
-      res.end(
-        JSON.stringify({
-          error: { code: 402, message: "fixture-private-error-must-not-leak" },
-        }),
-      );
-      return;
-    }
-    res.end(
-      JSON.stringify({
-        choices: [
-          {
-            message: {
-              role: "assistant",
-              content: JSON.stringify({
-                resumo:
-                  "Interpretação OpenRouter da fixture, sem chamada real.",
-                pontos_positivos: [],
-                pontos_de_atencao: [],
-                sugestoes: [],
-                prioridade: "normal",
-              }),
-            },
-            finish_reason: "stop",
-          },
-        ],
-        usage: {
-          prompt_tokens: 10,
-          completion_tokens: 20,
-          total_tokens: 30,
-          cost: 0,
-        },
-      }),
-    );
-    return;
-  }
-  if (name === "consume_raiox_ai_quota") {
-    res.end("false");
-    return;
-  }
   if (req.method === "OPTIONS") {
     res.end();
     return;
@@ -340,6 +284,8 @@ const mock = http.createServer(async (req, res) => {
     } else rows = reports;
   }
 
+  if(name==='raiox_settings')rows=[{barbershop_id:shop,low_occupancy_threshold:.4}];
+  if(name==='raiox_notification_preferences'){if(req.method==='POST')reportPreference=payload;rows=[reportPreference]}
   if (name === "shop_members")
     rows = denied
       ? []
@@ -543,37 +489,6 @@ const fixture = await fs.mkdtemp("/workspace/full-owner-qa-");
 await fs.cp(path.join(root, "src"), path.join(fixture, "src"), {
   recursive: true,
 });
-// Fixture-only provider endpoint and runtime switch. Never copied into production.
-const providerPath = path.join(fixture, "src/lib/saas2/openrouter.ts");
-await fs.writeFile(
-  providerPath,
-  (await fs.readFile(providerPath, "utf8")).replace(
-    'const api = "https://openrouter.ai/api/v1";',
-    `const api = "${supabaseUrl}/openrouter";`,
-  ),
-);
-const runtimePath = path.join(fixture, "src/lib/runtime-secret.ts");
-const credentialFlag = path.join(fixture, ".qa-ai-enabled");
-await fs.writeFile(
-  runtimePath,
-  'import {existsSync} from "node:fs";\n' +
-    (await fs.readFile(runtimePath, "utf8"))
-      .replace("now = Date.now()", 'now = Date.parse("2026-11-05T23:00:00Z")')
-      .replace(
-        'nodeKey = process.env.OPENROUTER_API_KEY?.trim() || "";',
-        `nodeKey = existsSync(${JSON.stringify(credentialFlag)}) ? "fixture-server-key" : "";`,
-      ),
-);
-// The isolated quota scenario uses a fixed in-window clock; the report gets an after-close clock.
-// No clock override or fixture code is copied back into production source.
-const reportActionPath = path.join(fixture, "src/app/actions/chat-actions.ts");
-await fs.writeFile(
-  reportActionPath,
-  (await fs.readFile(reportActionPath, "utf8")).replace(
-    "const now = Date.now(),",
-    `const now = new Date('${date}T21:00:00-03:00').getTime(),`,
-  ),
-);
 await fs.cp(path.join(root, "supabase"), path.join(fixture, "supabase"), {
   recursive: true,
 });
@@ -600,6 +515,11 @@ await fs.writeFile(
     "config.output=undefined;config.headers=async()=>[];export default config;",
   ),
 );
+if(process.env.QA_FOCUS){
+ const {build}=await import('esbuild');const engine=path.join(fixture,'report-engine.mjs');await build({entryPoints:[path.join(root,'src/lib/raiox4/report.ts')],bundle:true,platform:'node',format:'esm',outfile:engine,logLevel:'silent'});const {operationalReport}=await import(engine);
+ const source={bookings:history,history,ledger:[],barbers:[{id:barber,name:'Carlos',is_active:true}],services:[],hours:[],off:[],closed:[],consents:[]};
+ reports=[{id:'report-v4',barbershop_id:shop,date,kind:'briefing',payload:operationalReport(source,date,'briefing',null),generated_at:new Date().toISOString()},{id:'report-legacy',barbershop_id:shop,date,kind:'closing',payload:{version:1,income:5000,bookings:2},generated_at:new Date().toISOString()}];
+}
 const log = await fs.open("/tmp/full-next-fixture.log", "w");
 const child = spawn(
   process.execPath,
@@ -613,9 +533,6 @@ const child = spawn(
       NEXT_PUBLIC_BARBERSHOP_ID: "",
       NEXT_PUBLIC_DEMO_MODE: "false",
       NEXT_PUBLIC_DEMO_WATERMARK: "true",
-      OPENROUTER_API_KEY: "",
-      OPENROUTER_MODEL: "fixture/model:free",
-      AI_DAILY_QUOTA_ENABLED: "false",
     },
     stdio: ["ignore", log.fd, log.fd],
   },
@@ -646,9 +563,9 @@ try {
   });
   for (const width of process.env.QA_WIDTHS
     ? process.env.QA_WIDTHS.split(",").map(Number)
-    : [1440, 1024, 820, 390]) {
+    : [1920,1366,820,430,390,360]) {
     const context = await b.newContext({
-      viewport: { width, height: 1000 },
+      viewport: { width, height: ({1920:1080,1366:768,820:1180,430:932,390:844,360:800})[width]||900 },
       timezoneId: "America/Sao_Paulo",
       locale: "pt-BR",
       reducedMotion: width === 820 ? "reduce" : "no-preference",
@@ -683,6 +600,7 @@ try {
       errors = [];
     p.on("pageerror", (e) => errors.push(e.message));
     p.on("dialog", (d) => d.accept());
+    if(!process.env.QA_FOCUS){
     for (const route of [
       "dashboard",
       "agenda",
@@ -952,177 +870,38 @@ try {
       await p.evaluate(() => document.documentElement.scrollWidth > innerWidth),
       false,
     );
-    await p.goto("http://127.0.0.1:8897/raio-x");
-    const reportDetails = p.getByRole("button", {
-      name: "Detalhes deste relatório",
-      exact: true,
-    });
-    await reportDetails.waitFor();
-    await reportDetails.click();
-    await p.getByText(/Resumo calculado dos registros da loja/).waitFor();
-    assert(p.url().endsWith("/raio-x"));
-    await p.waitForTimeout(220);
-    await p.screenshot({
-      path: `${out}/raio-x-relatorio-inline-${width}.png`,
-      fullPage: true,
-    });
-    const entry = p.getByRole("textbox", { name: "Mensagem para o Raio-X" });
-    await entry.fill("Teste de quebra");
-    await entry.press("Shift+Enter");
-    assert((await entry.inputValue()).includes("\n"));
-    await entry.fill("");
-    await p
-      .locator(".s3-shortcuts")
-      .getByRole("button", { name: "Resumo de hoje", exact: true })
-      .waitFor();
-    await p
-      .locator(".s3-shortcuts")
-      .getByRole("button", { name: "Resumo de hoje", exact: true })
-      .click();
-    await p
-      .getByText("Raio-X · resumo calculado", { exact: true })
-      .first()
-      .waitFor();
-    await p
-      .getByRole("textbox", { name: "Mensagem para o Raio-X" })
-      .fill("Como estão minhas despesas esta semana?");
-    await p.getByRole("button", { name: "Enviar ↗", exact: true }).click();
-    await p
-      .getByText("Raio-X · resumo calculado", { exact: true })
-      .nth(1)
-      .waitFor();
-    assert.equal(
-      messages.filter((m) => m.role === "assistant").length >= 2,
-      true,
-    );
-    await p
-      .getByRole("button", { name: "+ Nova conversa", exact: true })
-      .click();
-    await p
-      .getByRole("button", { name: "Resumo de hoje", exact: true })
-      .last()
-      .click();
-    await p
-      .getByText("Raio-X · resumo calculado", { exact: true })
-      .first()
-      .waitFor();
-    await p.reload();
-    assert.equal(await p.getByRole("dialog").isVisible(), false);
-    if (width >= 1024) {
-      const sidebar = await p.locator(".admin-sidebar").boundingBox();
-      assert.equal(sidebar.x, 0);
-      assert.equal(sidebar.y, 0);
-      assert.equal(Math.round(sidebar.height), p.viewportSize().height);
     }
-    await p
-      .getByRole("button", { name: "Histórico e opções", exact: true })
-      .click();
-    await p.getByRole("dialog").waitFor();
-    await p.waitForTimeout(220);
-    await p.screenshot({ path: `${out}/raio-x-historico-${width}.png` });
-    await p
-      .getByRole("dialog")
-      .getByRole("button", { name: "Resumo de hoje", exact: true })
-      .first()
-      .click();
-    await p.getByRole("dialog").waitFor({ state: "hidden" });
-    await p
-      .getByText("Raio-X · resumo calculado", { exact: true })
-      .first()
-      .waitFor();
-    await p.waitForTimeout(250);
-    await p.screenshot({ path: `${out}/raio-x-${width}.png`, fullPage: true });
-    await fs.writeFile(credentialFlag, "fixture");
     await p.goto("http://127.0.0.1:8897/raio-x");
-    const integrationQuestion = `OpenRouter integração ${width}`;
-    await p
-      .getByRole("textbox", { name: "Mensagem para o Raio-X" })
-      .fill(integrationQuestion);
-    await p.getByRole("button", { name: "Enviar ↗", exact: true }).click();
-    await p
-      .getByText("Raio-X · dados calculados + OpenRouter", { exact: true })
-      .waitFor();
-    await p.getByText(/Interpretação OpenRouter da fixture/).waitFor();
-    assert.equal(
-      calls.filter((c) => c.name === "consume_raiox_ai_quota").length,
-      0,
-      "Daily quota RPC must not be invoked while paused",
-    );
-    assert(
-      messages.some(
-        (m) =>
-          m.payload?.mode === "openrouter" && m.payload?.aiUsage?.costUsd === 0,
-      ),
-    );
+    await p.getByRole('heading',{name:'Recebimentos e previsão',exact:true}).waitFor();
+    assert.equal(await p.getByRole('textbox',{name:'Mensagem para o Raio-X'}).count(),0);
+    await p.getByRole('button',{name:'Como os indicadores são calculados',exact:true}).click();
+    await p.getByText(/Ticket: valor dos serviços/).waitFor();
+    await p.getByRole('button',{name:'Ontem',exact:true}).click();
+    await p.getByRole('button',{name:'Hoje',exact:true}).click();
+    await p.waitForTimeout(300);
+    await p.waitForFunction(()=>!document.querySelector('[aria-label="Meta em reais"]')?.disabled);
+    await p.getByLabel('Meta em reais',{exact:true}).fill('200');
+    await p.getByRole('button',{name:'Salvar meta',exact:true}).click();
+    await p.getByText('Meta salva.',{exact:true}).waitFor();
     await p.reload();
-    await p
-      .getByRole("button", { name: "Histórico e opções", exact: true })
-      .click();
-    await p
-      .getByRole("dialog")
-      .getByRole("button", { name: integrationQuestion, exact: true })
-      .click();
-    await p
-      .getByText("Raio-X · dados calculados + OpenRouter", { exact: true })
-      .waitFor();
-    await p.getByRole("dialog").waitFor({ state: "hidden" });
-    await p.waitForFunction(() => {
-      const b = Array.from(document.querySelectorAll("button")).find(
-        (b) => b.textContent?.trim() === "+ Nova conversa",
-      );
-      return b && !b.disabled;
-    });
-    await p.waitForTimeout(250);
-    await p.screenshot({
-      path: `${out}/openrouter-chat-${width}.png`,
-      fullPage: true,
-    });
-    providerFails = true;
-    const postBefore = calls.filter((c) => c.name === "completions").length;
-    await p
-      .getByRole("textbox", { name: "Mensagem para o Raio-X" })
-      .fill(`Verificar créditos ${width}`);
-    assert.equal(
-      await p
-        .getByRole("textbox", { name: "Mensagem para o Raio-X" })
-        .inputValue(),
-      `Verificar créditos ${width}`,
-    );
-    await p.getByRole("button", { name: "Enviar ↗", exact: true }).click();
-    await p
-      .getByText(/Créditos insuficientes no OpenRouter/)
-      .first()
-      .waitFor();
-    assert.equal(
-      calls.filter((c) => c.name === "completions").length,
-      postBefore + 1,
-    );
-    assert(
-      !(await p.locator("body").innerText()).includes(
-        "fixture-private-error-must-not-leak",
-      ),
-    );
-    providerFails = false;
-    await fs.rm(credentialFlag, { force: true });
-    await p.goto("http://127.0.0.1:8897/raio-x");
-    const before = reports.length;
-    await p
-      .getByRole("button", { name: "Relatórios do expediente", exact: true })
-      .click();
-    await p.waitForTimeout(250);
-    await p.screenshot({
-      path: `${out}/relatorios-${width}.png`,
-      fullPage: true,
-    });
-    await p.reload();
-    await p
-      .getByRole("button", { name: "Relatórios do expediente", exact: true })
-      .waitFor();
-    assert.equal(reports.length, before);
-    assert.equal(
-      await p.evaluate(() => document.documentElement.scrollWidth > innerWidth),
-      false,
-    );
+    await p.getByRole('heading',{name:'Recebimentos e previsão',exact:true}).waitFor();
+    assert.equal(await p.getByLabel('Meta em reais',{exact:true}).inputValue(),'200');
+    assert.equal(calls.filter(c=>['completions','consume_raiox_ai_quota'].includes(c.name)).length,0);
+    assert.equal(calls.filter(c=>c.name==='raiox_reports'&&c.method==='POST').length,0,'Opening panel must never generate reports');
+    if(process.env.QA_FOCUS){
+     await p.getByRole('button',{name:/Briefing matinal/}).click();
+     await p.getByText(/Recebimentos no dia anterior:/).waitFor();
+     await p.goto('http://127.0.0.1:8897/raio-x?date='+date+'&report=closing');
+     await p.getByText('Relatório anterior preservado.',{exact:true}).waitFor();
+     assert.equal(reports.length,2);
+     await p.goto('http://127.0.0.1:8897/configuracoes');
+     const checkbox=p.getByRole('checkbox',{name:'Receber briefing matinal',exact:true});await checkbox.uncheck();await p.getByRole('button',{name:'Salvar preferências',exact:true}).click();await p.getByText('Preferências salvas para sua conta nesta barbearia.',{exact:true}).waitFor();await p.reload();await p.getByRole('button',{name:'Salvar preferências',exact:true}).waitFor();assert.equal(await checkbox.isChecked(),false);
+     await p.screenshot({path:`${out}/preferencias-${width}.png`,fullPage:true});
+     await p.goto('http://127.0.0.1:8897/raio-x?date='+date+'&report=closing');
+     await p.getByText('Relatório anterior preservado.',{exact:true}).waitFor();
+    }
+    await p.screenshot({path:`${out}/raio-x-${width}.png`,fullPage:true});
+    assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Raio-X overflow '+width);
     for (const route of ["resgate", "fila-de-espera", "configuracoes"]) {
       await p.goto("http://127.0.0.1:8897/" + route);
       await p.getByRole("heading", { level: 1 }).waitFor();
@@ -1161,8 +940,8 @@ try {
       analytics: true,
       ledgerPurchaseEditVoidSale: true,
       csv: true,
-      persistentChat: true,
-      idempotentReports: true,
+      deterministicDashboard: true,
+      reportsReadOnlyInBrowser: true,
       noOverflow: true,
     });
     await context.close();
@@ -1199,38 +978,7 @@ try {
       .getByRole("button", { name: "Registrar compra", exact: true })
       .isDisabled(),
   );
-  await p.goto("http://127.0.0.1:8897/raio-x");
-  await p.getByText(/Histórico aguardando a migration SaaS 3.0/).waitFor();
-  await p
-    .getByRole("textbox", { name: "Mensagem para o Raio-X" })
-    .fill("Quanto faturei hoje?");
-  await p.getByRole("button", { name: "Enviar ↗" }).click();
-  await p.getByText(/Prévia calculada sem histórico/).waitFor();
-  await p
-    .getByRole("button", { name: "Histórico e opções", exact: true })
-    .click();
-  await p.getByRole("button", { name: "Conexão IA", exact: true }).click();
-  await p.getByText(/missing_runtime_key/).waitFor();
-  const quotaBefore = calls.filter(
-    (c) => c.name === "consume_raiox_ai_quota",
-  ).length;
-  await p
-    .getByRole("button", { name: "Testar integração", exact: true })
-    .click();
-  await p.getByText(/missing_runtime_key/).waitFor();
-  assert.equal(
-    calls.filter((c) => c.name === "consume_raiox_ai_quota").length,
-    quotaBefore,
-  );
-  await p.screenshot({
-    path: `${out}/ai-diagnostic-missing-runtime.png`,
-    fullPage: true,
-  });
-  results.push({
-    missingSchema: true,
-    readOnlyLedger: true,
-    explicitUnsavedChat: true,
-  });
+  results.push({missingSchema:true,readOnlyLedger:true});
   missing3 = false;
   emptyData = true;
   await p.goto("http://127.0.0.1:8897/analises");
@@ -1241,24 +989,9 @@ try {
   await p
     .getByRole("heading", { name: "Nenhuma movimentação neste filtro." })
     .waitFor();
-  assert(
-    reports.some((r) => r.kind === "briefing"),
-    "Automatic briefing not generated",
-  );
-  assert(
-    reports.some((r) => r.kind === "closing"),
-    "Automatic closing not generated",
-  );
-  assert.equal(
-    new Set(reports.map((r) => r.barbershop_id + r.date + r.kind)).size,
-    reports.length,
-  );
-  results.push({
-    emptyAnalytics: true,
-    emptyLedger: true,
-    generatedBriefing: true,
-    generatedClosing: true,
-  });
+  await p.goto('http://127.0.0.1:8897/raio-x');
+  await p.getByRole('heading',{name:'Seu próximo atendimento começa aqui'}).waitFor();
+  results.push({emptyAnalytics:true,emptyLedger:true,emptyRaioX:true});
   emptyData = false;
   emptyManagement = true;
   for (const route of [

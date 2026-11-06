@@ -10,8 +10,8 @@ const answers = [
     "/financeiro",
   ],
   [
-    "Como converso com o Raio-X?",
-    "Faça perguntas sobre números e períodos. O servidor consulta dados autorizados; OpenRouter interpreta quando disponível. Sem provedor, a resposta é calculada e identificada. Não informe contatos pessoais. Conversas são privadas por usuário e loja.",
+    "Como uso o Raio-X?",
+    "Consulte indicadores, metas, encaixes e relatórios salvos. Todos os números são calculados dos registros autorizados da barbearia, sem IA generativa. Briefings e fechamentos dependem da rotina agendada; ative as preferências em Configurações. Conversas anteriores ficam em arquivo somente leitura.",
     "/raio-x",
   ],
   [
@@ -36,12 +36,12 @@ const answers = [
   ],
   [
     "O encerramento é automático?",
-    "Briefing e fechamento são gerados uma vez por data na primeira abertura após os horários cadastrados. Não há job em segundo plano. Sem acesso, a próxima abertura pode gerar o fechamento do último dia de expediente. Relatórios não lançam recebimentos.",
+    "Com o scheduler instalado e seu cron ativo na Cloudflare, o backend gera briefing e fechamento após os horários de expediente, mesmo sem abrir o painel. Em Configurações, autorize cada notificação. A rotina exige a instalação documentada do Raio-X 4.0 e não lança recebimentos.",
     "/raio-x",
   ],
   [
     "O que é demonstrativo?",
-    "Campanhas e conversa do assistente não enviam mensagens nem criam agendamentos. Áudio e WhatsApp são integrações futuras. IA generativa é opcional e usa somente indicadores agregados, com limite diário.",
+    "Campanhas sugeridas não enviam mensagens nem criam agendamentos automaticamente. WhatsApp depende de integração específica. Os indicadores do Raio-X usam registros reais; não há geração por modelos de linguagem.",
     "/resgate",
   ],
   [

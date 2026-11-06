@@ -9,9 +9,9 @@ export function periodFor(preset: string): PeriodValue {
   const end = localDate();
   return {
     preset,
-    end,
+    end: preset === 'yesterday' ? shiftDate(end,-1) : end,
     start:
-      preset === "today"
+      preset === "yesterday" ? shiftDate(end,-1) : preset === "today"
         ? end
         : preset === "month"
           ? end.slice(0, 8) + "01"
@@ -30,6 +30,7 @@ export function PeriodControl({
       <div className="s3-segment" role="group" aria-label="Período">
         {[
           ["today", "Hoje"],
+          ["yesterday", "Ontem"],
           ["7", "7 dias"],
           ["30", "30 dias"],
           ["month", "Mês"],

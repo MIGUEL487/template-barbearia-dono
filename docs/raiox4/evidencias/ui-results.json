@@ -1,0 +1,222 @@
+{
+  "results": [
+    {
+      "width": 1920,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "deterministicDashboard": true,
+      "reportsReadOnlyInBrowser": true,
+      "noOverflow": true
+    },
+    {
+      "width": 1366,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "deterministicDashboard": true,
+      "reportsReadOnlyInBrowser": true,
+      "noOverflow": true
+    },
+    {
+      "width": 820,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "deterministicDashboard": true,
+      "reportsReadOnlyInBrowser": true,
+      "noOverflow": true
+    },
+    {
+      "width": 430,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "deterministicDashboard": true,
+      "reportsReadOnlyInBrowser": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "deterministicDashboard": true,
+      "reportsReadOnlyInBrowser": true,
+      "noOverflow": true
+    },
+    {
+      "width": 360,
+      "analytics": true,
+      "ledgerPurchaseEditVoidSale": true,
+      "csv": true,
+      "deterministicDashboard": true,
+      "reportsReadOnlyInBrowser": true,
+      "noOverflow": true
+    },
+    {
+      "missingSchema": true,
+      "readOnlyLedger": true
+    },
+    {
+      "emptyAnalytics": true,
+      "emptyLedger": true,
+      "emptyRaioX": true
+    },
+    {
+      "managementPages": true,
+      "supportRoute": true,
+      "profileHistory": true,
+      "quickBookingAndStaffModals": true,
+      "emptyManagement": true,
+      "dataErrors": true,
+      "login": true
+    }
+  ],
+  "calls": [
+    {
+      "operation": "GET user",
+      "count": 791
+    },
+    {
+      "operation": "OPTIONS user",
+      "count": 287
+    },
+    {
+      "operation": "OPTIONS shop_members",
+      "count": 287
+    },
+    {
+      "operation": "GET shop_members",
+      "count": 435
+    },
+    {
+      "operation": "GET websocket",
+      "count": 168
+    },
+    {
+      "operation": "OPTIONS financial_transactions",
+      "count": 41
+    },
+    {
+      "operation": "GET financial_transactions",
+      "count": 318
+    },
+    {
+      "operation": "OPTIONS bookings",
+      "count": 14
+    },
+    {
+      "operation": "GET bookings",
+      "count": 290
+    },
+    {
+      "operation": "OPTIONS barbers",
+      "count": 34
+    },
+    {
+      "operation": "GET barbers",
+      "count": 168
+    },
+    {
+      "operation": "OPTIONS services",
+      "count": 40
+    },
+    {
+      "operation": "GET services",
+      "count": 173
+    },
+    {
+      "operation": "OPTIONS working_hours",
+      "count": 18
+    },
+    {
+      "operation": "OPTIONS time_off",
+      "count": 12
+    },
+    {
+      "operation": "OPTIONS closed_days",
+      "count": 27
+    },
+    {
+      "operation": "GET time_off",
+      "count": 77
+    },
+    {
+      "operation": "GET working_hours",
+      "count": 148
+    },
+    {
+      "operation": "GET closed_days",
+      "count": 92
+    },
+    {
+      "operation": "OPTIONS customers",
+      "count": 8
+    },
+    {
+      "operation": "GET customers",
+      "count": 20
+    },
+    {
+      "operation": "OPTIONS barber_services",
+      "count": 6
+    },
+    {
+      "operation": "GET barber_services",
+      "count": 6
+    },
+    {
+      "operation": "OPTIONS site_settings",
+      "count": 13
+    },
+    {
+      "operation": "GET site_settings",
+      "count": 13
+    },
+    {
+      "operation": "GET barbershops",
+      "count": 148
+    },
+    {
+      "operation": "GET raiox_notification_preferences",
+      "count": 13
+    },
+    {
+      "operation": "POST save_manual_financial_entry",
+      "count": 18
+    },
+    {
+      "operation": "POST void_manual_financial_entry",
+      "count": 6
+    },
+    {
+      "operation": "GET raiox_reports",
+      "count": 31
+    },
+    {
+      "operation": "GET daily_goals",
+      "count": 31
+    },
+    {
+      "operation": "GET raiox_settings",
+      "count": 31
+    },
+    {
+      "operation": "POST get_availability",
+      "count": 31
+    },
+    {
+      "operation": "POST daily_goals",
+      "count": 6
+    },
+    {
+      "operation": "GET consents",
+      "count": 6
+    },
+    {
+      "operation": "GET waitlist_entries",
+      "count": 14
+    }
+  ]
+}
