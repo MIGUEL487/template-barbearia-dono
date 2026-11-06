@@ -55,7 +55,7 @@ try {
         $item.SetAccessControl($acl)
     }
     $stage = 'read_acl'
-    $acl = Get-Acl -LiteralPath $path
+    $acl = $item.GetAccessControl([System.Security.AccessControl.AccessControlSections]::Access -bor [System.Security.AccessControl.AccessControlSections]::Owner)
     $stage = 'check_owner'
     if ($acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -ne $sid.Value) { Fail-PrivateAcl 'owner_mismatch' }
     $stage = 'check_inheritance'
@@ -105,7 +105,7 @@ def windows_acl(path, protect=False):
         data = {}
     stages = {"get_identity", "get_item", "build_acl", "set_acl", "set_dacl", "read_acl", "check_owner", "check_inheritance", "check_rules"}
     reasons = {"reparse_point", "owner_mismatch", "unprotected_inheritance", "other_principal_allowed", "full_control_missing", "exception"}
-    types = {"PrivilegeNotHeldException", "IdentityNotMappedException", "UnauthorizedAccessException", "SecurityException", "ArgumentException", "PlatformNotSupportedException", "NotSupportedException", "IOException", "Win32Exception", "MethodException", "CommandNotFoundException"}
+    types = {"SystemException", "InvalidOperationException", "RuntimeException", "PrivilegeNotHeldException", "IdentityNotMappedException", "UnauthorizedAccessException", "SecurityException", "ArgumentException", "PlatformNotSupportedException", "NotSupportedException", "IOException", "Win32Exception", "MethodException", "CommandNotFoundException"}
     stage = data.get("stage") if data.get("stage") in stages else "powershell_response"
     reason = data.get("reason") if data.get("reason") in reasons else "no_safe_diagnostic"
     exception = data.get("exception") if data.get("exception") in types else "unspecified"

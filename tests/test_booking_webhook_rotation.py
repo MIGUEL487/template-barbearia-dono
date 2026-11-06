@@ -90,6 +90,8 @@ class RotationTests(unittest.TestCase):
         self.assertNotIn('$acl.SetOwner', args[0][-1])
         self.assertNotIn('$acl.SetGroup', args[0][-1])
         self.assertNotIn('AccessControlSections]::All', args[0][-1])
+        self.assertNotIn('Get-Acl -LiteralPath', args[0][-1])
+        self.assertIn('$item.GetAccessControl(', args[0][-1])
 
     def test_windows_failure_details_are_not_echoed(self):
         response = subprocess.CompletedProcess([], 1, stdout=self.key, stderr=self.key)
