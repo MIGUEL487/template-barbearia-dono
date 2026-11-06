@@ -99,7 +99,7 @@ Get-Content -LiteralPath (Join-Path $RotationDir 'scheduler.stdin') -Raw | npx.c
 
 ## Validação desta correção
 
-Os testes Python verificam permissões POSIX reais, arquivos consistentes, ausência de segredo na saída, nenhuma rede/CLI durante `create`, falha antes da geração quando a ACL é negada e construção segura do comando PowerShell com caminhos contendo espaços. Os casos Windows são simulados no runner Linux: **a DACL NTFS e o PowerShell nativo não foram executados neste ambiente**. O próprio script faz a verificação real das ACLs quando rodar no Windows e se recusa a continuar em caso de falha. Nenhum secret de produção foi atualizado nesta correção.
+Os testes Python verificam permissões POSIX reais, arquivos consistentes, ausência de segredo na saída, nenhuma rede/CLI durante `create`, falha antes da geração quando a ACL é negada e construção segura do comando PowerShell com caminhos contendo espaços. Os testes locais Linux simulam a integração Windows. A versão corrigida também **passou nos runners Windows nativos com Python 3.12 e 3.13**, incluindo a validação real de ACLs e criação dos arquivos. [Execução confirmada](https://github.com/MIGUEL487/template-barbearia-dono/actions/runs/42211123415), código `8e5dbae`. O PC do proprietário não é acessível daqui. O próprio script faz a verificação real das ACLs quando rodar no Windows e se recusa a continuar em caso de falha. Nenhum secret de produção foi atualizado nesta correção.
 
 ## Se aparecer `Windows ACL verification failed`
 

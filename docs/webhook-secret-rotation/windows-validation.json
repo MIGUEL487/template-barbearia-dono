@@ -5,7 +5,7 @@
   "windowsAclFailuresFailClosed": true,
   "powershellCallsCarryNoSecret": true,
   "powershellExecutionPolicyChanged": false,
-  "nativeWindowsAclTested": false,
+  "nativeWindowsAclTested": true,
   "windowsCasesMockedOnLinux": true,
   "localUserCheckoutAccessibleFromCloud": false,
   "syncStrategy": "separate detached worktree; original checkout unchanged",
@@ -16,5 +16,12 @@
   "safeAclDiagnostic": true,
   "emptyFilesProtectedBeforeWriting": true,
   "diagnoseAccessGeneratesNoSecret": true,
-  "userWindowsFailureRootCause": "not yet identified; safe native diagnostic required"
+  "userWindowsFailureRootCause": "reported E_ACCESSDENIED at Set-Acl; fixed implementation persists DACL only and supports trusted Windows default owners; individual PC recheck pending",
+  "nativeWindowsPythonVersions": [
+    "3.12",
+    "3.13"
+  ],
+  "nativeWindowsChecks": "https://github.com/MIGUEL487/template-barbearia-dono/actions/runs/42211123415",
+  "nativeWindowsTestedCommit": "8e5dbae296f8a94d1dd6ec1fac35419e0d3e35ad",
+  "nativeWindowsResult": "success"
 }
