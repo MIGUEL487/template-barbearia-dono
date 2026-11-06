@@ -57,7 +57,11 @@ try {
     $stage = 'read_acl'
     $acl = $item.GetAccessControl([System.Security.AccessControl.AccessControlSections]::Access -bor [System.Security.AccessControl.AccessControlSections]::Owner)
     $stage = 'check_owner'
-    if ($acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -ne $sid.Value) { Fail-PrivateAcl 'owner_mismatch' }
+    $owner = $acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
+    # These built-in principals already have OS-level takeover privileges.
+    # Do not rewrite ownership or grant them access in the DACL.
+    $trustedOwners = @($sid.Value, 'S-1-5-18', 'S-1-5-32-544')
+    if ($trustedOwners -notcontains $owner) { Fail-PrivateAcl 'owner_mismatch' }
     $stage = 'check_inheritance'
     if ($item.PSIsContainer -and -not $acl.AreAccessRulesProtected) { Fail-PrivateAcl 'unprotected_inheritance' }
     $stage = 'check_rules'

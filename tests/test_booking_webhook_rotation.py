@@ -92,6 +92,8 @@ class RotationTests(unittest.TestCase):
         self.assertNotIn('AccessControlSections]::All', args[0][-1])
         self.assertNotIn('Get-Acl -LiteralPath', args[0][-1])
         self.assertIn('$item.GetAccessControl(', args[0][-1])
+        self.assertIn("$trustedOwners = @($sid.Value, 'S-1-5-18', 'S-1-5-32-544')", args[0][-1])
+        self.assertIn("if ($rule.IdentityReference.Value -ne $sid.Value) { Fail-PrivateAcl 'other_principal_allowed' }", args[0][-1])
 
     def test_windows_failure_details_are_not_echoed(self):
         response = subprocess.CompletedProcess([], 1, stdout=self.key, stderr=self.key)
