@@ -62,7 +62,7 @@ class RotationTests(unittest.TestCase):
         self.assertEqual(events[0], ('acl', self.created.name, True))
         generated = events.index(('generated', 32))
         self.assertGreater(generated, 0)
-        self.assertEqual(len([e for e in events if e[0] == 'acl']), 6)
+        self.assertEqual(len([e for e in events if e[0] == 'acl']), 10)
 
     def test_windows_acl_failure_writes_no_secret_and_cleans_only_new_directory(self):
         with patch.object(rotation, 'IS_WINDOWS', True), patch.object(rotation.tempfile, 'mkdtemp', return_value=str(self.created)), patch.object(rotation, 'windows_acl', side_effect=ValueError('ACL denied')), patch.object(rotation.secrets, 'token_hex') as generator:
@@ -74,7 +74,7 @@ class RotationTests(unittest.TestCase):
 
     def test_windows_powershell_uses_literal_env_path_and_no_policy_bypass(self):
         p = Path('folder with spaces')
-        response = subprocess.CompletedProcess([], 0, stdout='ACL_OK', stderr='')
+        response = subprocess.CompletedProcess([], 0, stdout='{"ok":true}', stderr='')
         with patch.object(rotation.subprocess, 'run', return_value=response) as run:
             rotation.windows_acl(p, protect=True)
         args, kwargs = run.call_args
@@ -92,6 +92,37 @@ class RotationTests(unittest.TestCase):
             with self.assertRaises(ValueError) as error:
                 rotation.windows_acl(self.created)
         self.assertNotIn(self.key, str(error.exception))
+
+    def test_empty_files_are_protected_before_writing(self):
+        def acl(path, protect=False):
+            if protect and path.is_file():
+                self.assertEqual(path.read_bytes(), b'')
+        with patch.object(rotation, 'windows_acl', side_effect=acl):
+            self.generate(windows=True)
+
+    def test_failure_diagnostic_is_allowlisted_and_contains_no_identity_or_values(self):
+        import json
+        response = subprocess.CompletedProcess([], 1, stdout=json.dumps({
+            'ok': False, 'stage': 'set_acl', 'reason': 'exception',
+            'exception': 'UnauthorizedAccessException', 'hresult': -2147024891,
+            'private_value': self.key, 'path': 'private path', 'sid': 'private sid',
+        }), stderr=self.key)
+        with patch.object(rotation.subprocess, 'run', return_value=response):
+            with self.assertRaises(rotation.PrivateAccessError) as error:
+                rotation.windows_acl(self.created)
+        message = str(error.exception)
+        self.assertIn('stage=set_acl', message)
+        self.assertIn('UnauthorizedAccessException', message)
+        self.assertNotIn(self.key, message)
+        self.assertNotIn('private path', message)
+        self.assertNotIn('private sid', message)
+
+    def test_diagnose_generates_no_key_and_makes_no_network_request(self):
+        with patch.object(rotation, 'IS_WINDOWS', False), patch.object(rotation.tempfile, 'mkdtemp', return_value=str(self.created)), patch.object(rotation.secrets, 'token_hex') as generator, patch.object(rotation.urllib.request, 'build_opener') as network, contextlib.redirect_stdout(io.StringIO()):
+            rotation.diagnose_access()
+        generator.assert_not_called()
+        network.assert_not_called()
+        self.assertFalse(self.created.exists())
 
     @unittest.skipIf(os.name == 'nt', 'POSIX permissions and symlinks')
     def test_private_file_rejects_symlink_and_public_permissions(self):

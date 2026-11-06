@@ -100,3 +100,19 @@ Get-Content -LiteralPath (Join-Path $RotationDir 'scheduler.stdin') -Raw | npx.c
 ## Validação desta correção
 
 Os testes Python verificam permissões POSIX reais, arquivos consistentes, ausência de segredo na saída, nenhuma rede/CLI durante `create`, falha antes da geração quando a ACL é negada e construção segura do comando PowerShell com caminhos contendo espaços. Os casos Windows são simulados no runner Linux: **a DACL NTFS e o PowerShell nativo não foram executados neste ambiente**. O próprio script faz a verificação real das ACLs quando rodar no Windows e se recusa a continuar em caso de falha. Nenhum secret de produção foi atualizado nesta correção.
+
+## Se aparecer `Windows ACL verification failed`
+
+A mensagem antiga era genérica: ela não comprova que o disco seja incompatível ou que falte ser administrador. A atualização aplica ACL também a cada arquivo ainda vazio e retorna somente etapas/códigos seguros. A causa específica na sua máquina precisa do diagnóstico nativo.
+
+No worktree de rotação já criado, atualize com fast-forward (não sobrescreve modificações conflitantes):
+
+```powershell
+git fetch origin refs/heads/fix/booking-webhook-secret-rotation
+if ($LASTEXITCODE -ne 0) { throw 'Fetch falhou.' }
+git merge --ff-only FETCH_HEAD
+if ($LASTEXITCODE -ne 0) { throw 'Atualização interrompida; preserve suas alterações locais.' }
+python .\scripts\booking-webhook-rotation.py diagnose-access
+```
+
+`diagnose-access` só usa uma pasta temporária nova e arquivo vazio, removidos ao terminar. Não gera secret e não acessa os provedores. Se passar, execute `python .\scripts\booking-webhook-rotation.py create`. Se falhar, informe somente a linha `Windows ACL: stage=...; reason=...; exception=...; hresult=...`. Não envie arquivos `.env`, conteúdo do segredo, ACLs completas ou capturas de campos secretos. Não use permissões amplas nem bypass para fazer a verificação passar.

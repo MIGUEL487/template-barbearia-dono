@@ -19,38 +19,65 @@ IS_WINDOWS = os.name == "nt"
 # Only paths/flags cross this process boundary. No secret is passed to PowerShell.
 WINDOWS_ACL_SCRIPT = r"""
 $ErrorActionPreference = 'Stop'
+$stage = 'get_identity'
+function Fail-PrivateAcl([string]$reason) {
+    [Console]::Out.Write((@{ok=$false; stage=$stage; reason=$reason} | ConvertTo-Json -Compress))
+    exit 1
+}
 try {
     $path = $env:AUTO_STILO_ACL_PATH
     $sid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User
+    $stage = 'get_item'
     $item = Get-Item -LiteralPath $path -Force
-    if (($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) { exit 1 }
+    if (($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) { Fail-PrivateAcl 'reparse_point' }
     if ($env:AUTO_STILO_ACL_PROTECT -eq '1') {
-        if (-not $item.PSIsContainer) { exit 1 }
-        $acl = New-Object System.Security.AccessControl.DirectorySecurity
+        $stage = 'build_acl'
+        if ($item.PSIsContainer) {
+            $acl = New-Object System.Security.AccessControl.DirectorySecurity
+            $rule = [System.Security.AccessControl.FileSystemAccessRule]::new(
+                $sid, [System.Security.AccessControl.FileSystemRights]::FullControl,
+                [System.Security.AccessControl.InheritanceFlags]'ContainerInherit,ObjectInherit',
+                [System.Security.AccessControl.PropagationFlags]::None,
+                [System.Security.AccessControl.AccessControlType]::Allow)
+        } else {
+            $acl = New-Object System.Security.AccessControl.FileSecurity
+            $rule = [System.Security.AccessControl.FileSystemAccessRule]::new(
+                $sid, [System.Security.AccessControl.FileSystemRights]::FullControl,
+                [System.Security.AccessControl.AccessControlType]::Allow)
+        }
         $acl.SetAccessRuleProtection($true, $false)
         $acl.SetOwner($sid)
-        $rule = [System.Security.AccessControl.FileSystemAccessRule]::new(
-            $sid, [System.Security.AccessControl.FileSystemRights]::FullControl,
-            [System.Security.AccessControl.InheritanceFlags]'ContainerInherit,ObjectInherit',
-            [System.Security.AccessControl.PropagationFlags]::None,
-            [System.Security.AccessControl.AccessControlType]::Allow)
         $acl.AddAccessRule($rule)
+        $stage = 'set_acl'
         Set-Acl -LiteralPath $path -AclObject $acl
     }
+    $stage = 'read_acl'
     $acl = Get-Acl -LiteralPath $path
-    if ($acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -ne $sid.Value) { exit 1 }
-    if ($item.PSIsContainer -and -not $acl.AreAccessRulesProtected) { exit 1 }
+    $stage = 'check_owner'
+    if ($acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -ne $sid.Value) { Fail-PrivateAcl 'owner_mismatch' }
+    $stage = 'check_inheritance'
+    if ($item.PSIsContainer -and -not $acl.AreAccessRulesProtected) { Fail-PrivateAcl 'unprotected_inheritance' }
+    $stage = 'check_rules'
     $found = $false
     foreach ($rule in $acl.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier])) {
         if ($rule.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Allow) {
-            if ($rule.IdentityReference.Value -ne $sid.Value) { exit 1 }
+            if ($rule.IdentityReference.Value -ne $sid.Value) { Fail-PrivateAcl 'other_principal_allowed' }
             if (($rule.FileSystemRights -band [System.Security.AccessControl.FileSystemRights]::FullControl) -eq [System.Security.AccessControl.FileSystemRights]::FullControl) { $found = $true }
         }
     }
-    if (-not $found) { exit 1 }
-    [Console]::Out.Write('ACL_OK')
-} catch { exit 1 }
+    if (-not $found) { Fail-PrivateAcl 'full_control_missing' }
+    [Console]::Out.Write('{"ok":true}')
+} catch {
+    $exception = $_.Exception
+    while ($null -ne $exception.InnerException) { $exception = $exception.InnerException }
+    [Console]::Out.Write((@{ok=$false; stage=$stage; reason='exception'; exception=$exception.GetType().Name; hresult=$exception.HResult} | ConvertTo-Json -Compress))
+    exit 1
+}
 """
+
+
+class PrivateAccessError(ValueError):
+    """Contains only allowlisted ACL diagnostics, never raw subprocess output."""
 
 
 def windows_acl(path, protect=False):
@@ -58,12 +85,29 @@ def windows_acl(path, protect=False):
     executable = Path(windows_root) / "System32/WindowsPowerShell/v1.0/powershell.exe"
     env = os.environ.copy()
     env.update(AUTO_STILO_ACL_PATH=str(path), AUTO_STILO_ACL_PROTECT="1" if protect else "0")
-    result = subprocess.run(
-        [str(executable), "-NoProfile", "-NonInteractive", "-Command", WINDOWS_ACL_SCRIPT],
-        env=env, capture_output=True, text=True, timeout=30, check=False,
-    )
-    if result.returncode != 0 or result.stdout.strip() != "ACL_OK":
-        raise ValueError("Windows ACL verification failed; use a local NTFS folder owned by your user. No secret was displayed.")
+    try:
+        result = subprocess.run(
+            [str(executable), "-NoProfile", "-NonInteractive", "-Command", WINDOWS_ACL_SCRIPT],
+            env=env, capture_output=True, text=True, timeout=30, check=False,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        raise PrivateAccessError("Windows ACL: stage=start_powershell; reason=unavailable_or_timeout. No secret displayed.") from None
+    try:
+        data = json.loads(result.stdout) if len(result.stdout) < 2048 else {}
+    except (ValueError, TypeError):
+        data = {}
+    if result.returncode == 0 and isinstance(data, dict) and data.get("ok") is True:
+        return
+    if not isinstance(data, dict):
+        data = {}
+    stages = {"get_identity", "get_item", "build_acl", "set_acl", "read_acl", "check_owner", "check_inheritance", "check_rules"}
+    reasons = {"reparse_point", "owner_mismatch", "unprotected_inheritance", "other_principal_allowed", "full_control_missing", "exception"}
+    types = {"UnauthorizedAccessException", "SecurityException", "ArgumentException", "PlatformNotSupportedException", "NotSupportedException", "IOException", "Win32Exception", "MethodException", "CommandNotFoundException"}
+    stage = data.get("stage") if data.get("stage") in stages else "powershell_response"
+    reason = data.get("reason") if data.get("reason") in reasons else "no_safe_diagnostic"
+    exception = data.get("exception") if data.get("exception") in types else "unspecified"
+    code = data.get("hresult") if type(data.get("hresult")) is int else 0
+    raise PrivateAccessError(f"Windows ACL: stage={stage}; reason={reason}; exception={exception}; hresult={code}. No secret displayed.")
 
 
 def check_private(path, directory=False):
@@ -111,6 +155,8 @@ def create():
             target = path / name
             fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
             with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as stream:
+                if IS_WINDOWS:
+                    windows_acl(target, protect=True)
                 stream.write(content)
             check_private(target)
     except Exception:
@@ -119,6 +165,26 @@ def create():
         raise
     print("Private files created. Secret value was not printed. Directory: " + str(path))
     return path
+
+
+def diagnose_access():
+    """Exercise the same ACL path using only an empty directory and empty file."""
+    path = Path(tempfile.mkdtemp(prefix="auto-stilo-acl-diagnostic-"))
+    try:
+        if IS_WINDOWS:
+            windows_acl(path, protect=True)
+        else:
+            os.chmod(path, 0o700)
+        secure_dir(path)
+        target = path / "empty-probe"
+        fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "w", encoding="utf-8"):
+            if IS_WINDOWS:
+                windows_acl(target, protect=True)
+            check_private(target)
+        print("ACL diagnostic passed for an empty directory and file. No secret generated; no network call.")
+    finally:
+        shutil.rmtree(path)
 
 
 def verify(directory):
@@ -154,11 +220,13 @@ def verify(directory):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["create", "verify-next"])
+    parser.add_argument("command", choices=["create", "verify-next", "diagnose-access"])
     parser.add_argument("--directory")
     args = parser.parse_args()
     if args.command == "create":
         create()
+    elif args.command == "diagnose-access":
+        diagnose_access()
     elif args.directory:
         verify(args.directory)
     else:

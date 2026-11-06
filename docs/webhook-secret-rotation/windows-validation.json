@@ -1,6 +1,6 @@
 {
   "windowsNativeSupportImplemented": true,
-  "pythonTests": 8,
+  "pythonTests": 12,
   "windowsAclBeforeGeneration": true,
   "windowsAclFailuresFailClosed": true,
   "powershellCallsCarryNoSecret": true,
@@ -10,7 +10,11 @@
   "localUserCheckoutAccessibleFromCloud": false,
   "syncStrategy": "separate detached worktree; original checkout unchanged",
   "productionActionsPerformed": false,
-  "pythonTestsPassed": 8,
+  "pythonTestsPassed": 11,
   "nativeWindowsTestIncluded": true,
-  "nativeWindowsTestSkippedOnLinux": true
+  "nativeWindowsTestSkippedOnLinux": true,
+  "safeAclDiagnostic": true,
+  "emptyFilesProtectedBeforeWriting": true,
+  "diagnoseAccessGeneratesNoSecret": true,
+  "userWindowsFailureRootCause": "not yet identified; safe native diagnostic required"
 }
