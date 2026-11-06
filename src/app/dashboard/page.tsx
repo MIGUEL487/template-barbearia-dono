@@ -6,7 +6,6 @@ import { currentMembership } from "@/lib/browser-shop";
 import { AdminSkeleton } from "@/components/admin/skeleton";
 import { ManagementLayout } from "@/components/admin/management-layout";
 import { AnimatedNumber } from "@/components/admin/animated-number";
-import { RevenueChart } from "@/components/admin/revenue-chart";
 import { BookingActions } from "@/components/admin/booking-actions";
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -283,7 +282,63 @@ export default function DashboardPage() {
         />
       </div>
       <div className="mg-dashboard-overview">
-        <RevenueChart entries={revenueEntries} />
+        <section className="mg-panel mg-quick-ops p-6 rounded-2xl bg-surface border border-border shadow-soft space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-hairline">
+            <div>
+              <p className="text-[11px] uppercase font-bold tracking-wider text-accent-light">
+                Controle Operacional
+              </p>
+              <h2 className="text-base font-bold text-text">Resumo Imediato</h2>
+            </div>
+            <Link
+              href="/analises"
+              className="text-xs text-text-muted hover:text-accent-light transition-colors flex items-center gap-1 font-medium"
+            >
+              <span>Ver Gráficos em Análises</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="p-4 rounded-xl bg-surface-2 border border-hairline space-y-1.5">
+              <span className="text-xs text-text-muted font-medium">Receita Hoje</span>
+              <div className="text-lg font-bold text-text font-mono">
+                {isLoading || errorMsg ? "—" : formatCurrency(revenueReceived)}
+              </div>
+              <p className="text-[11px] text-text-muted">
+                {revenuePending > 0
+                  ? `+ ${formatCurrency(revenuePending)} previsto a receber`
+                  : "Nenhuma pré-reserva pendente"}
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-surface-2 border border-hairline space-y-1.5">
+              <span className="text-xs text-text-muted font-medium">Situação da Operação</span>
+              <div className="text-lg font-bold text-emerald-400 font-mono">
+                {bookingsToday.filter((b) => b.status === "completed").length} / {bookingsToday.length}
+              </div>
+              <p className="text-[11px] text-text-muted">
+                Atendimentos concluídos hoje
+              </p>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-surface-2/60 border border-hairline text-xs space-y-1.5">
+            <div className="font-semibold text-text flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-accent-light" />
+              <span>Próximas Ações</span>
+            </div>
+            {bookingsToday.filter((b) => b.status === "confirmed").length > 0 ? (
+              <p className="text-text-muted">
+                Você tem {bookingsToday.filter((b) => b.status === "confirmed").length} atendimento(s) agendado(s) aguardando realização hoje.
+              </p>
+            ) : (
+              <p className="text-text-muted">
+                Sem agendamentos pendentes no momento. Horários livres disponíveis para novos clientes.
+              </p>
+            )}
+          </div>
+        </section>
         <section className="mg-panel mg-day-summary">
           <p className="mg-overline">Sua operação</p>
           <h2>Hoje na Auto Stilo</h2>

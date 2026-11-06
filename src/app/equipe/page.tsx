@@ -69,6 +69,13 @@ export default function EquipePage() {
     handleSaveHours,
     handleSaveServices,
     toggleServiceCheckbox,
+    barberToDelete,
+    deleteModalOpen,
+    deletionInfo,
+    isCheckingDeletion,
+    isDeletingBarber,
+    closeDeleteModal,
+    confirmDeleteBarber,
   } = state;
 
   return (
@@ -612,6 +619,134 @@ export default function EquipePage() {
               </button>
             </div>
           </form>
+        </DialogPanel>
+      </AnimatePresence>
+      {/* MODAL: REMOVER / ARQUIVAR BARBEIRO */}
+      <AnimatePresence>
+        <DialogPanel
+          open={deleteModalOpen}
+          onClose={closeDeleteModal}
+          titleId="delete-barber-title"
+        >
+          <div className="flex items-center justify-between pb-3 border-b border-hairline">
+            <h2 id="delete-barber-title" className="text-base font-bold text-text flex items-center gap-2">
+              <ShieldAlert className="w-5 h-5 text-amber-500" />
+              <span>Remover Profissional</span>
+            </h2>
+            <button
+              aria-label="Fechar"
+              disabled={isDeletingBarber}
+              onClick={closeDeleteModal}
+              className="w-8 h-8 rounded-lg bg-surface-2 text-text-muted hover:text-text flex items-center justify-center transition-colors !min-h-0 disabled:opacity-50"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="space-y-4 py-2">
+            {barberToDelete && (
+              <div className="flex items-center gap-3.5 p-3.5 rounded-xl bg-surface-2 border border-hairline">
+                <BarberPhoto
+                  url={barberToDelete.avatar_url}
+                  name={barberToDelete.name}
+                  className="barber-photo-compact shrink-0"
+                />
+                <div className="min-w-0">
+                  <div className="font-semibold text-sm text-text truncate">
+                    {barberToDelete.name}
+                  </div>
+                  <div className="text-xs text-text-muted truncate">
+                    {barberToDelete.bio || "Profissional da equipe"}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isCheckingDeletion ? (
+              <div className="py-6 flex flex-col items-center justify-center gap-2 text-xs text-text-muted">
+                <Loader2 className="w-5 h-5 animate-spin text-accent" />
+                <span>Consultando histórico e agendamentos futuros...</span>
+              </div>
+            ) : deletionInfo ? (
+              <div className="space-y-3">
+                {deletionInfo.isLastActiveBarber && (
+                  <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-400 text-xs flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="block font-semibold">Atenção: Único profissional ativo</strong>
+                      <span>
+                        Este é o único barbeiro ativo. Ao desativá-lo, sua barbearia não terá horários disponíveis para agendamento online.
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {deletionInfo.futureBookings > 0 && (
+                  <div className="p-3 rounded-xl bg-danger/10 border border-danger/25 text-danger text-xs flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="block font-semibold">
+                        {deletionInfo.futureBookings} agendamento(s) futuro(s) agendado(s)
+                      </strong>
+                      <span>
+                        Existem clientes marcados com este profissional. Desativá-lo impedirá novos agendamentos, mas os clientes agendados deverão ser atendidos ou remanejados.
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {deletionInfo.totalBookings > 0 ? (
+                  <div className="p-3.5 rounded-xl bg-surface-2 border border-hairline text-xs space-y-2">
+                    <p className="text-text leading-relaxed">
+                      Este profissional possui <strong>{deletionInfo.totalBookings} atendimento(s)</strong> no histórico do SaaS.
+                    </p>
+                    <p className="text-text-muted leading-relaxed">
+                      Para preservar o histórico contábil, financeiro e os relatórios da barbearia, ele será <strong>arquivado e desativado</strong> do agendamento público.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-3.5 rounded-xl bg-surface-2 border border-hairline text-xs space-y-2">
+                    <p className="text-text leading-relaxed">
+                      Este profissional não possui nenhum atendimento realizado. Ele pode ser removido definitivamente sem impacto nos relatórios.
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
+            <button
+              type="button"
+              disabled={isDeletingBarber}
+              onClick={closeDeleteModal}
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-text-muted hover:text-text bg-surface-2 hover:bg-surface-3 transition-colors !min-h-0 disabled:opacity-50"
+            >
+              Cancelar
+            </button>
+
+            {deletionInfo && deletionInfo.totalBookings > 0 ? (
+              <button
+                type="button"
+                disabled={isDeletingBarber || isCheckingDeletion}
+                onClick={() => confirmDeleteBarber("archive")}
+                className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-soft disabled:opacity-50 transition-all !min-h-0 flex items-center gap-2"
+              >
+                {isDeletingBarber && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                <span>{isDeletingBarber ? "Arquivando..." : "Arquivar e Desativar"}</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled={isDeletingBarber || isCheckingDeletion}
+                onClick={() => confirmDeleteBarber("permanent")}
+                className="bg-danger hover:bg-danger/80 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-soft disabled:opacity-50 transition-all !min-h-0 flex items-center gap-2"
+              >
+                {isDeletingBarber && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                <span>{isDeletingBarber ? "Excluindo..." : "Excluir Definitivamente"}</span>
+              </button>
+            )}
+          </div>
         </DialogPanel>
       </AnimatePresence>
     </ManagementLayout>

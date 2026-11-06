@@ -387,11 +387,100 @@ export async function toggleBarberActiveAction(
   return { success: true };
 }
 
+export async function checkBarberRemovalAction(
+  barbershopId: string,
+  barberId: string,
+): Promise<
+  | {
+      success: true;
+      totalBookings: number;
+      futureBookings: number;
+      isLastActiveBarber: boolean;
+    }
+  | { success: false; error: string; totalBookings?: never; futureBookings?: never; isLastActiveBarber?: never }
+> {
+  const supabase = await requireShopClient(barbershopId, ["owner", "admin"]);
+
+  const { count: totalBookings, error: totalErr } = await supabase
+    .from("bookings")
+    .select("id", { count: "exact", head: true })
+    .eq("barbershop_id", barbershopId)
+    .eq("barber_id", barberId);
+
+  if (totalErr) return { success: false, error: totalErr.message };
+
+  const nowIso = new Date().toISOString();
+  const { count: futureBookings, error: futureErr } = await supabase
+    .from("bookings")
+    .select("id", { count: "exact", head: true })
+    .eq("barbershop_id", barbershopId)
+    .eq("barber_id", barberId)
+    .gte("starts_at", nowIso)
+    .in("status", ["confirmed", "hold"]);
+
+  if (futureErr) return { success: false, error: futureErr.message };
+
+  const { count: activeCount, error: activeErr } = await supabase
+    .from("barbers")
+    .select("id", { count: "exact", head: true })
+    .eq("barbershop_id", barbershopId)
+    .eq("is_active", true);
+
+  if (activeErr) return { success: false, error: activeErr.message };
+
+  return {
+    success: true,
+    totalBookings: totalBookings ?? 0,
+    futureBookings: futureBookings ?? 0,
+    isLastActiveBarber: (activeCount ?? 0) <= 1,
+  };
+}
+
 export async function deleteBarberAction(
   barbershopId: string,
   barberId: string,
+  mode: "archive" | "permanent" | "auto" = "auto",
 ) {
   const supabase = await requireShopClient(barbershopId, ["owner", "admin"]);
+
+  const { count: totalBookings } = await supabase
+    .from("bookings")
+    .select("id", { count: "exact", head: true })
+    .eq("barbershop_id", barbershopId)
+    .eq("barber_id", barberId);
+
+  const hasHistory = (totalBookings ?? 0) > 0;
+
+  if (mode === "archive" || (mode === "auto" && hasHistory)) {
+    const { error } = await supabase
+      .from("barbers")
+      .update({ is_active: false })
+      .eq("id", barberId)
+      .eq("barbershop_id", barbershopId);
+
+    if (error) return { success: false, error: error.message };
+
+    revalidatePath("/equipe");
+    revalidatePath("/agenda");
+    return {
+      success: true,
+      action: "archived" as const,
+      message: hasHistory
+        ? "Barbeiro possui histórico de atendimentos e foi arquivado/desativado para manter os registros financeiros intactos."
+        : "Barbeiro desativado com sucesso.",
+    };
+  }
+
+  if (hasHistory) {
+    return {
+      success: false,
+      error:
+        "Não é possível excluir fisicamente este barbeiro pois existem agendamentos vinculados a ele. Utilize a opção de arquivamento.",
+    };
+  }
+
+  await supabase.from("barber_services").delete().eq("barber_id", barberId);
+  await supabase.from("working_hours").delete().eq("barber_id", barberId);
 
   const { error } = await supabase
     .from("barbers")
@@ -403,7 +492,7 @@ export async function deleteBarberAction(
 
   revalidatePath("/equipe");
   revalidatePath("/agenda");
-  return { success: true };
+  return { success: true, action: "deleted" as const };
 }
 
 export async function saveWorkingHoursAction(

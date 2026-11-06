@@ -38,6 +38,7 @@ import {
   createBarberAction,
   toggleBarberActiveAction,
   deleteBarberAction,
+  checkBarberRemovalAction,
   saveWorkingHoursAction,
   saveBarberServicesAction,
 } from "@/app/actions/admin-actions";
@@ -112,6 +113,17 @@ export function useTeamManager() {
     string[]
   >([]);
   const [isSavingServices, setIsSavingServices] = useState(false);
+
+  // 5. Exclusão / Desativação de Barbeiro com Modal
+  const [barberToDelete, setBarberToDelete] = useState<Barber | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deletionInfo, setDeletionInfo] = useState<{
+    totalBookings: number;
+    futureBookings: number;
+    isLastActiveBarber: boolean;
+  } | null>(null);
+  const [isCheckingDeletion, setIsCheckingDeletion] = useState(false);
+  const [isDeletingBarber, setIsDeletingBarber] = useState(false);
 
   const loadData = useCallback(async () => {
     setLoadError(null);
@@ -378,24 +390,81 @@ export function useTeamManager() {
     }
   };
 
-  const handleDeleteBarber = async (barber: Barber) => {
-    if (!confirm(`Deseja realmente excluir o barbeiro ${barber.name}?`)) return;
+  const openDeleteModal = async (barber: Barber) => {
     if (!barbershopId) return;
+    setBarberToDelete(barber);
+    setDeleteModalOpen(true);
+    setDeletionInfo(null);
+    setIsCheckingDeletion(true);
 
-    const res = await deleteBarberAction(barbershopId, barber.id);
-    if (res.success) {
-      setStatusMsg({
-        type: "success",
-        text: `Barbeiro ${barber.name} excluído.`,
-      });
-      if (selectedBarberId === barber.id) setSelectedBarberId(null);
-      loadData();
-    } else {
+    try {
+      const res = await checkBarberRemovalAction(barbershopId, barber.id);
+      if (res.success && res.totalBookings !== undefined) {
+        setDeletionInfo({
+          totalBookings: res.totalBookings,
+          futureBookings: res.futureBookings ?? 0,
+          isLastActiveBarber: Boolean(res.isLastActiveBarber),
+        });
+      } else {
+        setStatusMsg({
+          type: "error",
+          text: res.error || "Erro ao consultar histórico do barbeiro.",
+        });
+      }
+    } catch (err: any) {
       setStatusMsg({
         type: "error",
-        text: res.error || "Erro ao excluir barbeiro",
+        text: err.message || "Erro ao verificar agendamentos do barbeiro.",
       });
+    } finally {
+      setIsCheckingDeletion(false);
     }
+  };
+
+  const closeDeleteModal = () => {
+    if (isDeletingBarber) return;
+    setDeleteModalOpen(false);
+    setBarberToDelete(null);
+    setDeletionInfo(null);
+  };
+
+  const confirmDeleteBarber = async (mode: "archive" | "permanent") => {
+    if (!barbershopId || !barberToDelete) return;
+    setIsDeletingBarber(true);
+
+    try {
+      const res = await deleteBarberAction(barbershopId, barberToDelete.id, mode);
+      if (res.success) {
+        setStatusMsg({
+          type: "success",
+          text:
+            res.action === "archived"
+              ? `Barbeiro "${barberToDelete.name}" arquivado com sucesso. O histórico de atendimentos foi preservado.`
+              : `Barbeiro "${barberToDelete.name}" excluído definitivamente.`,
+        });
+        if (selectedBarberId === barberToDelete.id) {
+          setSelectedBarberId(null);
+        }
+        closeDeleteModal();
+        loadData();
+      } else {
+        setStatusMsg({
+          type: "error",
+          text: res.error || "Não foi possível remover o barbeiro.",
+        });
+      }
+    } catch (err: any) {
+      setStatusMsg({
+        type: "error",
+        text: err.message || "Erro ao processar remoção do barbeiro.",
+      });
+    } finally {
+      setIsDeletingBarber(false);
+    }
+  };
+
+  const handleDeleteBarber = async (barber: Barber) => {
+    await openDeleteModal(barber);
   };
 
   const handleSaveHours = async () => {
@@ -500,6 +569,14 @@ export function useTeamManager() {
     handleAddBarber,
     handleToggleBarberActive,
     handleDeleteBarber,
+    barberToDelete,
+    deleteModalOpen,
+    deletionInfo,
+    isCheckingDeletion,
+    isDeletingBarber,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmDeleteBarber,
     handleSaveHours,
     handleSaveServices,
     toggleServiceCheckbox,

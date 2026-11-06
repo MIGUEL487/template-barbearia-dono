@@ -9,7 +9,6 @@ import {
 import { saveGoalAction } from "@/app/actions/intelligence-actions";
 import { Workspace, Metric } from "./shell";
 import { PeriodControl, periodFor, type PeriodValue } from "./period";
-import { LineChart } from "./line-chart";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Expandable } from "@/components/ui/expandable";
@@ -155,12 +154,55 @@ export function OperationalDashboard() {
           )}
           <div className="r4-editorial">
             <Card className="r4-main">
-              <CardTitle>Recebimentos e previsão</CardTitle>
-              <LineChart rows={c.daily} />
-              <p className="text-sm text-text-muted">
-                Despesas: {money(c.expenses)} · Estornos: {money(c.refunds)}.
-                Previsão não é dinheiro recebido; saldo registrado não é lucro
-                líquido.
+              <CardTitle>Balanço operacional do período</CardTitle>
+              <div className="r4-operations !grid-cols-2 sm:!grid-cols-3 gap-3 my-3">
+                <div>
+                  <span>Recebimentos</span>
+                  <strong>{money(c.income)}</strong>
+                </div>
+                <div>
+                  <span>Previsão</span>
+                  <strong>{money(c.expected)}</strong>
+                </div>
+                <div>
+                  <span>Despesas</span>
+                  <strong>{money(c.expenses)}</strong>
+                </div>
+                <div>
+                  <span>Estornos</span>
+                  <strong>{money(c.refunds)}</strong>
+                </div>
+                <div>
+                  <span>Saldo em caixa</span>
+                  <strong>{money(c.registeredBalance)}</strong>
+                </div>
+              </div>
+              {c.daily.length > 1 && (
+                <div className="s3-table-scroll mt-3">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="border-b border-hairline text-text-muted">
+                        <th className="text-left py-1.5 font-medium">Data</th>
+                        <th className="text-center py-1.5 font-medium">Atendimentos</th>
+                        <th className="text-right py-1.5 font-medium">Recebimentos</th>
+                        <th className="text-right py-1.5 font-medium">Previsão</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-hairline/40">
+                      {c.daily.map((d) => (
+                        <tr key={d.date}>
+                          <td className="py-1 font-mono">{d.date.split("-").reverse().join("/")}</td>
+                          <td className="text-center py-1 font-mono">{d.bookings}</td>
+                          <td className="text-right py-1 font-mono text-emerald-400 font-semibold">{money(d.income)}</td>
+                          <td className="text-right py-1 font-mono text-text-muted">{money(d.forecast)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              <p className="text-xs text-text-muted mt-2">
+                Previsão não é dinheiro recebido; saldo registrado reflete os lançamentos financeiros sem deduções de taxas externas.
               </p>
             </Card>
             <Card>
@@ -176,11 +218,9 @@ export function OperationalDashboard() {
                   : "Configure uma meta para acompanhar o progresso."}
               </p>
               {d.goal !== null && d.goal > 0 && (
-                <progress
-                  aria-label="Progresso da meta"
-                  max={100}
-                  value={Math.min(100, (c.income / d.goal) * 100)}
-                />
+                <div className="text-xs font-semibold text-accent-light">
+                  {Math.round((c.income / d.goal) * 100)}% da meta atingida
+                </div>
               )}
               {!single && (
                 <p className="text-sm text-text-muted">
@@ -265,16 +305,11 @@ export function OperationalDashboard() {
               {c.services.length ? (
                 <div className="r4-ranking">
                   {c.services.map((s) => (
-                    <div key={s.name}>
+                    <div key={s.name} className="flex items-center justify-between py-1.5 border-b border-hairline/40">
                       <span>{s.name}</span>
                       <strong>
-                        {s.count} · {money(s.total)}
+                        {s.count} atendimento{s.count > 1 ? "s" : ""} · {money(s.total)}
                       </strong>
-                      <progress
-                        aria-label={s.name}
-                        value={s.count}
-                        max={Math.max(...c.services.map((x) => x.count))}
-                      />
                     </div>
                   ))}
                 </div>

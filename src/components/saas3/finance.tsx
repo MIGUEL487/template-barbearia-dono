@@ -5,7 +5,6 @@ import { AnimatedSelect } from "@/components/ui/animated-select";
 import { useEffect, useRef, useState } from "react";
 import { Workspace, Metric } from "./shell";
 import { PeriodControl, periodFor, type PeriodValue } from "./period";
-import { LineChart } from "./line-chart";
 import { Button } from "@/components/ui/button";
 import {
   financeAction,
@@ -345,15 +344,6 @@ export function Finance3() {
           {notice}
         </p>
       )}
-      <section className="s3-panel">
-        <div className="s3-section-title">
-          <div>
-            <h2>Entradas e saídas</h2>
-            <p>Valores efetivados no período · reais</p>
-          </div>
-        </div>
-        <LineChart rows={d ? series : []} first="Entradas" secondary="Saídas" />
-      </section>
       <section className="s3-panel">
         <div className="s3-section-title">
           <div>
