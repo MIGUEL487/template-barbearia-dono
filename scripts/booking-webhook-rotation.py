@@ -33,23 +33,26 @@ try {
     if ($env:AUTO_STILO_ACL_PROTECT -eq '1') {
         $stage = 'build_acl'
         if ($item.PSIsContainer) {
-            $acl = New-Object System.Security.AccessControl.DirectorySecurity
+            $acl = [System.Security.AccessControl.DirectorySecurity]::new($path, [System.Security.AccessControl.AccessControlSections]::Access)
             $rule = [System.Security.AccessControl.FileSystemAccessRule]::new(
                 $sid, [System.Security.AccessControl.FileSystemRights]::FullControl,
                 [System.Security.AccessControl.InheritanceFlags]'ContainerInherit,ObjectInherit',
                 [System.Security.AccessControl.PropagationFlags]::None,
                 [System.Security.AccessControl.AccessControlType]::Allow)
         } else {
-            $acl = New-Object System.Security.AccessControl.FileSecurity
+            $acl = [System.Security.AccessControl.FileSecurity]::new($path, [System.Security.AccessControl.AccessControlSections]::Access)
             $rule = [System.Security.AccessControl.FileSystemAccessRule]::new(
                 $sid, [System.Security.AccessControl.FileSystemRights]::FullControl,
                 [System.Security.AccessControl.AccessControlType]::Allow)
         }
         $acl.SetAccessRuleProtection($true, $false)
-        $acl.SetOwner($sid)
+        # Persist only modified access rules: never request owner/group/audit changes.
+        foreach ($existing in @($acl.GetAccessRules($true, $false, [System.Security.Principal.SecurityIdentifier]))) {
+            $acl.RemoveAccessRuleSpecific($existing)
+        }
         $acl.AddAccessRule($rule)
-        $stage = 'set_acl'
-        Set-Acl -LiteralPath $path -AclObject $acl
+        $stage = 'set_dacl'
+        $item.SetAccessControl($acl)
     }
     $stage = 'read_acl'
     $acl = Get-Acl -LiteralPath $path
@@ -100,9 +103,9 @@ def windows_acl(path, protect=False):
         return
     if not isinstance(data, dict):
         data = {}
-    stages = {"get_identity", "get_item", "build_acl", "set_acl", "read_acl", "check_owner", "check_inheritance", "check_rules"}
+    stages = {"get_identity", "get_item", "build_acl", "set_acl", "set_dacl", "read_acl", "check_owner", "check_inheritance", "check_rules"}
     reasons = {"reparse_point", "owner_mismatch", "unprotected_inheritance", "other_principal_allowed", "full_control_missing", "exception"}
-    types = {"UnauthorizedAccessException", "SecurityException", "ArgumentException", "PlatformNotSupportedException", "NotSupportedException", "IOException", "Win32Exception", "MethodException", "CommandNotFoundException"}
+    types = {"PrivilegeNotHeldException", "IdentityNotMappedException", "UnauthorizedAccessException", "SecurityException", "ArgumentException", "PlatformNotSupportedException", "NotSupportedException", "IOException", "Win32Exception", "MethodException", "CommandNotFoundException"}
     stage = data.get("stage") if data.get("stage") in stages else "powershell_response"
     reason = data.get("reason") if data.get("reason") in reasons else "no_safe_diagnostic"
     exception = data.get("exception") if data.get("exception") in types else "unspecified"

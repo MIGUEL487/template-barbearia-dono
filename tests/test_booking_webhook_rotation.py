@@ -84,7 +84,12 @@ class RotationTests(unittest.TestCase):
         self.assertEqual(kwargs['env']['AUTO_STILO_ACL_PROTECT'], '1')
         self.assertTrue(kwargs['capture_output'])
         self.assertIn('SetAccessRuleProtection($true, $false)', args[0][-1])
-        self.assertIn('Set-Acl -LiteralPath', args[0][-1])
+        self.assertIn('$item.SetAccessControl($acl)', args[0][-1])
+        self.assertIn('AccessControlSections]::Access', args[0][-1])
+        self.assertIn('$acl.RemoveAccessRuleSpecific($existing)', args[0][-1])
+        self.assertNotIn('$acl.SetOwner', args[0][-1])
+        self.assertNotIn('$acl.SetGroup', args[0][-1])
+        self.assertNotIn('AccessControlSections]::All', args[0][-1])
 
     def test_windows_failure_details_are_not_echoed(self):
         response = subprocess.CompletedProcess([], 1, stdout=self.key, stderr=self.key)
@@ -117,6 +122,7 @@ class RotationTests(unittest.TestCase):
         self.assertNotIn('private path', message)
         self.assertNotIn('private sid', message)
 
+    @unittest.skipIf(os.name == 'nt', 'POSIX diagnostic; native Windows covered separately')
     def test_diagnose_generates_no_key_and_makes_no_network_request(self):
         with patch.object(rotation, 'IS_WINDOWS', False), patch.object(rotation.tempfile, 'mkdtemp', return_value=str(self.created)), patch.object(rotation.secrets, 'token_hex') as generator, patch.object(rotation.urllib.request, 'build_opener') as network, contextlib.redirect_stdout(io.StringIO()):
             rotation.diagnose_access()

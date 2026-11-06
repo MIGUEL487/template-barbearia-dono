@@ -116,3 +116,9 @@ python .\scripts\booking-webhook-rotation.py diagnose-access
 ```
 
 `diagnose-access` só usa uma pasta temporária nova e arquivo vazio, removidos ao terminar. Não gera secret e não acessa os provedores. Se passar, execute `python .\scripts\booking-webhook-rotation.py create`. Se falhar, informe somente a linha `Windows ACL: stage=...; reason=...; exception=...; hresult=...`. Não envie arquivos `.env`, conteúdo do segredo, ACLs completas ou capturas de campos secretos. Não use permissões amplas nem bypass para fazer a verificação passar.
+
+### Acesso negado em `stage=set_acl` / `0x80070005`
+
+O código informado confirma que a escrita da ACL foi recusada; não identifica sozinho a política ou privilégio específico. A versão anterior incluía troca de proprietário. A correção carrega **somente `AccessControlSections.Access`**, mantém owner/group/auditoria intactos e persiste apenas a DACL modificada pela API .NET do arquivo/diretório. Regras herdadas e explícitas anteriores são substituídas por acesso do usuário atual; a verificação posterior continua obrigatória. Não é necessário executar `takeown`, dar acesso a Everyone ou alterar políticas globais para tentar passar no teste.
+
+Uma recusa nessa operação aparece como `stage=set_dacl`; nesse caso a restrição real a WRITE_DAC continua bloqueando a geração, sem fallback inseguro. O workflow `Windows rotation helper` verifica a ACL nativamente em runners Windows com Python 3.12 e 3.13, usando apenas fixtures públicas, sem qualquer rotação em produção.

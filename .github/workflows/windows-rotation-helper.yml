@@ -1,0 +1,37 @@
+name: Windows rotation helper
+on:
+  push:
+    branches: [fix/booking-webhook-secret-rotation]
+    paths:
+      - scripts/booking-webhook-rotation.py
+      - tests/test_booking_webhook_rotation.py
+      - .github/workflows/windows-rotation-helper.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-acl:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Test private local files and native ACL
+        shell: pwsh
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          $result = & python -m unittest discover -s tests -p test_booking_webhook_rotation.py -v 2>&1
+          $code = $LASTEXITCODE
+          $result | ForEach-Object { Write-Output "$_" }
+          "### Native Windows ACL · Python ${{ matrix.python-version }}" >> $env:GITHUB_STEP_SUMMARY
+          'Tests use only public fixtures and temporary files; no provider calls or production secrets.' >> $env:GITHUB_STEP_SUMMARY
+          '```text' >> $env:GITHUB_STEP_SUMMARY
+          $result | ForEach-Object { "$_" >> $env:GITHUB_STEP_SUMMARY }
+          '```' >> $env:GITHUB_STEP_SUMMARY
+          exit $code
