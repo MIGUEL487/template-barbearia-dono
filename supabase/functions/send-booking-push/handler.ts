@@ -1,3 +1,4 @@
+import {webhookAuthorization} from './webhook-auth.ts';
 import {sendReportPush} from './report.ts';
 import {createClient} from '@supabase/supabase-js';
 // @deno-types="npm:@types/web-push@3.6.4"
@@ -11,10 +12,6 @@ export function allowedPushEndpoint(endpoint:string){
   ['fcm.googleapis.com','updates.push.services.mozilla.com','web.push.apple.com'].includes(url.hostname)||/^[a-z0-9-]+\.notify\.windows\.com$/.test(url.hostname)
  );}catch{return false;}
 }
-async function secretMatches(actual:string,expected:string){
- const hash=async(value:string)=>new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)));
- const [a,b]=await Promise.all([hash(actual),hash(expected)]);let mismatch=0;for(let i=0;i<a.length;i++)mismatch|=a[i]^b[i];return mismatch===0;
-}
 async function handlePushRequest(request:Request){
  if(request.method!=='POST')return json({error:'Method not allowed'},405);
  const secret=Deno.env.get('BOOKING_WEBHOOK_SECRET');
@@ -23,7 +20,13 @@ async function handlePushRequest(request:Request){
  try{const body=await request.text();if(body.length>65536)return json({error:'Payload too large'},413);event=JSON.parse(body);}catch{return json({error:'Invalid JSON'},400);}
  if(!event||typeof event!=='object'||Array.isArray(event))return json({error:'Invalid event'},400);
  const isTest=event.type==='RAIOX_TEST';
- if(!isTest){if(!secret||secret.length<32)return json({error:'Webhook not configured'},503);if(!await secretMatches(request.headers.get('x-booking-webhook-secret')||'',secret))return json({error:'Unauthorized'},401);}
+ if(!isTest){
+  const auth=await webhookAuthorization(request.headers.get('x-booking-webhook-secret')||'',secret,Deno.env.get('BOOKING_WEBHOOK_SECRET_NEXT'));
+  if(!auth.configured)return json({error:'Webhook not configured'},503);
+  if(!auth.authorized)return json({error:'Unauthorized'},401);
+  if(auth.nextActive)console.info('[WebhookAuth]',{credential:auth.credential});
+ }
+
  if(['RAIOX_REPORT','RAIOX_TEST'].includes(event.type)){
   if(!uuid.test((isTest?event.barbershop_id:event.report_id)||''))return json({error:'Invalid report event'},400);
   const url=Deno.env.get('SUPABASE_URL'),key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');if(!url||!key)return json({error:'Server not configured'},503);

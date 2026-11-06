@@ -120,10 +120,12 @@ Deno.test(
     );
     const keys = webpush.generateVAPIDKeys(),
       secret = "fixture-secret-".repeat(4),
+    nextSecret=crypto.randomUUID()+crypto.randomUUID(),
       vars = {
         SUPABASE_URL: `http://127.0.0.1:${server.addr.port}`,
         SUPABASE_SERVICE_ROLE_KEY: "fixture-admin",
         BOOKING_WEBHOOK_SECRET: secret,
+        BOOKING_WEBHOOK_SECRET_NEXT: nextSecret,
         VAPID_PUBLIC_KEY: keys.publicKey,
         VAPID_PRIVATE_KEY: keys.privateKey,
         VAPID_SUBJECT: "mailto:test@example.test",
@@ -143,7 +145,7 @@ Deno.test(
       new Request("http://local/function", {
         method: "POST",
         headers: {
-          "x-booking-webhook-secret": valid ? secret : "wrong",
+          "x-booking-webhook-secret": valid ? nextSecret : "wrong",
           authorization:
             test && valid ? "Bearer fixture-session" : "Bearer invalid",
         },

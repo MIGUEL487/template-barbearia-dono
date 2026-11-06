@@ -31,13 +31,13 @@ Deno.test('webhook auth, events, privacy, deduplication, retries and stale subsc
   }
   return reply([]);
  });
- const secret=crypto.randomUUID()+crypto.randomUUID(),keys=webpush.generateVAPIDKeys();
- const vars={SUPABASE_URL:`http://127.0.0.1:${server.addr.port}`,SUPABASE_SERVICE_ROLE_KEY:'fixture-service-role',BOOKING_WEBHOOK_SECRET:secret,VAPID_PUBLIC_KEY:keys.publicKey,VAPID_PRIVATE_KEY:keys.privateKey,VAPID_SUBJECT:'mailto:qa@example.test'};
+ const secret=crypto.randomUUID()+crypto.randomUUID(),nextSecret=crypto.randomUUID()+crypto.randomUUID(),keys=webpush.generateVAPIDKeys();
+ const vars={SUPABASE_URL:`http://127.0.0.1:${server.addr.port}`,SUPABASE_SERVICE_ROLE_KEY:'fixture-service-role',BOOKING_WEBHOOK_SECRET:secret,BOOKING_WEBHOOK_SECRET_NEXT:nextSecret,VAPID_PUBLIC_KEY:keys.publicKey,VAPID_PRIVATE_KEY:keys.privateKey,VAPID_SUBJECT:'mailto:qa@example.test'};
  const original=Object.fromEntries(Object.keys(vars).map(key=>[key,Deno.env.get(key)]));
  for(const [key,value]of Object.entries(vars))Deno.env.set(key,value);
  const oldSend=webpush.sendNotification;
  webpush.sendNotification=async(_subscription,payload)=>{sends++;lastPayload=String(payload);if(failStatus)throw Object.assign(new Error('fixture'),{statusCode:failStatus});return {statusCode:201,body:'',headers:{}};};
- const request=(type='INSERT',old:unknown={},header=secret)=>new Request('http://localhost/function',{method:'POST',headers:{'x-booking-webhook-secret':header},body:JSON.stringify({type,schema:'public',table:'bookings',record:row,old_record:old})});
+ const request=(type='INSERT',old:unknown={},header=nextSecret)=>new Request('http://localhost/function',{method:'POST',headers:{'x-booking-webhook-secret':header},body:JSON.stringify({type,schema:'public',table:'bookings',record:row,old_record:old})});
  try{
   assert.equal((await handleRequest(new Request('http://localhost'))).status,405);
   assert.equal((await handleRequest(request('INSERT',{},'wrong'))).status,401);assert.equal(sends,0);
