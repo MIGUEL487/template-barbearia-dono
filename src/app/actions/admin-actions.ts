@@ -420,19 +420,32 @@ export async function checkBarberRemovalAction(
 
   if (futureErr) return { success: false, error: futureErr.message };
 
-  const { count: activeCount, error: activeErr } = await supabase
+  // 1. Verificar se o barbeiro alvo existe e se está ativo
+  const { data: targetBarber } = await supabase
+    .from("barbers")
+    .select("id, is_active")
+    .eq("barbershop_id", barbershopId)
+    .eq("id", barberId)
+    .maybeSingle();
+
+  // 2. Quantidade de OUTROS barbeiros ativos na barbearia (excluindo o atual)
+  const { count: otherActiveCount } = await supabase
     .from("barbers")
     .select("id", { count: "exact", head: true })
     .eq("barbershop_id", barbershopId)
-    .eq("is_active", true);
+    .eq("is_active", true)
+    .neq("id", barberId);
 
-  if (activeErr) return { success: false, error: activeErr.message };
+  // O barbeiro alvo só é o "último ativo" se ele mesmo ESTIVER ativo E não houver nenhum outro barbeiro ativo.
+  const isLastActiveBarber = Boolean(
+    targetBarber?.is_active && (otherActiveCount ?? 0) === 0
+  );
 
   return {
     success: true,
     totalBookings: totalBookings ?? 0,
     futureBookings: futureBookings ?? 0,
-    isLastActiveBarber: (activeCount ?? 0) <= 1,
+    isLastActiveBarber,
   };
 }
 
