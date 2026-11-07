@@ -95,7 +95,7 @@ export function operationalReport(
       id: "cancellations",
       condition: `${c.cancelled}/${c.bookings} contra ${p.cancelled}/${p.bookings} no período anterior (mínimo 10 em cada)`,
       message:
-        "Cancelamentos acima da referência anterior; confira a fila de espera.",
+        "Cancelamentos acima da referência anterior; confira os horários vagos na agenda.",
     });
   const retained = c.retention.filter((r) => r.usual !== null);
   if (retained.length)

@@ -45,11 +45,6 @@ const answers = [
     "/resgate",
   ],
   [
-    "A fila de espera avisa o cliente?",
-    "Não automaticamente. Consulte uma vaga, crie a pré-reserva explícita e contate manualmente o cliente pelo meio autorizado. O banco valida ordem, disponibilidade e concorrência. A oferta segue a validade normal de 15 minutos.",
-    "/fila-de-espera",
-  ],
-  [
     "Como ativo notificações neste aparelho?",
     "Use Ativar notificações abaixo. No iPhone, instale pela opção Adicionar à Tela de Início e abra o app instalado. Permissão do aparelho, chaves VAPID, função e webhook precisam estar configurados. O som exige um clique para ativação.",
     "/configuracoes",

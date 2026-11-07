@@ -1,1 +1,5 @@
-import {Waitlist3} from '@/components/saas3/waitlist';export default function Page(){return <Waitlist3/>}
+import { redirect } from "next/navigation";
+
+export default function Page() {
+  redirect("/agenda");
+}

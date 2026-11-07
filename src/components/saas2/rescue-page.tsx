@@ -79,12 +79,11 @@ export function RescuePage() {
               <div>
                 <h2>Reavaliar cancelamentos</h2>
                 <p>
-                  {d.current.cancelled} cancelamento(s) na data. A fila mantém
-                  prioridade e regras de encaixe.
+                  {d.current.cancelled} cancelamento(s) na data. Acompanhe os horários vagos na agenda.
                 </p>
               </div>
-              <Link className="text-accent-light" href="/fila-de-espera">
-                Abrir fila →
+              <Link className="text-accent-light" href="/agenda">
+                Abrir agenda →
               </Link>
             </article>
             <article className="s3-opportunity">
@@ -123,7 +122,7 @@ export function RescuePage() {
               </p>
               <p className="text-text-muted mt-4">
                 Capacidade livre não equivale a serviços que cabem. Confirme os
-                inícios disponíveis no Raio-X ou na fila de espera.
+                inícios disponíveis no Raio-X ou na agenda.
                 Cancelamentos são agrupados pela data do atendimento; não há
                 histórico de quando ocorreram.
               </p>

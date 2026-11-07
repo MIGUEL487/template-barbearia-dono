@@ -10,7 +10,7 @@ export function diagnose(c: Analysis, p: Analysis, goal: number | null) {
     );
   if (c.cancelled)
     lines.push(
-      `${c.cancelled} cancelamento(s) registrado(s) para a data. Confira a fila de espera antes de oferecer um encaixe.`,
+      `${c.cancelled} cancelamento(s) registrado(s) para a data. Confira os horários vagos na agenda antes de oferecer um encaixe.`,
     );
   if (c.noShow) lines.push(`${c.noShow} falta(s) registrada(s).`);
   const morning = c.hourly.filter((h) => Number(h.hour.slice(0, 2)) < 12),

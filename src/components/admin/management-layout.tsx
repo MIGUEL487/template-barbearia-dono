@@ -20,7 +20,6 @@ export function ManagementLayout({
     "/analises",
     "/raio-x",
     "/resgate",
-    "/fila-de-espera",
   ].includes(path)
     ? "Inteligência"
     : ["/financeiro", "/configuracoes", "/suporte"].includes(path)
